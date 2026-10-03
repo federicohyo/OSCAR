@@ -145,7 +145,7 @@ def build(figw, figh, fontscale, standalone=True):
     # ---- 3: the recovery ---------------------------------------------------
     # The rising edge itself, on the same volts axis as the other two panels, so
     # it can be read against them. Just the trace and the baseline: the fitted
-    # time constants are quoted in the text, not drawn over the data.
+    # time constants are quoted in the text rather than drawn over the data.
     ax = fig.add_subplot(gs[2])
     m = (t > T_MIN - 0.4) & (t < T_MIN + 12)
     ax.plot(t[m] - T_MIN, pad[m], color=C_PAD, lw=0.5, alpha=0.5)

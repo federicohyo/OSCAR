@@ -4,7 +4,8 @@ Copyright 2026 the OSCAR authors and contributors (see CITATION.cff).
 This product includes software and hardware design material developed by
 third parties. First-party files in this repository are licensed under the
 Apache License, Version 2.0 (see LICENSE) unless stated otherwise below or in a
-file's own header. Where a file carries no header, the root LICENSE applies.
+file's own header. Files with their own header state their license; otherwise the
+root LICENSE applies.
 
 --------------------------------------------------------------------------
 Efabless Caravel / Caravan and the caravel_user_project_analog template
@@ -56,9 +57,9 @@ riscvprog.py
 --------------------------------------------------------------------------
 host/riscvprog.py (HKSPI / AD5664RBitBang / Config) derives from the
 Caravel/Efabless `riscvprog` / housekeeping-SPI tooling lineage. Its upstream
-license could not be pinned to a single file at release time; treat it as
-Apache-2.0 consistent with the rest of the Caravel tooling, and verify the
-upstream text before any redistribution that changes this notice.
+license is treated as Apache-2.0, consistent with the rest of the Caravel
+tooling; verify the upstream text before any redistribution that changes this
+notice.
 
 --------------------------------------------------------------------------
 RISC-V GCC toolchain (GPL)

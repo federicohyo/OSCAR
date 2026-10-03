@@ -4,13 +4,13 @@
 The reference campaign's "digital, same pipeline emulated" row quoted 0.867 +/- 0.037, taken from a
 FLOAT LIF at a hand-chosen operating point (olfaction_sim_sweep.py) -- and that model
 over-predicts the measured array by more than 0.10, so the number was flagged optimistic.
-The firmware does not use floats: lif_steps_ram() runs a Q16 shift-add decay on int32 with
+The firmware stays integer: lif_steps_ram() runs a Q16 shift-add decay on int32 with
 a hard reset and a refractory counter. This mirrors that loop exactly, so the emulated row
 is computed in the arithmetic that would actually run.
 
-This needs no bench time. The emulation is deterministic fixed-point: executing it on the
+This needs zero bench time. The emulation is deterministic fixed-point: executing it on the
 RISC-V is bit-identical to executing it here, so the chip could only confirm the
-arithmetic, not the accuracy. What it does need is the same fairness the array got --- its
+arithmetic rather than the accuracy. What it does need is the same fairness the array got --- its
 operating point swept and the best taken, scored under the same protocol (all 150 chunks,
 GroupKFold by trial, kernel read-out, voted over 5) and repeated over projection seeds.
 

@@ -32,7 +32,7 @@ BURST_HZ  = 137.0     # the measured-clean node (odor_stimulus.py rationale:
                       # with the 1 kS/s readout)
 BURST_S   = 0.40
 BURST_VPP = 5.0e-3    # at the chip/jack; on chip1's healthy amp (~124x)
-                      # -> ~600 mVpp events at ch1, no rail risk
+                      # -> ~600 mVpp events at ch1, keeping clear of the rail
 PRE_S, POST_S = 1.0, 1.5
 REPS      = 12
 

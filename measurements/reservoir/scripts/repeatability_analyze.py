@@ -36,7 +36,7 @@ def block_stats(counts):
     n = len(c)
     mean, sd = c.mean(), c.std(ddof=1) if n > 1 else 0.0
     cv = sd / mean if mean > 0 else np.nan
-    # lag-1 autocorrelation: slow drift is correlated, white jitter is not
+    # lag-1 autocorrelation: slow drift is correlated, white jitter is uncorrelated
     if n > 3 and sd > 0:
         a = c - mean
         r1 = float(np.sum(a[:-1] * a[1:]) / np.sum(a * a))
@@ -67,7 +67,7 @@ def main(path="repeatability_spikes.npz"):
     counts = np.array([[len(np.asarray(sp[k, t])) for t in range(ntr)]
                        for k in neurons], dtype=float)
 
-    # --- trial 0: the routing transient, excluded by pre-registration ---------
+    # --- trial 0: the routing transient, set aside by pre-registration ---------
     t0, rest = counts[:, 0], counts[:, 1:]
     live = rest.mean(axis=1) > 0
     if live.any():

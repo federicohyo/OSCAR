@@ -50,7 +50,7 @@ def main():
 
     # A1a homogeneous surrogate: best neuron replicated to matched dimension
     bk = int(order[0])
-    Xrep = Xf[:, cols([bk] * n)]               # n identical blocks -> same dim, no diversity
+    Xrep = Xf[:, cols([bk] * n)]               # n identical blocks -> same dim, diversity removed
     m, s = cv_acc(Xrep, y, groups, args.mode)
     print(f"A1a replicate neuron {bk:2d} x{n} (matched dim): {m:.3f} +/- {s:.3f}   "
           f"[if << A0, diversity computes]")

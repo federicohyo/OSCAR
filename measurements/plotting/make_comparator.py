@@ -159,12 +159,13 @@ def main():
     xf = json.load(open(TRANSFER or os.path.join(RES, "olfaction_hybrid_transfer.json")))
     LEV = np.array(d["levels"], dtype=float)
     tr = d["trace"]
-    # the parked vleakn is whatever most of the trace was taken at, not the CLI default
+    # the parked vleakn is whatever most of the trace was taken at rather than the CLI default
     import collections
     park = collections.Counter(t["vleakn"] for t in tr).most_common(1)[0][0]
     NS = np.array(xf["N"], dtype=float)
-    # the ladder is what the transfer found usable: a level that fires with no input is
-    # not a comparator, and one whose file failed verification is not on disk at all
+    # the ladder is what the transfer found usable: a level that fires with input at zero
+    # falls outside the comparator role, and one whose file stopped at verification stays
+    # off disk
     lv = [L for L in xf["levels"] if xf["p"][str(L)][0] <= 0.05]
     swm = {L: next((n for n, q in zip(xf["N"], xf["p"][str(L)]) if q >= 1.0), None)
            for L in lv}
@@ -186,13 +187,13 @@ def main():
 
     # ---- (a) membrane vs N, sub-threshold ---------------------------------
     # Only points where the neuron did NOT fire: once it spikes, "peak membrane" is the
-    # spike amplitude (~490 mV) and no longer measures integration.
+    # spike amplitude (~490 mV) and stops measuring integration.
     # Settings the LADDER actually uses, taken from the placement record rather than
     # chosen for a pretty ramp. Deeper settings give longer sub-threshold ramps --
-    # everything at or below -1.5 mV never reaches threshold across all 32 counts -- but a
-    # curve with no switch point reads as a comparator that does not work, and no level is
-    # placed there. One curve per level ties this panel to (b).
-    # Keyed on (vleakn, dJExc), not dJExc alone: lvl24 and lvl32 share dJExc = +0.0 and
+    # everything at or below -1.5 mV stays below threshold across all 32 counts -- but a
+    # unswitched curve reads as an inactive comparator, and levels stay away from
+    # there. One curve per level ties this panel to (b).
+    # Keyed on (vleakn, dJExc) together, as lvl24 and lvl32 share dJExc = +0.0 and
     # are distinguished only by vleakn, so a dJExc-only map silently labelled the parked
     # lvl24 curve with lvl32's switching count.
     pl = {int(k): (v["vleakn"], v["djexc"]) for k, v in d.get("placed", {}).items()
@@ -216,7 +217,7 @@ def main():
         m = np.array(t["p"]) == 0.0
         # The switch quoted is the TRANSFER's, measured over every count and shared with
         # panel (b). The placement sweep only probed the ladder values, so its own first
-        # firing point is an upper bound on the same number, not a second measurement.
+        # firing point is an upper bound on the same number rather than a second measurement.
         L0 = lvl_of.get(round(t["djexc"], 6))
         sN = swm.get(L0)
         a1.plot(LEV[m], v[m], "o-", ms=2.6, lw=1.0, color=c,
@@ -224,7 +225,7 @@ def main():
                       + (rf", $N^{{*}}{{=}}${sN}" if sN else ""))
         top = max(top, float(np.max(v[m])))
         # the first N that fired: the ramp has left the sub-threshold regime, and its
-        # measured "peak" from here on is the spike, not the integrated burst
+        # measured "peak" from here on is the spike rather than the integrated burst
         if sN:
             a1.plot(sN, 1.0, "v", ms=3.4, color=c, clip_on=False,
                     transform=a1.get_xaxis_transform())
@@ -258,7 +259,7 @@ def main():
     a2.set_xscale("log"); a2.set_xticks([X0, 1, 2, 4, 8, 16, 32])
     a2.set_xticklabels(["0", "1", "2", "4", "8", "16", "32"])
     a2.set_xlim(0.55, 45); a2.set_ylim(-0.06, 1.26)
-    # headroom for the labels, but a probability axis must not read past 1
+    # headroom for the labels, while a probability axis stays capped at 1
     a2.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
     a2.set_xlabel("input spikes in burst, $N$")
     a2.set_ylabel(r"$p(\mathrm{fire})$")

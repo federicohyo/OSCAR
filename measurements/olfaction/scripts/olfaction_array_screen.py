@@ -2,23 +2,23 @@
 """Which neurons can be comparators AT THE SAME global bias?
 
 The bias DACs are array-wide, so a "level" is one operating point for all 16 neurons at
-once. Whether the tree can use more than one neuron therefore does not turn on "can this
+once. Whether the tree can use more than one neuron therefore stays separate from "can this
 neuron be tuned" -- each one can, separately -- but on "can several be in range
 simultaneously". Mismatch decides it, and on this die it first decided badly: at every
-setting where n14 comparates, n5, n11 and n2 fire with no input at all.
+setting where n14 comparates, n5, n11 and n2 fire with input at zero.
 
 So screen the whole array instead of guessing a subset.
 
 WHY THIS ONE IS AER-ONLY, against the standing rule to tune on the scope. The monitor mux
-puts ONE neuron on the pin at a time, so sixteen membranes cannot be watched in a single
+puts ONE neuron on the pin at a time, so sixteen membranes are watched one burst at a time, since a single
 pass; a scope-based screen would cost sixteen passes. And the question here is binary and
-one AER can answer honestly: a free-running neuron fires with no input, which is exactly
-what p(fire | N=0) reports, and a neuron that never fires by the top of the alphabet is
+one AER can answer honestly: a free-running neuron fires with input at zero, which is exactly
+what p(fire | N=0) reports, and a neuron that stays silent by the top of the alphabet is
 out of range whatever its membrane is doing. The scope earns its place on the next step --
 resolving a graded ramp between those two extremes -- and the monitor is pinned to one
 candidate here so that trace stays watchable while the screen runs.
 
-Two probes per (setting, neuron), not a full transfer, so screening sixteen costs about
+Two probes per (setting, neuron) rather than a full transfer, so screening sixteen costs about
 what a four-neuron ladder did.
 
     PYTHONPATH=. CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_array_screen.py
@@ -33,16 +33,16 @@ BIAS = "ofxCaravanViewer/bin/comparator_n14_lvl{L}.biases"
 
 def burst_all(b, ks, n, reps, wait, settle=0.30):
     """p(fire) for every neuron at burst size n. Routed one at a time -- the input path
-    latches a single 4-bit address, so there is no fan-out -- but read unmasked, so the
-    cost of another neuron is one more burst and not another acquisition.
+    latches a single 4-bit address, fan-out off -- but read unmasked, so the
+    cost of another neuron is one more burst rather than another acquisition.
 
     THE ROUTE MUST SETTLE BEFORE THE WINDOW OPENS. Programming a weight re-runs
     spikesetup, which pulses the LA lines, and those pulses can drive the neuron. Draining
     30 ms after routing left such a spike inside the counting window, so eight neurons
     read p(fire | N=0) = 1 and were called free-running -- while the scope showed them
-    sitting quiet, 50 mV below threshold, not spiking at all. The route is therefore
+    sitting quiet, 50 mV below threshold, spiking flush off. The route is therefore
     allowed to settle and the link is drained AFTER it, so the window contains only what
-    the burst caused. The calibration script never had this bug because it programs once
+    the burst caused. The calibration script stays clear of this bug because it programs once
     in setup(), outside the measurement loop."""
     hit = {k: 0 for k in ks}
     for _ in range(reps):

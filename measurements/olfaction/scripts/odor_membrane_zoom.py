@@ -60,7 +60,7 @@ def main():
     with Agilent() as sc:
         print(sc.idn())
         t0 = time.time()
-        # Drain the child's output while waiting, so it never blocks on a full pipe.
+        # Drain the child's output while waiting, keeping the pipe flowing.
         while time.time() - t0 < a.arm_after:
             ln = loop.stdout.readline()
             if ln:

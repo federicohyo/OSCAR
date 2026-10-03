@@ -3,7 +3,7 @@
 
 The four weight branches on this die are the same size: their measured single-bit onsets sit
 within a few millivolts of each other (bit 3 is the exception, ~35 mV weaker). So programming
-word w does not deliver w units of charge, it delivers popcount(w) units, and the "4-bit"
+word w delivers popcount(w) units of charge rather than w, and the "4-bit"
 code has five distinguishable levels instead of sixteen.
 
 Binary weighting has to be created in the bias domain instead. In weak inversion a branch's
@@ -38,7 +38,7 @@ def main():
 
     nut = args.nut if args.nut is not None else d.get("nUT_volts")
     if not nut:
-        raise SystemExit(f"no nUT in {src}; run the 'slope' stage first or pass --nut")
+        raise SystemExit(f"nUT absent from {src}; run the 'slope' stage first or pass --nut")
     delta = nut * math.log(2)
 
     br = d.get("branches") or {}

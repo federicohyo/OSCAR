@@ -9,8 +9,8 @@ be right, and all three came from F. Corradi:
     events sum instead of one spike saturating the membrane.
   * coincidence_1_n14 as the starting point, and a raised excitatory weight, which lifts
     the ramp clear of the noise floor: 20 -> 299 mV over N = 0..32, monotone.
-  * vleakn moves the RESTING potential, not just the leak rate, so it slides the whole
-    ramp against a fixed threshold. vthrdn is inert on this path (ten e-folds, no effect).
+  * vleakn moves the RESTING potential as well as the leak rate, so it slides the whole
+    ramp against a fixed threshold. vthrdn is inert on this path (ten e-folds, zero effect).
 
 So the switching count is set by vleakn at about a millivolt per level. This bisects
 vleakn per target level and writes one bias file each.
@@ -90,7 +90,7 @@ def main():
                 print(f"  vleakn {v:.4f} -> {lab:<10} (N=0 {p0:.2f})")
                 if p0 > 0.3:            # rest too high: back off
                     lo = v
-                elif sw is None:        # never fires: rest too low
+                elif sw is None:        # stays silent: rest too low
                     hi = v
                 elif sw > tgt:          # switches too late
                     hi = v
@@ -98,7 +98,7 @@ def main():
                     lo = v
                 else:
                     best = dict(vleakn=v, p0=p0, p=ps, switch=sw); break
-                # p0 <= 0.3 is REQUIRED here, not only in the branch above: a
+                # p0 <= 0.3 is REQUIRED here as well as in the branch above: a
                 # free-running neuron fires at N=1, so switch==1 matches a target of 1
                 # and this fallback would record it as a perfect comparator. That is
                 # exactly what the N=0 control exists to prevent, and it slipped past

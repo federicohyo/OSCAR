@@ -8,7 +8,7 @@ MEMORY that carries bit a (early) to the late window; feedforward (RECURCTRL 0) 
 
 Stimulus (temporal XOR): bit a in an early window (EXC, so it seeds firing the self-loop can hold),
 bit b in a late window with a per-neuron RANDOM exc/inh sign (fixed seeded projection = reservoir
-diversity). Readout window is AFTER bit b, so feedforward (no memory of a) is at chance while
+diversity). Readout window is AFTER bit b, so feedforward (memory of a off) is at chance while
 recurrence solves it. Label = a XOR b.
 
 MASKING: only the recorded neuron is streamed (MASK = 1<<k); all others masked (they still run in

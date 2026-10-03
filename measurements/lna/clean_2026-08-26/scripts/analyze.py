@@ -19,7 +19,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 
 FIG = os.path.join(ROOT, "figures"); os.makedirs(FIG, exist_ok=True)
 FS, RAIL = 1000.0, 1.78
 
-# One fixed hue order, assigned by entity and never cycled (dataviz rule).
+# One fixed hue order, assigned by entity and kept from cycling (dataviz rule).
 INK, MUTED, GRID = "#1b1b1f", "#5c5f66", "#d7d9de"
 C_MEAS, C_REF, C_WARN = "#2f6fd0", "#8a63d2", "#c2410c"
 
@@ -62,7 +62,7 @@ def true_drive(freq_hz, jack_vpp):
     if key in _drive_cache: return _drive_cache[key]
 
     # 1st choice: the snapshot in setup/. The WAVs themselves live OUTSIDE this
-    # archive (~270 MB), so without this table the correction would silently
+    # archive (~270 MB), so this table is what keeps the correction from silently
     # vanish on any other machine and quietly un-correct the low-end gains by
     # up to 4%.
     global _drive_table
@@ -130,8 +130,8 @@ def transfer():
     # could be taken this session (the probe that would measure it is the one
     # whose earth caused the ground loop), so the PREVIOUS campaign's reference
     # SHAPE is reused. Only its shape is used, normalised on its own plateau.
-    # Above 130 Hz its clipped fit degrades, and an audio output cannot roll off
-    # at 200 Hz, so the drive is taken as flat there -- same rule as before.
+    # Above 130 Hz its clipped fit degrades, and an audio output rolls off well above
+    # 200 Hz, so the drive is taken as flat there -- same rule as before.
     gdb_c, fc_c = None, float("nan")
     ref = os.path.join(ROOT, "..", "..", "lna_transfer_ref.csv")
     if os.path.exists(ref):
@@ -190,7 +190,7 @@ def transfer():
     fig.savefig(os.path.join(FIG, "gain_vs_frequency.pdf")); plt.close(fig)
     print(f"gain_vs_frequency.png: plateau {plateau:.2f} dB ({10**(plateau/20):.1f}x), "
           f"-3 dB raw {fc:.3f} Hz, corrected {fc_c:.3f} Hz, {len(f)} points")
-    # Noise must be referred through the AMPLIFIER's gain, not the raw chain's:
+    # Noise is referred through the AMPLIFIER's gain rather than the raw chain's:
     # below ~20 Hz the raw curve is mostly the sound card, and dividing by it
     # would inflate the input-referred noise by the sound card's own roll-off.
     return (f, 10**(gdb_c/20)) if gdb_c is not None else (f, g)
@@ -236,8 +236,8 @@ def gain_vs_level():
                    markeredgecolor="white", markeredgewidth=.7, label=lab, zorder=3)
 
     # Gain falls with drive. Across all blocks the fit is gain = a + b*ln(vin),
-    # r = -0.64; the output DC does NOT predict gain (r = +0.01), so the trend is
-    # compression, not operating-point wander. Residual scatter ~2.5% is the
+    # r = -0.64; the output DC is uncorrelated with gain (r = +0.01), so the trend is
+    # compression rather than operating-point wander. Residual scatter ~2.5% is the
     # block-to-block reproducibility limit.
     va = np.concatenate([pack(pr)[0] for pr, _, _ in series if len(pack(pr)[0])])
     ga = np.concatenate([pack(pr)[1] for pr, _, _ in series if len(pack(pr)[0])])
@@ -296,7 +296,7 @@ def noise(gain_f=None):
     m = (f > 0.2) & (f < 450)
     f, asd_out = f[m], asd_out[m]
 
-    # running-median line detector (generic, not mains-specific)
+    # running-median line detector (generic rather than mains-specific)
     logA = np.log10(asd_out); k = 101
     pad = np.pad(logA, k//2, mode="edge")
     med = np.array([np.median(pad[i:i+k]) for i in range(len(logA))])

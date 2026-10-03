@@ -3,10 +3,10 @@
 // ECG frontier): the co-integrated core must reproduce the analog reservoir by Euler-
 // integrating 16 heterogeneous LIF ODEs. It is compiled to rv32i and disassembled to
 // count the instruction path; the dynamic per-beat cost is O(N_neurons * T/dt) and is
-// dominated by the software multiply used for the membrane decay (rv32i has no MUL).
+// dominated by the software multiply used for the membrane decay (rv32i multiplies in software).
 //
 // Fixed-point Q16 state, matching the codebase's -nostdlib convention (hand shift-add
-// multiply, no libgcc). One inner step per neuron:
+// multiply, libgcc-free). One inner step per neuron:
 //     v = (v * decay) >> 16 + jump[i];   // leak (soft-mul) + synaptic input
 //     if (v < 0) v = 0;                  // rectify
 //     if (v >= vth && !refractory) { spike; v = vreset; }
@@ -21,7 +21,7 @@
 #define NSTEP 2000    // T/dt steps per beat (T=2 s, dt=1 ms shown; swept offline)
 
 // Unsigned 32x32 -> 32 shift-add multiply. Identical to neuron_handshake.c:umul32 --
-// rv32i has no MUL and we link -nostdlib, so multiply by hand. Loop count = bit-length
+// rv32i multiplies in software and we link -nostdlib, so multiply by hand. Loop count = bit-length
 // of the multiplier b, which is why the decay multiply dominates the per-step cost.
 uint32_t umul32(uint32_t a, uint32_t b)
 {
@@ -64,7 +64,7 @@ int lif_step(int32_t *v, uint32_t decay, int32_t jump,
 // Integrate the whole 16-neuron reservoir for one beat. `jumps` is the per-neuron,
 // per-step synaptic input (Q16); in the real run this is the delta-encoded ECG feature
 // stream binned onto the dt grid. Returns total output spikes (kept so the compiler
-// cannot dead-code the loop).
+// keeps the loop live).
 int reservoir_beat(int32_t *v, uint32_t *decay, int32_t *vth,
                    int32_t *vreset, int32_t *refr, const int32_t *jumps)
 {

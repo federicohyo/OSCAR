@@ -19,8 +19,8 @@ from sklearn.preprocessing import StandardScaler
 matplotlib.rcParams.update({"pdf.fonttype": 42, "font.size": 9})
 
 # Recordings ACC and DIM (reservoir_datasets.py). They are DIFFERENT acquisitions,
-# not two read-outs of one: ACC carries 49 events/window and DIM 282 on the same
-# beats. Do not quote a statistic from one against the other.
+# two distinct read-outs: ACC carries 49 events/window and DIM 282 on the same
+# beats. Compare like with like when quoting a statistic.
 NO_PROJ = "reservoir_spikes_nv_delta.npz"      # ACC: shared input, plain feedforward delta
 WITH_PROJ = "reservoir_spikes_nv_randproj.npz"  # DIM: per-neuron input projection
 

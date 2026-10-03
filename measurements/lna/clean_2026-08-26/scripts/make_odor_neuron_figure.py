@@ -34,11 +34,11 @@ GAP = 0.30                      # silence longer than this separates two bursts
 # (1) The detector thresholds a 25-sample TRAILING mean, whose group delay is
 #     (25-1)/2 = 12 ms. The LNA trace and everything derived from it therefore lag
 #     physical time by that much; the injections, taken from the same samples, do
-#     not. Uncorrected this alone puts the spikes 12 ms early against the amplifier.
-# (2) Injecting is not instantaneous. Measured host BURST -> spike line back at the
+#     stay aligned. Uncorrected this alone puts the spikes 12 ms early against the amplifier.
+# (2) Injecting takes time. Measured host BURST -> spike line back at the
 #     host: 29.6 ms median over 20 trials (sd 2.3 ms). That is the full round trip;
 #     the outbound half is what delays the spike relative to the host's decision.
-#     It cannot be split without a chip-side echo of command receipt, so half is
+#     Splitting it needs a chip-side echo of command receipt, so half is
 #     used and the residual uncertainty is of the same order (~7 ms).
 SMOOTH_DELAY_S = 0.012
 ROUND_TRIP_S   = 0.0296
@@ -97,7 +97,7 @@ for i in range(-1, reps + 2):
     if c + grid[0] < tl[0] or c + grid[-1] > tl[-1]: continue
     # only periods in which the stimulus was actually playing: the recording runs
     # ~3 s past the end of the WAV, and those periods contribute a flat trace that
-    # would drag the median and inflate the spread with no signal in it.
+    # would drag the median and inflate the spread off pure noise.
     if c > tm["wav_s"] - 0.2: continue
     lna.append(np.interp(c + grid, tl, cl)); used.append(i)
 lna = np.vstack(lna)
@@ -115,13 +115,13 @@ inj_ph = phase(fr[:, 0])
 drv = np.interp(grid + tm["event_on"], ts, vs, left=vs[0], right=0.0)
 
 # --- what the chip ACTUALLY received ---------------------------------------
-# The intended stimulus is not what arrives: the signal passes the sound card and
-# the divider first. Rather than assume it is faithful, recover it by inverting the
+# The intended stimulus differs from what arrives: the signal passes the sound card
+# and the divider first. Rather than assume it is faithful, recover it by inverting the
 # measured amplifier response on the median output. In 1-25 Hz the LNA is a single
 # pole at the measured 1.53 Hz corner with gain ~268x, inverting; the control loop
 # additionally averaged over 25 ms, so that boxcar is part of the forward path and
 # is divided out too. The band stops at 25 Hz because the boxcar's first null is at
-# 40 Hz and dividing near it amplifies noise without adding signal.
+# 40 Hz and dividing near it amplifies noise while adding little signal.
 FC, GAIN, BOX = 1.53, 268.0, 0.025
 nn = len(grid); ff = np.fft.rfftfreq(nn, 1.0/FS)
 Hl = -GAIN*(1j*ff/FC)/(1 + 1j*ff/FC)

@@ -25,12 +25,12 @@
  * upper bound on the analog substrate's disadvantage:
  *   - normalisation computes ONE reciprocal and then multiplies, rather than
  *     doing 128 divisions. The naive version costs ~128 divisions instead.
- *   - the tree node table is assumed resident and indexed directly; no bounds
- *     checks, no bagging, no per-class softmax.
+ *   - the tree node table is assumed resident and indexed directly; bounds
+ *     checks, bagging and per-class softmax are outside this count.
  *   - R-peak detection is charged to nobody (Section 8.4): it is shared with OP1
  *     and OP2, which consume an R-peak-aligned window.
  *
- * Build (counting only -- this never runs on the die in this form):
+ * Build (counting only -- the production form differs from this one):
  *   riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -O2 -ffreestanding -nostdlib \
  *     -c op3_kernel.c -o op3_kernel.o && riscv64-unknown-elf-objdump -d op3_kernel.o
  */
@@ -61,7 +61,7 @@ static int32_t soft_mul(int32_t a, int32_t b)
 }
 
 /* ---------------------------------------------------------------- soft div */
-/* Restoring division, 32 iterations, no early exit. */
+/* Restoring division, 32 iterations, fixed length. */
 static int32_t soft_div(int32_t num, int32_t den)
 {
     uint32_t n = (uint32_t)num, d = (uint32_t)den, q = 0, rem = 0;

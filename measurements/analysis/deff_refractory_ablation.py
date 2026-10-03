@@ -6,7 +6,7 @@ PREMISE TEST FIRST -- and the premise as briefed is FALSE.
 The brief: "73% of measured ISIs imply >26 Hz instantaneous, against mean rates of
 1.8-15.4 Hz. The array bursts at its refractory ceiling." The two rate figures are
 right (`reservoir_spikes_nv_randproj.npz`: per-neuron means 1.81-15.43 Hz, 72.6% of
-ISIs below 1/26 s). The inference from them is not, and this script measures why.
+ISIs below 1/26 s). The inference from them differs, and this script measures why.
 
 Every inter-event interval in ALL THREE ECG recordings is an integer multiple of a
 single period of 11.986 ms, to a mean residual of 0.9% of a period, with
@@ -19,20 +19,20 @@ single period of 11.986 ms, to a mean residual of 0.9% of a period, with
   * a per-neuron minimum ISI of 23.20-23.77 ms, identical across all 16 neurons to
     2.5%, in an array whose per-neuron RATES span 8.5x through mismatch.
 
-An analog refractory period cannot do that. An acquisition clock started at trial
+An analog refractory period acts differently. An acquisition clock started at trial
 onset can, and these three files are all from 2026-07-05, before the 2026-07-10
 change to chip Timer0 timestamps (reservoir_run.py:905c46c) -- so they carry HOST
 ARRIVAL times, exactly as the reference analysis already says. The recorded
-ISI distribution is therefore a measurement of the host read cadence, not of the
+ISI distribution is therefore a measurement of the host read cadence rather than of the
 neurons. "73% above 26 Hz" is the fraction of intervals at lattice steps 2 and 3.
 
 That does NOT make the mechanism uninteresting -- it makes it a different
-mechanism, and one round 2 did not test. Round 2 ruled out a 250 ms blanking dead
+mechanism that round 2 left untested. Round 2 ruled out a 250 ms blanking dead
 time (it would cap the array at 128 events/window against 282 observed) and
 modelled 16 ms uniform timestamp quantisation (-1% on D_eff). A 24 ms per-neuron
 dead time caps a neuron at 83 events/window, 16 neurons at 1335 -- far above the
 282 observed, so it was never excluded by that argument, and its signature is in
-the data: 15954 intervals, not one below 23.2 ms.
+the data: 15954 intervals, all at or above 23.2 ms.
 
 So this script runs both readings of "refractory", on top of the
 operating-point-matched condition (D_eff 12.2, <|rho|> 0.30 at tau = 20 ms):
@@ -53,7 +53,7 @@ PROVENANCE
   DERIVED    per-neuron thresholds, bisected to reproduce the measured rates
              (unchanged from deff_operating_point.py)
   SIMULATED  every ablation condition; C and F in particular have NO measured
-             parameter on this die, so they are swept, not calibrated
+             parameter on this die, so they are swept rather than calibrated
 
 Run:  ./.venv-meas/bin/python3 deff_refractory_ablation.py
 """
@@ -73,7 +73,7 @@ T_BEAT = 2.0
 TAU_M, W_EXC, W_INH = 0.02, 0.34, 0.34
 TREF_DEFAULT = 0.005
 DT = 0.001
-SUBMS = 0.001            # the <1 ms cluster is a known packet artefact, excluded
+SUBMS = 0.001            # the <1 ms cluster is a known packet artefact, set aside
 
 
 # ---------------------------------------------------------------------------
@@ -187,7 +187,7 @@ def sim_lif_x(events, T, tau_m, vth, vreset, tref, w_exc, w_inh, dt=DT,
     if fac_tau > 0.0:
         u, fdecay, tprev = 1.0, np.exp(-dt / fac_tau), None
         # facilitation is a state of the SYNAPSE, so it advances on the event
-        # timeline, not the membrane grid
+        # timeline rather than the membrane grid
         ev = sorted(((tf * T, ch) for tf, ch in events))
         for t, ch in ev:
             if tprev is not None:
@@ -288,7 +288,7 @@ def main():
                   dict(tref=float(np.round(isi_floor, 5)))))
     conds.append(("+ refractory 38.5 ms (26 Hz f-I sat.)", dict(tref=1 / 26.)))
     # A -- the acquisition lattice actually present in the recording, in two halves:
-    #      the timing quantisation on its own (which does not change the rate at
+    #      the timing quantisation on its own (which leaves the rate unchanged at
     #      all) and the two-slot floor that deletes events
     conds.append((f"+ lattice timing only {grid*1e3:.1f} ms",
                   dict(lattice=grid, rng=np.random.default_rng(1), min_steps=1)))
@@ -335,7 +335,7 @@ def main():
     # therefore build a family that changes NOTHING but the rate -- a common scale
     # on all 16 thresholds -- and read each mechanism's D_eff against the D_eff
     # that family reaches at the SAME output rate. The excess over that curve is
-    # the part of the effect that is not simply a rate change.
+    # the part of the effect beyond a simple rate change.
     # -----------------------------------------------------------------------
     print("\n" + "=" * 78)
     print("RATE CONTROL: threshold-only family (no mechanism, rate alone)")

@@ -147,7 +147,7 @@ def px_per_um(ax, cx, cy):
 
     o = scr(cx, cy)
     vx, vy = scr(cx + 1.0, cy) - o, scr(cx, cy + 1.0) - o
-    # unit in-plane direction a*ex + b*ey whose projection has no vertical part
+    # unit in-plane direction a*ex + b*ey whose projection is horizontal
     a, b = vy[1], -vx[1]
     n = math.hypot(a, b)
     if n < 1e-12:                       # dead-on top view; nothing is horizontal
@@ -411,7 +411,7 @@ def main():
         x0, y0, x1, y1 = d["bbox"]
         # The parsed JSON is several GB of Python lists for a big cell and is
         # dead once the geometry is in numpy. Drop it before the next panel so
-        # parallel workers each hold the arrays, not the parse tree.
+        # parallel workers each hold the arrays rather than the parse tree.
         d = None
         built.append(dict(verts=verts, fc=fc, ec=ec, label=label, spans=spans,
                           fa0=fc[:, 3].copy(), ea0=ec[:, 3].copy(),
@@ -483,7 +483,7 @@ def main():
                            for k in args.peel_key)
     elif args.peel:
         pt0, pt1, pn = (float(v) for v in args.peel.split(":"))
-        # the one-shot form never comes back, so it does not loop
+        # the one-shot form stays applied, so it serves one-shot flights
         peel_keys = [(0.0, 0.0), (pt0, 0.0), (pt1, pn), (1.0, pn)]
     notes = None
     if args.rung:
@@ -522,7 +522,7 @@ def main():
                                     args.scale_um, args.dim)
 
     # Attach the geometry once. Poly3DCollection re-projects from the axes
-    # matrix on every draw, so the camera can move without rebuilding it --
+    # matrix on every draw, so the camera can move with the matrix reused --
     # which is the whole point of keeping the verts in one numpy array.
     for ax, b in zip(axes, built):
         b["ax"] = ax
@@ -570,7 +570,7 @@ def main():
 
         if peel_keys:
             vis = peel_alpha(peel_amount(fr / args.frames, peel_keys))
-            # ^ global: the peel is the one thing that does not repeat
+            # ^ global: the peel is the one non-repeating element
             # only rewrite the layers whose alpha actually moved; at 7 M faces
             # touching every layer each frame is real work
             moved = {si for si, m in vis.items()
@@ -588,7 +588,7 @@ def main():
                 # always takes the top ones, so whatever is still visible is a
                 # contiguous prefix. Slicing the fully transparent tail off
                 # keeps matplotlib from depth-sorting and rasterising faces
-                # that cannot contribute a pixel -- worth ~37% of the geometry
+                # that stays outside the frame -- worth ~37% of the geometry
                 # on this cell while the stack is peeled back.
                 for b in built:
                     cut = 0
@@ -615,7 +615,7 @@ def main():
                 ax.set_xlim(cx - span, cx + span)
                 ax.set_ylim(cy - span, cy + span)
                 if j in bars:
-                    # A bar calibrated once would be wrong by the zoom factor,
+                    # A bar calibrated once would drift by the zoom factor,
                     # so re-measure and relabel it as the window changes.
                     ppu = px_per_um(ax, cx, cy)
                     um = nice_bar(ppu)
@@ -632,7 +632,7 @@ def main():
             if i == 0:
                 got = fig.canvas.get_width_height()
                 if got != (args.width, args.height):
-                    # rawvideo has no header: ffmpeg is told the size up front,
+                    # rawvideo is headerless: ffmpeg is told the size up front,
                     # so a mismatch would silently shear the whole video.
                     sys.exit(f"canvas is {got[0]}x{got[1]}, expected "
                              f"{args.width}x{args.height} -- refusing to write "

@@ -173,7 +173,7 @@ def main():
         onsets.append(i / FS_WAV)
 
     # Unit-peak-to-peak template -> the requested chip amplitude. Scale by the
-    # TEMPLATE's span, not the train's, so overlapping spikes (if any) cannot
+    # TEMPLATE's span rather than the train's, so overlapping spikes (if any) stay
     # quietly rescale every spike.
     train = train * (2 * amp_fs)           # v spans 1.0 peak-to-peak
     peak = float(np.max(np.abs(train)))

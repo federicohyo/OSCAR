@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Neuron f-I transfer curve driven by on-chip Poisson synaptic input.
 
-One neuron at a time (so the RISC-V never has to service more than one firing
+One neuron at a time (so the RISC-V services at most one firing
 neuron), a single excitatory synapse (weight 15) is stimulated by the on-chip
 RISC-V Poisson generator at a mean input rate swept from 1 to 100 Hz; the neuron's
 output firing rate is sampled over the AER path. Aggregated across the array, the

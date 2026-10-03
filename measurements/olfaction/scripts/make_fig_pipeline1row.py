@@ -4,7 +4,7 @@
 through (a) the 8-channel MOx recording, (b) the sixteen projections with
 level-crossing stimulus ticks, (c) the measured 16-neuron raster, (d) the
 exponential-kernel read-out. Same data and chunk-picking rule as the repo-root
-make_fig_odorclass.py; replayed from disk, no hardware.
+make_fig_odorclass.py; replayed from disk, hardware untouched.
 
 Writes measurements/olfaction/figures/fig_pipeline_row.pdf. Run from the repo root:
     PYTHONPATH=measurements/olfaction/scripts ./.venv-meas/bin/python3 \
@@ -48,7 +48,7 @@ def main():
                 and sum(1 for j in range(len(Y))
                         if Y[j] == names.index(c) and pred[j] == Y[j]
                         and tot[j] > np.median(tot)) >= 3), None)
-    assert cls is not None, "no class with enough healthy chunks"
+    assert cls is not None, "a class with enough healthy chunks is required"
     j = pick_chunk(cls, Y, pred, tot, it, names)
     print(f"row chunk: j={j} class={names[Y[j]]} trial={it[j]}, "
           f"spikes={tot[j]}, predicted {names[pred[j]]} (correct)")

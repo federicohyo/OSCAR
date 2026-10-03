@@ -12,7 +12,7 @@ trial's 5 chunks.  Typical statistic = mean over ALL C(5,3) subsets and all
 against data/olfaction_class_curve.json before drawing.
 
 DRAWN AT PRINT SIZE (3.45 x 0.85 in, two 5-row panels), single column,
-do not rescale.
+keep the same scale.
 Outputs fig19_olfaction_3odor.pdf (+ .png preview) in the figures directory,
 and caches the per-subset scores in data/olfaction/olfaction_k3.json.
 """
@@ -57,7 +57,7 @@ def predictions(sp, Y, it, T, C):
 
 def scores():
     files = sorted(glob.glob(os.path.join(REPO, "data/olfaction/olf_validate/*.npz")))
-    assert files, "no archived spikes"
+    assert files, "archived spikes required"
     out = {}
     for f in files:
         z = np.load(f, allow_pickle=True)

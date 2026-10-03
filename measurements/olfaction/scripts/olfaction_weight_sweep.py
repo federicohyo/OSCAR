@@ -6,7 +6,7 @@ them in the reference campaign." Right, and it is the better knob.
 
 At the reference point the four weight branches sit within 10 mV of each other, so the
 word delivers popcount(w): five levels, non-monotonic at the carries, and w<=7 drops
-most of the array silent ([[weight-code-is-popcount-not-binary]]). Useless as a dial.
+most of the array silent ([[weight-code-is-popcount-not-binary]]). Very coarse as a dial.
 The reference calibration fixes that. In weak inversion I_j = I* exp((V_j - V_j0)/nUT),
 so setting
 
@@ -15,17 +15,17 @@ so setting
 cancels each branch's mismatch and builds the binary ratio, and delivered charge becomes
 A(w) = w exactly. Word w then spans 1..15 monotonically. Since the reference delivers
 popcount(15) = 4 units, w in {1,2,3,4} is a 1/4x .. 1x drive dial at the SAME common
-mode -- which is what "fewer spikes" needs, without touching leak or threshold.
+mode -- which is what "fewer spikes" needs, leaving leak and threshold in place.
 
 LIMIT, stated because it bounds the result: the ladder (data/synapse/ladder_n5_25mhz)
 was measured on n5 ONLY. The octave term nUT*ln2 = 21.5 mV is device physics and is
 shared; the mismatch term is n5's. On the other 15 neurons the ladder is therefore
 partially calibrated, and each neuron keeps its own reference common mode V_cm = its own
-JExcWn0. Inhibition gets the binary term only -- its branch onsets were never measured --
+JExcWn0. Inhibition gets the binary term only -- its branch onsets stay unmeasured --
 and PMOS polarity inverts the sign.
 
 WHY THE WEIGHT AND NOT THE LEAK (measured 2026-08-13). The rate here is EVOKED: ~16
-output spikes from 29 input events per presentation. Cutting it with vleakn fails --
+output spikes from 29 input events per presentation. Cutting it with vleakn comes up short --
 probed at +60 mV it silenced 6/16 neurons and at +90 mV 9/16, while the rate only fell
 108 -> 45 Hz, never near the 20 Hz the simulation wants. Leak and threshold remove
 RESPONSIVENESS; only the weight scales charge per event while leaving the neuron able to

@@ -8,7 +8,7 @@ gap far better than aggregation, at feasible M.
 
 Compares three input encodings at matched budget, speaker-independent:
   pool     : contiguous 700->16 sum (baseline, kills the gap)
-  subset   : M passes, 16 distinct channels each, no summing (the candidate)
+  subset   : M passes, 16 distinct channels each, summing off (the candidate)
 If subset gives rec>ff beyond error bars at feasible M -> SHD-on-chip viable (goes first)."""
 import warnings; warnings.filterwarnings("ignore")
 import argparse

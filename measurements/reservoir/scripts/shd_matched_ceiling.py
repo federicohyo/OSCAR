@@ -6,12 +6,12 @@ The on-chip demo pools the 700 SHD cochlea channels down to <=16 chip inputs and
 SETRECUR). This script establishes the SW ceiling under THOSE constraints so the on-chip
 number has an honest reference, and -- critically -- checks whether the recurrent>feedforward
 gap SURVIVES the 700->16 pooling + 16-neuron bottleneck. If the gap dies here, it cannot
-appear on-chip and we should not spend bench time on it.
+appear on-chip, saving bench time.
 
 Speaker-INDEPENDENT: fit on shd_train, test on shd_test (held-out speakers), the honest split.
 
 Three tiers, all with a linear readout:
-  static rate (16-dim pooled)  -- time thrown away, the no-temporal-processing control
+  static rate (16-dim pooled)  -- time averaged out, the temporal-processing control
   N=16 rate ESN, rho=0 (ff)    -- leaky membrane memory only (chip's RECURCTRL 0)
   N=16 rate ESN, rho>0 (rec)   -- + network recurrence (chip's SETRECUR)
 Plus the UNCONSTRAINED N=400 ESN as the upper bound for context.

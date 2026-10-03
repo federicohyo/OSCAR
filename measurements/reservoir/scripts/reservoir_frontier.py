@@ -38,14 +38,14 @@ from scipy.stats import wilcoxon
 F_CLK = 25e6                 # RV32I core clock (firmware/soc.h CONFIG_CLOCK_FREQUENCY)
 # sky130 130nm small in-order RV32I core, ~1.8 V. No on-die power was measured in this
 # tape-out (the reference campaign is an interface/throughput characterization), so E_CYCLE is a
-# LITERATURE-ORDER ESTIMATE used only as a linear scale on the energy axis; it does not
-# affect the analog-vs-numeric ORDERING or the O(N/dt) SLOPE (both digital paths share it,
+# LITERATURE-ORDER ESTIMATE used as a linear scale on the energy axis; it leaves the
+# analog-vs-numeric ORDERING and the O(N/dt) SLOPE intact (both digital paths share it,
 # and the analog feature-generation energy is orders of magnitude below either).
 E_CYCLE = 100e-12            # J per cycle  [estimate: sky130 RV32I @ 25 MHz, order 10-100 pJ]
 
 # --- EXACT static instruction costs, counted from firmware/numeric_lif/numeric_lif.lst
 #     (riscv64-unknown-elf-gcc -march=rv32i -O2). See that .lst for provenance. ---
-# lif_step, typical hot path (v>=0, non-refractory, no spike): 20 fixed instr + the
+# lif_step, typical hot path (v>=0, non-refractory, silent): 20 fixed instr + the
 # inlined soft-multiply loop (.L9) at 7 instr per iteration.
 LIF_FIXED_INSTR   = 20       # lif_step minus the multiply loop (prologue+branches+update)
 MUL_INSTR_PER_ITER = 7       # umul32 inlined loop body (andi,neg,and,srli,add,slli,bnez)
@@ -113,7 +113,7 @@ def summ(per, recs):
 
 def main():
     # The two datasets are arguments so the same analysis can be re-run against a
-    # re-acquisition without editing the scoring code. Defaults are the original files.
+    # re-acquisition with the scoring code untouched. Defaults are the original files.
     import argparse
     ap = argparse.ArgumentParser()
     # recording NSV (reservoir_datasets.py): OP1 accuracy AND the 81.1 events/beat
@@ -159,7 +159,7 @@ def main():
         print(f"  {n:22s} acc={am:.3f}  95%CI[{ci_lo:.3f},{ci_hi:.3f}]  "
               f"(marginal s.d.±{asd:.3f}, SEM±{sem:.3f})  macroF1={fm:.3f}")
 
-    # paired analog-vs-best-digital (accuracy), the honest 'competitive-not-dominant' test
+    # paired analog-vs-best-digital (accuracy), the honest head-to-head test
     da = np.array([per["OP1_analog_reservoir"][r][0] for r in recs])
     db = np.array([per["OP3_edge_GBM"][r][0] for r in recs])
     d = da - db
@@ -209,7 +209,7 @@ def main():
 
     # analog reservoir feature-generation cost: physics integrates for free; the RISC-V
     # only receives the sparse output spikes over the AER/LA path. Order estimate:
-    # ~tens of spikes/beat, each a 4-byte UART packet (~1.3 ms) -- bounded by I/O, not compute.
+    # ~tens of spikes/beat, each a 4-byte UART packet (~1.3 ms) -- bounded by I/O rather than compute.
     hw_spk = sum(len(np.asarray(hw["spikes"][j, b])) for j in range(16) for b in range(90)) / 90
     aer_cyc = hw_spk * 200          # ~200 cyc/spike to sample+timestamp a received event (est.)
     print(f"\n=== analog reservoir (OP1) feature-generation cost ===")
@@ -227,7 +227,7 @@ def main():
                   op2_dt_floor_s=float(dt_floor),
                   op1_aer_cycles_per_beat=float(aer_cyc),
                   op1_mean_spikes_per_beat=float(hw_spk),
-                  # OP3: COUNTED, not estimated. Exact rv32i instruction count for the
+                  # OP3: COUNTED rather than estimated. Exact rv32i instruction count for the
                   # full path (234->128 resample 15,698 + per-beat normalisation 15,657
                   # + RR features 703 + 600-tree traversal 23,270), from
                   # firmware/op3_kernel/op3_kernel.c at -march=rv32i -O2 with dynamic
@@ -237,7 +237,7 @@ def main():
                   # hard-coded 4000.0 order-of-magnitude estimate that was low by 13.8x.
                   op3_gbm_cycles_per_beat=55329.0,
                   # OP4 is still an order-of-magnitude estimate; it is a reference
-                  # function, not a claim, and no headline number depends on it.
+                  # function rather than a claim; headline numbers stand independent of it.
                   op4_ref_cycles_per_beat=2000.0),   # ESTIMATE
         dt_sweep=sweep,
         static_costs=dict(lif_fixed=LIF_FIXED_INSTR, mul_per_iter=MUL_INSTR_PER_ITER,
@@ -288,7 +288,7 @@ def _apply_style():
 
 def make_figure(results_json="reservoir_frontier.json"):
     """Nature-Communications-quality two-panel frontier, rendered entirely from the saved
-    analysis in `results_json` (no numbers hardcoded here):
+    analysis in `results_json` (numbers all sourced here):
       (a) accuracy vs energy/inference for the four operating points -- the accuracies
           coincide within s.d.; the numeric-LIF reproduction (OP2) costs ~10^2-10^3x more.
       (b) the exact O(N/dt) mechanism -- numeric compute climbs linearly with temporal

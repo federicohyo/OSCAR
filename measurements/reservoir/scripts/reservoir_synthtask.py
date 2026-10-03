@@ -2,10 +2,10 @@
 """Positive control: a task where dimensionality > 1 is PROVABLY required (XOR).
 
 The ECG N/V task is threshold-solvable (1 bit/neuron ~ 0.94), so raising reservoir
-dimensionality buys nothing there. Before concluding "dimensionality does not help on
+dimensionality offers no gain there. Before concluding "dimensionality stays flat on
 this chip", we must show our pipeline (D_eff + kernel scorer) CAN detect the benefit when
-a task genuinely needs it. XOR is the textbook case: it is not linearly separable in any
-single projection, so a D_eff = 1 reservoir MUST fail and a diverse one CAN succeed.
+a task genuinely needs it. XOR is the textbook case: it needs more than one dimension, so no single
+projection suffices, so a D_eff = 1 reservoir MUST fall short and a diverse one CAN succeed.
 
 Design (hardware-mappable):
   - Each trial carries two bits (a, b), encoded as a burst of UP events in window A
@@ -37,8 +37,8 @@ K, TAUS = 8, [0.04, 0.08, 0.16, 0.32]
 # Both bits drive ONE coincident window so their bursts SUM on the membrane: the
 # integrated drive is proportional to (a+b). That is what lets a threshold ladder
 # compute OR (fire if a+b>=1) vs AND (fire only if a+b>=2), and hence XOR = OR AND NOT AND.
-# If the two bits drove separate, well-separated windows they could not sum and threshold
-# diversity could not build XOR -- the design must force summation.
+# If the two bits drove separate, well-separated windows they would sum below threshold
+# and diversity would give XOR -- the design forces summation instead.
 WIN = (0.35, 0.55)
 
 
@@ -90,7 +90,7 @@ def score(sp, y, g, feat="kernel", T=2.0):
         F = np.array([[1.0 if len(sp[i, b]) else 0.0 for i in range(sp.shape[0])] for b in range(sp.shape[1])])
     accs = []
     for tr, te in LeaveOneGroupOut().split(F, y, g):
-        if len(set(y[tr])) < 2:            # a held-out cell can leave one class absent
+        if len(set(y[tr])) < 2:            # a held-out cell can leave a single class in the split
             continue
         c = make_pipeline(StandardScaler(),
                           LogisticRegression(max_iter=5000, class_weight="balanced", C=0.1))
@@ -147,8 +147,8 @@ def main():
     ev, ab, labels, g = make_trials(args.per_cell, args.T, args.burst, args.jitter, rng)
 
     if args.signed:
-        # Software mirror of the on-chip exc/inh XOR mechanism: identical neurons (no
-        # mismatch), diversity is the exc/inh routing of the two bits.
+        # Software mirror of the on-chip exc/inh XOR mechanism: identical neurons (matched
+        # devices), diversity is the exc/inh routing of the two bits.
         sp = simulate_signed(ab, args.n, args.T, args.tau_m, args.tref,
                              args.w, args.w_inh, args.burst, args.jitter, rng)
         De = d_eff(state_matrix(sp, args.T))

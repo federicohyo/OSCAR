@@ -7,7 +7,7 @@ consequences drive this whole module:
 
   1. SEARCH IN VOLTS. The DAC's voltage axis is the log-current axis, so working in volts
      linearises the exponential -> a smooth landscape a GP surrogate can fit. Steps are small and
-     BOUNDED (a narrow window around a known-good point), never wide sweeps.
+     BOUNDED (a narrow window around a known-good point), always narrow.
   2. TWO SENSING CHANNELS. Spike counts (AER) give the task memory (MC0/1/2, rate, drift); the
      scope membrane gives the mechanism (tau_eff, and railing that spike-counts hide -- a "silent"
      neuron can be saturated-high, needing the OPPOSITE correction to a dead one).
@@ -39,7 +39,7 @@ class Observation:
 class Diagnostics:
     mc0: float; mc1: float; mc2: float       # CV memory capacity at lags 0,1,2 (RECURRENT reservoir)
     rate: float                              # mean spikes/frame/neuron on the 2nd half
-    drift: float                             # (rate_2ndhalf - rate_1sthalf)/rate_1sthalf ; ~0 = no saturation
+    drift: float                             # (rate_2ndhalf - rate_1sthalf)/rate_1sthalf ; ~0 = saturation-free
     n_live: int                              # neurons with non-trivial activity
     tau_eff: float = float("nan")            # membrane decay time constant (frames), from scope/impulse
     railed_frac: float = 0.0                 # fraction of sampled neurons stuck-high (saturated)
@@ -82,7 +82,7 @@ def fit_tau_eff(t: np.ndarray, v: np.ndarray) -> float:
     return tau in the same time units as t. Shared by the sim and the real scope trace. Robust to a
     baseline offset and to a railed (flat-high) trace (returns inf-ish -> caught as saturation)."""
     v = np.asarray(v, float); t = np.asarray(t, float)
-    if v.ptp() < 1e-6:                                   # flat -> railed or dead; no decay to fit
+    if v.ptp() < 1e-6:                                   # flat -> railed or dead; nothing to fit
         return float("inf") if v.mean() > 0.5 * (v.max() + 1e-9) else 0.0
     c = v.min()
     a = v - c
@@ -96,7 +96,7 @@ def fit_tau_eff(t: np.ndarray, v: np.ndarray) -> float:
         slope = np.polyfit(tt[mask] - tt[0], np.log(aa[mask]), 1)[0]
     except Exception:
         return 0.0
-    if slope >= -1e-6:                                   # ~flat or rising -> no decay = railed/latched
+    if slope >= -1e-6:                                   # ~flat or rising -> decay absent = railed/latched
         return float("inf")
     tau = -1.0 / slope
     return float(tau) if tau < 10.0 * len(t) else float("inf")   # absurdly long = effectively railed
@@ -112,7 +112,7 @@ def analyze(obs: Observation, wash: int = 100) -> Diagnostics:
     mc = [cv_mc(X, u, lag, wash) for lag in (0, 1, 2)]
     h1 = counts[wash:cut].mean(); h2 = counts[cut:].mean()
     rate = float(h2)
-    # symmetric relative drift, BOUNDED in [-2,2] (never blows up when the first half is ~empty,
+    # symmetric relative drift, BOUNDED in [-2,2] (stays finite when the first half is ~empty,
     # e.g. a saturation runaway where all spikes land in the second half)
     drift = float((h2 - h1) / (0.5 * (h1 + h2) + 1e-6))
     # feedforward MC on the SAME live neurons + input -> the rec-ff gap the objective rewards
@@ -135,11 +135,11 @@ def analyze(obs: Observation, wash: int = 100) -> Diagnostics:
 # ----------------------------------------------------------------------------- objective
 @dataclass
 class ObjectiveCfg:
-    # Reward RECURRENCE-SPECIFIC fading memory (the whole point of NARMA), not just any memory:
+    # Reward RECURRENCE-SPECIFIC fading memory (the whole point of NARMA) over generic memory:
     #  - the rec-ff GAP (recurrent MC minus feedforward MC at lag>=1) is weighted highest, so a point
-    #    where recurrence does nothing (rec~=ff, the last run's failure) scores near zero.
-    #  - absolute rec MC1/MC2 kept as a smaller term (need real memory, not just a gap of noise).
-    #  - MC0 capped (encoding is necessary but an instant-echo must not win); n_live = dimensionality.
+    #    where recurrence does nothing (rec~=ff) scores near zero.
+    #  - absolute rec MC1/MC2 kept as a smaller term (need real memory above the noise floor).
+    #  - MC0 capped (encoding is necessary, with an instant-echo kept from winning); n_live = dimensionality.
     w_gap1: float = 1.5; w_gap2: float = 1.0             # rec-ff memory gap (recurrence must contribute)
     w_mc0: float = 0.20; mc0_cap: float = 0.40           # capped encoding credit
     w_mc1: float = 0.5; w_mc2: float = 0.3               # absolute rec memory (secondary)
@@ -168,7 +168,7 @@ def objective(diag: Diagnostics, cfg: ObjectiveCfg = ObjectiveCfg()) -> Tuple[fl
     v["railed"] = max(0.0, diag.railed_frac - cfg.railed_max)
     v["n_live"] = max(0.0, cfg.n_live_min - diag.n_live) / max(1, cfg.n_live_min)
     if np.isnan(diag.tau_eff):
-        pass                                             # scope not used -> tau constraints not measured
+        pass                                             # scope unused -> tau constraints left to the scope pass
     elif np.isfinite(diag.tau_eff):
         v["tau_lo"] = max(0.0, cfg.tau_lo - diag.tau_eff) / cfg.tau_lo
         v["tau_hi"] = max(0.0, diag.tau_eff - cfg.tau_hi) / cfg.tau_hi

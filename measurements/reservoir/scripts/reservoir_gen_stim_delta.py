@@ -4,7 +4,7 @@
 For each neuron k, apply its fixed input projection (reservoir_input_proj.json) to a
 representative beat and delta-encode it, then write reservoir_delta_proj_n{k}.txt in the
 same "t_ms channel" format the bridge's Stim-N loop reads. Looping neuron k's own
-projected trace (feedforward, no recurrence) reproduces exactly the per-neuron drive of
+projected trace (feedforward, recurrence off) reproduces exactly the per-neuron drive of
 reservoir_run_randproj.py, so tuning the bias on-scope matches the experiment.
 """
 import argparse

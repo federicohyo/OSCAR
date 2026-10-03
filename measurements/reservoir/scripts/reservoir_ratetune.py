@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Closed-loop bias tuner for the array's EVOKED firing rate.
 
-Closes the tooling gap behind the `\\todo{MEASURE:}` in Section 4.3.1: re-acquire the
+Fills the tooling needs behind the `\\todo{MEASURE:}` in Section 4.3.1: re-acquire the
 reservoir at the DIM recording's operating point so the D_eff decomposition and the
 accuracy can be compared like for like.
 
 `reservoir_biastune.py` cannot do this. It sweeps vleakn and measures the RESTING
-rate with no stimulus, which is a different quantity: the recordings' 8.8 Hz is the
+rate with zero stimulus, which is a different quantity: the recordings' 8.8 Hz is the
 rate the array emits WHILE BEATS ARE BEING PRESENTED, through the projected delta
 encoder. This script measures that quantity, through the same `present_delta` path
 the acquisition uses, and bisects a bias offset until it hits a target.
@@ -25,14 +25,14 @@ The reference analysis's 8.8 Hz is DIM's rate as REPORTED by the flash-resident 
 with host-arrival timestamps, whose 11.986 ms lattice with a two-slot floor drops
 42% of the events of a recording at today's drive (`lattice_rate_check.py`, which
 also carries the control showing the lattice is near-idempotent on data already on
-it). The fixed read-out drops none. Tuning today's array to 8.8 Hz *as measured*
+it). The fixed read-out drops zero. Tuning today's array to 8.8 Hz *as measured*
 would therefore leave it about 29% quieter than DIM actually was.
 
 So the objective is the LATTICE-PROJECTED rate: at each probe the measured spike
 trains are pushed through the old, measured lattice parameters, and THAT is
-compared to 8.81 Hz. It needs no inversion and it is exactly the comparison
+compared to 8.81 Hz. It needs zero inversion and it is exactly the comparison
 `deff_lattice_on_new.py` makes for D_eff. `--target-domain raw` restores the
-literal reading of the todo; the deviation is a visible choice, not a silent one.
+literal reading of the todo; the deviation is a visible choice rather than a silent one.
 
 
 THE KNOB, AND WHY A COMMON OFFSET
@@ -55,11 +55,11 @@ Limitations say the neuron free-runs BELOW vleakn = 0.225 V. Both can hold if ra
 versus vleakn is non-monotonic -- free-run at the bottom, saturation-silence at the
 top, a usable band between. This script therefore measures the sign of the response
 from its first step and flips if it guessed wrong, and it treats a rate that fell
-because neurons went SILENT as a probe failure rather than as progress: a saturated
+because neurons went SILENT as a probe shortfall rather than as progress: a saturated
 membrane satisfies a naive rate objective while destroying the reservoir.
 
 Headroom is genuinely tight. `_feedproj` sits at 0.257-0.285 V, so a -30 mV offset
-already puts the lowest neuron at the free-run edge. If no feasible offset reaches
+already puts the lowest neuron at the free-run edge. If every feasible offset misses
 the target, that is a real outcome and the script says so -- see the pre-committed
 fallback in `bench/README.md` (MEASURE 1 demotes to the Limitations text).
 """
@@ -78,12 +78,12 @@ from reservoir_run_randproj import load_proj, bias_path
 from deff_refractory_ablation import apply_lattice
 
 T_BEAT = 2.0
-GRID_OLD = 0.011986        # MEASURED on the 2026-07 recordings, not refitted
+GRID_OLD = 0.011986        # MEASURED on the 2026-07 recordings rather than refitted
 MIN_STEPS = 2              # the two-slot floor, also measured
 LATTICE_SEEDS = 8
 
 # Hard rails per knob, and the value below/above which the reference analysis or the bench
-# notes say the array stops behaving. Going outside these is never a solution.
+# notes say the array stops behaving. Staying inside these is the solution.
 RAILS = {
     "vleakn": (0.150, 0.400),   # NMOS leak
     "ifdcp":  (0.600, 1.780),   # PMOS; 1.78 V is OFF
@@ -91,12 +91,12 @@ RAILS = {
 FREERUN_VLEAKN = 0.225          # Limitations: below this the neuron free-runs
 
 # Reference-point selection criterion. COMMITTED 2026-08-12 in
-# bench/reference_acquisition.md BEFORE the sweep that applies it. Do not tune these
+# bench/reference_acquisition.md BEFORE the sweep that applies it. Tune within these
 # to produce a winner: a reference point that only exists under a widened criterion
-# is not a reference point.
+# falls short of the standard.
 MIN_LIVE_HZ = 2.0     # slowest live neuron; below this it is one drift from dark
 DRIFT_MV    = 5.0     # the drift the point must tolerate
-DRIFT_TOL   = 0.25    # ... without the array mean moving more than this
+DRIFT_TOL   = 0.25    # ... keeping the array mean within this
 MIN_CV      = 0.30    # per-neuron rate diversity floor
 
 
@@ -237,7 +237,7 @@ def main():
                          "bench/reference_acquisition.md, which is about MARGIN, not "
                          "about hitting a rate. Ignores --target.")
     ap.add_argument("--max-probes", type=int, default=12,
-                    help="a wrong first guess costs a flip probe and a wider "
+                    help="an off first guess costs a flip probe and a wider "
                          "bracket; 12 x 4 min is still under an hour, and the "
                          "expensive failure is ending one probe short")
     ap.add_argument("--syn", type=int, default=0)
@@ -256,8 +256,8 @@ def main():
         args.write_biases = (f"ofxCaravanViewer/bin/bias_ratetune_{clk}mhz_"
                              f"{args.knob}_n{{k}}.biases")
     if args.write_biases:
-        # Fail in the first second, not after an hour of tuning: a bias file the
-        # acquisition would refuse is not a usable result. The Section 4.6 guard
+        # Detect it in the first second rather than after an hour of tuning: a bias file the
+        # acquisition would refuse makes for an unusable result. The Section 4.6 guard
         # keys on the filename, so the filename has to carry the clock.
         from reservoir_run import check_bias_clock_pairing, BiasClockMismatch
         try:
@@ -350,8 +350,8 @@ def main():
             if usable(r1):
                 moved = r1["objective_hz"] - r0["objective_hz"]
                 if abs(moved) <= DEAD * r0["objective_hz"]:
-                    # No movement is NOT evidence the direction is right -- it is no
-                    # evidence at all. Measure the other side before committing the
+                    # Zero movement gives zero evidence of the right direction. Measure the other side
+                    # before committing the
                     # remaining probes to a guess.
                     print(f"  -> NO RESPONSE ({moved:+.2f} Hz). Trying the other "
                           "direction before committing.")
@@ -379,8 +379,8 @@ def main():
 
             # Expand geometrically until the target is bracketed, a gate fires, or
             # we run out of probes. A gate firing IS the answer when it means the
-            # array cannot be driven there without losing neurons. The first step is
-            # already measured (r1) -- do not pay for it twice.
+            # array is best driven elsewhere to keep all neurons. The first step is
+            # already measured (r1) -- a second probe adds nothing.
             lo_rec, hi_rec, step, cand = r0, None, args.step, r1
             while len(log) < args.max_probes:
                 if not usable(cand):
@@ -419,7 +419,7 @@ def main():
                         a = mid
                 else:
                     # Ran out of probes mid-bisection. The closest endpoint is NOT a
-                    # converged result and must not be reported as one.
+                    # converged result and is kept out of the reported set.
                     solution = min((a, c),
                                    key=lambda r: abs(r["objective_hz"] - args.target))
                     solution["budget_exhausted"] = True
@@ -434,7 +434,7 @@ def _finish_sweep(args, log, ctx, paths):
     """Apply the pre-committed reference criterion to a characterisation sweep.
 
     Reports every point against every condition, so a rejected point is visible with
-    the reason rather than merely absent, and so the winner can be checked by hand."""
+    the reason, and so the winner can be checked by hand."""
     knob = args.knob
     pts = sorted([r for r in log if "rejected" not in r or r["rejected"] == "silent"],
                  key=lambda r: r["delta"])

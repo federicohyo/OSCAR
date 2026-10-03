@@ -9,7 +9,7 @@ produced from the archived data alone.
 repository.** The rows describe what each result plots, the data it reads and
 the script that produces it.
 
-Rows without a dedicated producer script are marked **[GAP]** and note how the
+Rows whose figure is produced by hand are marked **[MANUAL]** and note how the
 figure is produced. Non-data-driven floats are **[ASSET]** and are provided as
 exported images under `docs/figures/`.
 
@@ -58,10 +58,10 @@ depth corrected in addition to the fragment rewrite:
 
 | Result | Data file(s) | Plotting script | Output file | Notes |
 |---|---|---|---|---|
-| System architecture | — (design asset) | — (asset export) | `docs/figures/arch_overview.pdf` / `.png` | **[ASSET]** exported system-overview float; no data. |
+| System architecture | — (design asset) | — (asset export) | `docs/figures/arch_overview.pdf` / `.png` | **[ASSET]** exported system-overview float. |
 | **Hardware layout** | — (design assets) | — (one-time compose/export) | `docs/figures/fig_hardware_layout.{pdf,png}` | **[ASSET]** composed from `ISLPED2025-layout.png`, `skywater_2024_avlsi_chip_SNN_RISCV.jpg`, `19701130_045846_826317_daugther_chip.jpg`. Also the README figure. |
-| LNA schematic | `design/xschem/` (LNA cell) | — | `docs/figures/lna_schematic.pdf` | **[GAP: no dedicated script]** produced manually from the LNA cell (xschem GUI → SVG/PDF). |
-| LNA transfer, gain + noise (`fig12_lna_gain_noise.pdf`) | `measurements/lna/data/lna_transfer_final.csv`, `lna_transfer_ref.csv`, `lna_noise.csv` | `measurements/lna/clean_2026-08-26/scripts/make_figures.py` | `measurements/lna/figures/fig12_lna_transfer.pdf` (gain) **and** `fig14_lna_noise.pdf` (noise) | Script emits the two panels separately. The combined two-panel `fig12_lna_gain_noise.pdf` is produced manually → **[GAP: no dedicated script]**; recommend `make_fig12_gain_noise.py`. A reference copy of the combined asset is provided at `measurements/lna/figures/fig12_lna_gain_noise.pdf`. |
+| LNA schematic | `design/xschem/` (LNA cell) | — | `docs/figures/lna_schematic.pdf` | **[MANUAL]** produced manually from the LNA cell (xschem GUI → SVG/PDF). |
+| LNA transfer, gain + noise (`fig12_lna_gain_noise.pdf`) | `measurements/lna/data/lna_transfer_final.csv`, `lna_transfer_ref.csv`, `lna_noise.csv` | `measurements/lna/clean_2026-08-26/scripts/make_figures.py` | `measurements/lna/figures/fig12_lna_transfer.pdf` (gain) **and** `fig14_lna_noise.pdf` (noise) | Script emits the two panels separately. The combined two-panel `fig12_lna_gain_noise.pdf` is produced manually → **[MANUAL]**; recommend `make_fig12_gain_noise.py`. A reference copy of the combined asset is provided at `measurements/lna/figures/fig12_lna_gain_noise.pdf`. |
 | TiO2 wet-transduction panels | `measurements/wet_pad/data/scope_20260829_094236.csv`, `scope_20260829_103015.csv` | `measurements/wet_pad/scripts/tio2_combi.py` | `measurements/wet_pad/figures/fig16_tio2_wetting.pdf`, `fig17_tio2_dilute3x.pdf` | Shadows: `tio2_three_panel.py`, `tio2_dilute3x_panel.py`, `tio2_injection_recovery.py`, `make_fig_saline_chain.py`. |
 | Pad-evoked spiking | `measurements/wet_pad/data/scope_20260831_123139_single_payed_back_chip1_v1.csv` | `measurements/wet_pad/scripts/make_fig_pad_evoked.py` | `measurements/wet_pad/figures/fig18_pad_evoked_chip1.pdf` | |
 | SOTA comparison | — | — | `docs/` Markdown/CSV (hand-entered) | Compiled from literature. |
@@ -122,16 +122,16 @@ PYTHONPATH=. "$PY" measurements/plotting/make_synapse_weight.py --panels b \
 "$PY" measurements/plotting/constants.py
 ```
 
-## [GAP]s and open decisions
+## Manual figures and open decisions
 
-1. **Combined `fig12_lna_gain_noise.pdf` — no dedicated script.** The two panels
+1. **Combined `fig12_lna_gain_noise.pdf` — produced manually.** The two panels
    are produced separately; the combined figure is produced manually. Recommend
    writing
    `measurements/lna/clean_2026-08-26/scripts/make_fig12_gain_noise.py`.
-2. **`docs/figures/lna_schematic.pdf` — no dedicated script.** The schematic is
+2. **`docs/figures/lna_schematic.pdf` — produced manually.** The schematic is
    produced manually from the `design/xschem/` LNA cell.
 3. **SOTA tables — hand-entered.** Compiled from literature into Markdown/CSV
    under `docs/`.
 4. **Operating point.** Many results are operating-point and clock dependent.
-   Where a row says `_25mhz` or a named bias file, reproduce that clock and bias
-   file, not just "a" bias file. See `docs/HARDWARE_TRAPS.md`.
+   Where a row says `_25mhz` or a named bias file, reproduce that clock and that
+   named bias file. See `docs/HARDWARE_TRAPS.md`.

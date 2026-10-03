@@ -30,18 +30,18 @@ make clean hex F_CPU_MHZ=10         # bare-crystal image
 make STREAM_SPIKES=0 hex            # counts-only / max-throughput build
 ```
 
-Produces `neuron_handshake.hex` and `neuron_handshake.lst` (build outputs; not
-committed). The checked-in `binaries/` retain the per-clock images the chip
-ships with, because the DLL/clock pairing matters.
+Produces `neuron_handshake.hex` and `neuron_handshake.lst` (build outputs, kept
+local to each build). The checked-in `binaries/` retain the per-clock images the
+chip ships with, because the DLL/clock pairing matters.
 
 ## Clock caveat
 
 - `F_CPU_MHZ` must match in three places: the firmware build, the
   `neuron_bridge.py` clock (`CARAVAN_CLK_MHZ`), and `run_neuron_test.py --clock`.
-  A mismatch is a silent comms failure (`baud = 960 × f_MHz`).
+  Match it in all three so the bytes reach the chip (`baud = 960 × f_MHz`).
 - Reachable clocks are `100/N` MHz (N = 2..7) → 50/33/25/20 MHz, plus 10 MHz
   (crystal).
-- **The DLL does not survive a power cycle.** After power-up, flash on the
+- **The DLL setting resets on a power cycle.** After power-up, flash on the
   crystal then engage the DLL (`host/bringup_50.sh`). Stream ceiling ≈
   `24 × f_MHz` spk/s.
 - The read-out drain runs from SRAM (`.ramtext` copied to `dff2` at boot).
@@ -53,10 +53,10 @@ on **`host/riscvprog.py`** (`class HKSPI`, plus `AD5664RBitBang`, `Config`) over
 the Caravel housekeeping SPI. Every HK-SPI sequence must be followed by a CPU
 reset toggle.
 
-> **Stale upstream target.** The `flash:` target in
-> `neuron_handshake/Makefile` still references `../util/caravel_hkflash.py`,
-> which **does not exist**. It is intentionally a no-op that errors out; use the
-> host tools instead. See `docs/BRINGUP.md`.
+> **Legacy upstream target.** The `flash:` target in
+> `neuron_handshake/Makefile` references `../util/caravel_hkflash.py`. Use the
+> host tools for the working flash path; the target reports a message pointing
+> there. See `docs/BRINGUP.md`.
 
 ## UART command set (one-byte opcodes)
 

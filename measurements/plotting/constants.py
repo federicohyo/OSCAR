@@ -42,7 +42,7 @@ with open(os.path.join(_RESDIR, "olfaction_hybrid_slot.json")) as _f:
 with open(os.path.join(_RESDIR, "olfaction_mismatch_payoff.json")) as _f:
     _PAY = json.load(_f)
 P_ANALOG_W = 0.10e-3      # [W]   aVDD, corrected rail measurement (2026-08-29);
-                          # 0.43 mW previously quoted was not the array alone
+                          # 0.43 mW previously quoted covered more than the array alone
 P_CORE_W = 9.3e-3         # [W]   DVDD, RV32I at 25 MHz
 K_RAIL = P_ANALOG_W * _SLOT["t_slot_s"]      # rail joules in one node visit
 
@@ -74,7 +74,7 @@ CYC_STEP_IDEAL = 153      # [cyc/neuron-step]  see reservoir_frontier.py:numeric
 #
 # This REPLACES the hard-coded 4000 cyc/beat order-of-magnitude estimate at
 # reservoir_frontier.py:231 that produced the old 588x headline. The estimate was low by
-# 13.8x, and not for the reason we predicted: it does not even cover tree traversal
+# 13.8x, for a different reason than predicted: it leaves tree traversal uncovered
 # (23,270 cyc on its own), let alone the feature extraction it omits entirely.
 OP3_CYC_RESAMPLE  = 15698     # 234 -> 128 linear interpolation, soft-multiply bound
 OP3_CYC_NORMALISE = 15657     # min/max scan + one reciprocal + 128 soft multiplies
@@ -96,14 +96,14 @@ OP3_CYC_TOTAL     = OP3_CYC_RESAMPLE + OP3_CYC_NORMALISE + OP3_CYC_RR + OP3_CYC_
 #
 # Q16 is both exact and 28% CHEAPER: its 16-byte node stride indexes with one shift
 # where Q8.8's 12-byte stride needs three instructions, and flash fetch amplifies that.
-# The COUNTED figure is 4,126 for both and cannot see it, which is why this is measured.
+# The COUNTED figure is 4,126 for both and stays blind to it, which is why this is measured.
 OLF_CYC_MEASURED_Q16 = 85215    # [cyc/decision] MEASURED, flash-resident, matched accuracy
 OLF_CYC_MEASURED_Q8 = 118349    # [cyc/decision] MEASURED, but 0.933 voted -- NOT matched
 OLF_CYC_COUNTED = 4126
 # Digital cost of ONE node visit of the hybrid tree: pick the next node, load the
 # level, accumulate the leaf. MEASURED (olfaction_hybrid_slot.py). This is the routing
-# that runs on the host on this die, because the core cannot program the bias DACs;
-# it is quoted so the energy accounting does not depend on where the routing ran.
+# that runs on the host on this die, because the core leaves bias-DAC programming to the host;
+# it is quoted so the energy accounting is independent of where the routing ran.
 OLF_ROUTE_CYC = 532
 
 # ---- olfaction, array measured on silicon (2026-08-15) ---------------------
@@ -132,13 +132,13 @@ OLF_OPT_PROJ_CYC = 2284004     # [cyc/chunk] MEASURED, single valid run
 OLF_OPT_KERN_CYC = 77898       # [cyc/chunk] MEASURED, single valid run
 # the naive values from the SAME run as the optimised ones. The stage timings vary ~10%
 # between runs (flash fetch is placement-sensitive), so a speed-up must be computed from
-# a contemporaneous pair, not against OLF_ARR_*_CYC measured in a different image.
+# a contemporaneous pair rather than against OLF_ARR_*_CYC measured in a different image.
 OLF_NAIVE_PROJ_SAMERUN = 6388615
 OLF_NAIVE_KERN_SAMERUN = 4907006
 
 # Accuracy, all under ONE protocol: within-0.1s chunks, GroupKFold by trial, voted over
 # the 5 heater-cycle chunks of a trial. NOT the train-on-1.0s Dennler protocol that the
-# 1.000/0.933 figures above come from -- the two must not be mixed.
+# 1.000/0.933 figures above come from -- keep the two separate.
 # WITH the digital kernel read-out (the reference table row "analog array + digital read-out").
 OLF_ACC_ARRAY_V5, OLF_ACC_ARRAY_V5_SD = 0.756, 0.042      # 3 chip re-acquisitions
 # COUNTS-ONLY on the same measured array -- the quantity the width sweeps in the reference figure
@@ -162,7 +162,7 @@ OLF_EMUL_RATE_HZ = 21
 OLF_ACC_Q16_V5, OLF_ACC_Q16_V5_SD = 0.953, 0.016          # 5 CV fold seeds
 OLF_ACC_Q8_V5, OLF_ACC_Q8_V5_SD = 0.947, 0.016
 OLF_CHUNKS_PER_DECISION = 5
-          # [cyc/decision] COUNTED, 1-CPI, cannot be SRAM-resident
+          # [cyc/decision] COUNTED, 1-CPI, stays out of SRAM
 OLF_DECISION_HZ = 20.0          # [Hz] the e-nose heater cycle: 50 ms, one cycle = one feature
 OLF_EVENTS_PER_DECISION = 20    # [events] assumed array activity per decision
 
@@ -199,13 +199,13 @@ _olf_analog_frac = 100.0 * (OLF_ARR_RAIL_UJ + OLF_ARR_DRAIN_CYC * E_CYCLE_J * 1e
     / _olf_arr_tot_uj
 _olf_amort = _olf_common_cyc * E_CYCLE_J * 1e6 / _olf_block_analog
 
-# --- PROJECTED (not measured): the same task with an algorithm the substrate can
+# --- PROJECTED (extrapolated beyond measurement): the same task with an algorithm the substrate can
 # execute. The 8->16 projection is what the 16 exc + 16 inh 4-bit synapses per neuron
 # already compute in analog, so the digital MAC is redundant; and if a second layer
 # integrates in the membranes, the read-out is spike COUNTS rather than exponential
 # filters. Both primitives exist on this die (the synapse fabric; SETRECUR, demonstrated
 # by the T-XOR result). Everything else is held at its measured value.
-_olf_m_enc = OLF_ARR_ENC_CYC * E_CYCLE_J * 1e6 * 0.5      # 8 raw channels, not 16
+_olf_m_enc = OLF_ARR_ENC_CYC * E_CYCLE_J * 1e6 * 0.5      # 8 raw channels rather than 16
 _olf_m_clf = OLF_ARR_CLF_CYC / (128 * 5) * (16 * 5) * E_CYCLE_J * 1e6
 _olf_matched_uj = (_olf_m_enc + _olf_m_clf
                    + OLF_ARR_DRAIN_CYC * E_CYCLE_J * 1e6 + OLF_ARR_RAIL_UJ)
@@ -215,7 +215,7 @@ _olf_matched_analog_share = 100.0 * (OLF_ARR_RAIL_UJ
                                      + OLF_ARR_DRAIN_CYC * E_CYCLE_J * 1e6) / _olf_matched_uj
 
 # --- hybrid: RISC-V routes the tree, the array integrates, 16 neurons time-multiplexed
-# across the visited nodes. Per-visit costs are measured; the hybrid is not built.
+# across the visited nodes. Per-visit costs are measured; the hybrid is projected.
 OLF_TREE_NODES, OLF_TREE_VISITS = 746, 160.3
 _olf_dig_visit_nj = OLF_CYC_MEASURED_Q16 / OLF_TREE_VISITS * E_CYCLE_J * 1e9
 _olf_rail_slot_nj = OLF_ARR_RAIL_UJ * 1e3 / OLF_LIF_N          # one neuron, one window
@@ -281,16 +281,16 @@ def crossover_dt(cyc_per_step, e_analog_J):
 #              = k * (E_static/E_op3)  +  E_readout/E_op3
 #
 # which is LINEAR AND INCREASING in k: making the digital side more efficient
-# makes the array look WORSE, because 98% of OP1's cost is not on the core at
-# all. The only lever that closes the gap is the analog rail. Writing the analog
+# weighs against the array, because 98% of OP1's cost sits off the core at
+# all. The lever that closes the gap is the analog rail. Writing the analog
 # static power as E_static/m:
 #
 #     ratio(m) = (E_static/m + E_readout) / E_op3   ->  1  at  m = E_static/(E_op3 - E_readout)
 #
-# and as m -> infinity the ratio does not go to zero but to E_readout/E_op3: the
+# and as m -> infinity the ratio converges to E_readout/E_op3 rather than zero: the
 # read-out the array needs is itself a fixed fraction of the whole tree baseline.
 # All three are DERIVED -- pure arithmetic on the measured/counted quantities
-# above, no new measurement and no estimate.
+# above, a direct equality derived from the figures above.
 # ---------------------------------------------------------------------------
 
 def gap_slope_in_core_efficiency(e_static_J, e_op3_J):
@@ -421,7 +421,7 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
         r"\newcommand{\olfaccqeightsd}{%.3f}" % OLF_ACC_Q8_V5_SD,
         # hybrid analog tree, measured on silicon (olfaction_hybrid_score.json,
         # olfaction_hybrid_slot.json). Read from the result files rather than typed, so
-        # the reference analysis cannot drift from the run that produced them.
+        # the reference analysis stays locked to the run that produced them.
         r"\newcommand{\accthree}{%.3f}" % _HYB["analog"]["voted5"],
         r"\newcommand{\accthreesd}{%.3f}" % _HYB["voted5_sd"],
         r"\newcommand{\accceil}{%.3f}" % _HYB["digital_snapped"]["voted5"],
@@ -433,11 +433,11 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
         r"\newcommand{\hybrearmms}{%.0f}" % (3 * _SLOT["tau_s"] * 1e3),
         r"\newcommand{\hybtaums}{%.0f}" % (_SLOT["tau_s"] * 1e3),
         r"\newcommand{\hybvisituj}{%.1f}" % (_SLOT["e_visit_J"] * 1e6),
-        # NOT a /16 number. Sixteen-way multiplexing is not reachable: the bias DACs are
-        # array-wide, so the neurons in range do not hold different thresholds, and
+        # NOT a /16 number. Sixteen-way multiplexing lies out of reach: the bias DACs are
+        # array-wide, so the neurons in range share one threshold, and
         # weighting levels by their share of node visits gives 1.13x
         # (olfaction_mismatch_payoff.py). The /16 macro this replaces was 9.8x optimistic
-        # and is deleted rather than kept unused, so it cannot be picked up again.
+        # and is deleted rather than kept unused, so it stays out of future runs.
         r"\newcommand{\hybpar}{%.2f}" % _PAY["speedup"],
         r"\newcommand{\hybvisitparuj}{%.1f}"
         % ((_SLOT["e_visit_J"] - K_RAIL + K_RAIL / _PAY["speedup"]) * 1e6),
@@ -555,7 +555,7 @@ def selfcheck(op1_energy_mJ, op3_energy_uJ=None, aer_cyc_pb=None):
     # --- Task Q: the gap decomposition the prose rests on.
     # These are pinned on the CURRENT (counted) OP3 basis. Task 6c will replace
     # OP3_CYC_TOTAL with a measured value; when it does, update these numbers to the
-    # new basis -- every one of them is an equality, none is a bound to be relaxed.
+    # new basis -- every one is an equality rather than a bound to be relaxed.
     if op3_energy_uJ is not None and aer_cyc_pb is not None:
         e_op3 = op3_energy_uJ * 1e-6
         e_ro = aer_cyc_pb * E_CYCLE_J
@@ -563,7 +563,7 @@ def selfcheck(op1_energy_mJ, op3_energy_uJ=None, aer_cyc_pb=None):
         ok(e_an / e_op3, 10.42, 0.2, "OP1/OP3 ratio")
         # the identity the prose depends on: ratio = k*slope + floor, so a MORE
         # efficient core (k>1) widens the gap. If this ever comes out <= 0 the
-        # sentence in the reference analysis is wrong. (slope = analog-static share, so it
+        # sentence in the reference analysis is off. (slope = analog-static share, so it
         # moved 41.8 -> 9.7 with the corrected 100 uW rail; the floor is rail-free.)
         slope = gap_slope_in_core_efficiency(E_ANALOG_STATIC_J, e_op3)
         floor = gap_floor(e_ro, e_op3)
@@ -584,12 +584,12 @@ if __name__ == "__main__":
     import json
     d = json.load(open(os.path.join(HERE, "reservoir_frontier.json")))
     cost = d["cost"]
-    # MEASURED basis (Task F): 105 cyc/call + 480 cyc/event, not the 200 cyc/spike
+    # MEASURED basis (Task F): 105 cyc/call + 480 cyc/event rather than the 200 cyc/spike
     # estimate the json still carries.
     ev = cost["op1_mean_spikes_per_beat"]
     aer_cyc = aer_cycles_per_beat(ev)
     e_an_mJ = analog_energy_J(aer_cyc) * 1e3
-    # COUNTED basis (Task I), not the json's 4000-cycle estimate.
+    # COUNTED basis (Task I) rather than the json's 4000-cycle estimate.
     e_tree_uJ = OP3_CYC_TOTAL * E_CYCLE_J * 1e6
     selfcheck(e_an_mJ, e_tree_uJ, aer_cyc)
     # --- olfaction: the second point on the decision-rate axis -------------

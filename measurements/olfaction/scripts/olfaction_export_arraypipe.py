@@ -113,7 +113,7 @@ def main():
         # LITERAL constants, unrolled over units. A runtime lookup ap_projq8[u][c]
         # forces gcc to emit a real multiply (__mulsi3, 16-iteration software routine);
         # only a compile-time literal lets it strength-reduce into shifts and adds. That
-        # distinction is the whole optimisation, and getting it wrong once cost a build.
+        # distinction is the whole optimisation, and an early slip cost a build.
         h.write("__attribute__((always_inline)) static inline int "
                 "ap_proj_dot(const int *x, int u)\n{\n  switch (u) {\n")
         for u in range(16):
@@ -129,7 +129,7 @@ def main():
             h.write("  {" + ",".join(str(q(np.exp(-d * 0.001 / t)))
                                      for d in range(nsteps)) + "},\n")
         h.write("};\n\n")
-        # (3) per-unit spike tick lists, so the kernel iterates over EVENTS not ticks
+        # (3) per-unit spike tick lists, so the kernel iterates over EVENTS rather than ticks
         counts = [int((grid[u] > 0).sum()) for u in range(16)]
         mx = max(1, max(counts))
         h.write(f"#define AP_MAXSPK {mx}\n")

@@ -9,20 +9,20 @@ accumulate -- is digital, exactly as the architecture intends (6.15: conditional
 free in software, integration is what the array is for). The routing runs on the HOST
 rather than the core for one hard reason: the RISC-V cannot program the bias DACs
 ([[host-owns-the-bias-dacs-not-the-core]]), and a comparator's threshold IS a bias, so
-threshold switching cannot be core-resident on this die. That is an architectural finding
-about this chip, not a shortcut -- the per-visit routing cost is separately measured
+threshold switching runs off-core on this die. That is an architectural finding
+about this chip rather than a shortcut -- the per-visit routing cost is separately measured
 (532 cycles) so the energy accounting is unaffected.
 
 ONE NEURON, TIME-MULTIPLEXED. n14 is the calibrated one, so it serves every node in turn.
 The accuracy claim is unaffected (each comparison is physically performed); the energy
 projection assumes 16 neurons working in parallel and is stated as such.
 
-EXECUTION ORDER. Grouped by threshold level, not by chunk: a bias load costs ~0.9 s and a
+EXECUTION ORDER. Grouped by threshold level rather than by chunk: a bias load costs ~0.9 s and a
 burst ~0.3 s, so walking chunk-major would spend the entire run switching biases. Every
 node is evaluated on every chunk and the tree is walked afterwards from the measured
 outcomes -- the same comparisons, in a cache-friendly order.
 
-    # transfer matrix first: the tree presents counts the ladder calibration never probed
+    # transfer matrix first: the tree presents counts outside what the ladder calibration probed
     PYTHONPATH=. CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_hybrid_chip.py --transfer
     PYTHONPATH=. CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_hybrid_chip.py --tree
 """
@@ -67,7 +67,7 @@ def archive(path, keep, levels, **extra):
 def switch_now(b, sc, k, hint, reps, wait):
     """The count this level ACTUALLY switches at, right now.
 
-    A single before/after ladder check tells you drift happened but not when, and run 1
+    A single before/after ladder check tells you drift happened without timing it, and run 1
     drifted on three of ten levels over five hours. Bracketing each level's node group
     turns that into a measured, attributable quantity for ~9 s per call: if a level moved
     while its own nodes were being evaluated, its comparisons are the suspect ones and
@@ -99,7 +99,7 @@ def main():
     ap.add_argument("--neuron", type=int, default=14)
     ap.add_argument("--wait", type=float, default=0.25, help="the calibrated pacing")
     ap.add_argument("--transfer", action="store_true",
-                    help="measure p(fire | N, L) over ALL N in 0..32, not just the ladder")
+                    help="measure p(fire | N, L) over ALL N in 0..32, beyond the ladder")
     ap.add_argument("--treps", type=int, default=4)
     ap.add_argument("--tree", action="store_true", help="execute the tree on chip")
     ap.add_argument("--nodes", type=int, default=0, help="cap nodes (0 = all)")
@@ -112,10 +112,10 @@ def main():
     args = ap.parse_args()
     k = args.neuron
     m = json.load(open(args.model))
-    # The transfer always probes EVERY bias file on disk, never the model's ladder. The
+    # The transfer always probes EVERY bias file on disk rather than the model's ladder. The
     # model's ladder may already have levels pruned as redundant, and that prune came
     # from an OLDER transfer -- inheriting it makes pruning a RATCHET, so a level that
-    # drifted into a duplicate yesterday could never be measured again even after it
+    # drifted into a duplicate yesterday would be measured just once even after it
     # drifted back apart. Run 3's first attempt silently probed nine levels for exactly
     # this reason. The tree mode is different and must use the model's ladder, because
     # that is what the encoding was built from.
@@ -132,8 +132,8 @@ def main():
             P, keep = {}, []
             print(f"\ntransfer matrix: {len(LADDER)} levels x {len(NS)} counts "
                   f"x {args.treps} reps")
-            # A level whose bias file is absent was placed but did not survive
-            # verification, so it is not part of the ladder. Skip it rather than fail:
+            # A level whose bias file was pruned off disk was placed but stopped at
+            # verification, so it stays off the ladder. Skip it and move on:
             # after the bench move only 6 of 10 verified, and six is the count at which
             # accuracy saturates anyway (olfaction_hybrid_levels.py).
             LADDER = [L for L in LADDER if os.path.exists(BIAS.format(L=L))]
@@ -166,7 +166,7 @@ def main():
     if args.nodes:
         inter = inter[:args.nodes]
     # HIGHEST level first. The drift measured between two transfer matrices five hours
-    # apart is confined to the upper ladder -- levels 1-4 did not move at all, while 16,
+    # apart is confined to the upper ladder -- levels 1-4 held steady, while 16,
     # 24 and 32 moved by 3, 5 and 2 counts. Whatever the cause, the encoding is built
     # from a transfer taken just before the run, so it is most accurate at the start.
     # Spending that accuracy on the levels that actually move, rather than on the four

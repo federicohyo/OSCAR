@@ -2,14 +2,14 @@
 """Feedforward reservoir with a FIXED per-neuron INPUT PROJECTION (one neuron at a time).
 
 Same feedforward, one-at-a-time protocol as reservoir_run.py (per-neuron tuned bias,
-no recurrence, no AER contention), but instead of driving every neuron with the SAME
+recurrence off, AER contention off), but instead of driving every neuron with the SAME
 delta-coded ECG, each neuron k is stimulated with ITS OWN projection of the beat:
 
     x_k(t) = shift( gaussian_smooth(ECG, sigma_k), shift_k )   -> delta_encode(x_k, theta_k)
 
 The per-neuron {sigma_k, shift_k, theta_k} are read from a fixed, pre-generated config
 (reservoir_input_proj.json, produced by reservoir_input_proj.py and applied identically
-to every beat, train and test -- no leakage). This is a random-feature projection in the
+to every beat, train and test -- leakage-free). This is a random-feature projection in the
 continuous-signal domain that decorrelates the input each neuron sees, which the offline
 diagnostics (A4) identified as the true bottleneck: filtering the SAME correlated spike
 train with different kernels stays correlated, so the decorrelation must be injected at
@@ -47,8 +47,8 @@ def bias_path(k):
 def save_ckpt(out, arr, y, records, neurons, T, classes, done, coding="delta_randproj",
               bias_files=()):
     """Atomically write the (possibly partial) npz. `done` = list of neuron ids fully
-    collected so far; not-yet-collected rows hold empty arrays. Write-to-tmp + rename so
-    an interrupted write never corrupts the checkpoint.
+    collected so far; pending rows hold empty arrays. Write-to-tmp + rename so
+    an interrupted write leaves the checkpoint intact.
 
     `bias_files` goes into the provenance header along with the core clock, the flashed
     firmware hash and the working-tree state -- see run_provenance.py for why."""
@@ -139,8 +139,8 @@ def main():
     with BridgeSession() as b:
         for i, k in enumerate(neurons):         # neurons OUTER: load each neuron's bias once
             # Stream ONLY the neuron being recorded. _collect_until already filters
-            # by address host-side, so this is not about contamination -- it is
-            # bandwidth. The UART ceiling is 24*f_MHz events/s (600/s at 25 MHz),
+            # by address host-side; the aim here is bandwidth headroom.
+            # The UART ceiling is 24*f_MHz events/s (600/s at 25 MHz),
             # and 16 neurons free-running at tens of Hz sits right at it, which
             # shows up as DROPS/STALLS and aborts the run.
             b.send(f"MASK {1 << k}")

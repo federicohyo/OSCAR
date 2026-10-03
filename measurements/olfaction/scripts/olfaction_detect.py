@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Accuracy versus latency for both substrates -- on odour DETECTION, not phase.
 
-Why detection and not corr/acorr. A window shorter than one modulation period cannot
+Why detection rather than corr/acorr. A window shorter than one modulation period is too short to
 contain a phase relationship, so the corr/acorr task has a hard latency floor at ~1
-period (100 ms at 10 Hz) and "decide faster, then average" cannot apply to it. That is
-a property of the task definition, not of any substrate, and the sliding-window
+period (100 ms at 10 Hz) and "decide faster, then average" stays out of reach for it. That is
+a property of the task definition rather than any substrate, and the sliding-window
 attempt duly returned chance at every window length.
 
-Detection has no such floor. "Is this odour open right now" is answerable from a short
+Detection avoids that floor. "Is this odour open right now" is answerable from a short
 causal window, the olfactometer's valve trace gives per-sample ground truth at 1 kHz,
 and it is what a filament-tracking nose actually computes. So the accuracy-latency
 trade-off is real here and can be measured.
@@ -20,7 +20,7 @@ The two substrates pay for that trade-off differently, which is the whole argume
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_detect.py
 
-HONESTY NOTES. (1) Windows from one trial are not independent, so they stay in one CV
+HONESTY NOTES. (1) Windows from one trial are correlated, so they stay in one CV
 fold and the k-averaged column is an UPPER bound. (2) E_OP3 is the ECG tree kernel; a
 task-matched count under op3_count.py discipline is owed before any of this is quoted.
 """

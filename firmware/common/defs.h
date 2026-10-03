@@ -23,8 +23,8 @@
 
 #include <csr.h>
 
-// a pointer to this is a null pointer, but the compiler does not
-// know that because "sram" is a linker symbol from sections.lds.
+// a pointer to this reads as a null pointer, while the compiler keeps it
+// distinct because "sram" is a linker symbol from sections.lds.
 extern uint32_t sram;
 
 // Pointer to firmware flash routines
@@ -157,7 +157,7 @@ extern uint32_t flashio_worker_end;
 #define reg_wb_enable	      (*(volatile uint32_t*) CSR_MPRJ_WB_IENA_OUT_ADDR)
 
 // Counter-Timer 0 Configuration
-#define reg_timer0_config (*(volatile uint32_t*) CSR_TIMER0_EN_ADDR) // this is enable not config
+#define reg_timer0_config (*(volatile uint32_t*) CSR_TIMER0_EN_ADDR) // this acts as the enable rather than config
 #define reg_timer0_update  (*(volatile uint32_t*) CSR_TIMER0_UPDATE_VALUE_ADDR)
 #define reg_timer0_value  (*(volatile uint32_t*) CSR_TIMER0_VALUE_ADDR)
 #define reg_timer0_data   (*(volatile uint32_t*) CSR_TIMER0_LOAD_ADDR)

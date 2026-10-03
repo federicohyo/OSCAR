@@ -7,10 +7,10 @@ properties we can measure directly on silicon:
   Memory Capacity  MC = sum_k corr^2( linear readout of x(t) , u(t-k) )   [how far back it remembers]
   NARMA NRMSE      nonlinear temporal prediction (needs MC + nonlinearity)
 
-Chip model: 16 LIF neurons, membrane state carried ACROSS frames (no reset = feedforward memory),
+Chip model: 16 LIF neurons, membrane state carried ACROSS frames (reset off = feedforward memory),
 per-neuron input gain (device mismatch / bias spread), SETRECUR-style recurrence (neuron k fires
 -> inject W_rec[j,k] next step; self-loops give sustained memory). Feature = per-frame SPIKE COUNT
-per neuron (exactly what the chip's AER returns). Readout = ridge. Compares ff (no recurrence) vs
+per neuron (exactly what the chip's AER returns). Readout = ridge. Compares ff (recurrence off) vs
 rec, and sweeps the knobs that map to biases: tau_m (vleakn/vtaun), input gain, recurrence gain.
 """
 import warnings; warnings.filterwarnings("ignore")

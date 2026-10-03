@@ -162,7 +162,7 @@ def main():
                  and sum(1 for j in range(len(Y))
                          if Y[j] == names.index(c) and pred[j] == Y[j]
                          and tot[j] > np.median(tot)) >= 3), None)
-    assert cls2 is not None, "no second class with enough healthy chunks"
+    assert cls2 is not None, "need a second class with enough healthy chunks"
     j2 = pick_chunk(cls2, Y, pred, tot, it, names)
     for tag, jj in ((names[Y[j1]], j1), (names[Y[j2]], j2)):
         print(f"row chunk: j={jj} class={tag} trial={it[jj]}, "

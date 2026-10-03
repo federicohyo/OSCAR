@@ -55,7 +55,7 @@ def features(sp, Y, T):
 
 def main():
     files = sorted(glob.glob("data/olfaction/olf_validate/*.npz"))
-    assert files, "no archived spikes found"
+    assert files, "archived spikes required"
     table = {}
     for f in files:
         tag = f.split("/")[-1].replace(".npz", "")     # e.g. centre_r0

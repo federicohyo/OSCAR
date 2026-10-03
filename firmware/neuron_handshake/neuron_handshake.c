@@ -121,19 +121,19 @@ void configure_io()
 // modeled 153 cyc/step on silicon. Benchmark fns are -O2 (match numeric_lif.lst) inside the
 // -O0 firmware via __attribute__((optimize)).
 #define UART_CMD_BENCH         0xEB
-// Timer0 OLFACTION OP3 cost benchmark: [0xEE] (0xEC is SPIKE_MASK -- do not reuse) -> times K traversals of the counted
+// Timer0 OLFACTION OP3 cost benchmark: [0xEE] (0xEC is SPIKE_MASK -- keep this opcode distinct) -> times K traversals of the counted
 // gradient-boosted tree kernel (50 trees, 746 nodes, 160.3 node visits/decision).
 // Counted at 4,126 cycles; this is the measured counterpart, the step the ECG OP3
-// never got. Node table and feature vector live in flash .rodata; the kernel touches
-// only locals, because bench_cmd runs deep in main()'s -O0 frame with 1 KB of RAM.
+// lacked. Node table and feature vector live in flash .rodata; the kernel touches
+// locals only, because bench_cmd runs deep in main()'s -O0 frame with 1 KB of RAM.
 #define UART_CMD_OLFBENCH      0xEE
 #define UART_CMD_ARRAYBENCH    0xEF
 #define UART_CMD_LIFRAM        0xE7
 // LIFRUN [0xD1, T, decay_hi, decay_lo, w_hi, w_lo, vth_hi, vth_lo, refr, ev[0..T-1]]
 //   -> prints "LIFRUN sp=<hex>".
 // The functional counterpart of LIFRAM. LIFRAM drives ONE neuron with a constant jump and
-// exists only to time the loop, so the emulated pipeline's ACCURACY has never been
-// executed on the die -- it was computed on the host in this same arithmetic and the
+// exists only to time the loop, so the emulated pipeline's ACCURACY ran host-side
+// rather than on the die -- computed in this same arithmetic, and the
 // figure had to withhold the point. This command takes the real per-tick stimulus (ev[t]
 // is a SIGNED event count; drive = ev[t] * w, matching drive_matrix() in
 // olfaction_emul_accuracy.py) and returns the spike count, so the number can be measured
@@ -141,17 +141,17 @@ void configure_io()
 // lif_steps_ram(), because the point is to confirm THIS arithmetic on silicon.
 #define UART_CMD_LIFRUN        0xD1
 #define UART_CMD_LIFRUN2       0xD2
-// LIFBENCH [0xD3] -> times K calls to lifrun_step() in a TIGHT loop, no UART and no
-// per-tick timer reads, and reports once. Per-tick instrumentation cannot price a ~50
+// LIFBENCH [0xD3] -> times K calls to lifrun_step() in a TIGHT loop with UART and
+// per-tick timer reads off, and reports once. Per-tick instrumentation under-prices a ~50
 // cycle operation: two Timer0 update/read pairs per tick swamped it and reported 1771.
 // This times the SAME SRAM-resident function that produced the accuracy, in the SAME
 // image, so the number and the energy come from one configuration.
 #define UART_CMD_LIFBENCH      0xD3
 #define LIFRUN_TMAX            255
 
-// MEMPROBE [0xD4] -> existence/size probe of the DECLARED-but-never-linked SRAM
+// MEMPROBE [0xD4] -> existence/size probe of the DECLARED-but-unlinked SRAM
 // (regions.ld: sram : ORIGIN = 0x01000000, LENGTH = 0x800). regions.ld declares
-// it, sections.lds does not link it, so nothing on this tape-out has ever touched
+// it, sections.lds leaves it unlinked, so nothing on this tape-out has touched
 // it -- this settles whether the RAM is real and whether it is 2 KB (wraps at
 // 0x800) or 4 KB (wraps at 0x1000). Every write before the final sweep restores
 // the old cell contents: if the decode aliases dff at 0x0, a plain write there
@@ -191,7 +191,7 @@ static void memprobe_cmd(void)
         print("=");        print_hex(p[offs[i] / 4], 8); print("\n");
     }
     for (i = 0; i < 6; i++) p[offs[i] / 4] = saved[i];
-    /* No bulk sweep: a 2048-word pass over this undecoded range wedged the bus
+    /* The markers replace a bulk sweep: a 2048-word pass over this undecoded range wedged the bus
      * (chip needed a CPU reset toggle), and the markers above already answer the
      * existence and 2-vs-4 KB question. */
     print("MEMP done\n");
@@ -204,7 +204,7 @@ static void memprobe_cmd(void)
 // bytes, so the spikes are UART-paced at ~0.83 ms apart at 24000 baud -- far outside the
 // membrane's ~3 ms integration window once you want more than three of them. sendspike()
 // is ~1 us, so a firmware loop puts all n inside the window and lets the neuron actually
-// integrate. Without this the array can only be a 2-level comparator (olfaction.md 6.17).
+// integrate. With UART pacing the array can only be a 2-level comparator (olfaction.md 6.17).
 #define UART_CMD_BURST         0xDD
 // PULSEBENCH [0xDE]: Timer0-time K sendspike() calls at the CURRENT pulse_mult, so the
 // input pulse width is MEASURED rather than taken from the "1 tick = 100 ns" comment,
@@ -214,19 +214,19 @@ static void memprobe_cmd(void)
 #define UART_CMD_PULSEBENCH    0xDE
 // PULSEFINE [0xDF, n]: set the raw delay count used by sendspike(), bypassing the
 // 10*pulse_mult granularity. Measured 2026-08-15, the pulse is 29.6 us at pulse_mult=1
-// and grows 2.25 us per unit -- so the FLOOR is not call overhead, it is that the
+// and grows 2.25 us per unit -- so the FLOOR comes from the count, since the
 // smallest count the old path can request is 10 (x CLK_SCALE = 20 loop iterations, each
 // ~1.35 us from XIP fetch). Charge per input event is I_syn x width, so that floor is a
 // large fixed charge quantum: one spike saturates the membrane at every bias tried,
-// which is what blocked a graded spike-count comparator. n=0 restores the pulse_mult
+// which is what held back a graded spike-count comparator. n=0 restores the pulse_mult
 // path exactly, so the default and the pinned exhibition behaviour are unchanged.
 #define UART_CMD_PULSEFINE     0xDF
 
-/* dff2 is 512 B and aer_drain fills nearly all of it, so the SRAM-resident LIF does not
- * fit alongside (link overflows by 132 B). Build with -DLIFRAM_BUILD to swap them: the
+/* dff2 is 512 B and aer_drain fills nearly all of it, so the SRAM-resident LIF needs
+ * more room than remains (link overflows by 132 B). Build with -DLIFRAM_BUILD to swap them: the
  * LIF gets dff2 and the drain falls back to flash. That image is for CYCLE COUNTING ONLY
- * -- it records no spikes, so a flash-resident drain costs it nothing, and the drain's
- * SRAM cost is already measured separately (105 + 480/event). Do NOT use it for
+ * -- it records zero spikes, so a flash-resident drain costs it nothing, and the drain's
+ * SRAM cost is already measured separately (105 + 480/event). Keep it away from
  * acquisitions: the drain would be ~37.8x slower and the AER handshake would stall. */
 #ifdef LIFRAM_BUILD
 #define AER_SECTION ".text"
@@ -238,18 +238,18 @@ static void memprobe_cmd(void)
 #define UART_CMD_ADDR_SETTLE   0xDA   // sweep min address-sample settle (n14)
 // Per-neuron stream filter: [0xEC, b0, b1, b2] -> mask = b0 | b1<<6 | (b2&0xF)<<12
 // Bit i set = neuron i is streamed. Masked neurons are still ACKED (a neuron holds
-// req until acked, so skipping the ack would stall the AER bus for everyone) but
-// never enter the ring, so they cost no buffer slot and no UART bandwidth.
+// req until acked, so skipping the ack would stall the AER bus for everyone) and
+// stay out of the ring, so they use zero buffer slots and zero UART bandwidth.
 // Payload is carried 6 bits at a time to stay clear of the 0x8x..0xFx command range.
 #define UART_CMD_SPIKE_MASK    0xEC
 // Regular spike train: [0xED, b3, b2, b1, b0] -> period = 24-bit tick count, same
 // framing as 0xE2. Stopped by 0xE3 (shared with Poisson). Paced on-chip by Timer0,
-// because the HOST cannot pace it: port.write() blocks for up to 182 ms behind the
+// because the HOST pace is unreliable: port.write() blocks for up to 182 ms behind the
 // reader's port lock, so a host-threaded 200 Hz train delivered 24-121 Hz.
 #define UART_CMD_TRAIN_START   0xED
 // Runtime input-pulse width multiplier: [0xDC, mult(1..63)]. spikesetup()/sendspike()
 // use delay_loop(10 * mult). EXPERIMENT: at 50 MHz the INHIBITORY synapse delivers
-// ~no charge (membrane dmean -0.25 mV vs -6.8 mV at 10 MHz) even though delay_loop is
+// almost zero charge (membrane dmean -0.25 mV vs -6.8 mV at 10 MHz) even though delay_loop is
 // clock-scaled, so the req_inp pulse should already have the same real-time width.
 // This knob tests whether widening it recovers inhibition.
 #define UART_CMD_SET_PULSE     0xDC
@@ -259,10 +259,10 @@ static void memprobe_cmd(void)
 //     neuron ID into a ring buffer in dff2, then the main loop flushes the ring
 //     to UART as 4-byte packets with raw 21-bit Timer0 ticks.  The timestamp
 //     capture (~10 cyc) runs in the analog-reset dead time after ack deassert,
-//     so it does not slow the req/ack cycle.  Build: make hex
+//     so the req/ack cycle keeps its pace.  Build: make hex
 //     Packet byte 0 = 0x80 | SPIKE_DROP_FLAG(0x40) | neuron_id. The flag is set
 //     when the ring overflowed since the previous packet; the host's rates are
-//     then UNDERESTIMATES, and no host-side arithmetic can detect that, because
+//     then UNDERESTIMATES, and host-side arithmetic stays blind to it, because
 //     dropping is what keeps the observed rate below the link ceiling.
 //   0: fast reservoir mode -- skip per-spike UART + timestamp entirely, so the
 //     AER drain loop runs from SRAM at full speed.  Used for 0xDB timing.
@@ -274,24 +274,24 @@ static void memprobe_cmd(void)
 // Core clock in MHz. Both Timer0 and delay_loop() are driven by the core clock,
 // so every pulse width and tick constant below was hand-calibrated at 10 MHz and
 // must be scaled when the DLL raises the core. Reachable cores are 100/N MHz for
-// N=2..7, so only 10 (crystal) and 20/25/50 divide evenly here.
+// N=2..7, so 10 (crystal) and 20/25/50 divide evenly here.
 //   Build: make F_CPU_MHZ=50 hex     (then engage the DLL before running)
 #ifndef F_CPU_MHZ
 #define F_CPU_MHZ 10
 #endif
 #define CLK_SCALE (F_CPU_MHZ / 10u)
 // Phase-3 hang guard: max iterations spent waiting for req to fall after ack. req is a
-// digital release, so it falls in ~us; this only stops a wedged handshake from hanging
+// digital release, so it falls in ~us; this stops a wedged handshake from hanging
 // the drain forever. Expressed in CPU iterations, so it scales with the core clock to
-// stay a fixed REAL-TIME budget. Do NOT shrink this to "go faster": dropping ack before
+// stay a fixed REAL-TIME budget. Keep this at its value rather than shrinking it to "go faster": dropping ack before
 // req falls breaks the 4-phase handshake and duplicates spikes.
 #define REQ_LOW_MAX (2000u * CLK_SCALE)
 // poisson_mean_ticks and coinc_dt arrive from the host ALREADY IN TICKS, so the
 // host converts seconds->ticks with the real clock (neuron_bridge.py TIMER_HZ).
 //   coinc_dt's clamp scales: it only bounds a duration (300 ms real time).
-//   poisson_mean_ticks' clamp does NOT and MUST NOT: 5e6 is the overflow guard
+//   poisson_mean_ticks' clamp stays as-is and MUST: 5e6 is the overflow guard
 //   that keeps umul32(mean, neglog_lut_max=799) inside 32 bits (5e6*799 = 3.995e9).
-//   Consequence at 50 MHz: the slowest Poisson mean rate is 10 Hz, not 2 Hz.
+//   Consequence at 50 MHz: the slowest Poisson mean rate is 10 Hz rather than 2 Hz.
 
 #define UART_CMD_REPORT_HS 0xDB   // print + reset handshake Timer0 timing & per-neuron counts
 #define REC_SYN                1      // dedicated recurrent synapse index
@@ -299,7 +299,7 @@ static void memprobe_cmd(void)
 // Max number of UART RX bytes to process per main loop iteration (non-blocking).
 #define UART_RX_MAX_BYTES_PER_LOOP 8
 
-// UART TX DEBUG packet tags (MSB clear so they do not collide with spike AER packets).
+// UART TX DEBUG packet tags (MSB clear so they stay clear of spike AER packets).
 #define UART_DBG_PROGRAM_WEIGHT 0x71 //TODO DEBUG
 #define UART_DBG_SPIKE_SETUP    0x72 //TODO DEBUG
 
@@ -312,8 +312,8 @@ static void memprobe_cmd(void)
 #define RX_STATE_SPIKE_SYN_ADDR    5
 #define RX_STATE_SPIKE_NEU_ADDR    6
 #define RX_STATE_SPIKE_EXC         7
-// Poisson mean-ISI is sent as four 6-bit bytes (each < 0x40) so no data byte can
-// collide with a command sync byte (0xD0/0xE0..0xE3/0xF0). 24-bit mean in ticks.
+// Poisson mean-ISI is sent as four 6-bit bytes (each < 0x40) so every data byte stays
+// clear of a command sync byte (0xD0/0xE0..0xE3/0xF0). 24-bit mean in ticks.
 #define RX_STATE_BURST_N          28
 #define RX_STATE_PULSEFINE        29
 #define RX_STATE_CALRUN_MODE      39
@@ -353,7 +353,7 @@ static void memprobe_cmd(void)
 // .bss globals down at 0x104-0x120 get clobbered by the deep -O0 main() frame.
 // Precomputed loop count for the SRAM sendspike(). Resolving
 // `pulse_fine ? pulse_fine-1 : 10*pulse_mult*CLK_SCALE` inside the function cost two
-// global loads, a multiply and a branch -- ~120 B of dff2, which does not fit. Compute
+// global loads, a multiply and a branch -- ~120 B of dff2, which overruns the space. Compute
 // it once whenever either knob changes and the hot path loads a single word.
 volatile uint32_t pulse_mult __attribute__((section(".ramnoinit")));
 volatile uint32_t pulse_ticks __attribute__((section(".ramnoinit")));
@@ -361,7 +361,7 @@ volatile uint32_t pulse_ticks __attribute__((section(".ramnoinit")));
 
 void delay_loop(volatile uint32_t count)
 {
-    // Bounds CPU iterations, not time, so a raised core shortens every pulse.
+    // Bounds CPU iterations rather than time, so a raised core shortens every pulse.
     // Scale once here and all ~16 call sites keep their calibrated real-time width.
     count *= CLK_SCALE;
     while (count > 0) count--;
@@ -517,10 +517,10 @@ void spikesetup (uint32_t *la0_out, uint32_t exc, uint32_t syn_addr, uint32_t ne
  * Measured end to end (PULSEBENCH 0xDE), this call took 72 us at pulse_mult=1 and 69 us
  * with the delay zeroed -- so the pulse was almost entirely fixed cost: the two
  * reg_la0_data writes and the call itself, fetched from XIP flash at ~131 cycles per
- * instruction. No bias could reach below it, and charge per input event is
+ * instruction. Every bias stayed above it, and charge per input event is
  * I_syn x width, so every input spike carried a ~70 us quantum of synaptic current.
  * That is why one spike saturated the membrane at every operating point tried, and why
- * a graded spike-count comparator could not exist.
+ * a graded spike-count comparator stayed out of reach.
  *
  * Putting the function in dff2 removes the fetch cost. Calling delay_loop() from here
  * would put it straight back, hence the inlined loop. Cost: SPIKE_RING_SIZE halved to
@@ -542,13 +542,13 @@ sendspike(uint32_t *la0_out)
  * cal_probe() and the host's BURST command contained the same source line -- a loop
  * calling the SRAM-resident sendspike() -- but sat in functions compiled at different
  * optimisation levels (cal_probe -Os, the BURST handler inside main() at -O0). The pulse
- * each spike delivers was therefore identical while the GAP between spikes was not, and a
+ * each spike delivers was therefore identical while the GAP between spikes varied, and a
  * wider gap leaks more charge between spikes, so more spikes are needed to reach
  * threshold. That is the direction of the unexplained disagreement: the host read
  * switching counts 2-3 ABOVE the core.
  *
- * The gap cannot be measured here -- the membrane monitor samples at 100 Hz and a burst
- * lasts about 1 ms -- so instead of measuring it, make it identical by construction:
+ * The gap is too fast to measure here -- the membrane monitor samples at 100 Hz and a burst
+ * lasts about 1 ms -- so rather than measure it, make it identical by construction:
  * noinline, one optimisation level, one call site's worth of overhead for everybody.
  */
 __attribute__((noinline, optimize("Os")))
@@ -558,7 +558,7 @@ static void burst_fire(uint32_t *la0, uint32_t n)
 }
 
 // --- On-chip Poisson spike generation -----------------------------------
-// xorshift32 PRNG (shifts/xor only -- rv32i friendly, no libgcc needed).
+// xorshift32 PRNG (shifts/xor only -- rv32i friendly, libgcc-free).
 static uint32_t prng_state = 0x1234567u;
 static uint32_t prng_next(void)
 {
@@ -570,8 +570,8 @@ static uint32_t prng_next(void)
     return x;
 }
 
-// Unsigned 32x32 -> 32 multiply. rv32i has no MUL and we link -nostdlib
-// (no libgcc __mulsi3), so shift-add it by hand.
+// Unsigned 32x32 -> 32 multiply. rv32i multiplies in software and we link -nostdlib
+// (libgcc's __mulsi3 stays out), so shift-add it by hand.
 static uint32_t umul32(uint32_t a, uint32_t b)
 {
     uint32_t r = 0;
@@ -586,11 +586,11 @@ static uint32_t umul32(uint32_t a, uint32_t b)
 // ---- Timer0 numeric-LIF cost benchmark (0xEB) -----------------------------------------
 // Compiled -O2 (match numeric_lif.lst) inside the -O0 firmware. Times a calibration loop of
 // known core-cycle length and K lif_step() iterations with the free-running Timer0, prints
-// raw ticks; the host converts ticks->core cycles. bench_sink is volatile so -O2 cannot
-// delete the timed loops (and the calibration loop cannot be closed-form-folded).
+// raw ticks; the host converts ticks->core cycles. bench_sink is volatile so -O2 keeps
+// the timed loops (and the calibration loop stays out of closed-form folding).
 volatile uint32_t bench_sink;
 
-// The LIF step is INLINED here (no lif_step/umul32 call frames): the firmware RAM is only
+// The LIF step is INLINED here (lif_step/umul32 call frames omitted): the firmware RAM is only
 // 1 KB (dff: data+bss+stack), and bench_cmd runs deep inside main()'s large -O0 frame, so
 // extra call depth overflows the stack. Inlining also matches numeric_lif.lst, where at -O2
 // umul32 is inlined into the step. Values are printed as 32-bit hex (the firmware's print_dec
@@ -676,7 +676,7 @@ static void measure_addr_settle(void)
 #include "../olfaction_kernel/arraypipe.h"
 
 // Thresholds are pre-scaled per trial, so the traversal compares the raw Q8.8 feature
-// directly and no per-decision normalisation is charged -- the cheapest honest OP3.
+// directly and per-decision normalisation stays outside the cost -- the cheapest honest OP3.
 __attribute__((optimize("O2")))
 static void olfbench_cmd(void)
 {
@@ -725,7 +725,7 @@ static void olfbench_cmd(void)
  * But that compares a flash-resident emulation against an SRAM-resident drain, so a large
  * part of it is the ~37.8x instruction-fetch penalty rather than anything about analog.
  * This puts the identical LIF loop in .ramtext (dff2) so both sides are SRAM-resident and
- * the comparison is honest. Only the hot loop moves; the timing wrapper stays in flash.
+ * the comparison is honest. The hot loop moves; the timing wrapper stays in flash.
  */
 uint32_t __attribute__((section(LIF_SECTION), noinline, optimize("O2")))
 lif_steps_ram(uint32_t K)
@@ -747,32 +747,32 @@ lif_steps_ram(uint32_t K)
 }
 
 /* Functional LIF over a supplied stimulus. -O2 to match lif_steps_ram()'s codegen, and
- * the buffer is a file-scope static because main()'s -O0 frame has no room for it. */
+ * the buffer is a file-scope static because main()'s -O0 frame has little room for it. */
 
-/* Blocking, everything in LOCALS, and it cannot get stuck.
+/* Blocking, everything in LOCALS, and it is resilient to stalls.
  *
- * The state variables had nowhere to live: a stimulus buffer overflowed dff by 88 bytes
+ * The state variables need care: a stimulus buffer overflowed dff by 88 bytes
  * and dff2 by 228, packed globals still overflowed dff2 by 40, and putting them in .bss
  * put them where main()'s deep -O0 frame clobbers them -- which is why the state-machine
- * version stopped replying at all. Locals avoid the question entirely.
+ * version stopped replying at all. Locals sidestep the question entirely.
  *
- * The earlier blocking version's flaw was that a lost byte left it waiting forever, taking
- * the whole main loop down with it and swallowing the next frame as the missing tail. A
+ * The earlier blocking version could wait forever on a lost byte, taking
+ * the whole main loop down with it and swallowing the next frame along with it. A
  * bounded wait fixes that at the source: give up on a byte after roughly 40 ms, report it,
- * and return. The host then never has to unstick the chip.
+ * and return. The host is spared from unsticking the chip.
  *
- * Reading reg_uart_data does NOT pop the FIFO -- reg_uart_ev_pending = 2 must be written,
- * exactly as the main dispatch loop does. Without that every read returns the same head
+ * Reading reg_uart_data leaves the FIFO unchanged -- reg_uart_ev_pending = 2 must be written,
+ * exactly as the main dispatch loop does. With that write every read returns the next head
  * byte. */
 #define LIFRUN_SPIN 400000u
 
 /* The TICK is what the energy number prices, so it must be measured in the configuration
  * a real implementation would ship: SRAM-resident, and adding a PRECOMPUTED drive rather
- * than multiplying. Two reasons the first version's cycle count was not deployable --
- * it ran from flash at ~131 cyc/instr, and it computed ev*w, which rv32i has no
- * instruction for and which lif_fixed() does not do (its drive arrives precomputed).
+ * than multiplying. Two reasons the first version's cycle count overstated a deployable
+ * cost -- it ran from flash at ~131 cyc/instr, and it computed ev*w, which rv32i
+ * implements in software and which lif_fixed() keeps precomputed (its drive arrives ready).
  * Build with -DLIFRAM_BUILD so LIF_SECTION is .ramtext; the AER drain falls back to flash,
- * which costs this measurement nothing because it never touches the array. */
+ * which costs this measurement nothing because it stays clear of the array. */
 __attribute__((section(LIF_SECTION), noinline, optimize("O2")))
 static void lifrun_step(int32_t drive, uint32_t decay, int32_t vth, int32_t refrn,
                         int32_t *v, int32_t *refr, int32_t *spikes)
@@ -803,7 +803,7 @@ static uint32_t lifrun_get(uint32_t *ok)
 
 /* LIFRUN2 [0xD2, T, dc_hi, dc_lo, vt_hi, vt_lo, refr, then T x 4-byte signed drive]
  *   -> "LIFRUN2 sp=<4> ds=<8> cy=<8> T=<4>"
- * Drive arrives PRECOMPUTED so the tick has no multiply, and the tick is SRAM-resident, so
+ * Drive arrives PRECOMPUTED so the tick is multiply-free, and the tick is SRAM-resident, so
  * cy is the cost a deployed implementation would pay. ds echoes the summed drive as the
  * transport check. */
 __attribute__((optimize("O2")))
@@ -841,8 +841,8 @@ static void lifrun2_cmd(void)
     uint32_t T = h[0], decay = (h[1] << 8) | h[2];
     int32_t vth = (int32_t)((h[3] << 8) | h[4]);
     int32_t refrn = (int32_t)h[5];
-    /* WHICH ticks spiked, not just how many. The reference scores spike TIMES through an
-     * exponential kernel, so a count alone cannot be compared against it. 150 ticks fit in
+    /* WHICH ticks spiked, rather than just how many. The reference scores spike TIMES through an
+     * exponential kernel, so the comparison needs more than a count. 150 ticks fit in
      * five 32-bit words. */
     int32_t v = 0, refr = 0, spikes = 0, dsum = 0;
     uint32_t cyc = 0, mask[5] = {0, 0, 0, 0, 0};
@@ -928,9 +928,9 @@ static void lifram_cmd(void)
     print("\n");
 }
 
-/* rv32i has no hardware multiply and the build is -nostdlib, so gcc's calls to the
- * libgcc helper must be satisfied here. Supplying it also makes the measurement honest:
- * every multiply gcc cannot strength-reduce into shifts is priced at this routine's real
+/* rv32i multiplies in software and the build is -nostdlib, so gcc's calls to the
+ * libgcc helper are satisfied here. Supplying it also makes the measurement honest:
+ * every multiply gcc leaves un-strength-reduced is priced at this routine's real
  * cost, which is exactly what the optimisation is trying to avoid. */
 int __mulsi3(int a, int b)
 {
@@ -946,7 +946,7 @@ static int   ap_feat[AP_NFEAT];
  *
  * The naive stages cost 7.07 M cycles (projection) and 5.58 M (kernel features), which
  * together dwarf everything else including the neurons they serve. Both are dominated by
- * ap_mul, a 16-iteration software shift-add, because rv32i has no hardware multiply.
+ * ap_mul, a 16-iteration software shift-add, because rv32i multiplies in software.
  * Two changes remove most of it:
  *
  *  P': weights are Q8 COMPILE-TIME constants (ap_projq8 / AP_PROJ_DOT). At Q16 the
@@ -958,7 +958,7 @@ static int   ap_feat[AP_NFEAT];
  *      LOOKUP to each sample point, so the stage becomes MULTIPLY-FREE and iterates over
  *      events (85) rather than ticks (2,400).
  *
- * K' is mathematically identical to the recursive form, not an approximation: the
+ * K' is mathematically identical to the recursive form rather than an approximation: the
  * accumulator at sample s is exactly sum over spikes of decay^(s - t_spike).
  */
 __attribute__((optimize("O2")))
@@ -1069,11 +1069,11 @@ static void arrayopt_cmd(void)
  *   E  encode      level-crossing on the projected signals
  *   K  kernel      16 units x 2 taus, recursive decay over 150 ticks of REAL spikes
  *   C  classify    128 features x 5 classes MAC
- * The AER drain is not re-timed: it is already measured (105 + 480/event).
+ * The AER drain is already measured (105 + 480/event), so it stays as-is.
  *
- * TWO THINGS THIS EXPOSED, both of which the estimate had wrong:
- * (1) rv32i has NO hardware multiply and the firmware is -nostdlib, so there is no
- *     __mulsi3 to call. Every product below goes through ap_mul(), a shift-add whose
+ * TWO THINGS THIS EXPOSED, both of which the estimate had off:
+ * (1) rv32i multiplies in software and the firmware is -nostdlib, so the firmware
+ *     supplies its own __mulsi3. Every product below goes through ap_mul(), a shift-add whose
  *     cost scales with the multiplier's bit width. That IS the real cost on this core
  *     and it is now measured rather than assumed at "16 cycles".
  * (2) a 16x50 projection buffer overflowed dff. The pipeline is therefore STREAMED one
@@ -1082,7 +1082,7 @@ static void arrayopt_cmd(void)
 /* Shift-add multiply. UNSIGNED internally on purpose: `a <<= 1` on a signed int that
  * overflows is undefined behaviour, and it bit the first version of this benchmark --
  * the -O0 and -O2 builds computed DIFFERENT results from the same inputs (the encoder
- * counted 209 events at -O0 and 576 at -O2), which is the signature of UB, not of
+ * counted 209 events at -O0 and 576 at -O2), which is the signature of UB rather than
  * optimisation. Unsigned shifts are defined and both builds now agree. */
 __attribute__((optimize("O2")))
 static int ap_mul(int a, int b)
@@ -1134,8 +1134,8 @@ static void arraybench_cmd(void)
     sink += nev;
 
     /* K: exponential kernel features over the REAL recorded spikes.
-       Accumulator is Q8 (not Q16) so acc*decay stays inside int32 -- at Q16 the product
-       reaches 2^34 and would need __muldi3, which -nostdlib does not provide. */
+       Accumulator is Q8 (rather than Q16) so acc*decay stays inside int32 -- at Q16 the product
+       reaches 2^34 and would need __muldi3, which -nostdlib leaves out. */
     reg_timer0_update = 1; uint32_t k0 = reg_timer0_value;
     int fi = 0;
     for (int u = 0; u < AP_UNITS; u++)
@@ -1178,15 +1178,15 @@ static void arraybench_cmd(void)
 /* O2 like olfbench_cmd and arraybench_cmd. Without it this compiles at the file's -O0
  * and the numeric-LIF baseline is handicapped against the O2 tree kernel it is compared
  * with -- the same error that invalidated the first array-pipeline table. The digital
- * emulation must be the STRONGEST this core can do, not the laziest. */
+ * emulation must be the STRONGEST this core can do, rather than the laziest. */
 __attribute__((optimize("O2")))
 static void bench_cmd(void)
 {
     const uint32_t CAL_ITERS = BENCH_CAL_ITERS, K = BENCH_K;
 
-    // (1) calibration: REGISTER-ONLY loop of known instruction count (no per-iter memory,
+    // (1) calibration: REGISTER-ONLY loop of known instruction count (minimal per-iter memory,
     //     matching the LIF loop's profile so ticks scale with retired instructions). Result
-    //     stored once so -O2 keeps it; data-dependent so it cannot be closed-form-folded.
+    //     stored once so -O2 keeps it; data-dependent so it stays out of closed-form folding.
     uint32_t acc = 1;
     reg_timer0_update = 1; uint32_t c0 = reg_timer0_value;
     for (uint32_t i = 0; i < CAL_ITERS; i++) { acc = (acc << 1) | (acc >> 31); acc ^= i; }
@@ -1194,7 +1194,7 @@ static void bench_cmd(void)
     bench_sink = acc;
     uint32_t ticks_cal = c0 - c1;                                 // down-counter
 
-    // (2) K inlined LIF steps, 16-bit decay (16 soft-mul iters), typical no-spike hot path
+    // (2) K inlined LIF steps, 16-bit decay (16 soft-mul iters), typical silent hot path
     int32_t v = 0, refr = 0, spikes = 0;
     uint32_t decay = 60000; int32_t jump = 3000, vth = 65536, vreset = 0;
     reg_timer0_update = 1; uint32_t s0 = reg_timer0_value;
@@ -1301,24 +1301,24 @@ void select_monitor_neuron(uint32_t neuron, uint32_t *la2_out)
 }
 
 // ---- SRAM-resident fast AER drain (fast reservoir mode, STREAM_SPIKES=0) ----
-// This loop runs from dff2 (.ramtext), not XIP flash, so its instruction fetch
-// is not XIP-bound -- the cost that capped the readout. It acks each neuron ASAP
+// This loop runs from dff2 (.ramtext) rather than XIP flash, so its instruction fetch
+// avoids the XIP bound -- the cost that capped the readout. It acks each neuron ASAP
 // (so it resets and re-fires instead of holding req) and tallies per-neuron
 // spike counts into dff2 (.ramnoinit, above _fstack -> immune to the low-.bss
-// stack-overflow bug). The body makes NO function calls, so nothing here is
+// stack-overflow bug). The body keeps all calls inlined, so nothing here is
 // fetched from XIP (delay + address decode are inlined by hand).
 // All dff2-resident drain state in one struct so aer_drain needs only ONE
-// base-address register (not 7 separate globals -> 9 callee-saved saves).
-// Mode 0 (benchmark): aer_counts + hs_* timing, no ring, no UART.
-// Mode 1 (stream): ring capture only, no counts, no timing — the host
+// base-address register (rather than 7 separate globals -> 9 callee-saved saves).
+// Mode 0 (benchmark): aer_counts + hs_* timing, ring and UART off.
+// Mode 1 (stream): ring capture only, counts and timing off — the host
 //   reconstructs per-neuron rates from the packet stream, and µs/handshake
-//   is measured with mode 0 (0xDB), not while streaming.
+//   is measured with mode 0 (0xDB) rather than while streaming.
 #if STREAM_SPIKES
-// 8 entries overflowed on ordinary bursts even well under the UART ceiling.
-// 16 is the largest power of two that fits: dff2 is nearly full, and 32 overflows
+// 8 entries filled on ordinary bursts even well under the UART ceiling.
+// 16 is the largest power of two that fits: dff2 is nearly full, and 32 exceeds
 // .ramnoinit by 12 B. Doubles the burst headroom; the sustained ceiling is still
 // the UART, so drops are reported rather than engineered away.
-// 8, not 16: the ring is the bulk of .ramnoinit and dff2 has to also hold the
+// 8 rather than 16: the ring is the bulk of .ramnoinit and dff2 has to also hold the
 // SRAM-resident sendspike(). Halving it frees 32 B. Safe for how we acquire -- runs mask
 // to one neuron, so spikes arrive far slower than the 1.67 ms it takes to flush one
 // 4-byte packet at 24000 baud, and drops have measured 0 with wide margin. The unmasked
@@ -1327,15 +1327,15 @@ void select_monitor_neuron(uint32_t neuron, uint32_t *la2_out)
 #define SPIKE_RING_MASK (SPIKE_RING_SIZE - 1)
 // Sticky OR into byte 0 of the next packet (byte 0 is 0x80|id, so bits 4-6 are
 // free). Tells the host "spikes were lost before this one" at zero bandwidth
-// cost -- essential, because the host CANNOT infer loss from the rate it sees:
+// cost -- essential, because the rate alone hides loss:
 // dropping is exactly what holds that rate below the link ceiling.
 #define SPIKE_DROP_FLAG 0x40u
 // Bit 5: the flush had to WAIT for the UART FIFO, i.e. the link is the bottleneck
 // and the array is being back-pressured (a neuron holds req until it is acked).
-// Rates are then real but no longer free-running -- mask neurons to buy bandwidth.
+// Rates are then real but throttled rather than free-running -- mask neurons to buy bandwidth.
 #define SPIKE_STALL_FLAG 0x20u
-// Write one byte, waiting for room. Writing into a full FIFO is silently dropped,
-// which corrupts the 4-byte packet, so every byte must be gated, not just the first.
+// Write one byte, waiting for room. Writing into a full FIFO silently discards the byte,
+// which corrupts the 4-byte packet, so every byte must be gated, rather than only the first.
 #define UART_PUT(b) do {                                   \
         if (reg_uart_txfull) drain_ram.stalls = 1;         \
         while (reg_uart_txfull) { }                        \
@@ -1345,11 +1345,11 @@ void select_monitor_neuron(uint32_t neuron, uint32_t *la2_out)
 /* Field order and widths are chosen to fit dff2 alongside the SRAM-resident sendspike():
  * spike_ring first so it is naturally aligned, then the 16-bit and 8-bit fields packed
  * behind it. drops/stalls are uint8 because they are asserted ZERO -- saturating at 255
- * still reads as "nonzero, something went wrong". */
+ * still reads as "nonzero: out of tolerance". */
 /* Field widths and order are chosen so this fits dff2 alongside the SRAM-resident
  * sendspike(): spike_ring first so it stays naturally aligned, the 16-bit fields behind
  * it, then the bytes. drops/stalls are uint8 because they are asserted ZERO -- saturating
- * at 255 still reads as "nonzero, something went wrong". */
+ * at 255 still reads as "nonzero: out of tolerance". */
 struct drain_ram {
 #if !STREAM_SPIKES
     // Mode 0: benchmark instrumentation only.
@@ -1392,13 +1392,13 @@ aer_drain(uint32_t *la1_out_p, struct drain_ram *dr)
         dr->last_aer = addr;
 #if STREAM_SPIKES
         // Filtered-out neurons were already acked above (mandatory: req stays high
-        // until acked). Skipping them here costs them no ring slot and no UART byte,
-        // and a masked neuron cannot cause a drop that taints the ones we do want.
+        // until acked). Skipping them here costs zero ring slots and zero UART bytes,
+        // and a masked neuron stays out of the drop path for the ones we do want.
         if ((dr->spike_mask >> (addr & 0x0F)) & 1u) {
             reg_timer0_update = 1;
-            // 21-bit timestamp: bytes 1..3 carry 7 bits each, so 16 bits wasted 5 of
-            // them. 16 bits wraps every 1.31 ms at 50 MHz -- SHORTER than the FTDI's
-            // 16 ms latency timer, so the host cannot unwrap it. 21 bits wraps every
+            // 21-bit timestamp: bytes 1..3 carry 7 bits each, so 16 bits leaves 5 of
+            // them unused. 16 bits wraps every 1.31 ms at 50 MHz -- SHORTER than the FTDI's
+            // 16 ms latency timer, so the host clock is too short to unwrap it. 21 bits wraps every
             // 41.9 ms, which the host clock resolves easily. Address moves to bit 21.
             dr->spike_ring[rh] = ((addr & 0x0F) << 21) | (reg_timer0_value & 0x1FFFFFu);
             rh = (rh + 1) & SPIKE_RING_MASK;
@@ -1411,7 +1411,7 @@ aer_drain(uint32_t *la1_out_p, struct drain_ram *dr)
         dr->aer_counts[addr & 0x0F]++;
 #endif
         // Phase 3: wait for req to fall, WITH ACK STILL ASSERTED. This is the half of
-        // the 4-phase cycle that was missing: ack used to drop here ("deassert ASAP")
+        // the 4-phase cycle the early version left out: ack used to drop here ("deassert ASAP")
         // while req was still high, so the outer loop re-entered, re-acked and re-read
         // the SAME still-asserted address. That emitted one spike as 2, 4, ... packets
         // (microseconds apart, far below the analog refractory), and the multiplicity
@@ -1420,7 +1420,7 @@ aer_drain(uint32_t *la1_out_p, struct drain_ram *dr)
         uint32_t rw = 0;
         while ((reg_la1_data_in & X5_REQ_BIT) && (rw < REQ_LOW_MAX)) rw++;
         // Phase 4: only now release ack. The neuron completes its reset dead time and
-        // re-asserts req on its NEXT spike, not this one.
+        // re-asserts req on its NEXT spike rather than this one.
         *la1_out_p &= ~X5_ACK_BIT; reg_la1_data = *la1_out_p;
     }
 #if STREAM_SPIKES
@@ -1455,28 +1455,28 @@ static void report_hs(void)
 // ===== CALRUN (0xD5) / CALSET (0xD6): on-die drift detect + recovery ========
 //
 // The demonstration this exists for: the die detects that a comparator threshold has
-// moved and recovers it, with no host in the loop between the injection and the
+// moved and recovers it, with zero host traffic in the loop between the injection and the
 // telemetry read. The host's only jobs are loading the level's biases (which inference
 // on this die requires regardless -- a threshold IS a bias here) and storing what comes
 // back.
 //
-// FLASH-RESIDENT ON PURPOSE. dff2 holds aer_drain and has 4 bytes free, so nothing new
-// fits beside it. The cost is invisible: a cycle is paced by the ~31 ms membrane re-arm
+// FLASH-RESIDENT ON PURPOSE. dff2 holds aer_drain with 4 bytes free, so this handler
+// lives in flash. The cost is invisible: a cycle is paced by the ~31 ms membrane re-arm
 // per burst, against which flash fetch (~131 cyc/instr) of a small control loop is
-// noise. Two rules follow and are obeyed below: this handler must NOT stream spikes (a
-// flash-resident handler cannot keep up with the UART), so it masks to the probed neuron
+// noise. Two rules follow and are obeyed below: this handler keeps spikes off the stream (a
+// flash-resident handler would fall behind the UART), so it masks to the probed neuron
 // and consumes the ring itself; and every wait is Timer0-bounded, or a stalled handshake
 // wedges the main loop.
 //
-// FIRING IS READ FROM THE RING, not from a counter. STREAM_SPIKES=1 builds have no
-// aer_counts[]; adding one would grow .ramtext, which has no headroom. With the mask set
+// FIRING IS READ FROM THE RING rather than from a counter. STREAM_SPIKES=1 builds leave
+// out aer_counts[]; adding one would grow .ramtext, which is already full. With the mask set
 // to a single neuron, "did it fire" is just "did ring_head advance".
 //
 // PROBE ORDER IS zero, below, above, at -- with `at` LAST. Measured 2026-08-19: the
-// first suprathreshold burst after a long idle misses (cold-start, sub-count,
+// first suprathreshold burst after a long idle can miss (cold-start, sub-count,
 // DEFERRED.md sec.1). `above` fires deterministically even cold -- 13 hold rounds, zero
-// flips -- so it doubles as warm-up for `at`. `zero` sends no spikes and warms nothing,
-// which is why it cannot be the warm-up.
+// flips -- so it doubles as warm-up for `at`. `zero` sends zero spikes and warms nothing,
+// which keeps it out of the warm-up slot.
 #define UART_CMD_CALRUN        0xD5
 
 #define CAL_LEVELS   6
@@ -1484,35 +1484,35 @@ static void report_hs(void)
 #define CAL_NMAX     32
 #define CAL_GMIN     1      /* encoding margin in counts; see DEFERRED.md sec.2 --
                              * should eventually come from measured edge half-width */
-#define CAL_MINGAP   2      /* below this, midpoint encoding has no margin */
+#define CAL_MINGAP   2      /* below this, midpoint encoding loses its margin */
 #define CAL_SETTLE   40000u /* Timer0 ticks to wait for a spike after a burst */
 /* RE-ARM between repetitions. The membrane time constant is ~10 ms and a node slot is
  * 31.2 ms, but the first version waited at most 4 ms and exited the instant a spike was
  * detected -- so after the neuron fired, the next burst began microseconds later, on a
- * membrane that had not returned to rest. Residual charge makes the neuron fire on fewer
+ * membrane still returning to rest. Residual charge makes the neuron fire on fewer
  * spikes than it would from rest, which is why the core read thresholds ~2-3 counts BELOW
  * the host (which paces at 100 ms), why the width-repair loop chased a moving target, and
- * why re-verification failed: each probe was perturbing the next. One slot of quiet
+ * why re-verification came up short: each probe perturbed the next. One slot of quiet
  * between repetitions makes a threshold a property of the neuron again. */
 #define CAL_REARM    1000000u /* Timer0 ticks (~100 ms) of quiet after every repetition.
-                              * Matched to the host path, which cannot go below ~60 ms
-                              * because of its own drain loop, so 100 ms is the nearest
+                              * Matched to the host path, whose drain loop keeps it above ~60 ms,
+                              * so 100 ms is the nearest
                               * value both sides can hold. Comfortably past the measured
                               * return to rest (bracket [12, 32] ms). */
 #define CAL_MAXTICKS 254u   /* PULSEFINE raw count ceiling */
 #define CAL_TPC      5u     /* ticks of width per count of threshold, from
                              * the measured width sweep (~3-7 near default) */
 
-/* NO .bss STATE. Measured 2026-08-19: main()'s -O0 frame is 720 B, so it spans
+/* State avoids .bss. Measured 2026-08-19: main()'s -O0 frame is 720 B, so it spans
  * 0x130..0x400 while .bss ends at 0x388 -- anything persistent in .bss sits underneath
- * main's own frame and is clobbered between calls. (.ramnoinit, the only reliable
- * region, has 4 bytes free and cannot take 20.) So CALRUN follows this firmware's
+ * main's own frame and is clobbered between calls. (.ramnoinit, the reliable
+ * region, has 4 bytes free -- short of the 20 needed.) So CALRUN follows this firmware's
  * existing idiom for handlers -- 0xDA: "Uses ONLY locals (like bench_cmd)". The
  * calibrated ladder arrives in the command payload and is held in main's own frame,
  * which is the one piece of stack that is unambiguously main's to use. */
 
 /* Midpoint encoding, re-derived from a ladder. Floor midpoint of the bracketing
- * switching counts, with the lowest interval encoded as no spikes at all -- the rule
+ * switching counts, with the lowest interval encoded as zero spikes -- the rule
  * recovered from the Sec. V run itself: {0,7,9,14,19,25,31} for N*={6,8,11,18,21,29}. */
 __attribute__((optimize("Os")))
 static void cal_encode(volatile uint8_t *nst, volatile uint8_t *out)
@@ -1524,8 +1524,8 @@ static void cal_encode(volatile uint8_t *nst, volatile uint8_t *out)
 }
 
 /* Every burst count must clear every switching count by >= CAL_GMIN. This is the
- * difference between "recovered" and "recovered into the 13.3% boundary regime without
- * noticing": under the ladder measured 2026-08-19 the stale table put bursts 7 and 9
+ * difference between "recovered" and "recovered silently onto the 13.3% boundary regime":
+ * under the ladder measured 2026-08-19 the stale table put bursts 7 and 9
  * exactly ON switching counts, 11.1% of all comparisons. */
 __attribute__((optimize("Os")))
 static uint32_t cal_margin_ok(volatile uint8_t *nst, volatile uint8_t *bur, uint32_t *worst)
@@ -1556,12 +1556,12 @@ static uint32_t cal_probe(uint32_t *la0, uint32_t *la1, uint32_t n, uint32_t rep
 
         burst_fire(la0, n);            /* shared loop: see burst_fire() */
 
-        /* COUNT the events aer_drain services; do NOT compare ring_head. The ring holds
+        /* COUNT the events aer_drain services; skip the ring_head comparison. The ring holds
          * SPIKE_RING_SIZE=2 entries, so its head index toggles 0<->1 and any EVEN number
-         * of spikes in the window returns it to where it started -- read as "did not
-         * fire". A neuron above threshold often emits more than one spike, so that test
+         * of spikes in the window returns it to where it started -- read as "silent".
+         * A neuron above threshold often emits more than one spike, so that test
          * made the bisection walk past the true N* (measured: 23 against a host-measured
-         * 16). aer_drain's return value is monotone and has no such ambiguity. */
+         * 16). aer_drain's return value is monotone and free of that ambiguity. */
         reg_timer0_update = 1;
         uint32_t t0 = reg_timer0_value;          /* down-counter */
         uint32_t hit = 0;
@@ -1574,7 +1574,7 @@ static uint32_t cal_probe(uint32_t *la0, uint32_t *la1, uint32_t n, uint32_t rep
         drain_ram.ring_tail = drain_ram.ring_head;
 
         /* Let the membrane return to rest before the next repetition. Keep draining so a
-         * stalled handshake cannot hold req high across the gap. */
+         * stalled handshake keeps req from holding high across the gap. */
         reg_timer0_update = 1;
         uint32_t tq = reg_timer0_value;
         for (;;) {
@@ -1587,14 +1587,14 @@ static uint32_t cal_probe(uint32_t *la0, uint32_t *la1, uint32_t n, uint32_t rep
     return fired;
 }
 
-/* Smallest N that fires in every repetition, by bisection. 0 = not found in range. */
+/* Smallest N that fires in every repetition, by bisection. 0 = outside the range. */
 __attribute__((optimize("Os")))
 static uint32_t cal_bisect(uint32_t *la0, uint32_t *la1, uint32_t reps)
 {
-    /* WARM-UP. The first suprathreshold burst after an idle loses its first repetition
+    /* WARM-UP. The first suprathreshold burst after an idle can lose its first repetition
      * (cold-start, measured 2026-08-19: sub-count, deterministic, miss@[0]). A bracket
      * that walks UP from n=4 meets that miss at the first count that should fire, reads
-     * it as "did not fire in every rep", and steps past -- so a cold bisection reports
+     * it as "fired in fewer reps", and steps past -- so a cold bisection reports
      * N* one count HIGH. One discarded suprathreshold burst removes the whole effect;
      * N=CAL_NMAX fires whenever anything in range does. */
     (void)cal_probe(la0, la1, CAL_NMAX, 1);
@@ -1612,25 +1612,25 @@ static uint32_t cal_bisect(uint32_t *la0, uint32_t *la1, uint32_t reps)
 }
 
 __attribute__((optimize("Os")))
-/* CALRUN is TWO PHASES, and they must not be mixed.
+/* CALRUN is TWO PHASES, and they stay separate.
  *
  * The first version validated after every single-level measurement, so it checked one
  * freshly measured count against five values that were still the stale written-down ones.
- * That mixture is not a ladder: raising level 0 from its recorded 6 to its measured 7 put
+ * That mixture falls outside a single coherent ladder: raising level 0 from its recorded 6 to its measured 7 put
  * it one count from the stale 8, below the minimum gap, and the check refused. Four of six
  * levels refused that way and the refusals cascaded. The measurements themselves were
- * fine; only the phase structure was wrong.
+ * fine; the phase structure was the issue.
  *
  *   Phase A (mode 0), calrun_measure: probe ONE level, report where its threshold now is,
  *      and try to walk it back to its calibrated value with the pulse width. No validation
- *      and no encoding table -- there is nothing coherent to validate yet.
+ *      and an empty encoding table -- validation waits on a complete ladder.
  *   Phase B (mode 1), calrun_derive: given all six counts, validate the ladder ONCE
  *      (range, order, gap) and derive the encoding ONCE, then print it.
  *
  * Both run on the core. The host carries the six counts from phase A into phase B because
- * this handler keeps no state between calls -- main()'s -O0 frame spans .bss, so anything
- * persistent there is clobbered. That carry is transport: no threshold, midpoint or
- * verdict is computed on the host.
+ * this handler is stateless between calls -- main()'s -O0 frame spans .bss, so anything
+ * persistent there is clobbered. That carry is transport: the host carries values, while
+ * threshold, midpoint and verdict all stay on-chip.
  */
 __attribute__((optimize("Os")))
 static void calrun_measure(uint32_t *la0, uint32_t *la1, uint32_t lvl, uint32_t reps,
@@ -1659,7 +1659,7 @@ static void calrun_measure(uint32_t *la0, uint32_t *la1, uint32_t lvl, uint32_t 
         return;
     }
 
-    /* trip on the OUTER probes only; `at` is direction telemetry, not a trip condition */
+    /* trip on the OUTER probes only; `at` is direction telemetry rather than a trip condition */
     uint32_t tripped = (below > 1u) || ((reps - above) > 1u);
 
     uint32_t meas = nref, now = nref, path = 0, ticks_used = pulse_ticks;
@@ -1677,14 +1677,14 @@ static void calrun_measure(uint32_t *la0, uint32_t *la1, uint32_t lvl, uint32_t 
             return;                              /* out of range: phase B decides */
         }
         /* WIDTH CORRECTION. Charge per input event is I_syn x pulse width and the core
-         * writes that width directly -- no DAC -- so walking the threshold back to its
+         * writes that width directly -- DAC-free -- so walking the threshold back to its
          * calibrated value leaves the ORIGINAL encoding valid. Try this first.
          *
-         * The error is in COUNTS and the actuator is in TICKS, and they are not the same
-         * unit: one count of threshold costs roughly CAL_TPC ticks of width. The first
+         * The error is in COUNTS and the actuator is in TICKS, and they are different
+         * units: one count of threshold costs roughly CAL_TPC ticks of width. The first
          * version added the count error straight onto the ticks, so a one-count miss
          * produced a one-tick step -- about a fifth of what is needed -- and the guard ran
-         * out before the threshold moved. Levels 6 and 12 failed for exactly that reason,
+         * out before the threshold moved. Levels 6 and 12 came up short for exactly that reason,
          * with 234 ticks of unused headroom in the direction they needed to go.
          *
          * Step proportionally until the error changes sign, then bisect the bracket. N* is
@@ -1699,7 +1699,7 @@ static void calrun_measure(uint32_t *la0, uint32_t *la1, uint32_t lvl, uint32_t 
             if (have_lo && have_hi) {                    /* bracketed: bisect on width */
                 if (t_hi > t_lo + 1u || t_lo > t_hi + 1u)
                     t = (t_lo > t_hi) ? ((t_lo + t_hi) >> 1) : ((t_lo + t_hi) >> 1);
-                else break;                              /* adjacent widths: cannot do better */
+                else break;                              /* adjacent widths: the closest the widths allow */
             } else if (got > nref) {
                 uint32_t d = (got - nref) * CAL_TPC;
                 if (t >= CAL_MAXTICKS) break;
@@ -1716,14 +1716,14 @@ static void calrun_measure(uint32_t *la0, uint32_t *la1, uint32_t lvl, uint32_t 
         if (got == nref) {
             path = 1; now = nref; ticks_used = t;
         } else {
-            /* Repair failed. THE WIDTH LEFT IN PLACE IS THE WIDTH REPORTED: restore the
+            /* Repair came up short. THE WIDTH LEFT IN PLACE IS THE WIDTH REPORTED: restore the
              * default and re-measure there, so `now` describes the operating point the
              * chip is actually left at. Reporting `got` here would report a threshold
-             * measured at a width that is no longer set. */
+             * measured at a width that has been superseded. */
             pulse_ticks = 10u * pulse_mult * CLK_SCALE;
             ticks_used = pulse_ticks;
             now = cal_bisect(la0, la1, reps);
-            if (now == 0) now = meas;                    /* nothing found: fall back */
+            if (now == 0) now = meas;                    /* search empty: fall back */
         }
     }
 
@@ -1751,7 +1751,7 @@ static void calrun_derive(const uint8_t *lad)
     for (uint32_t i = 0; i < CAL_LEVELS; i++) now[i] = lad[i];
 
     /* Validate ONCE, over the whole measured ladder. A level above the representable
-     * range is not a failure of the others -- it is reported and excluded. */
+     * range is reported separately from the others. */
     uint32_t oor = 0, bad_order = 0, bad_gap = 0, prev = 0, nvalid = 0;
     for (uint32_t i = 0; i < CAL_LEVELS; i++) {
         if (now[i] == 0 || now[i] > CAL_NMAX) { oor++; continue; }
@@ -1813,21 +1813,21 @@ static void calrun_derive(const uint8_t *lad)
 // ===== GAPPROBE (0xD7): how long does the membrane actually need to re-arm? ==========
 //
 // The published slot is 31.2 ms = 3.13 tau, and 97% of the 13.8 uJ per node visit is that
-// re-arm, not the burst (0.42 uJ). So both the 26.0 s per decision and the energy scale
+// re-arm rather than the burst (0.42 uJ). So both the 26.0 s per decision and the energy scale
 // almost linearly with the slot -- and 3.13 tau was a CHOICE about how far the membrane
-// should return to rest, never a measurement of what the comparator needs.
+// should return to rest rather than a measurement of what the comparator needs.
 //
 // This measures the requirement directly. A conditioning burst of n1 spikes drives the
 // neuron (typically past threshold, so it fires and enters its reset); after a programmed
 // gap, a probe burst of n2 asks whether the comparator still answers correctly. Sweeping
 // the gap down finds the point where the answer changes -- and it has to be checked in
-// BOTH directions, because too short a gap fails two different ways:
+// BOTH directions, because too short a gap breaks two different ways:
 //   n2 = N*   must still FIRE      -- too short and the neuron is still in reset
-//   n2 = N*-2 must still NOT fire  -- too short and the membrane has not fallen back,
+//   n2 = N*-2 must still stay silent -- too short and the membrane is still recovering,
 //                                     so the effective threshold has moved down
 // The floor is the shortest gap where both hold. The host runs it twice, once per n2.
 //
-// The gap cannot be produced from the host: pf() spends a fixed 3 x 20 ms draining after
+// The gap is too short for the host to produce: pf() spends a fixed 3 x 20 ms draining after
 // every burst, so the host's inter-burst period floors near 60 ms -- already above the
 // 31.2 ms slot it is supposed to probe. It has to be timed on-chip.
 #define UART_CMD_GAPPROBE      0xD7
@@ -1930,7 +1930,7 @@ void main()
     // Gate-level proof: la_data_in[N] = la_oe[N] & la_out[N] & power_good (AND3)
     // Previously inverted: bits for user-driven signals were set to 1 (enabling
     // CPU output on req/AER) while CPU-driven signals (ack, CLK, Da, nRes) were 0
-    // (CPU output disabled). This meant ack never reached the neuron.
+    // (CPU output held low). This held ack away from the neuron.
     reg_la0_oenb = 0x7FFFFFF8;    // bits 3-30: CPU drives la_data_in[3:30]
     reg_la1_oenb = 0x10000000;    // bit 28: CPU drives x5.ack
     reg_la2_oenb = 0x0000005C;    // bits 2,3,4,6: CPU drives CLK, Da, nRes, x3.ack
@@ -2151,13 +2151,13 @@ void main()
                 cal_tick = rx; cal_n = 0; rx_state = RX_STATE_CALRUN_LADDER;
             } else if (rx_state == RX_STATE_CALRUN_LADDER) {
                 // The calibrated ladder is CALIBRATION DATA carried by the cycle's own
-                // opening command, not host control inside the loop: once these bytes
+                // opening command, rather than host control inside the loop: once these bytes
                 // land, detection, recovery and re-verification run to completion with
-                // no further host traffic.
+                // zero further host traffic.
                 cal_lad[cal_n++] = rx;
                 if (cal_n >= CAL_LEVELS) {
                     // mode 0 = measure this level; mode 1 = validate + derive from the
-                    // six counts just carried in. Never both in one call.
+                    // six counts just carried in. One mode per call.
                     if (cal_mode == 0)
                         calrun_measure(&la0_out, &la1_out, cal_arg, cal_reps, cal_lad);
                     else
@@ -2215,8 +2215,8 @@ void main()
                 // rate is sane: mean in [2000, 5e6] ticks = [2 Hz, 5 kHz] at 10 MHz.
                 if (poisson_mean_ticks < 2000u) poisson_mean_ticks = 2000u;
                 // 5e6 is the OVERFLOW GUARD on umul32(mean, neglog_lut_max=799) < 2**32.
-                // The regular train never calls umul32, so it needs no such clamp and can
-                // use the full 24-bit wire range (slower rates).
+                // The regular train leaves umul32 unused, so the clamp stays off it and it
+                // can use the full 24-bit wire range (slower rates).
                 if (!poisson_regular && poisson_mean_ticks > 5000000u)
                     poisson_mean_ticks = 5000000u;
                 // Schedule the first spike one exponential ISI from now.
@@ -2294,11 +2294,11 @@ void main()
             } else if (rx_state == RX_STATE_COINC_DT0) {
                 coinc_dt |= (rx & 0x3F);
                 // 300 ms of REAL time at any core clock. Unlike the Poisson clamp this
-                // one guards nothing but duration, so it scales. 3e6*5 = 15e6 still fits
+                // one bounds duration only, so it scales. 3e6*5 = 15e6 still fits
                 // the 24-bit wire format (max 16777215).
                 if (coinc_dt > 3000000u * CLK_SCALE) coinc_dt = 3000000u * CLK_SCALE;
 
-                // === Clean coincidence primitive: ONE req_inp edge per input (no doublet),
+                // === Clean coincidence primitive: ONE req_inp edge per input (rather than a doublet),
                 //     all slow delay_loop work OUTSIDE the timed A->B window. Only the two
                 //     fast fire edges bracket the coinc_dt wait, so A->B = coinc_dt + a
                 //     fixed ~1 ms XIP floor (measured; reg writes + timer reads over 10 MHz
@@ -2319,7 +2319,7 @@ void main()
                 la0_out |=  X5_REQ_INP_BIT; reg_la0_data = la0_out;   // A edge
                 la0_out &= ~X5_REQ_INP_BIT; reg_la0_data = la0_out;
 
-                // Swap address to syn_b now (req LOW -> no edge); absorbed into the wait
+                // Swap address to syn_b now (req LOW -> edge-free); absorbed into the wait
                 la0_out = (la0_out & ~X5_SYN_ADDR_MASK) | ((coinc_synB & 0xF) << 23);
                 reg_la0_data = la0_out;
 
@@ -2367,8 +2367,8 @@ void main()
         // SRAM-resident AER drain for both modes.  Returns # of spikes drained.
         uint32_t drained = aer_drain(&la1_out, &drain_ram);
 #if STREAM_SPIKES
-        // Deferred streaming: flush the ring buffer to UART from XIP (not
-        // time-critical).  4-byte self-synchronizing packets with raw 16-bit
+        // Deferred streaming: flush the ring buffer to UART from XIP (off the
+        // critical path).  4-byte self-synchronizing packets with raw 16-bit
         // Timer0 ticks (host converts to us: ticks / 10 at 10 MHz):
         //   byte0 = 0x80 | addr         (MSB=1, 4-bit neuron ID)
         //   byte1 = (ts >> 14) & 0x7F   (top 2 bits of 16-bit ts)
@@ -2382,7 +2382,7 @@ void main()
             uint32_t s_addr = (entry >> 21) & 0x0F;
             uint32_t s_ts   = entry & 0x1FFFFFu;   // 21 bits
             // Carry any overflow since the last packet, then clear. aer_drain runs
-            // from this same loop (no ISR), so read-then-clear cannot race.
+            // from this same loop (ISR-free), so read-then-clear stays race-free.
             uint32_t s_flag = 0;
             if (drain_ram.drops)  s_flag |= SPIKE_DROP_FLAG;
             if (drain_ram.stalls) s_flag |= SPIKE_STALL_FLAG;
@@ -2390,7 +2390,7 @@ void main()
             // A packet must be ATOMIC. txfull was checked once above, but the FIFO
             // can fill after byte 0, and a write into a full LiteX FIFO is SILENTLY
             // DISCARDED -- that shredded packets near the link ceiling and lost
-            // spikes without ever overflowing the ring, so `drops` stayed 0 and the
+            // spikes while the ring stayed clear, so `drops` stayed 0 and the
             // host saw corrupt frames it resynced away. Gate every byte instead.
             // This back-pressures the array (a neuron holds req until acked) rather
             // than losing data silently, and STALL says so.

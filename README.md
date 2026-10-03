@@ -86,10 +86,10 @@ Additional design assets live in `docs/figures/`:
 
 - Synaptic efficacy and firing rate are strongly **operating-point dependent and
   clock-dependent**. Always retune biases at the clock you run.
-- The on-die **DLL does not survive a power cycle** — the chip returns to the
-  10 MHz crystal. Re-engage it, and **flash only on the crystal**.
-- The **AER encoder can latch** (all-ones *or* off-by-one address) and only a
-  physical power cycle clears it. Run an unmasked 16-neuron addressing check
+- The on-die **DLL setting resets on a power cycle** — after power-up the chip
+  runs on the 10 MHz crystal. Re-engage it, and **flash on the crystal**.
+- The **AER encoder can latch** (all-ones *or* off-by-one address); a physical
+  power cycle clears it. Run an unmasked 16-neuron addressing check
   before/after every acquisition.
 - Bias polarity: **NMOS** higher V = more current; **PMOS** lower V = more
   current (OFF = VDD).

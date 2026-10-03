@@ -5,7 +5,7 @@ The reference analysis reports a residual of 1.4 D_eff units: silicon
 reaches 18.1 where the best model (operating-point matched thresholds + the
 measured 11.99 ms acquisition lattice) reaches 16.7. Before any further mechanism
 is proposed to account for those 1.4 units, the residual needs an uncertainty,
-and it has never had one.
+and the mechanism stays unaccounted for.
 
 Two facts make that uncertainty large:
 
@@ -114,7 +114,7 @@ def main():
     print(f"\n  The residual is resolvable but its MAGNITUDE is not: the interval "
           f"spans\n  a factor of {hi/max(lo,1e-9):.0f}. Any mechanism adding "
           f"anywhere in [{lo:.1f}, {hi:.1f}] units\n  is consistent with it, which "
-          f"is why closing the gap cannot by itself\n  identify the mechanism.")
+          f"is why closing the gap alone\n  leaves the mechanism unidentified.")
 
     out = {
         "tau_s": TAU, "n_boot": N_BOOT, "lattice_seeds": LATTICE_SEEDS,

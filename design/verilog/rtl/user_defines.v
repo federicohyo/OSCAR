@@ -40,17 +40,16 @@
 `define GPIO_MODE_USER_STD_OUT_MONITORED   13'h1802
 `define GPIO_MODE_USER_STD_ANALOG          13'h000a
 
-// The power-on configuration for GPIO 0 to 4 is fixed and cannot be
-// modified (allowing the SPI and debug to always be accessible unless
-// overridden by a flash program).
+// The power-on configuration for GPIO 0 to 4 is fixed (allowing the SPI and
+// debug to always be accessible unless overridden by a flash program).
 
 // The values below can be any of the standard types defined above,
 // or they can be any 13-bit value if the user wants a non-standard
 // startup state for the GPIO.  By default, every GPIO from 5 to 37
 // is set to power up as an input controlled by the management SoC.
 // Users may want to redefine these so that the user project powers
-// up in a state that can be used immediately without depending on
-// the management SoC to run a startup program to configure the GPIOs.
+// up in a state that can be used immediately, independent of the management
+// SoC running a startup program to configure the GPIOs.
 
 `define USER_CONFIG_GPIO_5_INIT  `GPIO_MODE_USER_STD_ANALOG //GPIO_MODE_INVALID
 `define USER_CONFIG_GPIO_6_INIT  `GPIO_MODE_USER_STD_ANALOG 
@@ -62,7 +61,7 @@
 `define USER_CONFIG_GPIO_12_INIT `GPIO_MODE_USER_STD_ANALOG 
 `define USER_CONFIG_GPIO_13_INIT `GPIO_MODE_USER_STD_ANALOG 
 
-// Configurations of GPIO 14 to 24 are used on caravel but not caravan.
+// Configurations of GPIO 14 to 24 are used on caravel; caravan uses a different set.
 `define USER_CONFIG_GPIO_14_INIT `GPIO_MODE_USER_STD_ANALOG // bare analog pad 0
 `define USER_CONFIG_GPIO_15_INIT `GPIO_MODE_USER_STD_ANALOG 
 `define USER_CONFIG_GPIO_16_INIT `GPIO_MODE_USER_STD_ANALOG 

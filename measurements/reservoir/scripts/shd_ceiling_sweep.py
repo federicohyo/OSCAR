@@ -2,7 +2,7 @@
 """Does ANY 16-neuron operating point give a clean recurrent>feedforward gap on SHD five/nine
 (speaker-independent, 700->16 pooled)? The default point showed no gap; the recurrence value
 only appears when feedforward's intrinsic (leaky-membrane) memory is SHORTER than the task's
-discriminative timescale, so recurrence supplies the missing memory. Sweep membrane leak
+discriminative timescale, so recurrence supplies the needed memory. Sweep membrane leak
 (a_leak: high=short memory), spectral radius (rho), and input scale; report the rec-ff gap.
 This localises the target regime to tune the CHIP toward (short membrane tau + recurrence)."""
 import warnings; warnings.filterwarnings("ignore")

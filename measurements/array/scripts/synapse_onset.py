@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Characterize the 4-bit weight code by THRESHOLD BIAS rather than by firing rate.
 
-Why not firing rate. At every soma operating point reachable on this die the neuron's rate
+Why onset bias rather than firing rate. At every soma operating point reachable on this die the neuron's rate
 response to synaptic drive is a cliff: below threshold it emits nothing, and the moment the
 delivered charge crosses threshold it fires at close to the input rate (~900 Hz at 800 Hz in).
 Lowering the leak to buy temporal summation makes the neuron free-run instead (w=0 fires at
-several hundred Hz). So the rate carries one bit -- fired / did not fire -- and a weight sweep
+several hundred Hz). So the rate carries one bit -- fired / silent -- and a weight sweep
 read out by rate can only ever produce the staircase of zeros and saturations seen in the
-first scans. That is a property of the neuron, not of the synapse.
+first scans. That is a property of the neuron rather than the synapse.
 
 What to do instead. A sharp threshold is an excellent null detector. For each weight word we
 find the excitatory branch bias V at which that word just makes the neuron fire. Because the
@@ -21,7 +21,7 @@ lower by exactly nUT*ln(k):
     V_onset(w) = V0 - nUT * ln( A(w) )
 
 where A(w) is the word's delivered charge in units of one branch. The onset voltage is thus a
-LOGARITHMIC READOUT of synaptic efficacy, graded and precise even though the rate is not, and
+LOGARITHMIC READOUT of synaptic efficacy, graded and precise even where the rate stays blunt, and
 a plot of V_onset against log w is a straight line of slope -nUT exactly when the code is
 linear in w -- i.e. exactly when the branches are binary weighted.
 
@@ -149,7 +149,7 @@ def main() -> int:
             At leak biases below vleakn = 0.225 V the soma free-runs, and spontaneous
             activity then reads as synaptic response, so a bracket is only usable if the
             silent word stays silent across all of it. `find_onset` returns None when the
-            word does not fire even at `hi`, which is the pass condition; any voltage it
+            word stays silent even at `hi`, which is the pass condition; any voltage it
             returns is the bias at which spontaneous firing starts and therefore a hard
             floor on every onset measured in this stage.
             """

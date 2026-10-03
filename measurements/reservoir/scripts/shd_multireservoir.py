@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Restore the recurrence gap on SHD five/nine by stacking M PARALLEL 16-neuron reservoirs
-into one linear readout (total 16*M features), as suggested: 16 physical neurons lack the
+into one linear readout (total 16*M features), as suggested: 16 physical neurons fall short of the
 headroom for recurrence to beat leaky-feedforward, but M independent reservoirs do.
 
 On-chip realisation: TIME-MULTIPLEX the same 16 neurons across M passes, each pass with a

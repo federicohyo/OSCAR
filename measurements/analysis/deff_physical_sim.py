@@ -107,7 +107,7 @@ def simulate(up, dn, vth, T=T_BEAT, dt=DT_DEFAULT, tau_m=0.02, tref=0.005,
     # w_exc/w_inh may be per-unit vectors: the excitatory and inhibitory synapses
     # are separate DPI circuits with independent biases and independent mismatch,
     # so their RATIO varies from neuron to neuron. That ratio is the one parameter
-    # axis a per-neuron threshold cannot absorb (see deff_physical_mechanisms.py).
+    # axis a per-neuron threshold leaves unabsorbed (see deff_physical_mechanisms.py).
     we = np.asarray(w_exc, dtype=float).reshape(-1, 1) if np.ndim(w_exc) else w_exc
     wi = np.asarray(w_inh, dtype=float).reshape(-1, 1) if np.ndim(w_inh) else w_inh
     drive = we * up - wi * dn
@@ -140,7 +140,7 @@ def simulate(up, dn, vth, T=T_BEAT, dt=DT_DEFAULT, tau_m=0.02, tref=0.005,
             if syn_sat:
                 # quadratic self-limiting, applied on the same Euler step as the
                 # decay: s <- s - dt*s^2/(tau*syn_sat). Clamped at zero so a large
-                # step cannot drive the state negative.
+                # step leaves the state non-negative.
                 s = np.maximum(s - (dt / _tau_eff) * s * np.abs(s) / syn_sat, -abs(syn_sat))
             inj = s * gain
         else:
@@ -157,7 +157,7 @@ def simulate(up, dn, vth, T=T_BEAT, dt=DT_DEFAULT, tau_m=0.02, tref=0.005,
         if rectify:
             v = np.maximum(v, 0.0)
         elif leak_mode == "const":
-            # a constant leak with no floor runs away downward on a silent unit;
+            # a constant leak falls unbounded on a silent unit;
             # the real membrane sits at its rest rail. Clamp one threshold below.
             v = np.maximum(v, -vth)
 

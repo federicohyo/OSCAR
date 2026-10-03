@@ -6,7 +6,7 @@ single acquisition ... cross-acquisition reproducibility is a measurement we hav
 not made". The 2026-08-11 re-acquisition is that measurement, on the same 60
 beats, the same per-neuron projection and the same read-out pipeline as the
 2026-07 DIM recording -- but on the fixed read-out path (SRAM drain, on-chip
-Timer0 stamps, no 11.99 ms lattice), a 25 MHz core, and 2.7x the drive.
+Timer0 stamps, lattice-free), a 25 MHz core, and 2.7x the drive.
 
 Both are scored here through the IDENTICAL pipeline, inter-patient
 (leave-one-record-out), so the comparison is like-for-like:

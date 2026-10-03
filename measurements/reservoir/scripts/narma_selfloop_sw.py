@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """SW validation for NARMA on-chip: does a SELF-LOOP (diagonal-recurrence) reservoir — matching
-the chip's time-multiplexed self-recurrent units (no cross-coupling) — have enough memory +
+the chip's time-multiplexed self-recurrent units (self-coupled, cross-coupling off) — have enough memory +
 nonlinearity to do NARMA, and does recurrence beat feedforward? Bank of N leaky units with
 DIVERSE leak/gain/self-weight, driven by a continuous u(t) stream; per-step state -> ridge -> y;
 NRMSE, feedforward (self=0) vs recurrent (self>0). If rec NRMSE << ff, the on-chip plan is sound.

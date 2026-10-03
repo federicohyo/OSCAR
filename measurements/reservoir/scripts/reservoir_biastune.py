@@ -4,7 +4,7 @@
 quiet nodes) -- the raw material for a reservoir. Reducing vleakn lowers the leak so
 neurons begin to fire, at different thresholds due to device mismatch.
 
-Measures the resting per-neuron firing rate (no stimulation) across a vleakn (and
+Measures the resting per-neuron firing rate (zero stimulation) across a vleakn (and
 optionally ifdcp) sweep and scores diversity. Save the chosen point as a .biases file
 in the GUI (or via set_bias) once identified.
 

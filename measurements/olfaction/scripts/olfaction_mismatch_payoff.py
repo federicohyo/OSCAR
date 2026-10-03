@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """Would the mismatch ladder's parallelism pay? Node VISITS per level decide it.
 
-Eleven neurons sit in range at one global setting, but they do not switch at eleven
+Eleven neurons sit in range at one global setting, but they cluster rather than switching at eleven
 different counts: mismatch piles 8-10 of them at N=1 and leaves one or two stragglers
 higher (olfaction_mismatch_ladder.py). So the array offers wide parallelism at exactly one
-level and none at the others, and whether that is worth an executor rewrite depends on how
+level and zero at the others, and whether that is worth an executor rewrite depends on how
 much of the tree's work lands on the wide level.
 
-It does not. Level 1 carries about an eighth of the visits, because "is this feature above
+That payoff is limited. Level 1 carries about an eighth of the visits, because "is this feature above
 its lowest quantile" is nearly always true and the tree has little use for it; the visits
 concentrate on the middle and upper thresholds, which are one neuron wide. Amdahl then
-caps the speed-up near 1.1x, with no accuracy compensation -- the six-level mismatch
+caps the speed-up near 1.1x, with zero accuracy compensation -- the six-level mismatch
 ladder reaches the same ceiling one time-multiplexed neuron already reaches.
 
-The transferable form: mismatch hands you a distribution you do not choose, and here it is
+The transferable form: mismatch hands you a distribution beyond your choice, and here it is
 anti-correlated with where the algorithm spends its visits. For mismatch to pay as a
 resource, the spread has to land where the work is.
 

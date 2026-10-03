@@ -9,7 +9,7 @@
   ChipBackend -- the real thing (drop-in for the bench): applies biases via the bridge `B` command,
                  runs the on-die `NARMACOLLECT` stream, and captures membrane impulse traces on a few
                  neurons with scope_usb. Written to be run at the bench under the safety protocol;
-                 not exercised without hardware.
+                 exercised on hardware.
 """
 import time
 import numpy as np
@@ -20,7 +20,7 @@ from narma_chipsim import run_reservoir
 # ============================================================================ SIM
 class SimBackend:
     """Volts -> knobs via weak-inversion exponentials, then the spiking chip-sim. The map is
-    monotone and physically-flavoured (not chip-calibrated): its job is to reproduce the CHARACTER
+    monotone and physically-flavoured (uncalibrated to the chip): its job is to reproduce the CHARACTER
     of the tuning landscape (exponential sensitivity, a narrow feasible ridge), so the optimiser +
     objective loop is validated end-to-end before the chip."""
 
@@ -44,7 +44,7 @@ class SimBackend:
         i_leak = I("vleakn", theta.get("vleakn", self.V0["vleakn"]))
         i_tau = I("vtaun", theta.get("vtaun", self.V0["vtaun"]))
         i_inh = I("JInhWp", theta.get("JInhWp", self.V0["JInhWp"]))
-        # threshold: ~linear in volts around nominal (a comparator level, not a WI current)
+        # threshold: ~linear in volts around nominal (a comparator level rather than a WI current)
         vth = 1.0 * (1.0 + 6.0 * (theta.get("vthrdn", self.V0["vthrdn"]) - self.V0["vthrdn"]))
         vth = float(np.clip(vth, 0.4, 3.0))
         tau_m = float(np.clip(40.0 / i_leak, 4.0, 400.0))         # more leak current -> shorter tau
@@ -57,7 +57,7 @@ class SimBackend:
     def _run_counts(self, theta, u, recur=True):
         TAU, in_gain, rho, vth, bias_drive = self._knobs(theta)
         if not recur:
-            rho = 0.0                                    # feedforward: no neuron-neuron coupling
+            rho = 0.0                                    # feedforward: neuron-neuron coupling off
         # DPI input-synapse low-pass (the chip's real fading-memory mechanism the bare chipsim omits):
         # tau_syn set by vtaun (i_tau). Filtering the input injects u(t-1),u(t-2)... into frame t, so
         # the per-frame count carries lagged input -> MC1/MC2 > 0, TUNABLE by vtaun. Too much smoothing
@@ -222,7 +222,7 @@ class ChipBackend:
                 t, v = self._scope.read_waveform(1, points=2000)
                 traces.append((np.asarray(t, float), np.asarray(v, float)))
             except Exception as e:
-                traces.append((np.arange(2), np.zeros(2)))   # failed read -> flat -> flagged railed/dead
+                traces.append((np.arange(2), np.zeros(2)))   # off read -> flat -> flagged railed/dead
                 print(f"  scope read n{k} failed: {e}")
             stop.set(); th.join()
         return traces

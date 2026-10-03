@@ -1,6 +1,6 @@
 """SHD (Spiking Heidelberg Digits): does a RECURRENT reservoir on the spike STREAM beat a
 STATIC rate vector -- i.e. does temporal processing pay off on a genuinely temporal, already-
-spike-encoded task? (The clean test recurrence FAILED on static vowel because vowel has no
+spike-encoded task? (The clean test recurrence fell short on static vowel because vowel carries no
 time axis; SHD does.) Binary digit subset, like the vowel pairs.
 
 Models, all with a high-precision float readout, 5-fold CV, few seeds:

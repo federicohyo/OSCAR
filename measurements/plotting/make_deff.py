@@ -78,7 +78,7 @@ def main():
         at20 = corr_effdim(sp, T, K, "exp", TAU_TABLE)[2]
         print(f"{label:52s} tau=20ms  D_eff={at20:5.1f}")
 
-    # the gap the parameter-mismatch models do not close
+    # the gap the parameter-mismatch models leave open
     i20 = int(np.argmin(np.abs(TAUS - TAU_TABLE)))
     hw = vals[CURVES[0][0]][i20]
     best_sw = vals[CURVES[1][0]][i20]

@@ -91,13 +91,13 @@ def main():
     # about WHICH turn it sits on -- an inverting amplifier reads -180 or +180
     # with equal right. Slide the whole series by whole turns onto the branch
     # the simulation uses, so the two can be compared at all. This shifts every
-    # point by the same amount and so cannot manufacture agreement in shape.
+    # point by the same amount and so leaves shape agreement untouched.
     if a.flip:
         ph = ph + 180.0
     sim_at = np.interp(f, sim["freq_hz"], sim["phase_deg"])
     ph = ph - 360.0 * round(float(np.median(ph - sim_at)) / 360.0)
     gd = m["gain_db"][keep]
-    # the error bar is the uncertainty of the mean, not the spread of
+    # the error bar is the uncertainty of the mean rather than the spread of
     # the individual windows it was averaged from
     sd = m["sem_deg"][keep]
     lo, hi = f.min(), f.max()

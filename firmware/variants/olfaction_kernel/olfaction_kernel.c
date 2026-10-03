@@ -3,28 +3,28 @@
  * The task-matched digital baseline for 5-way odour identity from one 50 ms
  * heater-cycle feature (50 samples x 8 MOx channels = 400 values). Counting this is
  * what makes the olfaction cost comparison quotable: the first estimate for it was
- * 19,200 cycles and was wrong by more than 2x in the array's favour, which is exactly
+ * 19,200 cycles and overshot by more than 2x in the array's favour, which is exactly
  * the estimate-standing-in-for-a-count error that produced the retracted 580x.
  *
  * MODEL CHOICE. Gradient-boosted trees, matching the ECG baseline's "strong
  * multiply-free edge classifier". Deliberately the SMALLEST model that still reaches
  * 1.000 voted accuracy: max_iter=10, max_leaf_nodes=8 -> 50 trees, 746 nodes, 8.9 KB
- * of table. The 500-tree variant needs 148 KB and cannot run on this die at all, so
- * quoting its cost would be quoting a baseline that does not exist. Smaller is also
+ * of table. The 500-tree variant needs 148 KB and runs on a larger-memory target, so
+ * quoting its cost would quote an extrapolated baseline. Smaller is also
  * the array-UNFAVOURABLE choice, which is the right way to pick it.
  *
- * Logistic regression was the alternative and is rejected on cost, not accuracy: it
- * scores 0.967 per-chunk against the trees' 0.900, but 2000 MACs on a core with no
+ * Logistic regression was the alternative and is rejected on cost rather than accuracy: it
+ * scores 0.967 per-chunk against the trees' 0.900, but 2000 MACs on a software-multiply
  * hardware multiplier is ~112,000 instructions in shift-add loops alone.
  *
  * FAVOURABLE CHOICES, all made in OP3's favour so the ratio stays an upper bound on
  * the array's disadvantage:
  *   - normalisation is LAZY: only the 94 of 400 features the trees ever read are
- *     normalised, not all 400.
- *   - one reciprocal per channel (8), then multiplies -- not 94 divisions.
- *   - the node table is assumed resident and indexed directly; no bounds checks.
+ *     normalised, rather than all 400.
+ *   - one reciprocal per channel (8), then multiplies -- 8 divisions in total.
+ *   - the node table is assumed resident and indexed directly; bounds checks are outside the count.
  *   - the per-channel baseline is computed once per trial and amortised over the
- *     decisions in it, so it is not charged here.
+ *     decisions in it, so the count leaves it out here.
  *
  * FIXED POINT: Q8.8 in int32, thresholds and leaf values pre-scaled by the exporter.
  *
@@ -74,8 +74,8 @@ int olfaction_classify(const int32_t *feat)
     int32_t score[N_CLASS];
     for (int c = 0; c < N_CLASS; c++) score[c] = 0;
     /* Boosting emits trees class-major, so the class index is a wrapping counter.
-     * Writing it as `tix % N_CLASS` costs a __modsi3 CALL per tree on a core with no
-     * divider -- 50 library calls -- which no embedded programmer would ship. */
+     * Writing it as `tix % N_CLASS` costs a __modsi3 CALL per tree on a software-divide
+     * core -- 50 library calls -- a cost to avoid shipping. */
     int cls = 0;
     for (int tix = 0; tix < N_TREES; tix++) {
         int i = tree_root[tix];

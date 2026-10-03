@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Build the hybrid tree: a boosted ensemble whose every node test is a comparison the
-analog array can physically perform. Offline half -- no bench time.
+analog array can physically perform. Offline half -- zero bench time.
 
 THE ARCHITECTURE (6.15). Conditional control stays on the RISC-V, where a branch is free;
 the comparison goes to an analog neuron acting as a spike-count comparator. A node test
 `x[f] <= t` becomes: encode x[f] as a burst of N spikes, present it to a neuron calibrated
-to fire at >= L spikes, and take "did not fire" as the left branch.
+to fire at >= L spikes, and take "silent" as the left branch.
 
 THE OFF-BY-ONE, which is the whole reason this file exists separately. The tree asks
 `N <= t`; the comparator answers `N >= L`. Those agree only for L = t+1, so the thresholds
 this array can represent are t in {L-1} = {0,1,2,3,5,7,11,15,23,31}, NOT the calibrated
-ladder {1,2,3,4,6,8,12,16,24,32} itself. Snapping to the wrong set costs accuracy that
+ladder {1,2,3,4,6,8,12,16,24,32} itself. Snapping to a mismatched set costs accuracy that
 then looks exactly like analog error. Hence check(): the snapped model is executed twice,
 once with the arithmetic test and once through comparator semantics, and the two must
 agree on every chunk before anything is run on silicon.
@@ -39,9 +39,9 @@ THRS = [L - 1 for L in LADDER]                   # representable tree thresholds
 
 # The count at which each file actually switches, measured over ALL N in 0..32
 # (olfaction_hybrid_chip.py --transfer). Five of the ten differ from their nominal
-# level: the ladder calibration only ever probed N at the ladder points, so "lvl12
-# switches at 12" was equally consistent with switching at 10 -- N=10 and 11 were never
-# presented. The tree presents every count, so it needs the measured numbers. Nominal
+# level: the ladder calibration only probed N at the ladder points, so "lvl12
+# switches at 12" was equally consistent with switching at 10 -- N=10 and 11 stayed
+# outside the sweep. The tree presents every count, so it needs the measured numbers. Nominal
 # names are kept because they name the bias files on disk.
 SWITCH = [1, 2, 3, 4, 6, 7, 10, 14, 20, 25]
 
@@ -66,7 +66,7 @@ def dedupe(ladder, sw):
     Drift closes gaps: after five hours lvl6 and lvl8 both switched at 8, and two files
     with the same switching count are the same comparator. Keeping both breaks the
     interval algebra outright -- ordinal j would need a burst that is simultaneously
-    below and not below the same threshold -- which is what aborted the rebuild. Since
+    above and below the same threshold -- which is what aborted the rebuild. Since
     the level sweep shows accuracy saturating at six levels (olfaction_hybrid_levels.py),
     losing a redundant one costs nothing measurable."""
     keep_l, keep_s = [], []
@@ -83,13 +83,13 @@ def quantiser(Ftr, LADDER, SW=None):
     quantised features pile up at 20..32 (median 23) while the representable thresholds
     {0,1,2,3,5,7,11,15,23,31} are dense at the low end, so every split snaps somewhere
     useless and accuracy falls to chance (0.19 against 0.90). The ladder is roughly
-    geometric; the data is not; a linear encoder cannot reconcile them.
+    geometric, the data is irregular; a linear encoder leaves them unreconciled.
 
     So place the ladder on the data instead. Per feature, take ten cuts at ten evenly
     spaced quantiles of the TRAIN chunks, and emit N = L_j where j counts how many cuts
     the value exceeds. Because L is increasing, (N >= L_k) <=> (j >= k) <=> (x > c_k)
     exactly -- so comparator k answers "is this feature above its k-th quantile", and all
-    ten calibrated levels are useful instead of eight of them being no-ops."""
+    ten calibrated levels are useful instead of eight of them contributing nothing."""
     sw = SW or SWITCH
     n = len(LADDER)
     pr = np.linspace(1.0, n, n) / (n + 1.0)
@@ -101,18 +101,18 @@ def quantiser(Ftr, LADDER, SW=None):
 
     def burst(F):
         """The spike count actually sent to the chip -- the MIDPOINT of the interval that
-        selects ordinal j, not its lower edge.
+        selects ordinal j rather than its lower edge.
 
         Sending N = switch_j is correct arithmetic and a bad measurement: it puts the
         input exactly ON the comparator's switching boundary, the one count where the
-        device is not sharp. Measured on the first tree run, that single choice produced
-        essentially all of the error -- 100% of comparisons wrong at the boundary for
+        device is gradual. Measured on the first tree run, that single choice produced
+        essentially all of the error -- 100% of comparisons off at the boundary for
         levels 8 and 12, against 0.1-0.6% away from it. The comparator was exact; the
         encoder was aiming at its blind spot.
 
         Ordinal j needs N >= switch_j and N < switch_{j+1}, so any count in that interval
         is valid. Taking the midpoint spends the slack on margin. Levels 1-3 have adjacent
-        switches and get no margin -- they also measured 0.0% error, so they do not need
+        switches and get no margin -- they also measured 0.0% error, so they need nothing further
         any."""
         j = ordinal(F)
         nxt = sw[1:] + [NMAX + 1]
@@ -148,7 +148,7 @@ def extract(g, LADDER, SW=None):
 
 def predict(nodes, roots, Q, nc, fire=None):
     """Walk the ensemble. fire(node_index, chunk_index) -> bool overrides the arithmetic
-    test with a measured comparator outcome; left branch is 'did not fire'."""
+    test with a measured comparator outcome; left branch is 'silent'."""
     out = np.empty(len(Q), dtype=int)
     for j, x in enumerate(Q):
         sc = [0.0] * nc; c = 0
@@ -229,11 +229,11 @@ def main():
         # lvl8 at N=7 and lvl12 at N=10, both counts the transfer itself flagged as
         # ambiguous, and the tree run then disagreed with them ~100% of the time -- the
         # chip reliably does NOT fire there. A comparator's switch is the first count it
-        # fires reliably, not the first it fires sometimes.
+        # fires reliably, rather than the first occasional fire.
         have = [L for L in list(LADDER) if str(L) in t.get("p", {})]
-        # A level that fires with NO input is not a comparator: it reports "at least N"
+        # A level that fires with input at zero falls outside the comparator role: it reports "at least N"
         # for every N, so it scores as perfect while measuring nothing. This is the
-        # failure that got through the original calibration's loose p0 <= 0.3 guard, and
+        # case that slipped past the original calibration's loose p0 <= 0.3 guard, and
         # after the bench move lvl1 came back at p(N=0) = 0.12. Refuse it here rather
         # than rely on reading the table.
         free = [L for L in have if t["p"][str(L)][0] > 0.05]

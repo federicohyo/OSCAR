@@ -35,7 +35,7 @@ def main():
     p = idx[(idx["kind"] == "pulse") & (idx["condition"] == args.condition)
             & (idx["concentration"] == 100)]
     # the short-duration cells only exist at a few durations; take them all, and cap
-    # the 1.0 s cell so it does not dominate
+    # the 1.0 s cell so it stays minor
     sel = (p.groupby(["shape", "gas1"], group_keys=False)
              .apply(lambda d: d.sample(min(len(d), args.per_cell), random_state=0)))
     print(f"{len(sel)} pulse trials, {args.condition}")

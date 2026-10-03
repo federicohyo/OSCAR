@@ -24,7 +24,7 @@ Protocol (OF app -> stdin):
     P <synapse_id> <weight> <exc|nexc>
     S <synapse_id> <neuron_id> <exc|nexc>
     T [count]
-    TRIGRUN <hz>          # regular spike train at hz, paced by the bridge (not the GUI frame loop)
+    TRIGRUN <hz>          # regular spike train at hz, paced by the bridge rather than the GUI frame loop
     TRIGSTOP              # stop the regular spike train
     POISSON <hz>          # start on-chip Poisson generation on the staged route
     POISSONSTOP           # stop on-chip Poisson generation
@@ -118,7 +118,7 @@ _narma_stop = threading.Event()
 _reservoir_lock = threading.Lock()  # serialize port writes with the main loop
 
 # Regular (non-Poisson) stimulation is paced ON-CHIP by Timer0 (cmd 0xED), for the
-# same reason Poisson is: the host cannot pace it. port.write() contends with the
+# same reason Poisson is: pace it on-chip; port.write() contends with the
 # reader thread for the serial lock -- measured blocking up to 182 ms -- so a
 # host-threaded 200 Hz train delivered only 24-121 Hz depending on reader load, and
 # the GUI's own frame loop was worse still (capped at ofSetFrameRate(60)).
@@ -246,7 +246,7 @@ def _narma_loop(port, stop_ev, in_neurons, weight, density, rec_w, t_step=0.05, 
     emit(f"NARMAOK density={density} rec_w={rec_w} in={in_neurons}")
     rngstate = 12345
     while not stop_ev.is_set():
-        rngstate = (1103515245 * rngstate + 12345) & 0x7FFFFFFF   # portable LCG (no Math.random ban)
+        rngstate = (1103515245 * rngstate + 12345) & 0x7FFFFFFF   # portable LCG (Math.random-free)
         u = (rngstate / 0x7FFFFFFF) * 0.5                          # u in [0,0.5]
         n_in = int(round(u / 0.5 * kmax))
         with _reservoir_lock:
@@ -355,22 +355,22 @@ UART_DBG_SPIKE_SETUP = 0x72
 # The firmware must be built to match:  make F_CPU_MHZ=50 hex
 # DEFAULT 50 MHz: this is the operating point for the reservoir / vowel work, and all
 # 16 neurons are live here (at 10 MHz only ~6 are). NOTE: synaptic efficacy is
-# clock-dependent -- a GAIN shift, not a kill (the old "50 MHz kills inhibition" note
-# was wrong; it works once biases are retuned per clock, confirmed at bench 2026-07-10,
+# clock-dependent -- a GAIN shift (the old "50 MHz kills inhibition" note
+# has been superseded; it works once biases are retuned per clock, confirmed at bench 2026-07-10,
 # see the synapse-efficacy memory). The fast-readout features (SRAM drain, 21-bit
 # timestamps, mask, drop/stall flags, REC, on-chip pacing) are clock-independent.
-# Set CARAVAN_CLK_MHZ=10 to stay on the bare crystal (no DLL). This MUST match the
+# Set CARAVAN_CLK_MHZ=10 to stay on the bare crystal (DLL disengaged). This MUST match the
 # firmware's F_CPU_MHZ or every pulse width and Timer0 constant is off by the ratio.
 CLK_MHZ = int(os.environ.get("CARAVAN_CLK_MHZ", "50"))
 BAUD = 960 * CLK_MHZ
 
 # DLL registers (Caravel housekeeping SPI)
 R_ENA, R_BYP, R_OUT, R_FB = 0x08, 0x09, 0x11, 0x12
-FB_LOCK = 10          # loop never locks below ~90 MHz VCO; fb=4 silently kills the CPU
+FB_LOCK = 10          # loop locks from ~90 MHz VCO up; fb=4 silently kills the CPU
 OUT_DIV = {50: 0x12, 33: 0x1B, 25: 0x24, 20: 0x2D}
 
 # A spike is one 4-byte packet, 10 bits per byte on the wire (8N1). Above this
-# aggregate rate the firmware's ring buffer cannot drain into the UART and spikes
+# aggregate rate exceeds what the firmware's ring buffer can drain into the UART and spikes
 # are dropped silently, so every rate the host reports becomes an UNDERESTIMATE.
 SPIKE_LIMIT_HZ = BAUD // 40      # 1200 spk/s at 48000 baud (50 MHz core)
 
@@ -392,7 +392,7 @@ TRAIN_TICKS_MAX = 0xFFFFFF                 # 24-bit wire format
 # Bit 6 of packet byte 0: firmware's sticky "I overflowed the ring" flag.
 SPIKE_DROP_FLAG = 0x40
 # Bit 5: the flush waited on the UART FIFO -- the link is saturated and the array
-# is being back-pressured. This fires BEFORE the ring ever overflows, so it, not
+# is being back-pressured. This fires BEFORE the ring overflows, so it, rather than
 # DROPS, is the signal that the displayed rates stopped being free-running.
 SPIKE_STALL_FLAG = 0x20
 
@@ -441,7 +441,7 @@ def engage_dll(mhz):
     with HKSPI() as hk:
         w = lambda a, v: hk.slave.write([Config.CARAVEL_REG_WRITE, a, v])
         w(R_ENA, 0x00)          # disable while reprogramming
-        w(R_FB, FB_LOCK)        # VCO ~100 MHz; anything less never locks
+        w(R_FB, FB_LOCK)        # VCO ~100 MHz; lower values leave the loop unlocked
         w(R_OUT, out_reg)       # core = 100 / N
         w(R_ENA, 0x01)          # enable, keep DCO off
         time.sleep(0.4)         # let the loop lock
@@ -453,8 +453,8 @@ def engage_dll(mhz):
     time.sleep(1.5)             # firmware runs blink() before it streams
 
 # Timer0 ticks at the CORE clock, so every seconds->ticks conversion below must use
-# the real clock. These are sent to the chip already in ticks; the firmware cannot
-# rescale them (it does not know what the host meant).
+# the real clock. These are sent to the chip already in ticks; the firmware keeps
+# them as-is (the host clock reference lives host-side).
 TIMER_HZ = CLK_MHZ * 1_000_000
 
 # Poisson mean-ISI bounds, in ticks.
@@ -542,7 +542,7 @@ def spike_reader_thread(port, stop_event):
     #
     # It used to be 16 bits, which wraps every 1.31 ms at 50 MHz -- SHORTER than
     # the FTDI's 16 ms latency timer. Packets arriving in one read() share a
-    # host timestamp, so the host gap read 0 and no wraps were added: the
+    # host timestamp, so the host gap read 0 and zero wraps were added: the
     # intervals aliased (a 120 spk/s train reconstructed as a 599 us burst).
     # 21 bits puts the wrap well beyond USB latency, so the host resolves it.
     #
@@ -575,7 +575,7 @@ def spike_reader_thread(port, stop_event):
             # and 0x72 is 'r'. Firmware text travels on this same UART, so an unguarded
             # match ate four characters at every 'r' -- "ref=" vanished, "trip=" became
             # "t1", "margin=" became "ma=". Require the payload to be a plausible packet
-            # (addresses <= 15, exc flag <= 1); real text never satisfies that, because
+            # (addresses <= 15, exc flag <= 1); real text stays outside that range, because
             # the following characters are printable and so > 15.
             def _plausible_dbg(bb):
                 return bb[1] <= 15 and bb[2] <= 15 and bb[3] <= 1
@@ -600,11 +600,11 @@ def spike_reader_thread(port, stop_event):
 
             # Scan for sync byte (MSB=1)
             if buf[0] & 0x80 == 0:
-                c = buf.pop(0)  # not a packet start; resync
+                c = buf.pop(0)  # outside the packet-start set; resync
                 # Firmware print() shares this UART and every byte of it has MSB=0, so it
                 # used to be dropped here as noise -- which is why bench commands had to
                 # bypass the bridge and open the port directly. Reassemble printable runs
-                # into lines instead. A spike packet can never be mistaken for text: its
+                # into lines instead. A spike packet is unambiguous against text: its
                 # first byte always has MSB=1.
                 if c == 0x0A:
                     if fw_line:
@@ -620,7 +620,7 @@ def spike_reader_thread(port, stop_event):
 
             neuron = buf[0] & 0x0F
             # Bit 6 is the firmware's sticky overflow flag: spikes were lost before
-            # this packet. We cannot infer that from the observed rate, because
+            # this packet. The observed rate alone leaves this ambiguous, because
             # dropping is what keeps the observed rate under the link ceiling.
             if buf[0] & SPIKE_DROP_FLAG:
                 drops += 1
@@ -658,8 +658,8 @@ def spike_reader_thread(port, stop_event):
         # Periodic rate report
         # A firmware text line can end with fewer than 4 bytes left, and the packet
         # loop above only runs while >=4 remain -- so its terminating newline would sit in
-        # the buffer until more traffic arrived, and the line was never emitted. Leading
-        # MSB-clear bytes can never begin a spike packet, so draining them here is safe.
+        # the buffer until more traffic arrived, and the line stayed unemitted. Leading
+        # MSB-clear bytes stay outside the spike-packet start set, so draining them here is safe.
         while buf and (buf[0] & 0x80) == 0:
             c = buf.pop(0)
             if c == 0x0A:
@@ -677,7 +677,7 @@ def spike_reader_thread(port, stop_event):
             # Nonzero => the chip lost spikes in this window, so RATE is too low.
             emit(f"DROPS {drops}")
             # Stalls fire before any ring overflow: the link is the bottleneck
-            # and the array is throttled, so these rates are not free-running.
+            # and the array is throttled, so these rates reflect the throttle.
             emit(f"STALLS {stalls}")
             spike_count = 0
             drops = 0
@@ -722,7 +722,7 @@ def main():
     port.read(4096)
 
     emit("READY")
-    # Tell the GUI where the link saturates, so it can flag rates it cannot trust.
+    # Tell the GUI where the link saturates, so it can flag rates at the ceiling.
     emit(f"LIMIT {SPIKE_LIMIT_HZ}")
 
     # Start spike reader thread
@@ -770,7 +770,7 @@ def main():
                 elif 0 <= voltage <= VREFP and real_name in ("vtaup", "vthrdp", "vepulseextp", "vipulseextp", "JInhWp0", "JInhWp1", "JInhWp2", "JInhWp3", "VREF", "VB1", "VB2", "TUNEp", "buffermonp", "lna_iref", "vthrdn", "ifdcp"):
                     # lna_iref (DAC3 ch A) is powered down to high-Z at startup by
                     # run_neuron_test.py.  Explicitly power it up (mode=00 = normal)
-                    # before writing the voltage, because a plain write may not reliably
+                    # before writing the voltage, because a plain write can be unreliable
                     # wake the AD5664R depending on silicon revision.
                     if real_name == "lna_iref":
                         dac.power_down_dac(
@@ -855,7 +855,7 @@ def main():
                 # opening command because the firmware keeps NO persistent state: main()'s
                 # -O0 frame spans .bss, so anything stored between calls is clobbered.
                 # Once these bytes land, detection/recovery/re-verification run to
-                # completion with no further host traffic -- which is the claim.
+                # completion with zero further host traffic -- which is the claim.
                 # CALRUN <mode> <lvl> <reps> <ticks> n0..n5
                 #   mode 0 = measure one level (phase A)
                 #   mode 1 = validate the six counts and derive the encoding (phase B)
@@ -881,7 +881,7 @@ def main():
 
             elif cmd == "GAPPROBE" and len(parts) == 5:
                 # [0xD7, n1, n2, gap_hi, gap_lo, reps]; gap is in units of 100 Timer0
-                # ticks. Times the inter-burst gap ON CHIP, which the host cannot do:
+                # ticks. Times the inter-burst gap ON CHIP, out of the host's reach:
                 # pf() spends a fixed 60 ms draining per burst, already above the 31.2 ms
                 # slot this is meant to probe.
                 try:
@@ -900,7 +900,7 @@ def main():
                 # granularity: firmware sets pulse_ticks = n-1, and n=0 restores the
                 # pulse_mult default exactly. Charge per input event is I_syn x width,
                 # so this is a LINEAR charge knob where JExcWn is exponential -- and,
-                # unlike a bias, it is one the CORE can write (no DAC involved).
+                # unlike a bias, it is one the CORE can write (DAC bypassed).
                 try:
                     n = max(0, min(255, int(parts[1])))
                 except ValueError:
@@ -927,7 +927,7 @@ def main():
             elif cmd == "POISSON" and len(parts) == 2:
                 # Start on-chip Poisson generation at mean rate <hz> on the staged
                 # route. Host computes the mean ISI in CORE-CLOCK ticks (TIMER_HZ)
-                # and sends it as four 6-bit bytes (each < 0x40) so no data byte
+                # and sends it as four 6-bit bytes (each < 0x40) so every data byte
                 # collides with a command sync byte.
                 try:
                     hz = float(parts[1])
@@ -955,7 +955,7 @@ def main():
 
             elif cmd == "TRIGRUN" and len(parts) == 2:
                 # Regular spike train at <hz>, paced ON-CHIP by Timer0. The period is
-                # sent as a 24-bit tick count in four 6-bit bytes (each < 0x40), so no
+                # sent as a 24-bit tick count in four 6-bit bytes (each < 0x40), so every
                 # payload byte can collide with a command sync byte.
                 try:
                     hz = float(parts[1])
@@ -986,7 +986,7 @@ def main():
                     if len(parts) == 2:
                         path = parts[1]
                     else:
-                        # Recordings live in recordings/, not the repo root.
+                        # Recordings live in recordings/ rather than the repo root.
                         os.makedirs("recordings", exist_ok=True)
                         path = time.strftime("recordings/spikes_%Y%m%d_%H%M%S.txt")
                     try:
@@ -1049,7 +1049,7 @@ def main():
             elif cmd == "MASK" and len(parts) == 2:
                 # Which neurons the chip should stream. Bit i set = stream neuron i.
                 # Masked neurons are still acked on-chip, so array dynamics are
-                # unchanged; they simply cost no ring slot and no UART bandwidth.
+                # unchanged; they simply use zero ring slots and zero UART bandwidth.
                 try:
                     mask = int(parts[1], 0) & 0xFFFF
                 except ValueError:
@@ -1151,7 +1151,7 @@ def main():
             elif cmd == "COINC" and len(parts) == 5:
                 # One coincidence trial: input on synA then synB (both -> neuron),
                 # separated by dt_us. dt is sent as a 24-bit tick count at the CORE
-                # clock (TIMER_HZ) in four 6-bit bytes, so no data byte collides with
+                # clock (TIMER_HZ) in four 6-bit bytes, so every data byte stays clear of
                 # a command sync byte.
                 try:
                     syn_a = int(parts[1]) & 0x0F
@@ -1214,8 +1214,8 @@ def main():
 
             elif cmd == "TXORPROBE" and len(parts) >= 2:
                 # Recurrence memory-persistence probe (tuning aid for T-XOR). Fire a bit-a burst
-                # (early) into `neuron`, then read the LATE window (no further input): does the
-                # early bit's trace PERSIST? Measure {no-input, a-input} x {RECURCTRL off, on}
+                # (early) into `neuron`, then read the LATE window (input at zero): does the
+                # early bit's trace PERSIST? Measure {input zero, input a} x {RECURCTRL off, on}
                 # with a self-loop (SETRECUR neuron->neuron). Memory works when persistence
                 # appears ONLY with recurrence (rec_a high), is input-gated (rec_0 low), and the
                 # feedforward case decays (ff_a low). Emits: TXORRESULT ff_0 ff_a rec_0 rec_a.
@@ -1264,7 +1264,7 @@ def main():
                 # Cross-coupled reservoir MEMORY-CAPACITY probe (NARMA tuning aid). Drive a random
                 # input u(t), read per-neuron per-timestep counts, and measure how well the state
                 # linearly encodes u(t), u(t-1), u(t-2) (max per-neuron corr^2 per lag). GREEN needs
-                # MC0 (input encoded) AND MC1 (memory) -> a real reservoir, not just reverberation.
+                # MC0 (input encoded) AND MC1 (memory) -> a real reservoir rather than reverberation.
                 # Emits: NARMARESULT MC0 MC1 MC2 rate.
                 try:
                     density = int(parts[1]) if len(parts) > 1 else 3

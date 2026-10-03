@@ -34,7 +34,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # it is now measurements/plotting/ (2 levels deep). ROOT is the repo root.
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 
-# Okabe-Ito, assigned in fixed order and never cycled; validated for CVD separation.
+# Okabe-Ito, assigned in fixed order and kept from cycling; validated for CVD separation.
 C_MEAS = "#0072B2"   # measured
 C_BIN = "#D55E00"    # binary-code model
 C_UNARY = "#009E73"  # equal-branch (popcount) model
@@ -149,7 +149,7 @@ def main():
     axb.set_xlabel("programmed weight word")
     axb.set_ylabel("onset bias re. $w=1$ (mV)")
     # the single-panel variant carries its subject in the figure sub-caption,
-    # so it needs no in-axes title
+    # so the title can sit outside the axes
     if axa is not None:
         axb.set_title("(b) all 15 non-zero words", fontsize=10, color=INK)
     axb.set_xticks([1, 4, 8, 12, 15])
@@ -199,10 +199,10 @@ def main():
             if abs(m - last_m) > (s + last_s):
                 levels += 1
                 last_m, last_s = m, s
-        # order: every step up in w must not raise the onset (stronger synapse = lower onset)
+        # order: every step up in w lowers or holds the onset (stronger synapse = lower onset)
         pairs = sorted(zip(ws, ms))
         breaks = [(a[0], b[0]) for a, b in zip(pairs, pairs[1:]) if b[1] > a[1] + (2 * sigma_floor)]
-        # +1 for w=0 (no synaptic drive), always distinguishable
+        # +1 for w=0 (synaptic drive at zero), always distinguishable
         print(f"{label}:")
         print(f"    resolution : {levels} resolvable levels over the 15 non-zero words "
               f"-> {math.log2(levels + 1):.2f} effective bits (nominal 4)")

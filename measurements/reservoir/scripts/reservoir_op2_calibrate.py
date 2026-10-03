@@ -4,22 +4,22 @@
 The reference analysis finds OP2 is integrated "with the measured
 heterogeneous per-neuron time constants, so that the digital baseline is given
 the array's own diversity". reservoir_structured.py:103 in fact draws them from a
-seeded 15% Gaussian -- a SIMULATED spread, not a measurement. The sentence exists
+seeded 15% Gaussian -- a SIMULATED spread rather than a measurement. The sentence exists
 to neutralise the dimensionality confound, so it has to be made true rather than
 softened.
 
-This script makes it true in the strongest sense available without new silicon:
+This script makes it true in the strongest sense available on the existing silicon:
 for each neuron k it bisects that neuron's membrane time constant tau_k until the
 simulated mean output rate matches THAT NEURON's measured mean output rate, on
 the SAME 90 beats, under the SAME structured encoding. Every simulated neuron is
-therefore pinned to a per-neuron measurement, not to a summary statistic.
+therefore pinned to a per-neuron measurement rather than a summary statistic.
 
 PROVENANCE, stated exactly (hard rule 2):
   MEASURED   per-neuron mean output spikes/beat, from the OP1 recording
              (reservoir_spikes_nsv_structured_hw.npz), same beats, same encoding.
   DERIVED    per-neuron tau_k, obtained by bisection so the simulated rate equals
-             the measured rate. A rate is not a time constant; this is a
-             calibration through the neuron model, and is labelled DERIVED, never
+             the measured rate. A rate differs from a time constant; this is a
+             calibration through the neuron model, and is labelled DERIVED rather than
              MEASURED.
   SIMULATED  threshold and synaptic weight remain uniform across neurons. The
              calibration puts all measured diversity into tau. A variant that
@@ -28,7 +28,7 @@ PROVENANCE, stated exactly (hard rule 2):
 CAVEAT that Task B exists to test: the measured rates this calibrates against
 come from the Section 7 acquisition, i.e. the flash-resident read-out with
 host-arrival timestamps. If that path distorts per-neuron rates, the calibration
-inherits the distortion. Reported, not hidden.
+inherits the distortion. Reported openly.
 
   ./.venv-meas/bin/python3 reservoir_op2_calibrate.py
 """
@@ -71,11 +71,11 @@ def calibrate_neuron(spec_k, X, rr, target, vth, w_exc, iters=22, param="vth",
     matches that neuron's MEASURED mean output rate.
 
     param="tau": bisect the membrane time constant, threshold held uniform.
-      NOT generally solvable. Rate is not monotone in tau over the reachable
+      generally solvable. Rate varies non-monotonically in tau over the reachable
       range and for 8 of the 16 feature-neurons the measured target lies outside
       the interval tau can reach at all (see data/op2_calibration_tau.json):
       the structured encoding drives those neurons above the measured rate for
-      every tau in [2, 600] ms. Retained so the failure is reproducible.
+      every tau in [2, 600] ms. Retained so the shortfall is reproducible.
 
     param="vth": bisect the firing threshold, tau held uniform. Rate is monotone
       decreasing in threshold over the whole range and every neuron is reachable,
@@ -108,7 +108,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--beats", default="beats_nsv90_orig.npz")
     # recording NSV (reservoir_datasets.py): the 0.26 rate CV OP2 is matched to is
-    # ITS, not the 0.50 of recording DIM quoted in Section 7.3.
+    # ITS, rather than the 0.50 of recording DIM quoted in Section 7.3.
     ap.add_argument("--hw", default="reservoir_spikes_nsv_structured_hw.npz")
     ap.add_argument("--out", default="reservoir_spikes_nsv_structured_calib.npz")
     ap.add_argument("--vth", type=float, default=1.0)

@@ -97,8 +97,8 @@ def main():
     if os.path.exists(MATCH):
         # tau_syn is NOT measurable from spikes alone -- only the membrane current
         # would give it, and this bench reads spikes. So plot the ENVELOPE over
-        # every tau_syn that can reach silicon's rates, and show that the gap does
-        # not depend on the parameter we cannot measure.
+        # every tau_syn that can reach silicon's rates, and show that the gap is
+        # independent of the parameter outside our measurement.
         mm = json.load(open(MATCH))
         keys = sorted(k for k in mm if k.startswith("tau_syn_"))
         band = np.array([mm[k]["deff"] for k in keys])

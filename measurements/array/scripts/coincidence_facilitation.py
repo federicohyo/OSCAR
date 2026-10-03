@@ -17,7 +17,7 @@ Design (see the phase-2 protocol, Experiment (i)):
     spacing and are DISCARDED; the rest are recorded.
   * One JExcWn0 per invocation (checkpointed, stop-on-trouble). Run base first, then higher.
 
-Reuses the bridge primitives + coincidence_array helpers; does not rebuild them.
+Reuses the bridge primitives + coincidence_array helpers rather than rebuilding them.
 """
 import argparse
 import csv
@@ -122,7 +122,7 @@ def main() -> int:
         out_idx = detect_output(b, args.syn_a, args.syn_b, n, reps=15)
         if out_idx is None:
             print(f"STOP: neuron {n} produced NO OUTPUT at dt=0 (JExcWn0={jexc0:.4f}). "
-                  f"Escalate to the user; not hunting biases here.")
+                  f"Escalate to the user; bias hunting stops here.")
             return 2
         print(f"  neuron {n}: output index={out_idx}")
 

@@ -76,8 +76,8 @@ def main():
     # are drawn as reference lines instead -- they are two orders of magnitude below and
     # would flatten the stack if bars.
     # split the shared block into INPUT and OUTPUT signal processing. Calling it all
-    # "read-out" was wrong: 53% of it is the input projection, and none of it is the
-    # LA/AER interface, which is the separate (much smaller) drain term below.
+    # "read-out" was an overstatement: 53% of it is the input projection, with the
+    # LA/AER interface held in the separate (much smaller) drain term below.
     s_in, s_out = (proj + enc) * KCH, (kern + clf) * KCH
     shared = s_in + s_out
     x = np.arange(2)

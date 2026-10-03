@@ -75,15 +75,14 @@ module user_analog_project_wrapper (
     output [`MPRJ_IO_PADS-`ANALOG_PADS-1:0] io_out,
     output [`MPRJ_IO_PADS-`ANALOG_PADS-1:0] io_oeb,
 
-    /* Analog (direct connection to GPIO pad---not for high voltage or
-     * high frequency use).  The management SoC must turn off both
+    /* Analog (direct connection to GPIO pad---suited to low voltage and
+     * low frequency use).  The management SoC must turn off both
      * input and output buffers on these GPIOs to allow analog access.
      * These signals may drive a voltage up to the value of VDDIO
      * (3.3V typical, 5.5V maximum).
      * 
-     * Note that analog I/O is not available on the 7 lowest-numbered
-     * GPIO pads, and so the analog_io indexing is offset from the
-     * GPIO indexing by 7, as follows:
+     * Note that analog I/O applies from GPIO pad 7 upward, so the analog_io
+     * indexing is offset from the GPIO indexing by 7, as follows:
      *
      * gpio_analog/noesd [17:7]  <--->  mprj_io[35:25]
      * gpio_analog/noesd [6:0]   <--->  mprj_io[13:7]	
@@ -93,7 +92,7 @@ module user_analog_project_wrapper (
     inout [`MPRJ_IO_PADS-`ANALOG_PADS-10:0] gpio_analog,
     inout [`MPRJ_IO_PADS-`ANALOG_PADS-10:0] gpio_noesd,
 
-    /* Analog signals, direct through to pad.  These have no ESD at all,
+    /* Analog signals, direct through to pad.  These bypass on-die ESD entirely,
      * so ESD protection is the responsibility of the designer.
      *
      * user_analog[10:0]  <--->  mprj_io[24:14]

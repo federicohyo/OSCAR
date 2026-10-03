@@ -12,7 +12,7 @@ Simulated before spending bench time, in the FIRMWARE's fixed-point arithmetic
 (olfaction_emul_accuracy.lif_fixed), which now tracks silicon to about 0.07 -- close
 enough for a go/no-go. Simulation also lifts the UART limit that would cap the bench
 version at ~60 interleaved events per chunk, so we can ask whether the 4-input design
-the bench can actually run costs anything against the 8-input one it cannot.
+the bench can actually run costs anything against the 8-input one it leaves out.
 
 Conditions, all scored under the same protocol as every other number here:
   L1 counts   feedforward, counts only        -- the baseline to beat
@@ -64,7 +64,7 @@ def drive_analog_projection(enc8, n, nch, T, w, seed=11):
     """The projection AS THE SYNAPSE FABRIC WOULD DO IT: each channel is delta-encoded
     ONCE, then its events fan out to every neuron through weighted synapses.
 
-    The first version of this routed one sensor channel to each neuron, which is not what
+    The first version of this routed one sensor channel to each neuron, which differs from what
     16 exc + 16 inh synapses per neuron can do, and it cost 0.13 voted before the second
     layer was even reached. A weighted fan-in is the real substitution for the digital
     matrix multiply."""

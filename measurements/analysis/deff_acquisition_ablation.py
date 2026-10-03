@@ -3,9 +3,9 @@
 
 D_eff = 18.1 was measured on data acquired with the flash-resident read-out and
 host-arrival timestamps. Two properties of that path can inflate a participation
-ratio without the substrate doing anything: a per-neuron dead time decorrelates
+ratio with the substrate idle: a per-neuron dead time decorrelates
 neurons that would otherwise fire together, and 16 ms timestamp quantisation
-smears the states against a 20 ms kernel. Both are testable today, no silicon.
+smears the states against a 20 ms kernel. Both are testable today on existing silicon.
 
 Method: take the heterogeneous SW LIF (which sits at D_eff ~10) and push it
 through a model of the acquisition path, stage by stage, then recompute D_eff
@@ -19,13 +19,13 @@ we cross-check that against the reference analysis's ~250 ms REQ-hold figure.
 
 SUPERSEDED IN PART (round 5, deff_refractory_ablation.py). This script's
 conclusion -- "the read-out path is ruled out" -- is too strong, and the
-reference analysis no longer makes it. Both results here stand: 16 ms UNIFORM timestamp
-quantisation moves D_eff by -1%, and a 250 ms blanking dead time is excluded by
+reference analysis has dropped it. Both results here stand: 16 ms UNIFORM timestamp
+quantisation moves D_eff by -1%, and a 250 ms blanking dead time is ruled out by
 the 282 events/window this recording carries. Neither tests what the acquisition
 actually did. Every interval in this recording lies on an 11.986 ms lattice whose
-phase is set PER PRESENTATION, with a two-period floor at 23.97 ms; that is not
+phase is set PER PRESENTATION, with a two-period floor at 23.97 ms; that differs from
 uniform quantisation, and a 24 ms per-neuron dead time caps a neuron at 83
-events/window and the array at 1335, so the 282 argument never excluded it.
+events/window and the array at 1335, so the 282 argument left it in play.
 Applying the measured lattice carries 60% of the rate-matched residual.
 """
 import json
@@ -58,7 +58,7 @@ def stats(sp, T):
 
 def apply_deadtime(sp, dead):
     """Per-neuron blanking: after a recorded spike, suppress everything for `dead`
-    seconds. This is the structure a REQ hold imposes -- not random dropping."""
+    seconds. This is the structure a REQ hold imposes rather than random dropping."""
     out = np.empty_like(sp)
     for j in range(sp.shape[0]):
         for b in range(sp.shape[1]):

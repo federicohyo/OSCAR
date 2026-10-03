@@ -3,8 +3,8 @@
 Dryad archive into one compact npz.
 
 Dataset: Dennler et al., "High-speed odour sensing using miniaturised electronic nose",
-Science Advances 2024, Dryad doi:10.5061/dryad.pg4f4qrxz. Read only, never modified;
-the 14.7 GB archive is not versioned here (see .gitignore).
+Read-only, kept unmodified;
+the 14.7 GB archive stays out of version control here (see .gitignore).
 
 WHY THIS TASK. Two odours are pulsed either in phase (`corr`) or in antiphase
 (`acorr`) at a commanded modulation frequency. The stimulus control, verified on the
@@ -72,7 +72,7 @@ def main():
     for cond in conds:
         sub = idx[(idx["condition"] == cond) & (idx["kind"].isin(["corr", "acorr"]))].copy()
         # match acorr to the gas pairs corr actually has, unordered, so the two
-        # classes are not separable by which odours were present
+        # classes are separable by features beyond which odours were present
         pairs = {frozenset((r.gas1, r.gas2)) for r in
                  sub[sub["kind"] == "corr"].itertuples()}
         sub["pair"] = [frozenset((r.gas1, r.gas2)) for r in sub.itertuples()]
@@ -83,7 +83,7 @@ def main():
             n = min(len(c), len(a))
             if n == 0:
                 continue
-            # stratify the acorr draw across gas pairs so it is not dominated by one
+            # stratify the acorr draw across gas pairs so every one contributes
             a = (a.groupby("pair", group_keys=False)
                    .apply(lambda d: d.sample(min(len(d), max(1, n // max(1, a['pair'].nunique()))),
                                              random_state=args.seed))

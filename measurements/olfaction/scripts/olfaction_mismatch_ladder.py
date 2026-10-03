@@ -2,17 +2,17 @@
 """The ladder built from MISMATCH: switching count of every usable neuron, per setting.
 
 The bias DACs are array-wide, so one setting is one operating point for all 16 neurons.
-The screen showed 11 of them sit in range simultaneously (silent with no input, firing by
+The screen showed 11 of them sit in range simultaneously (silent with input at zero, firing by
 the top of the burst alphabet). Whether that is a ladder or just eleven copies of the same
 comparator depends on one thing: do they switch at DIFFERENT counts? Mismatch is the only
-thing that could separate them, since the bias cannot.
+thing that could separate them, since the bias is shared.
 
 If they do, the tree gets its levels from devices instead of from bias reloads, and every
 level is live at once -- which is what makes pipelining real, because the 30 ms membrane
 re-arm of one neuron overlaps the bursts of the others rather than serialising behind
 them.
 
-BISECTION, not a full transfer. The switch is monotone in N, so log2(33) ~ 6 probes find
+BISECTION rather than a full transfer. The switch is monotone in N, so log2(33) ~ 6 probes find
 it instead of 33. Eleven neurons then cost about 2.5 minutes per setting rather than 24.
 The N=0 control is still measured explicitly at every neuron, because a free-running
 neuron would bisect to 1 and look like the finest comparator in the array.
@@ -20,7 +20,7 @@ neuron would bisect to 1 and look like the finest comparator in the array.
 ROUTE SETTLING. Programming a weight re-runs spikesetup and pulses the LA lines; draining
 too soon after leaves such a pulse inside the counting window. That artefact previously
 made eight quiet neurons read as free-running -- the scope showed them 50 mV below
-threshold, not spiking -- so the route is allowed to settle and the link drained after it.
+threshold rather than spiking -- so the route is allowed to settle and the link drained after it.
 
     PYTHONPATH=. CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_mismatch_ladder.py
 """
@@ -65,7 +65,7 @@ def find_switch(b, k, nmax, reps, wait):
         return None, "free-runs"
     if pfire(b, k, nmax, reps, wait) < 1.0:
         return None, "silent"
-    lo, hi = 1, nmax                       # hi always fires, lo-1 never does
+    lo, hi = 1, nmax                       # hi always fires, lo-1 stays silent
     while lo < hi:
         mid = (lo + hi) // 2
         if pfire(b, k, mid, reps, wait) >= 1.0:

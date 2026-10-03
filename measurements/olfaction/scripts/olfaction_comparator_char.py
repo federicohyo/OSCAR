@@ -6,7 +6,7 @@ the RISC-V walks the tree. Simulation says that tolerates a LOT of imprecision: 
 thresholds quantised to the 16 levels an array can offer, up to 10% of node comparisons
 may branch the wrong way for only 0.033 voted accuracy, because a wrong branch in one of
 50 boosted trees is outvoted by the other 49. So the whole architecture rests on one
-measured quantity -- the chip's per-comparison error rate -- and not on building the
+measured quantity -- the chip's per-comparison error rate -- rather than on building the
 tree first.
 
 Method: drive one neuron with N input spikes and record whether it fires inside the
@@ -54,7 +54,7 @@ def main():
                 curve.append(fired / args.reps)
             res[k] = curve
             p = np.array(curve)
-            # transition width: inputs where the answer is neither reliably yes nor no
+            # transition width: inputs where the answer sits between reliably yes and no
             amb = int(((p > 0.1) & (p < 0.9)).sum())
             print(f"neuron {k:2d}: P(fire|N) = " + " ".join(f"{x:.2f}" for x in curve)
                   + f"   ambiguous over {amb}/{args.nmax} input levels")

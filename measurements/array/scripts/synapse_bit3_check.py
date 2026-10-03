@@ -4,7 +4,7 @@
 The bit map found that JExcWn0/1/2 each drive their own weight bit with near-equal efficacy,
 but JExcWn3 at the same bias produced no output for any word. Two very different explanations:
 
-  dead   -- the bit-3 branch or its programming path is broken, so word bit 3 is a no-op and
+  dead   -- the bit-3 branch or its programming path reads as damaged, so word bit 3 contributes nothing and
             the usable code is 3 bits;
   weak   -- the branch simply needs a higher gate bias to reach the same current, in which
             case raising JExcWn3 alone recovers it.

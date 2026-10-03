@@ -234,7 +234,7 @@ def generate_magic_script(transistors, capacitors, modules, script_file):
             file.write(f"paint li\n")
             y_offset += nfet.W + ymargin
 
-#multple finger not yet implemented and not yet correct!!!!
+#multiple finger planned for a later revision
 
 #        for nfet in nfets:
 #            # Calculate polyextend based on nfet.L

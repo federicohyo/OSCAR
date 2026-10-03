@@ -9,7 +9,7 @@ representative chunk per trial to keep the run short. That silently broke the
 comparison. chunks() returns one chunk per 50 ms heater cycle, so a 0.1 s pulse with
 its 0.2 s tail yields FIVE per trial, and the digital baseline classifies each chunk
 (0.900) and votes over the five to reach 1.000. Scoring a one-chunk array against a
-five-chunk-voted digital number is not the same measurement, and it conceded the cost
+five-chunk-voted digital number is a different measurement, and it conceded the cost
 argument for free: voting k chunks costs the digital side k x E_OP3, while the array
 pays P_analog x T continuously, so repetition is nearly free to it. That asymmetry is
 the whole point (olfaction_latency.py). So present every chunk and keep the trial index,
@@ -18,13 +18,13 @@ which the scorer needs both to vote and to keep a trial's chunks inside one CV f
 ENCODING. Each neuron sees its own fixed random projection of the 8 MOx channels,
 delta-encoded: UP crossings drive the excitatory synapse, DOWN the inhibitory. Same
 shape as reservoir_run_randproj.py for ECG, so the two are comparable, and the
-projection is fixed and applied identically to every trial -- no leakage.
+projection is fixed and applied identically to every trial -- leakage-free.
 
 TIME-MULTIPLEXED PROJECTIONS (--nproj, 2026-08-13). Sixteen neurons means sixteen
 1-D projections of a 400-D feature, and olfaction_loss_budget.py prices that bottleneck
 at -0.107 per-chunk / -0.067 voted -- as much as the analog array itself costs. Unlike
 the array's own loss, which is noise and averages away under voting, this is lost
-INFORMATION and no amount of repetition recovers it. So run each neuron over M different
+INFORMATION that repetition cannot recover. So run each neuron over M different
 projections in sequence and treat each (neuron, projection) as its own read-out unit:
 M x 16 effective dimensions from 16 devices, at M times the presentations.
 

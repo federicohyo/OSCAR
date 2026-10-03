@@ -116,7 +116,7 @@ def get_beat_sequences(records=("200", "208", "209", "222", "223", "232", "233")
         rr_rec, beat_pos = _rr_features(ann.sample, ann.symbol, fs)
         bsamp = np.asarray(ann.sample)[beat_pos]
         bsym = [ann.symbol[i] for i in beat_pos]
-        # precompute each beat's normalized morphology (None if not fully windowable)
+        # precompute each beat's normalized morphology (None if only partly windowable)
         morph = []
         for s in bsamp:
             a, b = s + win[0], s + win[1]

@@ -3,7 +3,7 @@
 
 The first repeatability run was criticised, correctly, for sitting at a higher
 firing rate than the DIM recording it is meant to inform. Matching the rate turned
-out not to be reachable with the available knobs (the weight word is a cliff, not
+out to lie beyond the available knobs (the weight word is a cliff rather than
 a dial -- see bench/deff_residual_mechanisms.md), so this analysis removes the
 need to match it.
 
@@ -25,7 +25,7 @@ number that does NOT depend on which rate the array happens to sit at.
 
 `c` is exactly the quantity the D_eff simulation needs: data/jitter_to_countcv
 .json says the model requires a coherent count CV of 25-35% to close the residual.
-If the fitted c is far below that, the jitter explanation fails at every rate, and
+If the fitted c is far below that, the jitter explanation is ruled out at every rate, and
 the operating-point objection to the bench run is answered rather than dodged.
 
   PYTHONPATH=. ./.venv-meas/bin/python3 repeatability_vs_rate.py [npz]

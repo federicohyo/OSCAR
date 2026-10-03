@@ -157,10 +157,10 @@ class BridgeSession:
 
     # -- high-level primitives ------------------------------------------
     def bias(self, name: str, value: float, settle_s: float = 0.0) -> None:
-        # The DACs are write-only: there is no readback, and during a bisection the host
-        # writes computed values that correspond to no .biases file. Recording a filename is
-        # therefore not enough to reconstruct the chip's state -- log every write instead.
-        # Enable with CARAVAN_DAC_LOG=<path>; the log is append-only and never rotated.
+        # The DACs are write-only: the host keeps the readback record, and during a bisection the host
+        # writes computed values of its own. Recording a filename is
+        # therefore the filename alone leaves the chip's state ambiguous; log every write instead.
+        # Enable with CARAVAN_DAC_LOG=<path>; the log is append-only and kept whole.
         if self._dac_log is not None:
             self._dac_log.write(f"{time.time():.6f}\t{name}\t{value:.6f}\n")
             self._dac_log.flush()

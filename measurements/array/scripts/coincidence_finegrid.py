@@ -5,10 +5,10 @@ Sharpens the grid-quantized Delta-t discrimination of Fig.~\\ref{fig:frontier2} 
 silicon: a sub-millisecond Delta-t grid densest across the window transition band, with
 >=100 trials/point, saving ALL raw per-trial outcomes (not just p_fire) so the
 discrimination Monte Carlo uses measured per-trial noise. Stock biases only -- if the
-neuron is not in a clean graded regime (baseline P(fire) not ~0.5, or no sharp
+neuron is outside a clean graded regime (baseline P(fire) away from ~0.5, or with a blunt
 transition), it STOPS and reports rather than hunting biases.
 
-Reuses the existing bridge primitives and coincidence_array helpers; does not rebuild them.
+Reuses the existing bridge primitives and coincidence_array helpers rather than rebuilding them.
 """
 import argparse
 import csv
@@ -111,7 +111,7 @@ def main() -> int:
             return 2
         print(f"  neuron {n}: output index={out_idx}")
 
-        # discard the initial stimulation transient (warm-up, not recorded)
+        # discard the initial stimulation transient (warm-up, kept out of the record)
         if args.warmup > 0:
             print(f"  warm-up: discarding {args.warmup} initial pairs...")
             trials_at(b, args.syn_a, args.syn_b, n, 0.0, out_idx, args.warmup,

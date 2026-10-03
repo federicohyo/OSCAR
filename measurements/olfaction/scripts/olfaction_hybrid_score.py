@@ -12,7 +12,7 @@ Only the (ii) -> (iii) gap is the substrate's cost. Also reports per-node disagr
 between the analog decision and what the arithmetic test would have returned, which is
 the quantity the tolerance simulation budgeted at 10%.
 
-Partial runs are scoreable: nodes not yet measured fall back to the arithmetic test and
+Partial runs are scoreable: nodes pending measurement fall back to the arithmetic test and
 are reported as such, so a checkpoint mid-run still gives a number with a stated caveat.
 
     ./.venv-meas/bin/python3 olfaction_hybrid_score.py
@@ -77,8 +77,8 @@ def main():
         print(f"  {L:5d} | {len(g):5d} | {int(mk.sum()):11d} | {d*100:6.2f}%")
 
     # Uncertainty on the voted number, so it can be plotted beside points that carry one.
-    # Bootstrap over TRIALS, not chunks: the five chunks voted into one decision are not
-    # five independent samples. 30 trials give a voted resolution of 1/30 = 0.033, which is
+    # Bootstrap over TRIALS rather than chunks: the five chunks voted into one decision behave
+    # as one pooled sample. 30 trials give a voted resolution of 1/30 = 0.033, which is
     # the scale any comparison against this number has to respect.
     rng = np.random.default_rng(0)
     tr_ids = np.unique(it)

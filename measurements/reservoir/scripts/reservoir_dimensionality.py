@@ -16,7 +16,7 @@ Metrics (all offline, on the raw-spike .npz):
          "Effective number of independent neurons". D_eff == n means perfectly
          decorrelated; D_eff == 1 means every neuron is the same neuron.
 
-  dPR    leave-one-out change in D_eff. <= 0 means the neuron buys no new direction.
+  dPR    leave-one-out change in D_eff. <= 0 means the neuron adds nothing new.
   dAcc   leave-one-out change in LOGO accuracy. The thing we actually care about.
   maxr   largest |correlation| with any OTHER neuron. High = redundant.
   cv     coefficient of variation of the neuron's binned rate. ~0 = saturated or silent.
@@ -53,7 +53,7 @@ def feats(sp, T, idx):
 def state_matrix(sp, T):
     """(n_beats*K, n_neurons): each neuron's binned response, stacked over beats.
 
-    Uses a single mid-range tau so the correlation reflects response shape, not the
+    Uses a single mid-range tau so the correlation reflects response shape rather than the
     multi-tau replication (which would make every neuron look correlated with itself).
     """
     n_neu, n_beats = sp.shape

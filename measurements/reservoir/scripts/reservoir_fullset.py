@@ -4,7 +4,7 @@
 (chip-independent) over the full set, and save a self-contained npz for the paired test.
 
 Records are chosen so >=12 are S-bearing (the lever for the macro-F1 / S-class result) and
-V coverage is adequate -- not by padding more beats onto the same few records.
+V coverage is adequate -- achieved by new records rather than padding more beats onto the same few.
 """
 import warnings; warnings.filterwarnings("ignore")
 import argparse

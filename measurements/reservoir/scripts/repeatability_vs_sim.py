@@ -3,27 +3,27 @@
 
 repeatability_run.py measures the CV of the spike COUNT across 50 repeats of one
 beat. deff_physical_mechanisms.py sweeps a THRESHOLD jitter. Those are different
-quantities, so the bench number cannot be read against the sweep directly. This
+quantities, so the bench number is compared with the sweep through a bridge. This
 script converts: for each threshold jitter it reports the count CV that jitter
 induces, so the measurement can be placed on the sweep and the residual it
 actually closes can be read off.
 
-Measuring the induced CV by repeating one beat does not work at this operating
+Measuring the induced CV by repeating one beat falls short at this operating
 point -- the model sits at DIM's 1.8-15.4 Hz, and the beat the bench repeated
 carries 92 UP against 92 DOWN events, which nearly cancel and evoke nothing.
 Instead the same 60 beats are presented twice under two INDEPENDENT jitter draws:
 for a given beat the signal is identical in both, so var(A-B) = 2*var_jitter
-isolates the jitter without needing model and bench to share an operating point.
+isolates the jitter, so model and bench need not share an operating point.
 
   PYTHONPATH=. ./.venv-meas/bin/python3 repeatability_vs_sim.py
 
 KNOWN ISSUE: the multi-seed sweep in main() is unstable -- the second and third
 bisection of an identical configuration collapse to the lower bound, which every
-component reproduces correctly in isolation and which is not yet diagnosed. The
+component reproduces correctly in isolation and which remains under diagnosis. The
 numbers reported in bench/deff_residual_mechanisms.md therefore come from the
 single-bisection path (induced_cv against one operating point, data/
 jitter_to_countcv.json) and from the already-validated JIT rows of
-deff_physical_mechanisms.py. Do not quote main()'s table until this is fixed.
+deff_physical_mechanisms.py. Hold main()'s table until this is fixed.
 """
 import json
 

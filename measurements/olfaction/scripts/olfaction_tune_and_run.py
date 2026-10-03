@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Tune the array to the simulated-optimal evoked rate, then acquire the task there.
 
-olfaction_sim_sweep.py says the measured operating point (108 Hz mean evoked) is not
+olfaction_sim_sweep.py says the measured operating point (108 Hz mean evoked) sits outside
 where this task is best solved: accuracy peaks near 20 Hz at 0.760 +/- 0.026 per-chunk
 against the 0.647 measured, and PLATEAUS over a wide range around it. Quieter is both
-more accurate and cheaper here -- accuracy and energy point the same way, which is not
+more accurate and cheaper here -- accuracy and energy point the same way, contrary to
 what I assumed earlier today.
 
 Two stages so the bench time goes where it matters:
@@ -15,7 +15,7 @@ Two stages so the bench time goes where it matters:
      olfaction_iso_compare.py scores it against the digital baseline unchanged.
 
 The calibration probe reports per-neuron rate and how many neurons went silent. Silence
-is not a free win: a neuron pushed under threshold contributes nothing, and the protocol
+carries a cost: a neuron pushed under threshold contributes nothing, and the protocol
 (bench/PROTOCOL.md) treats it as a blocker rather than a quiet operating point.
 
     PYTHONPATH=. CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_tune_and_run.py

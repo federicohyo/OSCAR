@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Can depth or width let a COUNTS-only read-out replace the digital kernel filter?
 
-A first pass at 8+8 said no, but that search was far too small to conclude anything: one
-weight seed, twelve operating points, no lateral recurrence. This sweeps depth (1-3
+A first pass at 8+8 said otherwise, but that search was far too small to conclude anything: one
+weight seed, twelve operating points, lateral recurrence off. This sweeps depth (1-3
 layers), width (8-64 neurons) and lateral recurrence in the last layer. The chip has 16
-neurons; the larger cases are a question about what a next tape-out would need, not about
+neurons; the larger cases are a question about what a next tape-out would need rather than about
 what this die can run.
 
-The pure-Python fixed-point LIF cannot sweep this, so the loop is vectorised here and
+The pure-Python fixed-point LIF is too slow to sweep this, so the loop is vectorised here and
 GATED on bit-exactness against olfaction_emul_accuracy.lif_fixed, which is itself the
 mirror of the firmware's lif_steps_ram(). The gate runs first and the sweep refuses to
 proceed if it fails -- a fast LIF that is not the firmware's LIF would answer a different
@@ -120,7 +120,7 @@ def main():
     ok, msg = gate()
     print(f"bit-exactness gate: {'PASS' if ok else 'FAIL'} -- {msg}")
     if not ok:
-        raise SystemExit("fast LIF is not the firmware's LIF; refusing to sweep")
+        raise SystemExit("fast LIF differs from the firmware's LIF; refusing to sweep")
 
     F, Y, it, names = build(args.theta)
     nch = len(Y)

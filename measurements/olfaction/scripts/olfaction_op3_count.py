@@ -7,7 +7,7 @@ disassembly of firmware/olfaction_kernel/olfaction_kernel.c compiled at
 test features. cycles = instructions + 1 extra per load (VexRiscv load = 2 cycles).
 
 This exists because the first figure quoted for this kernel was an ESTIMATE of 19,200
-cycles, and it was wrong by more than 2x in the array's favour. An estimate standing
+cycles, and it overshot by more than 2x in the array's favour. An estimate standing
 in for a count is what produced the retracted 580x.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_op3_count.py
@@ -46,7 +46,7 @@ def main():
     base = np.abs(X[:, (t >= -0.4) & (t < -0.05), :].mean(axis=1))
     # Scale the reciprocal so it carries ~16 bits of MANTISSA. A Q8.8 reciprocal of a
     # ~1e5 ohm baseline underflows to 1, which would price the multiply at ~1 iteration
-    # and silently understate the kernel -- a fixed-point bug, not a cheap kernel.
+    # and silently understate the kernel -- a fixed-point bug rather than a cheap kernel.
     recip = np.array([max(1, int((1 << 40) // max(int(v), 1))) for v in base.ravel()])
     recip = recip >> np.maximum(0, np.array([int(v).bit_length() - 16 for v in recip]))
     bits = float(np.mean([int(v).bit_length() for v in recip]))

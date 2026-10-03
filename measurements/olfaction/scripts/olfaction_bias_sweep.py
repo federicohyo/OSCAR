@@ -5,7 +5,7 @@ counterpart of choosing the cheapest digital baseline that matches accuracy.
 At the reference point the array runs at 108 Hz mean and emits 260 events per 150 ms
 decision. The read-out costs 105 + 480 per event, so 260 events is 46.5 uJ -- more than
 the entire measured digital kernel (31.7 uJ) before the analog rail is charged at all.
-An embedded design would not operate it there.
+An embedded design keeps away from it there.
 
 CRITERION, fixed before the sweep runs: minimise energy per decision
 (P_analog*T + (105 + 480*events)*E_cycle) subject to accuracy within one standard

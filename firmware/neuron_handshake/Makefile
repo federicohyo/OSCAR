@@ -16,8 +16,8 @@ TOOLCHAIN_PREFIX=riscv64-unknown-elf
 ARCH=rv32i_zicsr
 
 # Spike streaming mode: 1 (default) = deferred streaming (SRAM drain + ring
-# buffer + deferred UART with raw 16-bit timestamps); 0 = fast reservoir (no
-# UART, SRAM drain only, for 0xDB timing). Override: make STREAM_SPIKES=0 hex
+# buffer + deferred UART with raw 16-bit timestamps); 0 = fast reservoir (counts
+# only, SRAM drain, for 0xDB timing). Override: make STREAM_SPIKES=0 hex
 STREAM_SPIKES ?= 1
 
 # Core clock in MHz the firmware is calibrated for. 50 = DLL engaged (fb=10, out
@@ -49,8 +49,8 @@ hex:  ${PATTERN:=.hex}
 client: client.c
 	python3 ./client.py
 
-# STALE/BROKEN UPSTREAM TARGET. The upstream `../util/caravel_hkflash.py` does
-# not exist in this repo. Flash via the host tool instead:
+# LEGACY UPSTREAM TARGET. The upstream `../util/caravel_hkflash.py` resides
+# outside this repo. Flash via the host tool instead:
 #   python3 ../../host/run_neuron_test.py --clock 50
 #   ../../host/bringup_50.sh
 # See docs/BRINGUP.md and firmware/README.md.

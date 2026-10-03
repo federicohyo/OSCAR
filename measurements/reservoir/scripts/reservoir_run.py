@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Phase-1 feedforward reservoir run (one neuron at a time).
 
-In a feedforward reservoir the 16 neurons do not interact, so each can be stimulated
+In a feedforward reservoir the 16 neurons stay independent, so each can be stimulated
 and recorded independently, then the state vectors assembled offline -- identical to
-simultaneous fan-out, but with no AER saturation (only one neuron active at a time)
-and no firmware change. For each beat and each reservoir neuron we inject the beat's
+simultaneous fan-out, while keeping AER clear of saturation (one neuron active at a time)
+and with the firmware unchanged. For each beat and each reservoir neuron we inject the beat's
 time-stretched Poisson-rate profile (piecewise constant), bin the neuron's output
 spikes over time, and concatenate across neurons into a feature vector. The analog
 membrane (heterogeneous tau, device mismatch) does the temporal nonlinear filtering.
@@ -27,14 +27,14 @@ from reservoir_data import get_beats, encode_rate
 #
 # This default set was tuned on the 10 MHz crystal (2026-07-04) and it is what the
 # ACC / DIM / NSV recordings in the reference analysis were taken with. Its JInhWp[0:3] sit
-# at 1.77-1.78 V, which for a PMOS bias is OFF: inhibition is essentially disabled,
+# at 1.77-1.78 V, which for a PMOS bias is OFF: inhibition is essentially unused,
 # which is fine at 10 MHz where excitatory efficacy is high. Synaptic efficacy falls
 # as the core clock rises (the reference analysis), so running THIS set at
-# 50 MHz is exactly the failure mode that section documents.
+# 50 MHz is exactly the condition that section documents.
 #
 # The retuned 50 MHz set is the _jul10 one (2026-07-12), JInhWp ~ 1.27-1.29 V. It is
-# not the default because changing the default would silently re-point every existing
-# script at a different operating point. Pass it explicitly:
+# left off by default so that every existing script keeps pointing
+# at its original operating point. Pass it explicitly:
 #
 #   CARAVAN_CLK_MHZ=50 ./.venv-meas/bin/python3 reservoir_run.py \
 #       --bias-pattern 'ofxCaravanViewer/bin/bias_synapse_characterization_super_n{k}_jul10.biases'
@@ -79,7 +79,7 @@ def present_beat(b, neuron, rates, t_step):
 
 
 # Chip-reported readout integrity for the whole run. Nonzero means the readout lost
-# spikes (drops) or back-pressured the array (stalls), so the counts are not a
+# spikes (drops) or back-pressured the array (stalls), so the counts fall short as a
 # measurement of the neurons. The old readout reported neither -- and was in fact
 # capturing about one spike in seven (diagonal: 4660 spikes then vs 31956 now).
 INTEGRITY = {"drops": 0, "stalls": 0}
@@ -87,8 +87,8 @@ INTEGRITY = {"drops": 0, "stalls": 0}
 # Task O. Until round 5 this counter was only PRINTED, at the end of the run, after
 # hours of acquisition -- so a run that lost spikes from neuron 0 onward completed,
 # was saved, and looked like data. It is now a hard abort on the first nonzero
-# report, because a run with drops or stalls is not a measurement of the array and
-# no amount of downstream analysis repairs it. Set RESERVOIR_ALLOW_DROPS=1 only when
+# report, because a run with drops or stalls describes the link rather than the array.
+# Set RESERVOIR_ALLOW_DROPS=1 only when
 # you are deliberately characterising the loss itself.
 ALLOW_DROPS = os.environ.get("RESERVOIR_ALLOW_DROPS", "0") == "1"
 
@@ -107,12 +107,12 @@ def check_bias_clock_pairing(pattern):
     Synaptic efficacy falls as the core clock rises, so the 2026-07-04 set (whose
     JInhWp sits at ~1.78 V, i.e. inhibition OFF) is only valid on the crystal. The
     check is on the FILENAME, which is what actually distinguishes the two sets;
-    it is a guard rail, not a measurement. Override with RESERVOIR_ALLOW_BIAS_CLOCK=1
+    it is a guard rail rather than a measurement. Override with RESERVOIR_ALLOW_BIAS_CLOCK=1
     if you are deliberately reproducing an old acquisition at a new clock.
     """
     clk = int(os.environ.get("CARAVAN_CLK_MHZ", "50"))
     # Two ways to be recognised as retuned. The tag list is the original by-convention
-    # rule. The clock stamp is stronger and cannot be spoofed by an old file: a set
+    # rule. The clock stamp is stronger and resists spoofing by an old file: a set
     # written by reservoir_ratetune.py embeds the clock it was tuned at, so it is
     # valid at that clock and refused at any other.
     retuned = (any(tag in pattern for tag in ("_jul10", "_struct", "_feedproj"))
@@ -120,9 +120,9 @@ def check_bias_clock_pairing(pattern):
     if clk != 10 and not retuned and os.environ.get("RESERVOIR_ALLOW_BIAS_CLOCK") != "1":
         raise BiasClockMismatch(
             f"CARAVAN_CLK_MHZ={clk} with the 10 MHz-tuned bias set\n  {pattern}\n"
-            f"whose JInhWp[0:3] are at ~1.78 V (PMOS OFF -- inhibition disabled). "
+            f"whose JInhWp[0:3] are at ~1.78 V (PMOS OFF -- inhibition off). "
             f"Synaptic efficacy is clock-dependent; this "
-            f"pairing is the documented failure mode, not a valid operating point.\n"
+            f"pairing is the documented failure mode rather than a valid operating point.\n"
             f"Use --bias-pattern '{BIAS_PATTERN_50MHZ}', or set CARAVAN_CLK_MHZ=10, "
             f"or RESERVOIR_ALLOW_BIAS_CLOCK=1 to override deliberately.")
 
@@ -132,7 +132,7 @@ def _check_integrity():
     if (d or s) and not ALLOW_DROPS:
         raise ReadoutIntegrityError(
             f"readout integrity lost: drops={d}, stalls={s}. The recorded counts are "
-            f"not a measurement of the array. Reduce the array's rate (mask, lower "
+            f"outside a valid measurement of the array. Reduce the array's rate (mask, lower "
             f"drive) or raise the clock; set RESERVOIR_ALLOW_DROPS=1 to override.")
 
 
@@ -142,7 +142,7 @@ def _collect_until(b, neuron, deadline, times, t0):
     Records BOTH the host arrival time and the chip's Timer0 timestamp (`abs_us`,
     wrap-corrected by the bridge). The host time alone is useless for spike timing:
     the FTDI batches bytes on a ~16 ms latency timer, so every packet in a batch is
-    parsed microseconds apart no matter when the neuron actually fired -- that made
+    parsed microseconds apart regardless of when the neuron actually fired -- that made
     real spikes look like exact duplicates. The chip timestamp is the ground truth;
     the host time is kept only to anchor it to the start of the presentation.
     """

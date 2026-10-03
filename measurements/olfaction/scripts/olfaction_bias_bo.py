@@ -26,27 +26,27 @@ olfaction_iso_compare.py), penalised by hard constraints:
 Per-chunk rather than voted because it uses every chunk as a sample and so is the less
 noisy signal for the GP; the winner is re-scored voted, on the FULL chunk set, at the end.
 
-NOISE, and why the first run of this failed (2026-08-13). At 2 chunks/trial the
+NOISE, and why the first run of this came up short (2026-08-13). At 2 chunks/trial the
 evaluation sd is 0.076: re-drawing WHICH two chunks, on identical chip data, moved
 accuracy 0.433 -> 0.667. The BO was chasing a ~+0.11 prize with +/-0.076 error and duly
 fit noise. Two fixes, both here:
   * --chunks-per-trial 5 uses EVERY chunk, so chunk-subset sampling noise -- the dominant
     term -- disappears entirely rather than being averaged down.
   * --reps re-acquires each point N times and averages, which addresses the remaining
-    chip stochasticity. The per-rep spread is recorded so the noise is measured, not
+    chip stochasticity. The per-rep spread is recorded so the noise is measured rather than
     assumed.
 And the incumbent is now evaluated FIRST: ConstrainedBO.ask() returns random points for
 its first max(4, d+1) draws, so despite the NARMA README's "warm-started at the channel
-centres" the centre was never actually measured and the reference was absent from the GP.
+centres" the centre stayed unmeasured and the GP was built around measured points only.
 
 AER BRACKET (CLAUDE.md, [[aer-encoder-latch]]). The encoder on this die can latch -- every
 spike reading as neuron 15, or every address coming back one low -- and it survives reset,
 reflash and bias reprogramming; only a physical power cycle clears it. Silently, a latched
 encoder turns a masked run into a plausible recording of the WRONG neurons. So an unmasked
 16-neuron addressing scan runs before the search, every --scan-every evaluations, and at
-the end. A failed scan ABORTS: every point after a latch is garbage, and continuing would
-bury good data under bad. The partial tell without it is `live` collapsing across all
-subsequent points, but that is a symptom, not a check.
+A scan that latches ABORTS: every point after a latch is garbage, and continuing would
+bury good data under bad. The partial signal otherwise is `live` collapsing across all
+subsequent points, but that is a symptom rather than a check.
 
 Evaluations are expensive (~13 min per rep at 5 chunks/trial), so --max-hours bounds the
 run by wall clock and it stops cleanly at the budget rather than mid-sweep. State is
@@ -119,9 +119,9 @@ class AERLatch(RuntimeError):
 
 
 # A stimulated neuron is driven with INJECT spikes; a real encoder latch REDIRECTS them,
-# so the wrong address collects most of them. One or two spikes at another address is a
-# neighbour firing on its own, not a latch. Requiring a clear share of the injected train
-# keeps the check sensitive to the failure it exists for while not tripping on a stray.
+# so the shifted address collects most of them. One or two spikes at another address is a
+# neighbour firing on its own rather than a latch. Requiring a clear share of the injected train
+# keeps the check sensitive to the condition it exists for while ignoring a stray.
 INJECT = 20
 LATCH_MIN_COUNT = 5          # a quarter of the injected train
 
@@ -137,7 +137,7 @@ def aer_scan(b, neurons, base, tag=""):
     run applied one neuron's comparator biases to all sixteen, which left that neuron
     hair-trigger, and a SINGLE stray spike from it while a silent neuron was stimulated
     was reported as misaddressing. Stray firing is now recorded separately as `noise`,
-    which is diagnostic without failing the bracket."""
+    which is diagnostic while the bracket stays valid."""
     b.send("MASK 65535")
     mis, silent, noise, counts = [], [], [], []
     for k in neurons:
@@ -178,7 +178,7 @@ def measure(b, neurons, base, enc, off, idx, T, weight, mon=None):
     """mon: pin the analog monitor mux (UART_CMD_MONITOR_SYNC) to one neuron so the scope
     has a stable trace. Left following the stimulated neuron (mon=None) the mux hops
     across all 16 every evaluation and the scope shows nothing watchable. The mux is
-    analog-only and does not gate the AER recording, so pinning it does not change what
+    analog-only and sits outside the AER recording, so pinning it leaves unchanged what
     is measured -- only what is observable."""
     sp = np.empty((len(neurons), len(idx)), dtype=object)
     d0, s0 = INTEGRITY["drops"], INTEGRITY["stalls"]
@@ -218,7 +218,7 @@ def main():
     ap.add_argument("--scan-every", type=int, default=4,
                     help="unmasked AER addressing scan every N evaluations (0 = off)")
     ap.add_argument("--max-hours", type=float, default=0.0,
-                    help="wall-clock budget; 0 = no limit. Stops cleanly between points.")
+                    help="wall-clock budget; 0 = unlimited. Stops cleanly between points.")
     ap.add_argument("--tpresent", type=float, default=0.15)
     ap.add_argument("--theta", type=float, default=0.25)
     ap.add_argument("--weight", type=int, default=15)
@@ -275,7 +275,7 @@ def main():
                 print(f"\nwall-clock budget reached after {i} evaluations; stopping cleanly")
                 break
             # evaluate the INCUMBENT first -- the GP must contain the point we are
-            # trying to beat, and ConstrainedBO.ask() never proposes the centre
+            # trying to beat, and ConstrainedBO.ask() starts away from the centre
             x = np.zeros(len(ch)) if (i == 0 and not hist) else bo.ask()
             off = channels_to_dict(ch, x)
             accs, votes, rates, lives, dds, dss = [], [], [], [], 0, 0
@@ -327,7 +327,7 @@ def main():
                           open(args.state, "w"), indent=2)
                 if not ok:
                     raise AERLatch(
-                        f"AER scan failed after evaluation {i}: {bad}. Every point since "
+                        f"AER scan did not pass after evaluation {i}: {bad}. Every point since "
                         f"the previous passing scan is suspect; power-cycle the chip.")
             print(f"{i:3d} {off['d_vleakn']*1000:+6.1f}m {off['d_vthrdn']*1000:+6.1f}m "
                   f"{off['d_exc']*1000:+6.1f}m {off['d_inh']*1000:+6.1f}m "
@@ -342,7 +342,7 @@ def main():
                    "digital": {"per_chunk": 0.880, "voted5": 0.967}},
                   open(args.state, "w"), indent=2)
         if not ok:
-            raise AERLatch(f"CLOSING AER scan failed: {bad}. The whole run since the last "
+            raise AERLatch(f"CLOSING AER scan did not pass: {bad}. The whole run since the last "
                            "passing scan is suspect -- do not use these results.")
 
     xb, yb = bo.best()
@@ -358,7 +358,7 @@ def main():
         print("  " + ("REAL: delta exceeds the pooled per-rep spread"
                       if d > pooled and pooled > 0 else
                       "INSIDE THE NOISE: delta does not exceed the pooled spread "
-                      f"({pooled:.3f}) -- not an improvement"))
+                      f"({pooled:.3f}) -- below baseline"))
     print(f"\nBEST: vleakn {ob['d_vleakn']*1000:+.1f} mV, vthrdn {ob['d_vthrdn']*1000:+.1f} mV, "
           f"exc {ob['d_exc']*1000:+.1f} mV, inh {ob['d_inh']*1000:+.1f} mV")
     print(f"  {hb['rate']:.1f} Hz, {hb['live']}/16 live, "

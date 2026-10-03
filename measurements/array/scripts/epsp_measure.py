@@ -75,7 +75,7 @@ def fire_loop(b: BridgeSession, rate_hz: float, stop: threading.Event) -> None:
 
 def capture(sc, b: BridgeSession, args, inhibitory: bool):
     """Fire spikes continuously while the scope averages; return (t, v)."""
-    from scope_usb import Scope  # local import so --no-scope works without the scope libs
+    from scope_usb import Scope  # local import so the scope libs are optional for --no-scope
     assert isinstance(sc, Scope)
     slope = "NEG" if inhibitory else "POS"
     sc.channel(args.channel, scale=args.vdiv, offset=args.voffset)

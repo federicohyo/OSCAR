@@ -78,7 +78,7 @@ def transfer():
         vin = drive_frac * VIN0
         vo = float(r["vpp_out"])
         g = vo / vin
-        weak = drive_frac < 0.8          # the jack, not the amplifier
+        weak = drive_frac < 0.8          # the jack rather than the amplifier
         rows.append((f, vo, vin, g, 20 * math.log10(g), weak))
 
     with open(os.path.join(HERE, "lna_transfer_final.csv"), "w", newline="") as fh:
@@ -98,11 +98,11 @@ def transfer():
                 (math.log10(f[i]) - math.log10(f[i-1])))
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    # ONE line, no shading. The uncorrected trace lives in
+    # ONE line, unshaded. The uncorrected trace lives in
     # figures/lna_transfer_out.png. The points below ~1 Hz carry roughly
     # +/-1 dB rather than +/-0.1 dB because the jack was barely driving there;
     # that is recorded in the low_snr column of lna_transfer_final.csv and
-    # belongs in the caption, not on the axes.
+    # belongs in the caption rather than on the axes.
     ax.semilogx(f, g, "o-", ms=5, lw=1.6, color="C0")
     ax.axhline(G, ls="--", c="0.55", lw=1)
     ax.axhline(G - 3, ls=":", c="0.55", lw=1)

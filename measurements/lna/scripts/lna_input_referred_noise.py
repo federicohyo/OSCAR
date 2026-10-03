@@ -10,19 +10,19 @@ each frequency to refer the noise back to the input:
 The gain curve comes from `lna_transfer_final.csv` (the sweep with the audio
 path divided out), interpolated in log-log. Referring the noise to the input
 is only meaningful where the gain is actually known -- below ~0.2 Hz the drive
-delivered nothing and there is no measured gain, so nothing is reported there.
+delivered nothing and the measured gain stays at zero, so it carries no entry.
 
-What the measurement can and cannot separate:
+What the measurement resolves:
 
   * the ADC's own noise is NOT a limit here. On a passive node it contributes
     ~0.70 mV rms against the LNA output's ~19.5 mV rms -- 0.13% of the power,
-    so what we record is the amplifier, not the instrument. (Quantisation
+    so what we record is the amplifier rather than the instrument. (Quantisation
     alone is 0.805 mV / sqrt(12) = 0.23 mV rms.)
 
   * MAINS HUM IS NOT AMPLIFIER NOISE. 50/60 Hz and their harmonics are pickup
     from the room, and they dominate the total rms. They are reported
-    separately and excluded from the broadband figure, because quoting them as
-    the LNA's noise would be wrong by a wide margin.
+    separately and kept out of the broadband figure, because quoting them as
+    the LNA's noise would overshoot by a wide margin.
 
   * the amplifier's slow settling (~40 s, seen in the drift test) lands in the
     lowest bins. Below ~0.05 Hz the "noise" is really that drift.
@@ -30,7 +30,7 @@ What the measurement can and cannot separate:
 Comparison target: the reference SPICE noise peak of
 200 uV/sqrt(Hz) at ~1 Hz (low-noise amplifier).
 
-Read-only on the chip -- no FTDI, no DAC writes.
+Read-only on the chip -- FTDI closed, DACs untouched.
 
   ../.venv-meas/bin/python3 lna_input_referred_noise.py --seconds 180
 """
@@ -94,7 +94,7 @@ def main():
     print(f"PSD: nperseg={nps} -> {FS/nps:.4f} Hz resolution, "
           f"{len(v)//(nps//2)-1} averages")
 
-    # mains lines are pickup, not amplifier noise -- flag and exclude them
+    # mains lines are pickup rather than amplifier noise -- flag and set them aside
     line = np.zeros_like(fr, bool)
     for h in range(1, int(FS / 2 / args.mains) + 1):
         line |= np.abs(fr - h * args.mains) < max(0.5, 3 * FS / nps)
@@ -132,7 +132,7 @@ def main():
     if mm.sum():
         print(f"mains lines alone contribute "
               f"{math.sqrt(_trapz(asd_out[mm]**2, fr[mm]))*1e3:.2f} mV rms at the output "
-              f"-- that is room pickup, not the amplifier")
+              f"-- that is room pickup rather than the amplifier")
 
     with open(args.out, "w", newline="") as fh:
         w = csv.writer(fh)
@@ -149,7 +149,7 @@ def main():
         fig, ax = plt.subplots(2, 1, figsize=(9, 8))
         ax[0].loglog(fr[band], asd_out[band] * 1e6, lw=.8, color="0.5")
         ax[0].set_ylabel("output noise [$\\mu$V/$\\sqrt{Hz}$]")
-        ax[0].grid(True, which="both", alpha=.3); ax[0].set_title("LNA output noise, no drive")
+        ax[0].grid(True, which="both", alpha=.3); ax[0].set_title("LNA output noise, drive off")
         b2 = band & ~line
         ax[1].loglog(fr[b2], asd_in[b2] * 1e6, lw=.9, color="C0", label="measured (mains removed)")
         ax[1].axhline(200, ls="--", c="C3", lw=1.2, label="SPICE 200 $\\mu$V/$\\sqrt{Hz}$ @1 Hz (reference)")

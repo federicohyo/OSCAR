@@ -5,15 +5,15 @@ need one? Scored as a function of modulation frequency, with every control along
 The task is temporal BY CONSTRUCTION -- both classes deliver identical quantities of
 both gases and differ only in inter-channel phase (olfaction.md). So:
 
-  * the RATE control must sit at chance. If it does not, the encoder or the split is
+  * the RATE control must sit at chance. A deviation points to the encoder or the split
     leaking and nothing else in the table means anything.
   * the RAW control is the honest "do you need the spike encoding at all" test, the
     counterpart of the ECG count cue that turned out to solve that task unaided.
-  * SHUFFLED labels give the chance floor at this group count, which is not 0.5 when
+  * SHUFFLED labels give the chance floor at this group count, which departs from 0.5 when
     there are only ~12 groups.
 
-Grouping is by GAS PAIR, not by trial: the power is in groups, and the ECG work spent
-a day relearning that. A pair seen in training must not appear in test.
+Grouping is by GAS PAIR rather than by trial: the power is in groups, and the ECG work spent
+a day relearning that. A pair seen in training stays out of test.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_phase0.py
 """
@@ -33,8 +33,8 @@ T0_EXTRACT = -1.0          # window start of the npz, s
 def preprocess(X, t, win, hp_ms):
     """Per-channel fractional change from each trial's own pre-stimulus baseline, then
     high-pass. MOx resistances span three decades across channels so the normalisation
-    is mandatory, and the recovery tail is slow enough that without the high-pass a
-    delta encoder fires mostly on the ramp rather than on the odour."""
+    is mandatory, and the recovery tail is slow enough that the high-pass is needed;
+    otherwise the delta encoder fires mostly on the ramp rather than on the odour."""
     base = X[:, t < -0.05, :].mean(axis=1, keepdims=True)
     r = (X - base) / np.abs(base)
     if hp_ms:

@@ -13,7 +13,7 @@ A copy of the OpenROAD-flow-scripts needs to be available https://github.com/The
 Tool settings
 -------------
 
-To run on our servers (currently only co28 is supported), set up the following environment variables
+To run on our servers (co28 is the supported server), set up the following environment variables
 
 
 ```

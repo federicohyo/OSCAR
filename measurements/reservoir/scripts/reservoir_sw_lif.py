@@ -41,7 +41,7 @@ def sim_lif(events, T, tau_m, vth, vreset, tref, w_exc, w_inh, dt=0.001):
         v = v * decay + jump[i]
         t = i * dt
         if v < 0:
-            v = 0.0                      # rectify (no hyperpolarised runaway)
+            v = 0.0                      # rectify (hyperpolarised runaway blocked)
         if t - last_spike < tref:
             v = vreset
             continue

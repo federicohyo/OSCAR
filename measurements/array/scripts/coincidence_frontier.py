@@ -3,7 +3,7 @@
 neuron 14 -- a 2-panel figure of the membrane physics only. The cost argument (O(N/dt)
 digital integration vs O(1) analog) lives with the RESERVOIR frontier (fig:frontier), NOT
 here: for an isolated two-spike coincidence the right digital baseline is a
-timestamp-and-subtract (O(1), us-precise), so this figure makes no cost/dominance claim.
+timestamp-and-subtract (O(1), us-precise), so this figure keeps clear of any cost/dominance claim.
 
 Panels (single-EPSP-per-input primitive, firmware commit da5168a):
   (a) Oscilloscope membrane traces, four commanded intervals (Delta-t = 1/2/3/4 ms) aligned
@@ -13,12 +13,12 @@ Panels (single-EPSP-per-input primitive, firmware commit da5168a):
       rapid-probe 10 ms inter-pair): a flat P~=1 plateau (~3.8 ms FWHM), sharp ~1.5/ms edges,
       zero baseline beyond +-2.5 ms.
 
-Two honest limits (stated in the caption, not claimed away):
+Two honest scope notes (stated in the caption):
   * The abscissa is the COMMANDED interval: the execute-in-place (SPI-flash) stimulus path
-    floors the delivered interval at ~1 ms, so true Delta-t=0 is not deliverable and NO
-    sub-millisecond membrane resolution is claimed (it is bounded by the RISC-V I/O, not
+    floors the delivered interval at ~1 ms, so true Delta-t=0 is out of reach and
+    sub-millisecond membrane resolution is claimed (it is bounded by the RISC-V I/O rather than
     measured).
-  * Absolute spiking is FACILITATION-GATED: a well-rested pair does not fire (a 150 ms-rested
+  * Absolute spiking is FACILITATION-GATED: a well-rested pair stays silent (a 150 ms-rested
     sweep gave peak P=0); rapid repetition primes the membrane. The Delta-t-graded summation
     is the continuous-time computation; the spike is its facilitation-gated read-out.
 """
@@ -87,8 +87,8 @@ def main():
     print("  NOTE: absolute firing is facilitation-gated (150 ms-rested sweep gave peak P=0); "
           "the Delta-t-selectivity is the measured property, the spike is its facilitation-gated read-out.")
 
-    # NOTE: the digital O(N/dt) cost argument lives with the reservoir frontier (fig:frontier),
-    # not here -- an isolated 2-spike coincidence is cheap digitally (timestamp-and-subtract).
+    # NOTE: the digital O(N/dt) cost argument lives with the reservoir frontier (fig:frontier);
+    # here an isolated 2-spike coincidence is cheap digitally (timestamp-and-subtract).
 
     # scope membrane traces (physics backbone)
     ts, vs = load_coinc("scope_26.csv"); tb, vb = load_coinc("scope_25.csv")

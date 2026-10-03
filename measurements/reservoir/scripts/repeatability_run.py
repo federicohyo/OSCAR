@@ -14,7 +14,7 @@ presenting the SAME beat many times and watching how much each neuron's response
 moves. Nothing about the ECG task needs a second beat: the question is entirely
 about repeatability.
 
-PRE-REGISTERED READOUT (fixed before the run, so the analysis cannot drift):
+PRE-REGISTERED READOUT (fixed before the run, so the analysis stays anchored):
 
     per-neuron CV of the spike count over the 2 s window, across trials
 
@@ -155,7 +155,7 @@ def main():
         return st
 
     def setup_neuron(b, k):
-        b.send(f"MASK {1 << k}")               # only k streams: no AER jamming
+        b.send(f"MASK {1 << k}")               # k alone streams: AER jam-free
         b.apply_biases(load_biases(args.bias_pattern.format(k=k)))
         b.monitor(k)
         time.sleep(0.8)
@@ -190,7 +190,7 @@ def main():
                 for t in range(ntr):
                     if args.reload_at > 0 and t == args.reload_at:
                         # same file, same values: any step here is DAC programming,
-                        # not the neuron
+                        # with the neuron unchanged
                         b.apply_biases(load_biases(args.bias_pattern.format(k=k)))
                         time.sleep(0.5)
                     st = do_trial(b, k, t)

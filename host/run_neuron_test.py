@@ -51,7 +51,7 @@ DEFAULT_BIASES = [
     (4, 0b010, "JExcWn2",      0.0),      # NMOS → OFF = 0
     (4, 0b011, "JExcWn3",      0.0),      # NMOS → OFF = 0
 
-    # LNA biases driven to OFF (not high-Z — these are separate pins, not shared)
+    # LNA biases driven to OFF (dedicated pins rather than high-Z, and separate)
     # Original values: VREF=0.8, VB1=0.79, VB2=0.645, TUNEp=1.1
     (5, 0b000, "VREF",         0.0),      # LNA OFF (NMOS → 0V)
     (5, 0b001, "VB1",          0.0),      # LNA OFF (NMOS → 0V)
@@ -276,10 +276,10 @@ def flash_handshake_firmware(hex_path=None):
 # --- Core clock ---------------------------------------------------------------
 # The firmware is built for F_CPU_MHZ (default 10) and its delay_loop pulse widths
 # and Timer0 tick constants are scaled to it. The DLL does NOT survive a power
-# cycle, so the clock must be engaged after every flash or the pulses are wrong.
+# cycle, so the clock must be engaged after every flash so the pulses match.
 # Default is 10 MHz (crystal) because 50 MHz kills the inhibitory synapse; the fast
 # readout is clock-independent so 10 MHz loses nothing but the excitatory-only speed.
-# Reachable cores are 100/N MHz, N=2..7; fb MUST be 10 or the loop never locks.
+# Reachable cores are 100/N MHz, N=2..7; fb MUST be 10 so the loop locks.
 R_ENA, R_BYP, R_OUT, R_FB = 0x08, 0x09, 0x11, 0x12
 FB_LOCK = 10
 OUT_DIV = {50: 0x12, 33: 0x1B, 25: 0x24, 20: 0x2D}
@@ -338,7 +338,7 @@ def main():
     print()
 
     # Step 1: Flash firmware (before DACs, since HKSPI may reset FTDI).
-    # Always flash ON THE CRYSTAL: flash_phy_clk_divisor is never written by the
+    # Always flash ON THE CRYSTAL: flash_phy_clk_divisor is left unwritten by the
     # firmware, so SPI-flash SCK scales with the core and a 50 MHz core would clock
     # the flash 5x. A prior session may have left the DLL engaged, so force it back.
     if not args.skip_flash:

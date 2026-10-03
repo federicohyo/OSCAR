@@ -16,11 +16,11 @@ WHAT THIS DOES INSTEAD. The 1.0 s pulses have 90 trials of 23 chunks. Grouped 5-
 by trial gives every trial a turn in the test set, and each trial's chunks are partitioned
 into consecutive blocks of five so the statistic stays the reference campaign's voted-over-5 --
 about 360 voted decisions rather than 30. The quantiser cuts are fit on the TRAINING
-chunks of each fold, so the levels never see the test trials.
+chunks of each fold, so the levels stay clear of the test trials.
 
-Uncertainty is a CLUSTER bootstrap over trials, not over decisions: four voted decisions
-cut from one trial are not four independent samples, and treating them as such would
-shrink the interval by a factor it has not earned.
+Uncertainty is a CLUSTER bootstrap over trials rather than over decisions: four voted decisions
+cut from one trial are correlated, and treating them as independent would
+shrink the interval beyond what the data supports.
 
     ./.venv-meas/bin/python3 olfaction_hybrid_levels.py
 """

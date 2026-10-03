@@ -4,7 +4,7 @@
 the reference analysis accounts for the expansion from D_eff 9.6
 (identical software LIF + input projection) to silicon's 18.1 through the
 operating-point distribution, a mean-rate control and the measured 11.99 ms
-acquisition lattice, and leaves ~1.4 units with no mechanism named. Every
+acquisition lattice, and leaves ~1.4 units unnamed. Every
 mechanism tested there is a property of the ACQUISITION or a spread of LIF
 PARAMETERS. None of them changes the model neuron's EQUATIONS.
 
@@ -158,10 +158,10 @@ def main():
     # so the ratio w_inh/w_exc differs from neuron to neuron. This is the one
     # parameter axis the per-neuron threshold bisection above CANNOT absorb: a
     # common per-neuron gain is exactly what the threshold trades against, but the
-    # BALANCE between the two input channels is not. the reference analysis's weight-code
+    # BALANCE between the two input channels is the lever. the reference analysis's weight-code
     # result makes it concrete -- the four branches are equal-sized rather than
     # binary, and the ECG experiments ran on the uncalibrated code (the reference analysis), so
-    # the delivered exc and inh weights were not the programmed ones.
+    # the delivered exc and inh weights differed from the programmed ones.
     for sp_ei in (0.20, 0.40, 0.65):
         conds.append((f"EI    E/I ratio mismatch {sp_ei*100:.0f}%",
                       dict(_ei=sp_ei)))
@@ -170,14 +170,14 @@ def main():
     conds.append(("EI+NOISE E/I 40% + sigma 0.10",
                   dict(_ei=0.40, noise_sigma=0.10)))
 
-    # PER-TRIAL EXCITABILITY JITTER. The white membrane noise above is the wrong
+    # PER-TRIAL EXCITABILITY JITTER. The white membrane noise above is an off-target
     # TIMESCALE: it averages out under a 20 ms kernel and leaves <|rho|> flat.
     # What the <|rho|> ordering asks for is variation that is independent BETWEEN
     # NEURONS and slow compared with a beat -- bias drift, 1/f at low frequency,
     # temperature -- i.e. each neuron's excitability redrawn per presentation.
     # This is the only axis tested here that decorrelates neurons instead of
     # smoothing them, and it is Federico's candidate 4 in its per-neuron
-    # (not common-mode) form.
+    # (per-neuron rather than common-mode) form.
     for jz in (0.05, 0.10, 0.20, 0.35, 0.50):
         conds.append((f"JIT   per-trial excitability {jz*100:.0f}%", dict(_jit=jz)))
     conds.append(("JIT+RECT per-trial 20%, no rectification",
@@ -222,7 +222,7 @@ def main():
             sp = unflatten(spk, lattice=grid, rng=np.random.default_rng(100 + s))
             rho, curve = score(sp)
             curves.append(curve); rhos.append(rho); rates.append(r.mean())
-            # honesty check: not every target rate is reachable by threshold in
+            # honesty check: some target rates lie beyond threshold in
             # every condition. The impulse model with rectification caps a neuron
             # near one spike per excitatory event, so the fastest silicon neurons
             # are out of reach. Under-shooting the rate FLATTERS the condition

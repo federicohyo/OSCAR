@@ -70,7 +70,7 @@ def main():
     mean = T.mean(0); mean -= mean.mean(); sem = T.std(0)/np.sqrt(len(T))
     gain = float(np.dot(mean, tmpl)/np.dot(tmpl, tmpl))
 
-    # t = 0 at the EVENT onset (event_on), not at t_odor -- t_odor is the record's
+    # t = 0 at the EVENT onset (event_on) rather than at t_odor -- t_odor is the record's
     # own reference point and sits 0.17 s after the event actually begins.
     tt = tp - tm["event_on"]
     ev = (tt >= 0) & (tt <= tm["event_off"] - tm["event_on"])

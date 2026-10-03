@@ -40,7 +40,7 @@ def predictions(sp, Y, it, T, C):
 
 def main():
     files = sorted(glob.glob("data/olfaction/olf_validate/*.npz"))
-    assert files, "no archived spikes"
+    assert files, "archived spikes required"
     out = {}
     # per_acq[file][k][subset] = (Ys, its, pred, folds)
     for f in files:

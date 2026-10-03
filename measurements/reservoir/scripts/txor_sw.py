@@ -124,7 +124,7 @@ def main():
     # windows: bit a early, bit b late, separated by a gap much larger than tau_m
     win_a = (0.2, 0.4)
     win_b_far = (1.5, 1.7)     # gap ~1.1s >> tau_m: memory REQUIRED
-    win_b_near = (0.45, 0.65)  # gap ~0.05s ~ tau_m: memory NOT required (mechanism control)
+    win_b_near = (0.45, 0.65)  # gap ~0.05s ~ tau_m: mechanism control (memory-independent)
     ab, g = make_txor_trials(args.per_cell, args.T, win_a, win_b_far, args.burst, args.jitter, rng)
     y_xor = (ab[:, 0] ^ ab[:, 1]).astype(int)
     y_or = (ab[:, 0] | ab[:, 1]).astype(int)

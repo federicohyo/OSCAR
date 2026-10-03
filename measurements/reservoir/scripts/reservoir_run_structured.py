@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """A0 on silicon: STRUCTURED feature-aware encoding, feedforward, one neuron at a time.
 
-Same protocol as reservoir_run_randproj.py (per-neuron bias, host-paced delta replay, no
-recurrence, checkpoint per neuron) but each physical neuron k is driven by its assigned
+Same protocol as reservoir_run_randproj.py (per-neuron bias, host-paced delta replay, recurrence off, checkpoint per neuron) but each physical neuron k is driven by its assigned
 morphological feature detector (reservoir_structured.build_spec / encode_neuron): P-wave,
 QRS up-slope, QRS down-slope, T-wave, or RR/rhythm -- as few gated delta spikes. Validated
 in software (macro-F1 0.55, V-F1 0.93); this measures it on the analog array.

@@ -2,13 +2,13 @@
 """Odour identity vs pulse duration -- reproducing Dennler et al. Fig. 3D, then pricing it.
 
 Their protocol, followed here: train on 50 ms data features taken from 1000 ms pulses,
-test on pulses of 10-1000 ms. The classifier never sees a short pulse in training, so
+test on pulses of 10-1000 ms. The classifier training set holds long pulses only, so
 the accuracy-vs-duration curve is a genuine generalisation test, and it IS the
 accuracy-versus-latency curve the cost argument needs.
 
 Feature: a 50 ms chunk of the 8 sensor channels, prestimulus-baseline normalised. The
 reference reports the un-normalised version "approaches random classification for low
-concentrations", so the normalisation is load-bearing, not cosmetic.
+concentrations", so the normalisation is load-bearing rather than cosmetic.
 
 Classes follow the reference campaign: 2H, EB, Eu, IA and Blank, with b1/b2 (two identical pure
 solvent samples) merged into Blank.
@@ -47,7 +47,7 @@ def chunks(X, Th, t, dur_s, wl_s, pre=(-0.4, -0.05), phase_locked=True, tail=0.0
     R = (X - base) / np.abs(base)
     # The sensor response OUTLASTS the pulse -- the reference campaign reports odour offset
     # detected ~106 ms after a pulse ends -- so the decision legitimately uses the
-    # tail. Without it a 50 ms pulse yields one chunk and cannot be voted on.
+    # tail. With it a 50 ms pulse yields a chunk that can be voted on.
     lo, hi = 0.0, min(dur_s + tail, t[-1])
     F, trial = [], []
     for i in range(len(X)):

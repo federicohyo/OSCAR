@@ -3,12 +3,12 @@
 
 The 2026-07 recording reads D_eff = 18.1 and the 2026-08 re-acquisition reads
 14.9. Two things changed at once -- the 11.99 ms acquisition lattice went away,
-and the drive went up 2.7x -- so that 3.2-unit difference cannot be assigned to
-either on its own, and a reader could equally well call it a failure to reproduce.
+and the drive went up 2.7x -- so that 3.2-unit difference stays unattributed to
+either on its own, and a reader could equally well call it a reproduction shortfall.
 
-This settles it without a simulation and without matching rates: take the NEW
-recording, which has no lattice, and push it through the OLD one. The lattice
-parameters are not refitted -- they are the values measured on the 2026-07 data
+This settles it with neither a simulation nor rate matching: take the NEW
+recording, which is lattice-free, and push it through the OLD one. The lattice
+parameters are held fixed -- they are the values measured on the 2026-07 data
 (11.986 ms grid, phase drawn per (neuron, beat) presentation, two-slot floor).
 Everything else about the new recording stays exactly as acquired, so whatever
 D_eff moves is the lattice and nothing else.
@@ -17,7 +17,7 @@ D_eff moves is the lattice and nothing else.
 
 NOTE: do NOT read the "best-fit period" that fit_lattice returns on the new
 recording (8.030 ms). With 0% of intervals on integer multiples and a phase
-concentration of 0.265, that fit is returning noise -- there is no lattice there
+concentration of 0.265, that fit is returning noise -- lattice signal is zero there
 to find.
 """
 import json
@@ -29,7 +29,7 @@ from deff_refractory_ablation import apply_lattice
 
 K, T_BEAT = 8, 2.0
 TAUS = [0.01, 0.02, 0.04, 0.08, 0.16, 0.32]
-GRID_OLD = 0.011986          # MEASURED on the 2026-07 recordings, not refitted
+GRID_OLD = 0.011986          # MEASURED on the 2026-07 recordings rather than refitted
 MIN_STEPS = 2                # the two-slot floor, also measured
 NEW = "reservoir_spikes_nv_randproj_aug11.npz"
 OLD = "reservoir_spikes_nv_randproj.npz"

@@ -8,11 +8,11 @@ lattice whose phase is redrawn per presentation, with a two-slot floor at 23.97
 ms. That lattice is the flash-resident read-out plus host-arrival timestamps.
 
 The 2026-08-11 re-acquisition runs on the fixed path -- SRAM-resident drain, 21-bit
-on-chip Timer0 timestamps -- so the lattice should be absent. If it is, the largest
+on-chip Timer0 timestamps -- so the lattice should be gone. If it is, the largest
 modelled term in the decomposition disappears and the reference figure can be regenerated on an
 acquisition whose D_eff belongs to the array.
 
-This script runs the SAME lattice test the old recordings failed
+This script runs the SAME lattice test the old recordings came up against
 (deff_refractory_ablation.premise_test) against old and new, side by side.
 
   PYTHONPATH=. ./.venv-meas/bin/python3 reservoir_acq_compare.py [new.npz]

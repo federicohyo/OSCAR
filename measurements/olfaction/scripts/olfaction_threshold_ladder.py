@@ -3,17 +3,17 @@
 
 The hybrid tree (olfaction.md 6.15-6.16) uses the array as a bank of threshold
 comparators while the RISC-V walks the tree. The comparators are sharp enough --
-measured 1.8% per-comparison error against a 10% budget -- but they are not SPREAD: at
-the reference biases n2 fires at one input spike (no dynamic range at all), n1 and n5
+measured 1.8% per-comparison error against a 10% budget -- but they cluster: at
+the reference biases n2 fires at one input spike (zero dynamic range), n1 and n5
 both switch between 1 and 2, and only n11 sits as high as 4-5. A bank of near-identical
-comparators cannot represent a tree's thresholds, and quantising to 16 distinct levels
+comparators are too coarse for a tree's thresholds, and quantising to 16 distinct levels
 is what costs only 0.045 voted.
 
 So bisect vthrdn per neuron until neuron k switches at input level k+1: fires reliably
 at its level, stays silent one level below. Higher vthrdn raises the threshold (the
 quieter direction, bench_bias_lint.QUIETER_IF).
 
-A neuron that cannot be placed -- because it silences before reaching its level, or
+A neuron that stays unplaced -- because it silences before reaching its level, or
 still fires at level zero at the bottom of the range -- is reported rather than forced.
 The bank is only as good as the levels actually achieved, and pretending otherwise would
 put a fictitious threshold into the tree.
@@ -51,8 +51,8 @@ def main():
     neurons = [int(x) for x in args.neurons.split(",")]
 
     # CHARACTERISE, then assign. Forcing each neuron to a preassigned level and bisecting
-    # vthrdn failed 15/16: at weight 15 one input spike already fires almost any neuron and
-    # +/-150 mV of threshold cannot undo that. Charge per spike is the coarse knob, so
+    # vthrdn held for 1/16: at weight 15 one input spike already fires almost any neuron and
+    # +/-150 mV of threshold leaves that unchanged. Charge per spike is the coarse knob, so
     # sweep the weight, find where each neuron switches, and hand out the levels the array
     # can actually reach.
     def switch_level(b, k, nmax=16):

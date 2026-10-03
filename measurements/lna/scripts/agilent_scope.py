@@ -42,14 +42,14 @@ class Agilent:
             fcntl.ioctl(self.f.fileno(), self.USBTMC_IOCTL_SET_TIMEOUT,
                         struct.pack("I", int(ms)))
         except OSError:
-            pass        # older kernels do not have it; the default still works
+            pass        # this call is optional on older kernels; the default still works
 
     def __init__(self, dev=DEV):
         self.f = open(dev, "r+b", buffering=0)
         self._set_timeout_ms(10000)
         # An interrupted session leaves an unread response queued, and every
         # later query then returns ETIMEDOUT until the interface is cleared --
-        # including *IDN?. Clear on open so one aborted run does not poison the
+        # including *IDN?. Clear on open so one aborted run leaves the link clean for the
         # next; the first query after a clear can still come back empty, which
         # is why q() retries.
         self.clear()
@@ -140,7 +140,7 @@ class Agilent:
         self.w(f":TRIG:SLOP {slope}")
         if level is not None:
             self.w(f":TRIG:LEV {level:.6f}")
-        self.w(":TRIG:SWE NORM")     # NORM, not AUTO: wait for a real edge
+        self.w(":TRIG:SWE NORM")     # NORM rather than AUTO: wait for a real edge
         self.w(":SING")
         self.chan = chan
 

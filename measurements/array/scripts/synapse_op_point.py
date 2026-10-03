@@ -8,7 +8,7 @@ neuron once per input spike (gain saturated at 1). Neither end is a measurement 
 A graded code needs, for every weight word w:
 
     leak floor / R  <  A(w)          the EPSP train out-runs the leak, so out_hz > 0
-    A(15)           <  theta         one EPSP alone cannot fire the neuron, so out_hz < R
+    A(15)           <  theta         one EPSP alone stays below firing, so out_hz < R
 
 i.e. the per-branch efficacy A must sit in a window bounded below by the leak and above by
 the threshold. This scans the excitatory branch bias JExcWn0..3 (moved together, which

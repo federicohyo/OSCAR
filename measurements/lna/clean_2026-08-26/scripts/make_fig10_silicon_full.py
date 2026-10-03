@@ -54,7 +54,7 @@ t0L = fr[0, 0]
 dual = np.load(os.path.join(LNA, "odor_neuron_loop_dual.npz"), allow_pickle=True)
 draw = dual["raw"]
 # col 0 is the scope board clock, one stamp per sample; col 1 is the host stamp of
-# a whole batch and repeats, so it cannot be the axis. Tie the board clock to the
+# a whole batch and repeats, so it is unfit as the axis. Tie the board clock to the
 # run's time base at the first batch.
 tmb = draw[:, 0] - draw[0, 0] + draw[0, 1]
 vmb = draw[:, 3]                    # ch2 = membrane monitor of neuron 9
@@ -72,11 +72,11 @@ def fold(t, v, t0, nmax=12):
 
 L = fold(tl, cl, t0L); L -= np.median(L[:, grid < -0.20], axis=1, keepdims=True)
 lmed, lsd = np.median(L, axis=0), L.std(axis=0)
-# The membrane is folded on the two-channel run's OWN event onsets, not on
+# The membrane is folded on the two-channel run's OWN event onsets rather than on
 # t0 + i*P: fold()'s uniform stepping and its 9.6 s cutoff (sized for the older
 # ten-repeat run) kept only 7 of the 9 events, and its i = -1 row is the window
-# BEFORE the first event -- a flat trace with no spike in it, which among spiking
-# repeats reads as a failed trial rather than as the pre-stimulus baseline it is.
+# BEFORE the first event -- a flat trace with zero spikes, which among spiking
+# repeats reads as a mistimed trial rather than as the pre-stimulus baseline it is.
 _f = dual["fires"][:, 0]
 _ev = [[_f[0]]]
 for _x in _f[1:]:
@@ -109,13 +109,13 @@ for row in L: ax[1].plot(grid, row*1e3, lw=.45, color=RED, alpha=.25)
 ax[1].fill_between(grid, (lmed-lsd)*1e3, (lmed+lsd)*1e3, color=RED, alpha=.20, lw=0)
 ax[1].plot(grid, lmed*1e3, lw=1.3, color="#8c1010", label=r"$V_{LNA}^{out}$ (mV)")
 ax[1].set_ylabel(r"$V_{LNA}^{out}$ (mV)", color=RED); ax[1].tick_params(axis="y", labelcolor=RED)
-# NO median here. Spikes do not align sample-by-sample across repeats, so a
+# No median here. Spikes align loosely sample-by-sample across repeats, so a
 # median across them reads ~0.36 V while individual spikes reach 1.13 V -- it
 # would understate the membrane by a factor of three. The reference panel shows a
 # single transient; one representative repeat is drawn dark, the rest faint. All
 # nine repeats of the two-channel run are drawn.
 for row in M: ax[2].plot(grid, row, lw=.5, color=GRN, alpha=.28)
-# Most spikes, not tallest sample: every repeat reaches the same peak within
+# Most spikes rather than tallest sample: every repeat reaches the same peak within
 # 30 mV, so argmax over amplitude picks essentially at random.
 _thr_c = 0.5 * (np.median(M[:, grid < -0.20]) + M.max())
 _nspk = [int(((r[1:-1] > r[:-2]) & (r[1:-1] >= r[2:]) & (r[1:-1] > _thr_c)).sum())
@@ -138,11 +138,11 @@ for a_, lab, lloc in zip(ax, ("(a)", "(b)", "(c)"),
 # operating point the chip's own timestamps put 210 of 215 within-burst
 # interspike intervals at 1.368 ms exactly -- ~731 Hz, which is the AER drain
 # period, so the neuron was at or past the readout limit. A 1 kHz digitiser
-# samples that 1.4 times per spike and returns an alias, not a measurement:
+# samples at 1.4 times per spike and returns an alias rather than a measurement:
 # 1000-731 = 269 Hz beat, an apparent spike every 3.7 ms. The first inset drew
 # the beat.
 #
-# The fix was the neuron, not the instrument. Raising JExcWn0-3 by 0.0020 from
+# The fix was in the neuron rather than the instrument. Raising JExcWn0-3 by 0.0020 from
 # the file value moved it off the floor: 16 Hz out for 40 Hz in, interspike
 # interval ~60 ms. At 1 kHz that is ~60 samples per interval, and the charging
 # ramp between spikes is resolved rather than inferred. The inset is a
@@ -154,16 +154,16 @@ INSET = True
 # matches the panel it sits in and the neuron is driven by real event-time
 # injections rather than a 2 Hz single-spike trigger.
 #
-# The window is chosen to show what the panel cannot at 1 s across: the neuron
-# rests, is driven through threshold in a burst, resets, and recovers. It is NOT
+# The window is chosen to show what the panel leaves out at 1 s across: the neuron
+# rests, is driven through threshold in a burst, resets, and recovers. It stays
 # zoomed to a single interspike interval: within a burst the ISI is 3-4 ms and the
 # digitiser runs at 1 kHz, so an interval holds three or four samples and the
-# sub-threshold ramp that the reference figure draws from simulation is simply not resolved
-# here. Zooming further would draw an interpolation, not a measurement.
+# sub-threshold ramp that the reference figure draws from simulation falls below
+# resolution here. Zooming further would draw an interpolation rather than a measurement.
 if INSET:
     INS_T0, INS_T1 = 0.090, 0.230   # one reset, one full ramp, the next spike
     # Sits over the flat post-event stretch of the panel, opaque so the resting line
-    # behind it does not read as part of the inset.
+    # behind it stays visually separate from the inset.
     # Headroom is made ABOVE the traces rather than taken from beside them: the
     # spikes now run out to +0.31 s, so an inset parked on the right half would
     # sit on top of real data and hide it behind its own white patch.

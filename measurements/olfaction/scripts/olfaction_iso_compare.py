@@ -10,13 +10,13 @@ TWO PROTOCOL BUGS this replaces, both of which flattered the digital side:
 
   1. ONE CHUNK vs FIVE. chunks() emits one chunk per 50 ms heater cycle, so a 0.1 s
      pulse plus its 0.2 s tail gives five. The digital number (0.900 per-chunk, 1.000
-     voted) votes over all five; the first array run was given one and no vote.
+     voted) votes over all five; the first array run used a single pass without voting.
   2. DIFFERENT SPLITS. The digital baseline trains on 1.0 s pulses and tests on 0.1 s
      (Dennler's generalisation protocol); the array run did CV inside 0.1 s. Here BOTH
      substrates get the same folds on the same chunks. the reference-protocol version needs
-     a 1.0 s array acquisition and is not done yet -- see olfaction.md.
+     a 1.0 s array acquisition and is still in progress -- see olfaction.md.
 
-Chunks of one trial never split across folds (GroupKFold on trial), so voting is
+Chunks of one trial stay together across folds (GroupKFold on trial), so voting is
 evaluated only on held-out trials.
 
 ENERGY, per trial-level decision made from k chunks. The 16 neurons are a physical
@@ -27,12 +27,12 @@ each chunk costs M sequential presentations of T and M drain calls.
 Note this makes M=3 at T=0.05 cost the SAME rail as M=1 at T=0.15: real-time
 presentation pays for the multiplexing rather than saving anything on top of it.
 Running the neurons sequentially on the bench is an instrument limit (one unmasked
-neuron at a time), not the architecture, so the parallel assumption is the right one --
+neuron at a time) rather than the architecture, so the parallel assumption is the right one --
 it is the same assumption E_readout was defined under for ECG.
 Both scale linearly in k, so the ratio at FIXED k is constant -- the comparison only
 means something at MATCHED ACCURACY, i.e. at the k each substrate needs to reach a
-given accuracy. Note the digital figure excludes sensor/ADC power, which the array's
-P_analog effectively includes; that asymmetry favours the array and is not corrected.
+given accuracy. Note the digital figure leaves sensor/ADC power out of scope, while the array's
+P_analog effectively includes; that asymmetry favours the array and stays uncorrected.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_iso_compare.py
 """

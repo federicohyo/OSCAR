@@ -3,7 +3,7 @@
 
     ../.venv-meas/bin/python3 odor_chain_figure.py
 
-Reads what odor_neuron_loop_dual.py saved -- no bench, no chip -- and produces
+Reads what odor_neuron_loop_dual.py saved -- bench and chip untouched -- and produces
 figures/odor_chain_dual.png plus the numbers that go with it:
 
   panel 1  the stimulus that was played (the WAV itself)
@@ -16,14 +16,14 @@ TIME BASE. Nothing is aligned on playback start: pw-play's start latency jitters
 by more than a second. The 137 Hz, 50 ms mark at t_mark = 0.125 s of every period
 is found in ch1 itself and everything is referred to that.
 
-THE EVENT WINDOW COMES FROM THE WAV, not from odor_timing.json. That file's
+THE EVENT WINDOW COMES FROM THE WAV rather than odor_timing.json. That file's
 event_on/event_off (0.330-0.565 s) describe the SPICE/reference stimulus; in the WAV
 that is actually played the odor content of each period runs 0.50-1.26 s and
 peaks at 1.05 s. Scoring against the json window reports 0% and looks like a
-broken chain -- it is a mismatched clock, not a mismatched result.
+this points to a mismatched clock rather than a mismatched result.
 
 SPIKE ALIGNMENT. The spike file's t = 0 is its own first spike. Neuron 9 is
-quiescent without input (measured: 0 AER spikes in the idle gate window), so the
+quiescent with input at zero (measured: 0 AER spikes in the idle gate window), so the
 first recorded spike is the answer to the first injection, and that is what the
 two clocks are pinned on.
 """
@@ -85,7 +85,7 @@ def main():
     P = float(d["period_s"])
     raw, fires, trace = d["raw"], d["fires"], d["trace"]
     # col 0 is the scope board clock (one stamp per sample); col 1 is the host
-    # stamp of the whole batch and repeats, so it cannot be the time axis.
+    # stamp of the whole batch and repeats, so it is unfit as the time axis.
     t = raw[:, 0] - raw[0, 0] + raw[0, 1]
     ch1, ch2 = raw[:, 2], raw[:, 3]
     fs = 1.0 / np.median(np.diff(t))
@@ -101,8 +101,8 @@ def main():
     spk = np.atleast_2d(np.loadtxt(str(d["spikes_file"]), comments="#"))
     # The file's microsecond column is NOT zero-based despite its header (this run
     # starts at 14.994 s): it is the wrap-corrected chip clock, whose origin is the
-    # bridge, not the recording. Only differences are meaningful, so pin the first
-    # spike to the first injection -- neuron 9 is quiescent without input (0 AER
+    # bridge rather than the recording. Differences are what matter, so pin the first
+    # spike to the first injection -- neuron 9 is quiescent with input at zero (0 AER
     # spikes in the idle gate), so that spike is the answer to that injection.
     st = (spk[:, 2] - spk[0, 2]) / 1e6 + (fires[0, 0] if len(fires) else 0.0)
 

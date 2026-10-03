@@ -3,12 +3,12 @@
 
 A short sequence of consecutive beats is placed on a REAL time axis (actual RR gaps
 preserved), delta-encoded, and driven into a bank of software LIF neurons whose membrane
-time constants are tiled from short (no cross-beat memory) to long (fading memory across
+time constants are tiled from short (cross-beat memory off) to long (fading memory across
 beats). A premature beat (supraventricular, S) arrives while the preceding beat's long-tau
 membrane is still elevated, so the reservoir STATE at the target encodes rhythm context --
-information a single-beat pipeline cannot represent.
+information a single-beat pipeline leaves out.
 
-Decisive control: memory bank (tau up to ~0.5 s) vs. no-memory bank (all tau = 30 ms).
+Decisive control: memory bank (tau up to ~0.5 s) vs. memory-free bank (all tau = 30 ms).
 If long-tau lifts S-F1 above short-tau, the reservoir is using cross-beat timing.
 Baselines: single target beat alone, and raw+RR. Metric: inter-patient LORO macro/per-class F1.
 """

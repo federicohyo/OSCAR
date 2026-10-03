@@ -33,7 +33,7 @@ def load_wrec(path):
 
 def present(b, kin, events, T, reset_vl, op_vl):
     """Stimulate neuron kin with delta; record EACH neuron's response separately (16
-    traces) so the recurrent spread across the array is kept (no collapse)."""
+    traces) so the recurrent spread across the array is kept (collapse-free)."""
     b.bias("vleakn", op_vl); time.sleep(0.05)       # drop to operating point (from prior kill)
     b.drain(max_lines=100000)
     times = {j: [] for j in range(16)}

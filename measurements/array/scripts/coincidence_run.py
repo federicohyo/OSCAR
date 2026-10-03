@@ -79,7 +79,7 @@ def dominant_after_coinc(b, syn_a, syn_b, neuron, reps=8, window_s=0.05):
 
 def p_fire_coinc(b, first, second, neuron, dt_us, out_idx, trials, window_s):
     # window_s is a CONSTANT listen window (same for every dt) so the measurement
-    # sensitivity does not depend on dt. The caller sizes it to exceed max|dt| + a
+    # sensitivity is independent of dt. The caller sizes it to exceed max|dt| + a
     # response margin so both inputs' effects are always captured.
     fires = 0
     for _ in range(trials):

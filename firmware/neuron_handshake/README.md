@@ -16,7 +16,7 @@ compile-time `STREAM_SPIKES` flag (Makefile, default 1) controls UART output:
 | Build | `make hex` | `make STREAM_SPIKES=0 hex` |
 | Readout drain | `aer_drain()` from **SRAM** (`.ramtext`, dff2) + ring buffer | `aer_drain()` from **SRAM** (same) |
 | req/ack servicing (measured) | **~50 µs** (SRAM, `handshake_result.json`) | **~50 µs** (same) |
-| Per-spike UART stream | **yes** (deferred: ring buffer flushed in main loop) | **no** |
+| Per-spike UART stream | **yes** (deferred: ring buffer flushed in main loop) | **counts-only** |
 | Spike packet format | 4-byte: `0x80\|addr`, raw 16-bit Timer0 ticks (3×7-bit) | — |
 | Spike-rate readout | UART stream **and** `aer_counts[16]` (0xDB) | `aer_counts[16]` (0xDB) † |
 | Use it for | **timestamped spike stream at full array speed** | max throughput / 0xDB timing / reservoir |
@@ -29,13 +29,13 @@ compile-time `STREAM_SPIKES` flag (Makefile, default 1) controls UART output:
 - `sections.lds` adds a `.ramtext` section that **loads from flash but runs from
   dff2** (0x400–0x600), with a **page-aligned LMA** (`AT(ALIGN(...,256))`). If the
   LMA shares a 256 B flash page with `.data`, the page-oriented flasher writes
-  overlapping pages and **verify fails**. `.ramnoinit` (NOLOAD, dff2) holds
-  `aer_counts`.
+  overlapping pages and **verify flags a mismatch**. `.ramnoinit` (NOLOAD, dff2)
+  holds `aer_counts`.
 - `crt0_vex.S` copies `.ramtext` from flash to dff2 at boot (mirrors the `.data` copy).
-- `aer_drain()` is marked `section(".ramtext"), noinline` and makes **no function
-  calls** (post-ack settle + AER address decode are inlined by hand) — any `jal`
+- `aer_drain()` is marked `section(".ramtext"), noinline` and keeps **all calls
+  inlined** (post-ack settle + AER address decode are inlined by hand) — any `jal`
   would fetch from XIP and defeat the point. Verify with `objdump` that
-  `<aer_drain>` is at a dff2 address with no `jal`/`call`.
+  `<aer_drain>` is at a dff2 address with every `jal`/`call` inlined.
 - dff2 is **above** `_fstack` (0x400), so `.ramtext` and `aer_counts` are immune to
   the 1 KB-RAM stack-overflow trap that clobbers low `.bss`.
 
@@ -56,17 +56,17 @@ The SRAM drain and the UART output are **decoupled** by a ring buffer:
    spike_ring[head] = (neuron_id << 16) | (timer0_ticks & 0xFFFF);
    head = (head + 1) & 7;
    ```
-   This adds <1% to the 50.3 µs/handshake cycle and never touches the critical
-   ack→deassert path.
+   This adds <1% to the 50.3 µs/handshake cycle and leaves the critical
+   ack→deassert path untouched.
 
-2. **Flush (in `main` loop, XIP, not time-critical):** the main loop drains the
-   ring to UART as 4-byte packets with raw 16-bit Timer0 ticks. No firmware-side
-   division — the host converts ticks to µs (ticks / 10 at 10 MHz).
+2. **Flush (in `main` loop, XIP, off the critical path):** the main loop drains
+   the ring to UART as 4-byte packets with raw 16-bit Timer0 ticks. Division
+   happens host-side — the host converts ticks to µs (ticks / 10 at 10 MHz).
 
 3. **Ring buffer:** 8 slots in `.ramnoinit` (dff2). At 1133 spikes/s that's
-   ~7 ms of buffering. Overflow drops the oldest unflushed spike (lossy).
-   `aer_counts[16]` still tallies exact per-neuron totals — the ring is purely
-   for the timestamped stream.
+   ~7 ms of buffering. When full, the oldest unflushed spike is replaced so the
+   newest lands in the ring. `aer_counts[16]` still tallies exact per-neuron
+   totals — the ring is purely for the timestamped stream.
 
 4. **Memory:** `.ramtext` grows by ~40 B (timestamp instructions inlined into
    `aer_drain`), `.ramnoinit` grows by 38 B (8×4 B ring + 2 B head/tail + 4 B
@@ -111,7 +111,7 @@ Scope capture showing the membrane potential of a neuron via the x5 monout_array
 ... fast blinking = neurons firing continuously
 ```
 
-### Root cause of previous handshake failure: `reg_la*_oenb` polarity
+### Root cause of the earlier handshake issue: `reg_la*_oenb` polarity
 
 The `reg_la*_oenb` register name suggests active-LOW ("output enable bar"), but the gate-level netlist (`caravan_core.v`) proves it is **active-HIGH**:
 
@@ -120,7 +120,7 @@ The `reg_la*_oenb` register name suggests active-LOW ("output enable bar"), but 
 la_data_in_core[N] = la_oe_storage[N] & la_out_storage[N] & power_good
 ```
 
-`la_oe_storage[N] = 1` → CPU output **ENABLED**. The previous firmware had the polarity inverted: it set bits to 1 for user-driven signals (disabling them) and 0 for CPU-driven signals (ack, CLK, Da, nRes — disabling CPU output). This meant ack was permanently gated to 0 at the AND3 gate and never reached the neuron.
+`la_oe_storage[N] = 1` → CPU output **ENABLED**. The earlier firmware had the polarity inverted: it set bits to 1 for user-driven signals and 0 for CPU-driven signals (ack, CLK, Da, nRes), which held ack at 0 at the AND3 gate so it stayed off the neuron. The corrected polarity below enables the CPU outputs.
 
 Similarly, `reg_la*_iena` is counterintuitive: the AND2B gate inverts `la_ien_storage`, so `iena = 0` → input **ENABLED**. Setting all iena registers to 0 enables all inputs.
 
@@ -143,14 +143,14 @@ The management GPIO LED is **active-LOW**: `reg_gpio_out = 0` → LED ON, `reg_g
 
 ### Diagnostic blink reference
 
-| Phase | Test | Success blinks | Failure blinks |
+| Phase | Test | Success blinks | Alert blinks |
 |-------|------|---------------|----------------|
 | Start | — | 5 | — |
 | 1 | CPU→user: drive ack HIGH/LOW | 1 (asserted), 2 (deasserted) | — |
 | 2 | user→CPU: read req after nRes release | 1 (req=1) | 3 fast (req=0) |
-| 3a | Handshake: assert ack, check req drops | 3 (req dropped) | 6 (req stuck HIGH) |
-| 3b | Handshake: deassert ack, check req returns | 4 (req returned) | 7 (req stayed LOW) |
-| 3 (timeout) | req never went HIGH | 10 (error) | — |
+| 3a | Handshake: assert ack, check req drops | 3 (req dropped) | 6 (req held HIGH) |
+| 3b | Handshake: deassert ack, check req returns | 4 (req returned) | 7 (req held LOW) |
+| 3 (timeout) | req stayed LOW | 10 (error) | — |
 | 4 | Readback la1_oenb top nibble | N = nibble (expect 1) | 15 (if zero) |
 | 4 | Readback la2_oenb nibble 1 | N = nibble (expect 5) | 15 (if zero) |
 | Loop start | — | 5 | — |
@@ -239,5 +239,5 @@ Byte 3: (ts      ) & 0x7F           ← MSB=0, low 7 bits
   computes `delta = prev_ts - ts` (mod 65536), then `delta_us = delta / 10`
   (Timer0 = 10 MHz). Max delta before wrap = 65536 ticks = 6.55 ms.
 - **Self-synchronizing**: any byte with MSB=1 is always a packet start; MSB=0 is always data. If sync is lost, the parser discards bytes until the next 0x80+ byte.
-- **No firmware-side division**: the rv32i has no hardware divide; sending raw ticks eliminates the software `div10` loop entirely from the hot path.
-- **Throughput**: at 9600 baud, ~240 packets/s (4 bytes × ~0.42 ms/byte). Spikes exceeding the ring buffer or UART FIFO capacity are silently dropped; `aer_counts[16]` (0xDB) retains exact per-neuron totals.
+- **Division is host-side**: the rv32i divides in software, so sending raw ticks keeps the software `div10` loop off the hot path.
+- **Throughput**: at 9600 baud, ~240 packets/s (4 bytes × ~0.42 ms/byte). Spikes beyond the ring buffer or UART FIFO capacity give way to the newest entry; `aer_counts[16]` (0xDB) retains exact per-neuron totals.

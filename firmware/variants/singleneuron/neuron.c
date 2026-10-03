@@ -127,7 +127,7 @@ void main()
     // Gate-level proof: la_data_in[N] = la_oe[N] & la_out[N] & power_good (AND3)
     // Previously inverted: bits for user-driven signals were set to 1 (enabling
     // CPU output on req/AER) while CPU-driven signals (ack, CLK, Da, nRes) were 0
-    // (CPU output disabled). This meant ack never reached the neuron.
+    // (CPU output held low). This held ack away from the neuron.
     reg_la0_oenb = 0x7FFFFFF8;    // bits 3-30: CPU drives la_data_in[3:30]
     reg_la1_oenb = 0x10000000;    // bit 28: CPU drives x5.ack
     reg_la2_oenb = 0x0000005C;    // bits 2,3,4,6: CPU drives CLK, Da, nRes, x3.ack

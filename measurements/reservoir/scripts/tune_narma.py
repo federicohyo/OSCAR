@@ -4,9 +4,9 @@
 Closed loop: constrained Bayesian optimisation over a SMALL, BOUNDED window (weak inversion!) in
 VOLT space, evaluating each candidate bias vector on a pluggable backend that returns AER stream
 counts + scope membrane traces; the shared objective rewards fading memory (MC1/MC2) subject to
-bounded rate, no saturation (drift), no railing, a diversity floor, and a tau_eff band.
+bounded rate, saturation-free (drift), railing-free, a diversity floor, and a tau_eff band.
 
-    # validate the whole loop against the software chip-sim (no chip, no scope):
+    # validate the whole loop against the software chip-sim (chip and scope untouched):
     ./.venv-meas/bin/python3 tune_narma.py --backend sim --iters 40
 
     # bench (chip up at 50 MHz, base biases loaded, scope on /dev/usbtmc0):

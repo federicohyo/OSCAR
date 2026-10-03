@@ -15,7 +15,7 @@ extern "C" {
 // hardware mask.
 // Due to all this somewhat low-level mess, all of the glue is implemented in
 // the RiscV crt0, and this header is kept as a thin wrapper. Since interrupts
-// managed by this layer, do not call interrupt instructions directly, as the
+// managed by this layer; call these helpers rather than interrupt instructions directly, as the
 // state will go out of sync with the hardware.
 
 // Read only.
@@ -43,15 +43,15 @@ static inline void irq_setie(unsigned int ie)
 
 static inline unsigned int irq_getmask(void)
 {
-    // PicoRV32 interrupt mask bits are high-disabled. This is the inverse of how
-    // LiteX sees things.
+    // PicoRV32 interrupt mask bits are active-low (a 0 enables). This is the
+    // inverse of how LiteX sees things.
     return ~_irq_mask;
 }
 
 static inline void irq_setmask(unsigned int mask)
 {
-    // PicoRV32 interrupt mask bits are high-disabled. This is the inverse of how
-    // LiteX sees things.
+    // PicoRV32 interrupt mask bits are active-low (a 0 enables). This is the
+    // inverse of how LiteX sees things.
     _irq_setmask(~mask);
 }
 

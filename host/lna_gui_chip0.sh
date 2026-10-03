@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Launch the GUI for chip0 -- the chip whose on-die flash passthrough is
-# dead (2026-08-30). Its flash is frozen with the pinned 25 MHz odor image
-# (LNA/firmware/neuron_handshake_25MHz_odor_20260825.hex), so the chip must
-# ALWAYS be talked to at 25 MHz. neuron_bridge.py defaults to 50 MHz; a
-# bare GUI launch gives the documented silent comms failure on this chip.
+# Launch the GUI for chip0 -- the chip whose on-die flash passthrough reads
+# back as ESD-damaged (2026-08-30). Its flash is frozen with the pinned 25 MHz odor image
+# (LNA/firmware/neuron_handshake_25MHz_odor_20260825.hex), so always talk to
+# the chip at 25 MHz. neuron_bridge.py defaults to 50 MHz; a
+# bare GUI launch hits the documented silent comms mismatch on this chip.
 #
-# chip0 cannot be reflashed over USB anymore. Reflash path: Raspberry Pi
+# chip0 reflashes via the Raspberry Pi path: Raspberry Pi
 # hyo@192.168.1.48:/home/hyo/firmware-write/flash.sh via the J15 header
 # (daughterboard removed from J24).
 set -e

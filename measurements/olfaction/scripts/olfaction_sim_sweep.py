@@ -3,7 +3,7 @@
 point -- in simulation, before spending bench time.
 
 F. Corradi, 2026-08-13: "we just switched on the array, we did a very small calibration
-and you already call accuracy cannot be higher than this. I would disagree because we
+and you already call accuracy is capped here. I would disagree because we
 can make simulations in which the accuracy is higher and we can probably tune the bias
 better." Correct, and this project already recorded the lesson: ECG accuracy moved
 0.913 -> 0.700 on a 2.7x drive change alone ([[reservoir-results-are-operating-point-
@@ -83,7 +83,7 @@ def main():
     ap.add_argument("--repeats", type=int, default=1,
                     help="projection seeds; accuracy is reported mean +/- sd over them")
     ap.add_argument("--ratio", action="store_true",
-                    help="sweep the inhibitory/excitatory weight ratio (never swept)")
+                    help="sweep the inhibitory/excitatory weight ratio (fresh ground)")
     ap.add_argument("--wide", action="store_true",
                     help="bracket vth and w, which the refine grid pinned at its edges")
     ap.add_argument("--refine", action="store_true",
@@ -105,8 +105,8 @@ def main():
 
     if args.ratio:
         # w_exc == w_inh made UP/DOWN events cancel, capping the sim at ~42 Hz and
-        # making it unable to reach the chip's 108 Hz at all. Silicon has no such
-        # symmetry -- exc and inh efficacy differ on this die and the ratio is a real
+        # putting the chip's 108 Hz out of reach. Silicon relaxes this symmetry --
+        # exc and inh efficacy differ on this die and the ratio is a real
         # bias knob (JExcWn vs JInhWp). Sweep it.
         grid = dict(vth=[0.35, 0.7], w=[0.5, 1.0], tau_m=[0.05, 0.1],
                     tau_syn=[0.0], inh=[0.0, 0.25, 0.5, 1.0])

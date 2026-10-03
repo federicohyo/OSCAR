@@ -41,8 +41,8 @@ def probe_all(b, k_list, n, reps, wait):
     """One burst per neuron per rep, unmasked: every neuron is read at its own address.
 
     Routed one at a time because the input path latches a single 4-bit neuron address --
-    there is no fan-out on this die -- but the READ is shared, so the cost of adding a
-    neuron is one more burst, not one more acquisition."""
+    fan-out stays off on this die -- but the READ is shared, so the cost of adding a
+    neuron is one more burst rather than one more acquisition."""
     hit = {k: 0 for k in k_list}
     for _ in range(reps):
         for k in k_list:
@@ -93,7 +93,7 @@ def main():
             for k in ks:
                 r = rows[k]
                 sw[k] = next((n for n, q in zip(NS, r) if q >= 1.0), None) \
-                    if r[0] <= 0.05 else None       # free-runner: not a comparator
+                    if r[0] <= 0.05 else None       # free-runner: outside the comparator role
             print(f"  setting lvl{L:<3d} -> switches " +
                   " ".join(f"n{k}:{sw[k]}" for k in ks))
             rec.setdefault("switch", {})[str(L)] = {str(k): sw[k] for k in ks}

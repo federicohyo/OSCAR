@@ -7,7 +7,7 @@
 #   ./test_at_clock.sh 25 noflash  # skip flashing (image already loaded), just GUI
 #
 # Reachable clocks: 10 (crystal), 20, 25, 33, 50 MHz.
-# NOTE: 50 MHz (and, per today's inconclusive test, possibly 25/33) does not deliver
+# NOTE: 50 MHz (and, per today's inconclusive test, possibly 25/33) delivers reduced
 # synaptic charge -- that's exactly what this lets you check.
 set -e
 cd "$(dirname "$0")"
@@ -24,7 +24,7 @@ case "$MHZ" in
 esac
 if [ ! -f "$BIN" ]; then echo "missing binary: $BIN (run 'make hex F_CPU_MHZ=$MHZ' in firmware/neuron_handshake)"; exit 1; fi
 
-# free the FTDI (only one process may own it)
+# free the FTDI (one process owns it at a time)
 pkill -f neuron_bridge.py 2>/dev/null || true
 pkill -f inh_scope.py 2>/dev/null || true
 sleep 1

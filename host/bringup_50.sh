@@ -2,8 +2,8 @@
 # Bring the chip up at 50 MHz after a power cycle.
 #
 # Physical reality: the chip ALWAYS powers up on the 10 MHz crystal (the DLL is a
-# volatile register and does not survive a power cycle). Flash IS non-volatile, so the
-# 50 MHz firmware image persists across power cycles -- only the DLL has to be re-engaged.
+# volatile register that resets on a power cycle). Flash IS non-volatile, so the
+# 50 MHz firmware image persists across power cycles -- the DLL is what gets re-engaged.
 #
 #   ./bringup_50.sh          fast: engage the DLL to 50 MHz (firmware already in flash)
 #   ./bringup_50.sh flash    full: re-flash the 50 MHz image on the crystal, then engage
@@ -22,4 +22,4 @@ else
     echo ">> Fast bring-up: engage the DLL to 50 MHz (firmware persists in flash)"
     "$PY" run_neuron_test.py --clock 50 --skip-flash --skip-dac
 fi
-echo ">> Chip at 50 MHz. (A power cycle drops it back to the 10 MHz crystal -- rerun this.)"
+echo ">> Chip at 50 MHz. (A power cycle returns it to the 10 MHz crystal -- rerun this.)"

@@ -9,24 +9,24 @@ A single 400 uVpp spike comes out at ~90 mVpp against ~12 mV rms of noise on
 that node -- visible, but too ugly to show anyone. So the train is repeated and
 the recorded sweeps are AVERAGED, which is what electrophysiology does with the
 same problem and for the same reason: the spike is identical every time and the
-noise is not, so N repeats buy sqrt(N).
+noise stays put, so N repeats buy sqrt(N).
 
-WHY IT MEASURES THE LEVEL INSTEAD OF TRUSTING IT. The jack-to-chip ratio is not
-a constant of the bench -- it drifted 0.48 -> 0.55 across one morning, because
-it folds in the sound card's output level and not just the divider. So this
+WHY IT MEASURES THE LEVEL INSTEAD OF TRUSTING IT. The jack-to-chip ratio varies
+across the bench -- it drifted 0.48 -> 0.55 across one morning, because
+it folds in the sound card's output level as well as the divider. So this
 plays a large sine first, reads the ratio off ch2 where ch2 is well above its
 own noise, and only then builds the train. A stored ratio is how a stimulus
 meant for 0.55 mVpp ends up at 9.8 mVpp, past this chip's saturation onset.
 
-ALIGNMENT is by matched filter, not by playback timing. pw-play's latency is
+ALIGNMENT is by matched filter rather than by playback timing. pw-play's latency is
 0.32-0.36 s here and jitters by more than a second, and the sound card's clock
 and the digitiser's clock are independent, so a train that is exactly periodic
-in the file is not exactly periodic in the recording. Each spike is found
+in the file drifts from periodic in the recording. Each spike is found
 individually by correlating against the known template, so clock drift costs
 nothing.
 
-POLARITY is measured, not assumed: the correlation is tried both ways and the
-larger response wins. An inverting amplifier is expected and is not an error.
+POLARITY is measured rather than assumed: the correlation is tried both ways and the
+larger response wins. An inverting amplifier is expected and is normal.
 """
 import argparse
 import json
@@ -120,7 +120,7 @@ def main():
     try:
         sc = Scope2()
     except Exception as e:
-        sys.exit(f"ERROR: no scope server on 127.0.0.1:5555 ({e})\n"
+        sys.exit(f"ERROR: scope server on 127.0.0.1:5555 is unreachable ({e})\n"
                  "       start it with:\n"
                  "         ../.venv-meas/bin/python3 "
                  "../ofxLPM/scope-pixhawk/tools/server.py")
@@ -150,7 +150,7 @@ def main():
          "--repeats", str(a.repeats), "--stretch", str(a.stretch),
          "--ratio", f"{ratio:.6f}"], capture_output=True, text=True)
     if r.returncode:
-        sys.exit(f"ERROR: spike_stimulus.py failed:\n{r.stdout}{r.stderr}")
+        sys.exit(f"ERROR: spike_stimulus.py did not finish:\n{r.stdout}{r.stderr}")
     for line in r.stdout.strip().splitlines():
         print("      " + line)
     meta = json.load(open(os.path.join(HERE, "spike_stimulus.json")))
@@ -192,10 +192,10 @@ def main():
     avg = seg.mean(axis=0)
     t_seg = (np.arange(len(avg)) - pre) / FS
 
-    # Amplitude by projecting the average onto the template, not by its
+    # Amplitude by projecting the average onto the template rather than by its
     # peak-to-peak. Anything left in the average that is NOT spike-shaped --
     # residual hum above all -- lands in the residual instead of being read as
-    # signal. Peak-to-peak cannot tell them apart, and on synthetic data with
+    # signal. Peak-to-peak conflates them, and on synthetic data with
     # mains coherent to the repetition rate it read the gain 54% high.
     ref = np.interp(t_seg, tt, tv, left=0.0, right=0.0)
     ref = ref - ref.mean()

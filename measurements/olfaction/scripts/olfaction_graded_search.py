@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Search the bias space for a GRADED spike-count comparator.
 
-A previous pass concluded no such operating point exists on this die. That claim came
+A previous pass concluded such an operating point lies beyond this die. That claim came
 from sweeping three channels out of twenty-four, mostly one at a time along lines, and it
-was wrong to state so broadly (F. Corradi: "there are so many bias settings available and
+was overstated (F. Corradi: "there are so many bias settings available and
 you have just explored one or two"). The membrane saturating at a fixed plateau is what a
 FAST synapse does; whether it accumulates is governed by the synaptic time constant, which
-was never touched.
+stayed untouched.
 
 Channels searched, and why each is in:
   d_JExc   all four weight branches together -- charge per input event (NMOS: higher=more)

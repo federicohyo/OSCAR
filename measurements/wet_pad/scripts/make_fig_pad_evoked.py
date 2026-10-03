@@ -52,7 +52,7 @@ def dress(ax):
 
 
 d = np.genfromtxt(CSV, delimiter=",", names=True)
-t = (d["sample_index"] - d["sample_index"][0]) / FS      # trap-4: index, not clock
+t = (d["sample_index"] - d["sample_index"][0]) / FS      # trap-4: index rather than clock
 v1, v2 = d["volts"], d["volts_ch2"]
 
 base1 = np.median(v1)

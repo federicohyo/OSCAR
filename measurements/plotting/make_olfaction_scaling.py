@@ -33,7 +33,7 @@ INK, MUTED, GRID = "#1a1a1a", "#8a8a8a", "#d8d8d8"
 #   SHAPE  = substrate, redundantly: circles analog, squares digital
 # The previous scheme spent a colour per point, which meant "red = measured" in one panel
 # and a projection colour in the other; provenance now lives in the fill, where it can be
-# read without the caption.
+# read with the caption alongside.
 C_AN, C_DIGI, C_MEAS = "#0b7285", "#6741d9", "#c0392b"
 
 
@@ -89,7 +89,7 @@ def main():
     # read-out -- one simulated and one measured, and they disagree by 0.144. Both are
     # drawn, because the sweeps are calibrated against the simulated one and a reader is
     # entitled to see that silicon undershoots it. Neither is counts-only, unlike the
-    # sweeps; they are targets on this axis, not members of it.
+    # sweeps; they mark targets on this axis rather than members of it.
     a1.axhline(ref_v5, color=MUTED, ls=(0, (4, 2)), lw=1.0)
     a1.text(130, ref_v5 + 0.012, "16w + kernel (sim)", fontsize=6.0,
             color=MUTED, ha="right")
@@ -161,8 +161,8 @@ def draw_panel_b(a2, tag="(b)", legend_ncol=1):
                     "hybrid tree, 1 analog\nneuron + digital routing", C_AN, "o",
                     hs.get("voted5_sd", 0.0), True))
         # 16-way multiplexing divides the rail term only; delivery, re-arm, the AER read
-        # and the routing are per visit and do not amortise. Drawn to show that it moves
-        # the point by ~11x and still does not reach the digital tree.
+        # and the routing are per visit and stay unamortised. Drawn to show that it moves
+        # the point by ~11x and still trails the digital tree.
 
     # EVERY point carries the spread its own data supports. Drawing one error bar and
     # leaving the rest bare invites precisely the comparison the spreads forbid: the tree

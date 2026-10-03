@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DECIDER for SHD-on-chip recurrence: contiguous 700->16 pooling destroys the recurrence gap
 (shd_reconcile.py knob C), because averaging 44 adjacent cochlea channels smooths away the fine
-temporal structure recurrence exploits. Fix without more chip inputs: TIME-MULTIPLEX the INPUT
+temporal structure recurrence exploits. Fix on a fixed input count: TIME-MULTIPLEX the INPUT
 projection -- run M passes, each assigning the 700 channels to the 16 chip inputs by a DIFFERENT
 random grouping (a routing table per pass, fully hardware-realizable: each chip input = sum of
 its assigned channels' spikes), then concatenate the per-pass reservoir features into one linear

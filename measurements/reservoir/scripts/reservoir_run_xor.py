@@ -10,7 +10,7 @@ gives D_eff ~ 2 at the _jul10 bias point, measured) is enough to make XOR separa
 Same presentation as the reservoir runs: one neuron at a time, its bias file loaded once,
 the identical stimulus replayed for every neuron (diversity is in the neurons, not the
 input). Output spikes saved raw; scored offline with the canonical kernel pipeline, CV
-grouped by repetition (never by (a,b) cell).
+grouped by repetition rather than by (a,b) cell.
 
     CARAVAN_CLK_MHZ=50 ./.venv-meas/bin/python3 reservoir_run_xor.py \
         --bias-pattern 'ofxCaravanViewer/bin/bias_synapse_characterization_super_n{k}_jul10.biases' \
@@ -29,8 +29,8 @@ DEFAULT_NEURONS = list(range(16))
 
 # Signed encoding using BOTH synapses. exc and inh bits share ONE coincident window so
 # they compete on the membrane in real time (like delta coding's interleaved UP/DOWN) --
-# the membrane rectifies at 0, so inhibition must act DURING excitation to cancel it, not
-# before. chan 0 -> excitatory synapse, chan 1 -> inhibitory synapse.
+# the membrane rectifies at 0, so inhibition acts DURING excitation to cancel it, with
+# nothing before. chan 0 -> excitatory synapse, chan 1 -> inhibitory synapse.
 WIN_INH = (0.35, 0.55)
 WIN_EXC = (0.35, 0.55)
 

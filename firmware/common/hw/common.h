@@ -238,8 +238,8 @@ static inline void csr_wr_buf_uint32(unsigned long a,
 	_csr_wr_buf(a, buf, cnt);
 }
 
-/* NOTE: the macros' "else" branch is unreachable, no need to be warned
- * about a >= 64bit left shift! */
+/* NOTE: the macros' "else" branch is unreachable, so a >= 64bit left
+ * shift warning is suppressed here. */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshift-count-overflow"
 static inline void csr_rd_buf_uint64(unsigned long a, uint64_t *buf, int cnt)

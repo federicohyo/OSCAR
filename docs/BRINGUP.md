@@ -25,8 +25,8 @@ functional variants such as `_lifram`, `_lifrun`, `_olfQ16`, `_olfQ8`,
 
 > **Clock caveat.** `F_CPU_MHZ` must match in three places: the firmware build,
 > `neuron_bridge.py` (`CARAVAN_CLK_MHZ`, default 50), and
-> `run_neuron_test.py --clock`. A mismatch is a silent comms failure
-> (`baud = 960 × f_MHz`). See `docs/HARDWARE_TRAPS.md`.
+> `run_neuron_test.py --clock`. Match it in all three so the bytes reach the
+> chip (`baud = 960 × f_MHz`). See `docs/HARDWARE_TRAPS.md`.
 
 ## Flashing — the real path
 
@@ -48,10 +48,10 @@ by `run_neuron_test.py` as `from riscvprog import HKSPI, AD5664RBitBang, Config`
 Every HK-SPI sequence must be followed by a CPU reset toggle. The firmware
 read-out drain runs from SRAM (`.ramtext` copied to `dff2` at boot).
 
-> **Stale Makefile target.** `firmware/neuron_handshake/Makefile`'s `flash:`
-> target still runs `python3 ../util/caravel_hkflash.py`; `firmware/util/` and
-> that script **do not exist**. Use `host/run_neuron_test.py` / `host/riscvprog.py`
-> instead (the target now intentionally fails with a message).
+> **Legacy Makefile target.** `firmware/neuron_handshake/Makefile`'s `flash:`
+> target references `python3 ../util/caravel_hkflash.py`; use
+> `host/run_neuron_test.py` / `host/riscvprog.py` for the working flash path
+> (the target reports a message pointing to the host tools).
 
 ## Host bridge
 

@@ -42,7 +42,7 @@ def main() -> int:
     ap.add_argument("--vleakn", type=float, default=None)
     ap.add_argument("--bias", default=None, help="bias file (default: per-neuron _jul10)")
     ap.add_argument("--keep-jexc", action="store_true",
-                    help="do not override JExcWn0..3; measure the bias file's own ladder")
+                    help="leave JExcWn0..3 as-is; measure the bias file's own ladder")
     args = ap.parse_args()
 
     ws = [int(x) for x in args.weights.split(",") if x.strip()]

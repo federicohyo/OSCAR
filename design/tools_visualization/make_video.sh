@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # End-to-end: magic layout -> GDS -> layer JSON -> 3D frames -> mp4.
 #
-# Frames are piped, never written to disk.
+# Frames are piped, kept off disk.
 #
 #   ./tools_visualization/make_video.sh                    # default soma + synapse loop
 #   SECONDS_LOOP=25 ./tools_visualization/make_video.sh     # longer loop
@@ -27,7 +27,7 @@ NFRAMES=$(( FPS * SECONDS_LOOP ))
 # and over, with one more slice of the stack standing each time, so the chip
 # builds itself from the wells up. Each name is the topmost layer left at the
 # end of that loop, so "met1" after "li1" brings mcon and met1 on together.
-# SECONDS_LOOP is then the length of ONE loop, not of the whole video.
+# SECONDS_LOOP is then the length of ONE loop, while the video spans all rungs.
 RUNG_LIST=()
 if [ -n "${RUNGS:-}" ]; then
     read -ra RUNG_LIST <<< "$RUNGS"
@@ -79,7 +79,7 @@ if [ -n "${PANELS:-}" ]; then
     for _p in "${_PS[@]}"; do EXTRA+=(--panel "$_p"); done
 fi
 # WAYPOINTS="t:cx:cy:span;t:cx:cy:span;..." flies the camera instead of holding
-# the cell centred. Such a path is one-way, so the result does not loop.
+# the cell centred. Such a path is one-way, so the result serves one-shot flights.
 if [ -n "${WAYPOINTS:-}" ]; then
     IFS=';' read -ra _WPS <<< "$WAYPOINTS"
     for _w in "${_WPS[@]}"; do EXTRA+=(--waypoint "$_w"); done
@@ -91,8 +91,8 @@ if [ ${#RUNG_LIST[@]} -gt 0 ]; then
 fi
 [ -n "${NODE_NOTE+x}" ] && EXTRA+=(--node-note "$NODE_NOTE")
 # Frames stream straight into ffmpeg as raw RGBA instead of landing as ~900
-# PNGs (~400 MB) that ffmpeg would only read back again. rawvideo carries no
-# header, so ffmpeg is told the frame size here and render_stack.py aborts on
+# PNGs (~400 MB) that ffmpeg would read back again. rawvideo streams headerless
+# frames, so ffmpeg is told the frame size here and render_stack.py aborts on
 # frame 0 if its canvas disagrees.
 #
 # Rendering is single-threaded per process, so the loop is cut into contiguous

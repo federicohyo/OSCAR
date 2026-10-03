@@ -9,14 +9,14 @@ bit-identical if run. This runs it, so the reference figure can carry the point.
 
 Firmware side is UART_CMD_LIFRUN (0xD1): header then T signed event counts, reply echoes
 the spike count, the received stimulus sum and the Timer0 cycles spent in the ticks. The
-handler blocks but times out per byte, so a lost byte can no longer wedge it.
+handler blocks but times out per byte, so a lost byte no longer wedges it.
 
 Two things this rewrite fixes by construction rather than by patching:
   - the stimulus is derived ONCE, here, and the event array is asserted to be small before
     anything is sent. The previous runner had been edited so many times that D_ev and
-    D_cur reported identical minima, which the source could not produce;
+    D_cur reported identical minima, which the source never produces;
   - the transport check compares the echoed sum against the bytes ACTUALLY SENT, not
-    against the array they were meant to encode, so an encoding slip cannot pass.
+    against the array they encode, so an encoding slip is caught.
 
     CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_emul_run.py --limit 20
 """
@@ -33,7 +33,7 @@ def uart(clk):
     from neuron_bridge import find_ftdi_base_url
     base = find_ftdi_base_url()
     if not base:
-        raise SystemExit("no FT4232H found")
+        raise SystemExit("FT4232H search came up empty")
     return pyftdi.serialext.serial_for_url(base + "/4", baudrate=960 * clk, timeout=0.4)
 
 
@@ -50,8 +50,8 @@ def one(port, drv, decay, w, vth, refr, tries=8, settle=0.15):
     """drv: per-tick PRECOMPUTED drive (current), 4 bytes each. Returns (spikes, mask).
 
     Drive is sent precomputed because that is what lif_fixed() adds -- sending event
-    counts and multiplying by w on-chip introduced a multiply rv32i has no instruction
-    for, which is not what a deployed implementation would do.
+    counts and multiplying by w on-chip introduced a multiply rv32i handles in software,
+    which differs from what a deployed implementation would do.
 
     Transport: the ~607-byte frame used to go out one byte per USB transaction and the
     batch died mid-run on the jitter that injected, so it now goes in 32-byte chunks
@@ -101,7 +101,7 @@ def main():
 
     # LOAD the frozen stimulus rather than rebuild it. Rebuilding it inside this function
     # produced event counts of 80000 where the identical code standalone produced 4, and
-    # after a long hunt I could not explain it; freezing the array in a separate verified
+    # after a long hunt it stayed unexplained; freezing the array in a separate verified
     # step (where the unit-weight build is checked against the weighted one) removes the
     # question from the measurement path entirely.
     z = np.load(args.stimulus)

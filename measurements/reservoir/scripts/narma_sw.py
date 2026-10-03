@@ -2,7 +2,7 @@
 """NARMA: the canonical reservoir-computing MEMORY benchmark, as the clean recurrence positive
 control. The target y(t) depends on the last n inputs/outputs, so predicting it from the input
 stream u(t) with a LINEAR readout PROVABLY requires memory: a feedforward (memoryless / short-
-leak) reservoir cannot, a recurrent one can. Regression metric = NRMSE (lower is better).
+leak) reservoir leaves unsolved, a recurrent one solves. Regression metric = NRMSE (lower is better).
 
 NARMA-n:  y(t+1) = 0.3 y(t) + 0.05 y(t) * sum_{i=0}^{n-1} y(t-i) + 1.5 u(t-(n-1)) u(t) + 0.1
 u(t) ~ U[0, 0.5]. (n=2 is the simplest; n=10 the classic.)

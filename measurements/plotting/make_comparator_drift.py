@@ -75,7 +75,7 @@ def main():
     acq = []
     for tag, path, when in (
             # A and B are earlier acquisitions, kept because the transfer writes to one
-            # path and each run overwrites it; without them the drift is unrecoverable.
+            # path and each run overwrites it; these copies keep the drift recoverable.
             ("A", os.path.join(RES, "olfaction_hybrid_transfer_A.json"),
              dt.datetime(2026, 8, 16, 18, 52)),
             ("B", os.path.join(RES, "olfaction_hybrid_transfer_B.json"),
@@ -121,7 +121,7 @@ def main():
         ys = [s[L] for _, _, s in acq if s[L] is not None]
         if xs:
             a1.plot(xs, ys, "o-", ms=4, lw=1.1, color=c, zorder=3)
-            # Levels 1-4 sit one count apart and their labels cannot be separated; they
+            # Levels 1-4 sit one count apart and their labels stay merged; they
             # are also the flat ones, so the cluster is annotated once instead.
             # labels are attached per FINAL VALUE below, because drift can merge two
             # levels onto the same count and two labels would then sit on top of

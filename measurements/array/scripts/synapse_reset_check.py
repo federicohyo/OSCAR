@@ -4,9 +4,9 @@
 Every anomalously high reading in the JExcWn scans landed on the point immediately after a
 w=15 stage, and the "free-running" baselines were erratic rather than bias-ordered. Both are
 symptoms of one thing: after strong stimulation the neuron keeps firing for a while, so a
-measurement taken too soon reports the PREVIOUS weight word, not the one just programmed.
+measurement taken too soon reports the PREVIOUS weight word rather than the one just programmed.
 
-This drives the neuron hard, then watches its output in consecutive short bins with no input,
+This drives the neuron hard, then watches its output in consecutive short bins with input at zero,
 and reports when it falls silent. That dwell time is what the sweep must wait between points.
 """
 

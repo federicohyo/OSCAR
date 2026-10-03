@@ -11,7 +11,7 @@ construction. ff and rec use the same fixed-seed u stream.
 
 The bridge streams one `NARMAROW t u c0..c15` per step and a final
 `NARMACOLLECTDONE M mc0 mc1 mc2 rate` -- the MC is measured on the 2nd half of the FULL long stream,
-so long-stream saturation (which the 90-step probe cannot see) is reported directly. Watch that
+so long-stream saturation (beyond the 90-step probe's view) is reported directly. Watch that
 mc0/mc1 stay up and rate stays bounded; if rate climbs and mc0 collapses the reservoir is
 saturating -> lower rec_w / raise membrane tau at the bench (tune live with NARMAPROBE first).
 
@@ -42,7 +42,7 @@ def collect_cond(b, recur, M, tstep_ms, kmax, dens, rec_w, in_w, timeout_s, stal
             line = b.out_q.get(timeout=1.0)
         except Exception:
             if time.time() - last_progress > stall_s:
-                break                                      # no rows for stall_s -> jammed, give up
+                break                                      # zero rows for stall_s -> jammed, give up
             continue
         if line.startswith("NARMAROW "):
             p = line.split()

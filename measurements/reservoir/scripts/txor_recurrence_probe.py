@@ -5,7 +5,7 @@ long its activity REVERBERATES via a self-loop (neuron k spike -> REC_SYN inject
 k). Recurrence ON should keep k firing after the input stops (memory); OFF should decay at once.
 
 Sweeps the self-loop count c to find the fading-memory regime (reverberation lasts several times
-the input, but decays -- not dead, not runaway). This is the operating point T-XOR / NARMA need.
+the input, then decays -- neither dead nor runaway). This is the operating point T-XOR / NARMA need.
 Captures a scope membrane trace at a representative setting.
 
     ./.venv-meas/bin/python3 txor_recurrence_probe.py --neuron 5 --counts 0,1,2,3,4

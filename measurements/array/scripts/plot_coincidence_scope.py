@@ -3,7 +3,7 @@
 
 Two inputs are delivered to one neuron separated by dt; the membrane is read out on
 the analog monitor pin. At dt=5 ms the two EPSPs summate past threshold and the
-neuron spikes; at dt=8 ms they summate to a subthreshold peak and it does not fire.
+neuron spikes; at dt=8 ms they summate to a subthreshold peak and it stays silent.
 The captures are aligned on the first-EPSP onset and overlaid.
 """
 

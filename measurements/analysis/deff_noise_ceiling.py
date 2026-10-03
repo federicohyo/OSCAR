@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
 """What does D_eff actually measure here? Two controls the analysis never had.
 
-CONTROL 1 -- the ceiling. Poisson trains with no structure at all, at silicon's own
+CONTROL 1 -- the ceiling. Poisson trains with zero structure, at silicon's own
 per-neuron rates, score D_eff ~68.9, and flat across 4.6-45.5 Hz. So D_eff is
-maximised by NOISE, not by richness: it measures decorrelation, and perfect
+maximised by NOISE rather than by richness: it measures decorrelation, and perfect
 decorrelation is useless. Silicon's 16.91 and the model's 9.95 are both far below the
-ceiling, and "higher is better" cannot be assumed on an axis whose maximum is noise.
-The flatness also rules out the estimator: sparsity at low rate does not inflate it.
+ceiling, and "higher is better" needs care on an axis whose maximum is noise.
+The flatness also clears the estimator: sparsity at low rate leaves it un-inflated.
 
 CONTROL 2 -- the noise floor. Present the SAME beat 51 times and every dimension the
-covariance finds is trial-to-trial variability, because the stimulus never changed.
+covariance finds is trial-to-trial variability, because the stimulus stays fixed.
 That reads D_eff ~19-20, against 16.91 measured across 160 DIFFERENT beats.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 deff_noise_ceiling.py
 
 The second control is the one that bites: the array's trial-to-trial noise occupies as
 many effective dimensions as its stimulus-driven response does. On this task D_eff
-therefore cannot be read as stimulus-driven richness -- which also explains, without
-needing any further mechanism, why it never predicted accuracy.
+therefore stays out of stimulus-driven richness -- which also explains, with
+no further mechanism, why it stayed unlinked to accuracy.
 
-CAVEATS, and they are why this is not yet a reference analysis claim:
+CAVEATS, and they are why this remains a preliminary analysis claim:
   * the repeat runs are at DIFFERENT bias sets from REF25 (43.7 and 32.1 Hz against
     35.6), so this is rate-comparable but not operating-point matched;
   * 51 trials against 160 beats, and D_eff grows with sample count (+2.2 units from
     60 to 160 here), so the noise figure is if anything UNDERSTATED at 51 -- which
-    makes the comparison worse, not better.
+    works against the comparison.
 The decisive version is ~50 repeats of one beat at the REF25 operating point, about
 27 minutes of bench time, which would allow the proper split
 D_eff(signal) = PR(C_total - C_noise).

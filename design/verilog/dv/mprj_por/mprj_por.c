@@ -29,7 +29,7 @@ void main()
 
     // Configure mprj_io 10 and 25 as analog (digital in/out = off)
     // Configure mprj_io 11, 12, 26, and 27 as digital output
-    // mprj_io 14 to 24 are analog pads and cannot be configured
+    // mprj_io 14 to 24 are analog pads and use the analog interface
 
     reg_mprj_io_27 = GPIO_MODE_USER_STD_OUTPUT;
     reg_mprj_io_26 = GPIO_MODE_USER_STD_OUTPUT;

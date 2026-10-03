@@ -3,16 +3,16 @@
 
     ../.venv-meas/bin/python3 odor_bench.py
 
-Read-only on the chip: never opens the FTDI, never writes a DAC, so the biases
+Read-only on the chip: the FTDI stays closed and DACs untouched, so the biases
 stay exactly as loaded.
 
 The stimulus WAV holds N repeats back to back and is played ONCE. That matters:
 `pw-play`'s start latency jitters by more than a second and each relaunch leaves
-a ~100 ms silent gap, so per-playback alignment is hopeless. With one continuous
+a ~100 ms silent gap, so per-playback alignment is best avoided. With one continuous
 playback the repeat period is exact, and the only unknown is a single global
 offset -- recovered by correlating the marker band against a comb of N pulses
 spaced one period apart. Averaging over the whole record makes that estimate far
-sharper than any single-trial detection, and it cannot drift between repeats.
+sharper than any single-trial detection, and it stays stable between repeats.
 
 The node carries single-sample ADC glitches of a few hundred millivolts. They
 are broadband, so they land in the marker band too and would otherwise lift the
@@ -121,14 +121,14 @@ def main():
     if frac_hi > 0.0005 or frac_lo > 0.0005:
         sys.exit(f"ABORT: {frac_hi*100:.2f}% of samples are against the rail. "
                  f"The response is clipped and every number derived from it would "
-                 f"be biased, not merely noisy. Re-run odor_stimulus.py with a "
+                 f"be biased rather than merely noisy. Re-run odor_stimulus.py with a "
                  f"smaller --chip-vpp (currently {tm['chip_vpp']*1e3:.2f} mVpp).")
 
     env = marker_envelope(t, v, tm["mark_hz"])
     off, snr = find_offset(env, period, reps, tm["mark_s"])
     print(f"first marker at {off:.3f} s, comb score {snr:.1f}x the envelope floor")
     if snr < 1.8:
-        sys.exit("marker comb did not lock -- is the amplifier passing signal?")
+        sys.exit("marker comb is unlocked -- is the amplifier passing signal?")
 
     npre, npost = int(args.pre * FS), int(args.post * FS)
     P = int(round(period * FS))
@@ -140,7 +140,7 @@ def main():
         seg = np.array(v[i0 - npre: i0 + npost], dtype=float)
         folds.append(seg - float(np.mean(seg[: int(0.15 * FS)])))
     if not folds:
-        sys.exit("no repeat fell entirely inside the record")
+        sys.exit("every repeat overlaps the record edge")
 
     A = np.vstack(folds)
     mean, sd = A.mean(axis=0), A.std(axis=0)
@@ -169,7 +169,7 @@ def main():
              period_s=period, reps=reps, lead_s=lead,
              chip_vpp=tm["chip_vpp"], mark_hz=tm["mark_hz"])
     print(f"\ndata: {os.path.basename(args.out)} + odor_bench_trials.npz "
-          f"(raw record included -- re-fold offline, no bench needed)")
+          f"(raw record included -- re-fold offline with the bench idle)")
 
 
 if __name__ == "__main__":

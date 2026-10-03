@@ -9,12 +9,12 @@ operating point, so anything that moves is attributable to the programmed word.
 For each (weight, input rate) point the target neuron is stimulated with a fixed number of
 host-paced input spikes and its output spikes are counted over the actual elapsed window.
 Points are visited in randomized order within each repeat, so slow drift (temperature, DAC
-settling) does not alias into the weight axis and show up as a fake monotonic trend.
+settling) stays clear of the weight axis and avoids a fake monotonic trend.
 
 Guards, each of which has burned bench time before:
-  * biases come from a per-neuron file via apply_bias_dict (never run_neuron_test's single-VREF
+  * biases come from a per-neuron file via apply_bias_dict (bypassing run_neuron_test's single-VREF
     path, which halves the NMOS biases);
-  * only the target neuron is unmasked, so the AER bus cannot jam and inflate DROP/STALL;
+  * the target neuron alone is unmasked, so the AER bus stays clear of a jam that would inflate DROP/STALL;
   * DROPS/STALLS are tallied per point and written to the CSV -- a point with either nonzero is
     not a measurement of the array;
   * a warm-up burst is fired and discarded after every reprogram, because the first stimulation
@@ -22,7 +22,7 @@ Guards, each of which has burned bench time before:
   * an excitatory positive control runs before and after the sweep, so a dead run is
     distinguishable from a real zero.
 
-Output CSV is one row per trial (not per mean), so the analysis can compute its own statistics:
+Output CSV is one row per trial rather than per mean, so the analysis can compute its own statistics:
   repeat, weight, input_hz, spikes_in, elapsed_s, out_spikes, out_hz, total_hz, drops, stalls
 
 Example (the reference figure):
@@ -194,7 +194,7 @@ def main() -> int:
 
         b.apply_biases(biases)
         time.sleep(1.0)
-        b.send(f"MASK {1 << args.neuron}")     # stream only the target neuron: no AER jamming
+        b.send(f"MASK {1 << args.neuron}")     # stream the target neuron alone: AER jam-free
         time.sleep(0.2)
 
         # --- positive control: max weight must produce output, else the run is meaningless ---

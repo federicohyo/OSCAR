@@ -149,7 +149,7 @@ module user_analog_proj_example (
     // assign wbs_dat_o = rdata;
     // assign wdata = wbs_dat_i;
 
-    // IO --- unused (no need to connect to anything)
+    // IO --- unused (left unconnected)
     // assign io_out[`MPRJ_IO_PADS-`ANALOG_PADS-1:17] = 0;
     // assign io_out[14:13] = 11'b0;
     // assign io_out[10:0] = 11'b0;
@@ -168,7 +168,7 @@ module user_analog_proj_example (
     // IRQ
     assign irq = 3'b000;	// Unused
 
-    // LA --- unused (no need to connect to anything)
+    // LA --- unused (left unconnected)
     // assign la_data_out = {128{1'b0}};	// Unused
 
     // Instantiate the POR.  Connect the digital power to user area 1

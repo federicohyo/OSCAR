@@ -8,20 +8,20 @@ Differences from the original `reservoir_frontier.py::make_figure` in the repo r
      array draws 0.43 mW on aVDD and the RV32I draws 9.3 mW on DVDD at 25 MHz,
      i.e. 372 pJ/cycle. The analog point is additionally charged its own STATIC
      power over the whole 2 s beat window, which is the dominant term and which
-     the old estimate omitted entirely.
+     the old estimate left out entirely.
   2. Panel (a) redesigned for readability: taller axes, points labelled directly
      instead of via a cramped inset legend, and the two ratios that matter
      annotated explicitly.
   3. Honest inclusion of OP3. On the measured axis the multiply-free tree is
      ~42x cheaper than the analog array at the same accuracy (COUNTED OP3 basis,
      constants.OP3_CYC_TOTAL; the ~580x this originally said came from a
-     hard-coded 4000 cyc/beat estimate that was low by 13.8x -- retracted, do not
+     hard-coded 4000 cyc/beat estimate that was low by 13.8x -- retracted, kept out of use
      reinstate). The analog substrate's cost win is only against reproducing
-     ITSELF numerically (OP2), and unlike OP2 the tree baseline does not move
+     ITSELF numerically (OP2), and unlike OP2 the tree baseline stays fixed
      with dt at all.
 
-Reads reservoir_frontier.json (copied into this folder); no accuracy number is
-hardcoded here.
+Reads reservoir_frontier.json (copied into this folder); every accuracy number
+comes from that file.
 
 Usage:  python3 make_frontier.py
 """
@@ -76,11 +76,11 @@ def main():
     T_BEAT = cost["t_beat"]
 
     # ---- measured energy per inference (mJ) --------------------------------
-    # Task F: MEASURED read-out basis (105 cyc/call + 480 cyc/event), not the
+    # Task F: MEASURED read-out basis (105 cyc/call + 480 cyc/event) rather than the
     # 200 cyc/spike estimate the json still carries.
     aer_cyc  = K.aer_cycles_per_beat(cost["op1_mean_spikes_per_beat"])
     e_analog = K.analog_energy_J(aer_cyc) * 1e3
-    # Task I: COUNTED basis (op3_count.py), not the json 4000-cycle estimate.
+    # Task I: COUNTED basis (op3_count.py) rather than the json 4000-cycle estimate.
     e_tree   = K.OP3_CYC_TOTAL * E_CYCLE_J * 1e3
     e_ref    = cost["op4_ref_cycles_per_beat"] * E_CYCLE_J * 1e3
 
@@ -92,7 +92,7 @@ def main():
     dt_floor_ideal = K.DT_STAR_IDEAL
     e_num_floor = K.numeric_energy_J(dt_floor, K.CYC_STEP_SRAM) * 1e3
 
-    # ---- regression assertions: the basis cannot drift again ---------------
+    # ---- regression assertions: the basis stays fixed ---------------
     K.selfcheck(e_analog)
     assert abs(dt_floor * 1e6 - 308) < 1.0, dt_floor
     assert abs(dt_floor_ideal * 1e6 - 98) < 1.0, dt_floor_ideal
@@ -147,7 +147,7 @@ def main():
     ax1.legend(handles=handles, loc="upper left", bbox_to_anchor=(-0.02, 1.03),
                fontsize=6.3, labelspacing=0.42, handletextpad=0.5, borderpad=0.2)
 
-    # the analog array's cost does not move with dt -- draw that as a guide line
+    # the analog array's cost is independent of dt -- draw that as a guide line
     ax1.axvline(e_analog, color=C_ANALOG, ls=":", lw=0.9, alpha=0.7, zorder=1)
 
     # ratio 1: the SUBSTRATE comparison (same dynamics, physics vs numerics)
@@ -160,7 +160,7 @@ def main():
              rf"(${e_num_floor/e_analog:.0f}\times$ at $\Delta t^\star$)",
              fontsize=6.2, ha="center", va="bottom", color=INK, linespacing=1.3)
 
-    # ratio 2: the TASK comparison -- honest, and it does not favour the array
+    # ratio 2: the TASK comparison -- honest, and fair to the array
     y_arrow2 = 0.325
     ax1.annotate("", xy=(e_analog, y_arrow2), xytext=(e_tree, y_arrow2),
                  arrowprops=dict(arrowstyle="<->", lw=0.9, color=C_TREE,

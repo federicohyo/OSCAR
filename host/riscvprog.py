@@ -232,8 +232,8 @@ class HKSPI:
     # `data` is the exact 26-bit pattern to write,
     # where 0x3fff_ffff is the maximum trim (slowest clock)
     # and   0x0000_0000 is the minimum trim (fastest clock).
-    # Note that it's the "population count" of bits set to 1 that determines the trim (not
-    # the binary value itself). This is known as 'thermometer code' or 'unary coding' and
+    # Note that it's the "population count" of bits set to 1 that determines the trim,
+    # rather than the binary value itself. This is known as 'thermometer code' or 'unary coding' and
     # it means there are effectively only 27 distinct values, e.g.
     # ranging from 0b0 through 0b1, 0b11, 0b111... up to 0b11_1111_1111_1111_1111_1111_1111
     def dco_trim(self, value: int):
@@ -309,7 +309,7 @@ class AD5664RBitBang:
     def _apply_uart_enable_mode(self, uart_enable_mode: int) -> None:
         if uart_enable_mode not in (self.UART_ENABLE, self.UART_DISABLE, self.UART_DEFAULT):
             raise ValueError(f'Invalid uart_enable_mode {uart_enable_mode}')
-        # Backward compatibility: legacy UART gate control mode is now a no-op.
+        # Backward compatibility: legacy UART gate control mode is now a pass-through.
         self._uart_enable_mode = uart_enable_mode
 
     def set_uart_enable_mode(self, uart_enable_mode: int) -> None:

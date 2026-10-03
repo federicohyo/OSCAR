@@ -11,7 +11,7 @@ of the loop instead of only the input side:
     ch1 = LNA output      (what the detector thresholds; drives the injections)
     ch2 = membrane monitor pin of the neuron (`M 9`), i.e. the chip's own answer
 
-With ch2 the raster no longer has to be taken on faith from the AER stream: the
+With ch2 the raster is confirmed against the scope rather than taken on faith from the AER stream: the
 membrane trace shows the integration and the reset next to the stimulus that
 caused it, on one time base.
 
@@ -21,11 +21,11 @@ above a baseline-relative threshold it injects spikes into neuron 9. The decisio
 between amplification and spiking is made off-die -- a host-in-the-loop
 demonstration, and it must be described as one.
 
-THRESHOLD IS BASELINE-RELATIVE, never absolute: the output DC wanders by tens of
+THRESHOLD IS BASELINE-RELATIVE rather than absolute: the output DC wanders by tens of
 mV over minutes (it has moved ~0.6 V since the 2026-08-26 runs). The baseline is
 a trailing median over a window longer than the event.
 
-THE RAW STREAM IS SAVED at the full 1 kHz, not just the 250 Hz control trace: a
+THE RAW STREAM IS SAVED at the full 1 kHz in addition to the 250 Hz control trace: a
 membrane sawtooth aliases badly at the control rate. `raw` = (t_board, t_host,
 ch1, ch2); `trace`/`fires`/`counts` keep the same meaning as in the 1-channel
 script so the two runs stay comparable.
@@ -43,7 +43,7 @@ os.environ.setdefault("CARAVAN_CLK_MHZ", "25")   # the flashed image is a 25 MHz
                                                  # build; the bridge defaults to
                                                  # 50 and engages the DLL on
                                                  # startup -- a mismatch is a
-                                                 # SILENT comms failure.
+                                                 # SILENT comms mismatch.
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..")))
 sys.path.insert(0, HERE)
@@ -53,7 +53,7 @@ from lna_audio_sweep import Scope
 NEURON, WEIGHT = 9, 15
 SYN_DEFAULT = 15    # 2026-08-26 late: the preflight found synapse 0 dead and 15
                     # live -- the reverse of earlier tonight. Always take the
-                    # synapse from a fresh preflight; do not trust this default.
+                    # synapse from a fresh preflight; treat this default with care.
 SMOOTH_S   = 0.025
 BASELINE_S = 1.20
 THRESH_MV  = 40.0      # picked offline on the 2026-08-26 trace; re-check the
@@ -178,7 +178,7 @@ def main():
         # still holding whatever the GUI had left, which is how a run that
         # measured 8 Hz at 00:05 measured 0 Hz at 00:20 from an unchanged script:
         # the operating point had moved and nothing in the data said so. The file
-        # is the operating point; a run that does not name one is not reproducible.
+        # is the operating point; a run names one to be reproducible.
         if a.bias:
             import json as _json
             _p = a.bias
@@ -204,7 +204,7 @@ def main():
         # and reverts on every CPU reset). A flat ch2 does NOT prove the monitor
         # is dead -- neuron 9 is quiescent at this operating point -- so the gate
         # kicks the neuron and requires the membrane to answer. The burst is fired
-        # even under --dry: it tests the path, it is not part of the experiment,
+        # even under --dry: it tests the path and stays outside the experiment,
         # and its spikes are drained before RECORD starts.
         pre = sc.grab(GATE_S)
         p2p_pre, _ = ch2_activity(pre)
@@ -343,7 +343,7 @@ def main():
                         gate_pre_mvpp=p2p_pre, gate_quiet_mvpp=p2p_quiet,
                         gate_post_mvpp=p2p_post, free_run_hz=aer_free / GATE_S,
                         drops=drops, stalls=stalls, bias_file=a.bias,
-                        note="not comparable with the 2026-08-26 20:xx runs: different "
+                        note="differs from the 2026-08-26 20:xx runs: different "
                              "synapse, different excitability, LNA output DC moved "
                              "~1.67 V -> ~1.26 V")
     print(f"\ndata: {os.path.basename(a.out)} + {os.path.basename(rec_path)}")

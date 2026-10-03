@@ -47,11 +47,11 @@ Useful variables:
 
 Render cost is ~0.12 s/frame per worker for the default cells at 960x1080, so
 the 60 s loop takes about a minute across the default 8 workers.
-Cost scales with polygon count, not with cell area.
+Cost scales with polygon count rather than with cell area.
 
-## What this can and cannot render
+## What this renders
 
-Cost scales with **polygon count**, not cell area, and matplotlib is the limit.
+Cost scales with **polygon count** rather than cell area, and matplotlib is the limit.
 Measured on this repo's cells at 960x1080:
 
 Per-frame times are one worker; the 60 s column assumes the default 8.
@@ -67,10 +67,9 @@ Per-frame times are one worker; the 60 s column assumes the default 8.
 So: single devices are near-instant, `neuron_32syn_v1` is a coffee break, and
 the big arrays are a long lunch rather than the multi-day job they used to be.
 Each worker holds its own copy of the geometry (~4 GB for the 1.6 M-quad
-cells), so on a 64 GB machine keep `JOBS` at or below about 12 for those.
-**`Niet_Top` (9 M lines) is still out of scope** — do not point this at it. A whole-chip view needs a rasterising
-renderer, not a per-polygon one; KLayout's own image export is the right tool
-for that.
+  cells), so on a 64 GB machine keep `JOBS` at or below about 12 for those.
+**`Niet_Top` (9 M lines) works best with a rasterising renderer**; a whole-chip
+view suits KLayout's own image export, which handles that scale directly.
 
 ## Building the chip layer by layer
 
@@ -86,24 +85,23 @@ RUNGS="li1 met1 met2 met3 met4" \
 SCALE_UM=100 ./tools_visualization/make_video.sh
 ```
 
-**`SECONDS_LOOP` is one loop, not the whole video** — five rungs at 24 s is a
-two-minute film. A caption under the panel label names what each loop puts on.
+**`SECONDS_LOOP` sets one loop** — five rungs at 24 s is a two-minute film. A
+caption under the panel label names what each loop puts on.
 
 Five rungs is the version built for the installation: the first loop brings the
-whole device level up at once (wells, diff, tap, poly, licon1, li1) because the
-layers below the metals are not worth a loop each at array scale, and then one
+whole device level up at once (wells, diff, tap, poly, licon1, li1), and then one
 metal comes on per loop. Split them out again — `RUNGS="tap poly licon1 li1
 met1 met2 met3 met4"` — to watch the transistors themselves being made.
 
-Naming a metal without its via brings both on together (`met1` after `li1`
-adds mcon and met1), because the peel only ever takes whole layers off the top.
-That is usually what you want: a via layer alone is a field of small posts.
+Naming a metal brings its via on together with it (`met1` after `li1` adds mcon
+and met1), because the peel takes whole layers off the top. That is usually what
+you want: a via layer alone is a field of small posts.
 
 The fade is a smoothstep, and slow-in is the point. Dense geometry stacks many
 translucent faces, so a linear fade reads as finished about a quarter of the
 way through; easing in makes the layer look like it lands rather than blinks.
 
-Cost follows the rungs you pick, not the layer count: a loop spends its frames
+Cost follows the rungs you pick rather than the layer count: a loop spends its frames
 at its own rung's state, so the total is `frames-per-loop x (sum of the
 per-frame cost at each rung)`. Measured on the array at 960x1080, a frame costs
 0.4 s at bare nwell and 43.7 s at full stack; the five rungs above add up to
@@ -134,8 +132,9 @@ already close in.
 
 Two things stop a deep zoom from turning to mush:
 
-- **`PEEL`.** Diving into a large array without it buries the camera in upper
-  metal — you end up inside a solid wall of met1. `PEEL="T0:T1:N"` fades the
+- **`PEEL`.** A dive into a large array uses it to keep the camera out of the
+  upper metal, which would otherwise fill the view with a solid wall of met1.
+  `PEEL="T0:T1:N"` fades the
   top `N` layers away across that window, topmost first, each with its own
   slice of it, so the stack comes off a layer at a time. `N=10` leaves li1,
   poly, diff, tap and nwell: recognisably the same device level the standalone
@@ -146,7 +145,7 @@ Two things stop a deep zoom from turning to mush:
 
 The scale bar follows: it re-measures the projection every frame and relabels
 itself from a round ladder, so it steps 100 -> 50 -> 20 -> 10 um on the way
-down instead of staying wrong at its calibrated value.
+down, tracking the projection as it changes.
 
 A worked example — 3 s, hold on the full array then dive to one neuron:
 
@@ -161,15 +160,15 @@ PEEL="0.25:0.80:10" SCALE_UM=100 \
 
 ### Making a path loop
 
-A path loops when it is **periodic**, not when its last frame is a copy of its
-first — duplicating a frame just adds a stutter. Give the path the same centre,
+A path loops cleanly when it is **periodic**; a last frame that merely copies the
+first adds a stutter. Give the path the same centre,
 span and elevation at `T=0` and `T=1`, bring `PEEL_KEYS` back to its opening
 value, and the azimuth rock takes care of itself since it runs one full sine
 period. Frame `N-1` then sits one step before frame 0 and the wrap is invisible.
 
 `PEEL_KEYS="T:P;..."` is the peel as a curve — `P` top layers removed at
 fraction `T` — which is what lets it run backwards and reassemble the stack.
-The older one-shot `PEEL` never comes back, so it cannot loop.
+The older one-shot `PEEL` stays applied, so it suits one-shot flights.
 
 A worked 24 s loop: open on the array, dive to a neuron, retreat, sweep one row
 left to right, and pull back to the opening frame.
@@ -204,8 +203,8 @@ frame. Measured on a 1.6 M-quad cell: 56.4 -> 34.4 s/frame, 12.4 -> ~4 GB.
 
 **Frames render in parallel.** A single render is single-threaded, so the loop
 is cut into contiguous chunks that workers take from a queue, each encoding its
-own part file, and the parts are joined with `ffmpeg -f concat -c copy` — no
-re-encode. Slices must be contiguous because each part is a time range; camera
+own part file, and the parts are joined with `ffmpeg -f concat -c copy`, avoiding
+a re-encode. Slices must be contiguous because each part is a time range; camera
 angles are still derived from the frame number, so the joined loop stays
 seamless.
 
@@ -218,12 +217,12 @@ few thousand quads and the last draws 1.4 M, about **100:1**. One chunk per
 worker would leave the unlucky worker running for hours after the others had
 finished; small chunks handed out on demand even that out.
 
-Memory, not cores, sets `JOBS`. Each worker holds its own copy of the geometry
+Memory sets `JOBS`. Each worker holds its own copy of the geometry
 (~4 GB for the 1.6 M-quad cells), so 100 GB is about 24 workers however many
 cores there are. The high-water mark is the first wave, where each worker still
 holds the parsed JSON on top of its arrays — hence `STAGGER`, which spaces
 those starts out. Forking workers *after* the geometry is built would let them
-share it and use every core; not done yet.
+share it and use every core; that is a future optimization.
 
 ## How it works
 
@@ -232,26 +231,26 @@ mag/*.mag  --magic-->  GDS  --klayout-->  per-layer polygons (JSON)
            --python-->  extruded prisms  --pipe-->  ffmpeg  -->  mp4
 ```
 
-Frames are never written to disk. `render_stack.py` streams raw RGBA straight
-into ffmpeg, because 900 PNGs is ~350 MB of clutter that ffmpeg would only read
-back again. Passing a real directory instead of `-` still writes PNGs, which is
-handy when you want to inspect a single frame.
+Frames stream straight into ffmpeg; `render_stack.py` sends raw RGBA, because
+900 PNGs is ~350 MB of clutter that ffmpeg would read back again. Passing a real
+directory instead of `-` writes PNGs to disk, which is handy when you want to
+inspect a single frame.
 
 - `export_gds.tcl` — magic writes each named cell out as GDS.
 - `dump_layers.rb` — KLayout flattens the hierarchy, merges each layer, and
   decomposes the polygons into trapezoids. Trapezoids are convex quads, so the
-  renderer can extrude them without handling holes.
+  renderer extrudes them directly.
 - `render_stack.py` — extrudes each quad into a prism at its layer's real z, and
   orbits a camera. The camera path is periodic over the frame count, which is
   what makes the loop seamless.
 - `make_video.sh` — runs all of it and pipes the frames into ffmpeg.
 
-rawvideo carries no header, so ffmpeg is told the frame size up front and
-`render_stack.py` aborts on frame 0 if its canvas disagrees, rather than
-emitting a stream ffmpeg would silently misread.
+rawvideo streams headerless frames, so ffmpeg is told the frame size up front
+and `render_stack.py` aborts on frame 0 if its canvas disagrees, rather than
+emitting a stream ffmpeg would misread.
 
-KLayout's own 2.5D viewer is a GUI feature and cannot be driven headless, so
-KLayout is used here for geometry only; the 3D is drawn with matplotlib.
+KLayout's own 2.5D viewer is a GUI feature; here KLayout supplies geometry only,
+and the 3D is drawn with matplotlib.
 
 ## The scale bar
 

@@ -8,8 +8,8 @@ lets events sum. First evidence on n5: 14 / 23 / 50 mV at N = 1 / 4 / 16 with
 vepulseextp -100 mV.
 
 vtaup comes first because it sets the working amplitude: coincidence_1_n14 sits 89 mV
-below reference, a fast synapse whose response lands in the ~5 mV noise floor where no
-extender effect can be resolved. Raise it for signal, then sweep the extender for grading.
+below reference, a fast synapse whose response lands in the ~5 mV noise floor,
+where the extender effect is buried. Raise it for signal, then sweep the extender for grading.
 
 Objective (scope, standing rule -- AER is blind below threshold):
     span = dV(N=16) / dV(N=1),  subject to

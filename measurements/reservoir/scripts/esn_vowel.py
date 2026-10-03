@@ -1,9 +1,9 @@
 """Can a RECURRENT reservoir (SW ESN) + high-precision readout reach the 2-layer MLP on vowel?
 
-Vowel is a STATIC 10-D vector (LPC coeffs) -- no real time axis -- so to give recurrence
+Vowel is a STATIC 10-D vector (LPC coeffs) -- with a static time axis -- so to give recurrence
 something to do we present the 10 features as a length-10 scalar SEQUENCE and let the reservoir
 integrate it. The decisive control is spectral radius rho: rho=0 is a pure FEEDFORWARD random
-nonlinear expansion (no memory), rho>0 is genuinely RECURRENT. If recurrence helps, rho>0 beats
+nonlinear expansion (memory off), rho>0 is genuinely RECURRENT. If recurrence helps, rho>0 beats
 rho=0. Readout is high-precision float (ridge / logistic) -- the opposite of the chip's noisy
 spike-count readout.
 

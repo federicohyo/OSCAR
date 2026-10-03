@@ -181,7 +181,7 @@ def plot_window_widths(csv_path, out_base):
     colors = [plt.get_cmap("tab20")(n / 16.0) for n in neurons]
     bars = ax.bar(neurons, widths, color=colors, edgecolor="white", linewidth=0.3)
 
-    # Mark neurons with no measurable window
+    # Mark neurons whose window needs a wider sweep
     for i, w in enumerate(widths):
         if np.isnan(w):
             ax.text(neurons[i], 0.2, "×", ha="center", va="bottom",

@@ -2,11 +2,11 @@
 """Calibrate the spike-count comparator ladder on n14, scope-in-the-loop.
 
 WHY THE SEARCH AXIS IS JExc AND NOT vleakn (2026-08-16). Both knobs move the switching
-count, but not the same way: vleakn sets where the membrane rests relative to threshold,
+count, in a different way: vleakn sets where the membrane rests relative to threshold,
 JExc sets how much each input spike climbs, i.e. the RAMP STEEPNESS. Bisecting vleakn
 alone -- the first thing I did -- makes one knob cover the whole ladder, and the low
-levels then land within half a millivolt of the free-run edge where they are not
-separable (0.2563 read N>=3 and then N>=4 on a repeat). The measured map says it plainly:
+levels then land within half a millivolt of the free-run edge, where they overlap
+(0.2563 read N>=3 and then N>=4 on a repeat). The measured map says it plainly:
 at vleakn 0.2587, dJExc 0 -> N>=24, +5 mV -> N>=3, +10 mV -> N>=1. The same five levels
 that vleakn crushed into 0.5 mV are spread over 5 mV of JExc, and p(fire | N=0) stayed
 0.00 at every one of them -- the free-run edge is set by vleakn alone. So: park vleakn a
@@ -22,8 +22,8 @@ OPERATING CONDITION. A .biases file alone does NOT reproduce the comparator: it 
 calibrated against synapse 0 at weight 15, excitatory, routed to the neuron, driven by
 BURST (firmware-paced, spikes back to back roughly a microsecond apart) at the firmware's
 default input-pulse width. The leak means N spikes spread over a longer window integrate
-less, so N* is a count AT THIS PACING, not a pacing-independent counter. Reload the file
-and set the same route, or the switching count will not be the one on the label. It is
+less, so N* is a count AT THIS PACING rather than a pacing-independent counter. Reload the file
+and set the same route, or the switching count departs from the label. It is
 recorded in the results JSON alongside the levels.
 
 SCOPE. Federico's standing rule, and here it is also the mechanism panel: AER says only
@@ -62,8 +62,8 @@ def sparkline(sc, t0, n=28):
 
     A scalar peak says how high it got; the shape says WHY -- whether the ramp is a
     staircase climbing to threshold, a single saturating jump, or a flat line. That is
-    the difference between a knob that is working and one that is not, and it is not
-    visible in p(fire) at all."""
+    the difference between a knob that is working and one that is off, and it stays
+    invisible in p(fire) at all."""
     a = np.array(sc.s)
     if len(a) < 8:
         return "", float("nan")
@@ -181,7 +181,7 @@ def main():
     k, base = args.neuron, load_biases(args.base)
     rec = {"neuron": k, "base": args.base, "vleakn_park": args.vleakn,
            "wait": args.wait, "levels": LEV,
-           # what the .biases files do NOT carry, and without which they do not comparate
+           # what the .biases files leave out, needed for the comparator to work
            "operating_point": {"synapse": 0, "weight": 15, "exc": True, "route_to": k,
                                "drive": "BURST (firmware-paced, ~1 us inter-spike)",
                                "pulse_width": "firmware default pulse_mult",

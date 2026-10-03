@@ -2,7 +2,7 @@
 """XOR on-chip (signed exc/inh) with PER-NEURON on-chip-burst drive CALIBRATION.
 
 Root cause fix for silent high-threshold neurons (e.g. n3): the original runner fires host-paced
-single spikes (~5 ms apart) that don't summate, so a high-threshold neuron never crosses. Here
+single spikes (~5 ms apart) that stay below summation, so a high-threshold neuron stays below threshold. Here
 each bit is delivered as an ON-CHIP burst (`fire(N)` = N spikes fired rapidly on-die, which
 summate), with N CALIBRATED per neuron to a target output (small N for hot neurons like n5,
 ~40 for n3). exc/inh are INTERLEAVED in small chunks so the XOR cancellation still happens on the

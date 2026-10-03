@@ -3,16 +3,16 @@
 # for a more complete library. Isotel's version is GPL licensed
 from __future__ import division
 import numpy as np
-BSIZE_SP = 512 # Max size of a line of data; we don't want to read the
-               # whole file to find a line, in case file does not have
-               # expected structure.
+BSIZE_SP = 512 # Max size of a line of data; read it line by line, so the
+               # whole file stays unread when a line carries unexpected
+               # structure.
 MDATA_LIST = [b'title', b'date', b'plotname', b'flags', b'no. variables',
               b'no. points', b'dimensions', b'command', b'option']
 
 def rawread(fname: str):
     """Read ngspice binary raw files. Return tuple of the data, and the
-    plot metadata. The dtype of the data contains field names. This is
-    not very robust yet, and only supports ngspice.
+    plot metadata. The dtype of the data contains field names. This handles
+    ngspice, with robustness around edge cases still improving.
     >>> darr, mdata = rawread('test.py')
     >>> darr.dtype.names
     >>> plot(np.real(darr['frequency']), np.abs(darr['v(out)']))

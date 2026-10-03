@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """LNA transfer function from the audio jack, 0.1 Hz .. 400 Hz.
 
-READ-ONLY on the chip: this script never opens the FTDI and never writes a
+READ-ONLY on the chip: this script leaves the FTDI closed and the DACs untouched
 DAC. The biases are whatever you loaded (LNA_chip0_110_audio_0.25.biases);
 it only plays tones and listens to the scope broadcast server.
 
@@ -11,10 +11,10 @@ Drive path:   audio jack -> voltage divider -> LNA input
 
 Measurement:  coherent sine fit at the KNOWN drive frequency, on the
               pixhawk board clock (a clean 1 ms grid, 1000 S/s).
-              NOT a p5-p95 spread: with no tone playing the node already
+              rather than a p5-p95 spread: with the tone off the node already
               carries ~66 mVpp of mains hum and ADC spikes, which would
               floor the stopband at a fake ~19 dB. The fit rejects
-              anything that is not at f0 and reports the leftover as
+              everything outside f0 and reports the leftover as
               `resid_rms`, so every point carries its own error bar.
               Harmonics 2f and 3f are fitted alongside, so clipping shows
               up as h2/h3 instead of hiding inside the amplitude.
@@ -28,10 +28,10 @@ AC-coupled, so its own high-pass is in series with the amplifier:
 
 Pass 2 measures what the chip is actually being fed at each frequency, so
 pass 3 cancels the jack and the divider and leaves the LNA alone. Without
-it the sub-20 Hz decade is the sound card's roll-off, not the amp's.
+the sub-20 Hz decade is the sound card's roll-off rather than the amp's.
 
 Prereqs: the scope server must be running (127.0.0.1:5555). The GUI and
-neuron_bridge.py may stay open -- we do not touch the FTDI. Do not touch
+neuron_bridge.py may stay open -- the FTDI is left untouched. Leave
 the mixer volume: the --vin-pp calibration rides on its current setting.
 """
 
@@ -67,7 +67,7 @@ def make_wav(path, freq, vpp, min_dur, fs=44100):
     outlast settle+window rather than loop during it.
 
     Amplitude uses sine_out.sh's formula exactly -- the divider calibration
-    was taken with that level, so it must not drift here."""
+    was taken with that level, so it must stay fixed here."""
     amp = min((vpp / 2) / (FULL_SCALE_VRMS * math.sqrt(2)), 1.0)
     n = int(fs * max(min_dur, 4.0 / freq))
     per = max(1, round(fs / freq))
@@ -200,8 +200,8 @@ def longest_contiguous(t, v):
 
 def sine_fit(t, v, f0, nharm=3):
     """Least squares at the KNOWN drive frequency, plus harmonics and a
-    linear trend (the node drifts slowly; without the trend term the LF
-    points absorb the drift into the fundamental).
+    linear trend (the node drifts slowly; the trend term keeps the LF
+    points from absorbing the drift into the fundamental).
 
     Returns dict with fundamental amplitude (zero-to-peak), phase, DC,
     harmonic ratios and the residual rms."""
@@ -210,7 +210,7 @@ def sine_fit(t, v, f0, nharm=3):
     # f0 > fs/3 the 2f and 3f aliases land on the same frequency, making their
     # columns collinear -- the solve then returns huge cancelling coefficients
     # (h2 = h3 = 7.2e6 was seen at 400 Hz). The fundamental survives that, but
-    # the harmonic ratios are meaningless, so do not report them.
+    # the harmonic ratios are meaningless, so they are left out of the report.
     nyq = 0.5 / BOARD_DT
     nfit = max(1, min(nharm, int(nyq / f0 - 1e-9)))
     cols = [np.ones_like(t), t]
@@ -244,8 +244,8 @@ def clipped_sine_fit(t, v, f0, lo=0.0, hi=VDD):
 
     Thresholding to "the part above zero" and fitting that is biased: near the
     threshold a sample is kept only when noise pushed it up, so the estimate
-    inflates. Measured on the jack at 1 Vpp it read 1083 mVpp when no sample
-    exceeded 509 mV. The bias grows as noise approaches the signal, i.e. it is
+    inflates. Measured on the jack at 1 Vpp it read 1083 mVpp while every sample
+    stayed below 509 mV. The bias grows as noise approaches the signal, i.e. it is
     worst at the low frequencies the reference pass exists to measure -- it
     would flatten the roll-off it is meant to reveal.
 
@@ -261,7 +261,7 @@ def clipped_sine_fit(t, v, f0, lo=0.0, hi=VDD):
 
     a0 = max(float(np.percentile(v, 99)), 1e-4)
     best = None
-    for ph in (0.0, math.pi / 2):                 # two starts: phase is not observable pre-fit
+    for ph in (0.0, math.pi / 2):                 # two starts: phase stays outside the pre-fit observable
         p0 = [a0 * math.cos(ph), a0 * math.sin(ph), 0.0]
         try:
             r = least_squares(resid, p0, method="lm", max_nfev=4000)
@@ -288,7 +288,7 @@ def clipped_sine_fit(t, v, f0, lo=0.0, hi=VDD):
 def halfwave_fit(t, v, f0, adc_floor=0.0005):
     """Amplitude of a sine that the unipolar ADC has chopped at 0 V.
 
-    The pixhawk reads 0 V and up. A signal riding on no DC offset -- the audio
+    The pixhawk reads 0 V and up. A signal with zero DC offset -- the audio
     jack is AC-coupled, so its output swings about 0 -- loses its whole
     negative half. The positive half survives untouched, so fit only the
     samples clear of the floor. Verified on synthetic data against the
@@ -308,8 +308,8 @@ def halfwave_fit(t, v, f0, adc_floor=0.0005):
     rms = float(np.sqrt(np.mean(resid ** 2)))
     # Phase, on the same convention as sine_fit: atan2(cos-coeff, sin-coeff),
     # measured against t[0] of the array handed in. Half-wave rectification does
-    # not move the fundamental's phase -- the chopped-off half is simply not
-    # fitted -- so this is the input's phase even though the amplitude estimate
+    # leave the fundamental's phase unchanged -- the chopped-off half stays outside
+    # the fit -- so this is the input's phase even though the amplitude estimate
     # needs the care documented above.
     return {
         "amp": a1, "vpp": 2 * a1, "dc": float(np.mean(v)),
@@ -390,8 +390,8 @@ def measure_point(scope, audio, wavdir, f0, args, label=""):
         t, v = t[ntrim:], v[ntrim:]
     t, v, ndrop = drop_dropouts(t, v, f0)
 
-    # A node with no DC offset is chopped by the unipolar ADC; a normal fit
-    # would then read the clamped stub, not the signal. Detect and switch.
+    # A node at zero DC offset is chopped by the unipolar ADC; a normal fit
+    # would then read the clamped stub rather than the signal. Detect and switch.
     clamped = float((v <= 0.0005).mean())
     r = None
     if clamped > 0.10:
@@ -457,7 +457,7 @@ def do_divide(out_csv, ref_csv, png, anchor_hz=100.0, anchor_vin=0.007):
     o, rf = load(out_csv), load(ref_csv)
     common = sorted(set(o) & set(rf))
     if not common:
-        sys.exit("no common frequencies between the two passes")
+        sys.exit("the two passes have disjoint frequency sets")
     # the reference runs on decommensurate frequencies, so interpolate it
     # (log-log: both axes are naturally logarithmic here) onto the sweep's.
     rfk = np.array(sorted(rf))
@@ -467,7 +467,7 @@ def do_divide(out_csv, ref_csv, png, anchor_hz=100.0, anchor_vin=0.007):
         return float(np.exp(np.interp(math.log(f), np.log(rfk[ok]), np.log(rfv[ok]))))
     common = sorted(k for k in o if rfk[ok].min() <= k <= rfk[ok].max())
     if not common:
-        sys.exit("the two passes do not overlap in frequency")
+        sys.exit("the two passes have disjoint frequency ranges")
     ref_anchor = ref_at(anchor_hz)
     print(f"anchor: {anchor_hz:g} Hz, reference reads {ref_anchor*1e3:.2f} mVpp there, "
           f"chip input is {anchor_vin*1e3:g} mVpp -> scale {anchor_vin/ref_anchor:.5f}\n")
@@ -520,7 +520,7 @@ def main():
     ap.add_argument("--vin-pp", type=float, default=0.007,
                     help="measured Vpp at the chip input, after the divider")
     ap.add_argument("--ref", action="store_true",
-                    help="reference pass: probe is on the DIVIDER OUTPUT, not the LNA")
+                    help="reference pass: probe is on the DIVIDER OUTPUT rather than the LNA")
     ap.add_argument("--divide", nargs=2, metavar=("OUT_CSV", "REF_CSV"),
                     help="combine two passes into the corrected transfer function")
     ap.add_argument("--trim", type=float, default=1.0,

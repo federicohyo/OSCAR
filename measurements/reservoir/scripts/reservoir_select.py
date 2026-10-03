@@ -14,7 +14,7 @@ So this reports two numbers:
               selection actually buys you.
 
 Selection is greedy backward elimination on the inner folds (drop the neuron whose
-removal most improves inner accuracy; stop when no removal helps).
+removal most improves inner accuracy; stop once removals stop helping).
 
     ./.venv-meas/bin/python3 reservoir_select.py --npz reservoir_spikes...npz
 """

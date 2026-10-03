@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """Which JExcWn bias drives which weight bit, and how strong is each branch?
 
-The 16-word sweep at the reservoir operating point is not monotonic: words 7, 13 and 15 fire
+The 16-word sweep at the reservoir operating point is non-monotonic: words 7, 13 and 15 fire
 while 8-12 and 14 are silent. Reading the firing words as bit sets,
 
     {0,1,2} fire   {0,2,3} fire   {0,1,3} silent   {1,2,3} silent
 
-so the words that fire are exactly those containing bits 0 AND 2 -- i.e. the branches are not
-in a 1:2:4:8 ratio at this bias point, they are near-equal with device mismatch, and the word
+so the words that fire are exactly those containing bits 0 AND 2 -- i.e. the branches depart from
+a 1:2:4:8 ratio at this bias point, staying near-equal with device mismatch, and the word
 behaves like an unequal thermometer code. That is a claim about the hardware, so it needs a
 direct measurement rather than an inference from four words.
 
 Two stages:
 
   onset  -- with all four branches at the same bias V, sweep V and find where the single-bit
-            word w=1 starts firing. That calibrates a "low" bias (no branch alone can fire)
+            word w=1 starts firing. That calibrates a "low" bias (a single branch falls below the firing threshold)
             and a "high" bias (one branch alone can fire).
 
   map    -- hold three branches low and raise one, then test each single-bit word 1,2,4,8.

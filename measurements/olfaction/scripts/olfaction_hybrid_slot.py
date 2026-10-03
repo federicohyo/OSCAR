@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Measure the analog tree's SLOT TIME -- the physical duration of one node visit.
 
-This is the missing input to the energy number. Rail energy is power x time, so the slot
+This supplies the input the energy number needs. Rail energy is power x time, so the slot
 time is what converts a measured 430 uW into joules per node visit, and it is the one
 quantity the accuracy run does NOT measure: the 0.25 s I wait between bursts at the bench
 is a settle window chosen for measurement reliability, not a property of the circuit.
@@ -43,10 +43,10 @@ ROUTE_CYC = 532             # measured digital node visit
 def delivery(b, k, ns, m, reps):
     """Wall time of m back-to-back bursts, against burst size.
 
-    Synchronised on the chip's OWN spike stream, not on the host write. Host-side timing
+    Synchronised on the chip's OWN spike stream rather than the host write. Host-side timing
     would measure how fast the host fills the FTDI buffer, which is neither the UART nor
     the chip. Instead the neuron is left firing, m bursts are issued, and the clock stops
-    at the LAST spike to come back -- the chip cannot emit it before it has processed
+    at the LAST spike to come back -- the chip emits it only after it has processed
     every burst. Dropped spikes are harmless: only the last arrival matters, and the ring
     is 2 deep, so most of them are dropped by design.
 
@@ -75,10 +75,10 @@ def delivery(b, k, ns, m, reps):
             ts.append((last - t0) / m)
         out[n] = float(np.median(ts))
         print(f"  {n:>4} {out[n]*1e3:13.3f} {out[n]/max(n,1)*1e6:13.1f}")
-    # Drop points where the sync never saw a spike (t stays at t0, so the entry is 0.0).
+    # Drop points where the sync saw zero spikes (t stays at t0, so the entry is 0.0).
     # At N=255 the neuron is driven far past threshold into refractory for the whole
     # burst and the level-1 comparator emitted nothing the loop could catch; leaving the
-    # zero in the fit produced a NEGATIVE us/spike, which is not a physical answer.
+    # zero in the fit produced a NEGATIVE us/spike, which is unphysical.
     good = {n: t for n, t in out.items() if t > 0}
     if len(good) < 3:
         return out, float("nan"), float("nan")
@@ -129,7 +129,7 @@ def rearm(b, sc, k, n, reps, wait=1.0):
 def sanity(tau, nfit):
     """A re-arm of zero is not a fast neuron, it is a broken time base."""
     if nfit == 0 or tau != tau:
-        return "no usable decay captured"
+        return "decay capture empty"
     if tau < 1e-3:
         return f"tau {tau*1e3:.3f} ms is below one sample period -- time base suspect"
     return ""
@@ -185,8 +185,8 @@ def main():
     e_rt = ROUTE_CYC * E_CYCLE_J
     e_visit = e_rail + e_aer + e_rt
     e_dec = e_visit * args.visits * 5            # voted over 5 chunks
-    # /16 is NOT reachable and the reference campaign no longer quotes it. The bias DACs are
-    # array-wide, so the neurons in range do not hold different thresholds; weighting
+    # /16 lies outside reach and the reference campaign has moved past it. The bias DACs are
+    # array-wide, so the neurons in range share one threshold; weighting
     # levels by their share of node visits gives 1.13x (olfaction_mismatch_payoff.py).
     # Kept as an upper bound only, and labelled as one.
     e_visit16 = e_rail / 16 + e_aer + e_rt
@@ -195,7 +195,7 @@ def main():
           f"{e_rt*1e9:.0f} = {e_visit*1e9:.0f} nJ")
     print(f"per decision (x{args.visits:.1f} visits x5 chunks): {e_dec*1e6:.0f} uJ")
     print(f"16-way UPPER BOUND (not reachable: array-wide biases mean the neurons do "
-          f"not hold different thresholds; measured parallelism is 1.13x): "
+          f"share one threshold; measured parallelism is 1.13x): "
           f"{e_visit16*1e9:.0f} nJ/visit, {e_visit16*args.visits*5*1e6:.0f} uJ/decision")
     rec.update(delivery_s=d, us_per_spike=slope * 1e6, us_fixed=icept * 1e6,
                tau_s=tau, t_slot_s=t_slot, nbar=nbar,

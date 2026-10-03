@@ -9,7 +9,7 @@ bank, and the per-neuron bias files used by the general bring-up gate set
 `lna_iref`/`VB1`/`VB2`/`TUNEp`/`VREF` to values that switch the amplifier off.
 Whatever is loaded stays loaded; this only stimulates and listens.
 
-It also never opens /dev/ttyACM0 -- the scope server owns that port.
+It also leaves /dev/ttyACM0 untouched -- the scope server owns that port.
 
 Three checks, in order, each gating the next:
 
@@ -17,7 +17,7 @@ Three checks, in order, each gating the next:
      that comes back is k. The AER encoder can latch so that every spike reads as
      one address, or so that every address comes back one low -- both survive
      reset, reflash and rebiasing, and only a power cycle clears them. Without
-     this the failure is silent: a per-neuron mask keyed to the intended address
+this makes a latched encoder visible: a per-neuron mask keyed to the intended address
      turns a mislabelled array into an apparently dead one.
   2. NEURON 9 POSITIVE CONTROL. It must spike to a plain BURST before any loop is
      wired, otherwise a null result later is uninterpretable.

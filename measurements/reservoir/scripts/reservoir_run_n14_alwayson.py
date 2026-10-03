@@ -3,7 +3,7 @@
 existing 15-neuron data (bits_ab order is fixed across reps, so alignment is trivial). n14 is
 biased to fire TONICALLY at rest (high on corner 00); both bits route to its INHIBITORY synapse
 (a-inh, b-inh), so 01/10/11 are suppressed -> a clean 'detect-absence' / ~NOT(a+b) axis that adds
-the dimensionality the XOR readout was missing.
+the dimensionality the XOR readout needed.
 
 Uses bias_synapse_characterization_super_n14_jul10_inh.biases. Same trial structure (per-cell,
 window) as reservoir_run_xor so the row stacks directly. Prints per-corner counts to verify the

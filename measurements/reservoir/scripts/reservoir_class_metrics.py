@@ -2,13 +2,13 @@
 """Per-class metrics and a majority-class floor for a recorded reservoir dataset.
 
 Accuracy alone hides two things on these beat sets. They are class-balanced by construction,
-so the majority-class floor is 1/n_classes -- worth printing, because a reader cannot infer it
-from an accuracy number alone and inter-patient folds are *not* balanced within a held-out
+so the majority-class floor is 1/n_classes -- worth printing, because a reader can miss it
+from an accuracy number alone and inter-patient folds stay unbalanced within a held-out
 record. And a three-class macro accuracy can sit comfortably above chance while one class is
 never predicted at all, which sensitivity and PPV expose immediately.
 
 Deliberately separate from reservoir_analysis.py / reservoir_frontier.py: those reproduce the
-reference analysis's numbers and are not to be perturbed. This only adds columns beside them, using
+reference analysis's numbers and stay fixed. This adds columns beside them, using
 the same features, the same read-out and the same leave-one-record-out protocol.
 
     ./.venv-meas/bin/python3 reservoir_class_metrics.py \
@@ -83,8 +83,8 @@ def main():
         tp = cm[i, i]
         support = cm[i].sum()
         predicted = cm[:, i].sum()
-        # Sensitivity is undefined with no true instances, PPV with no predictions; a class
-        # that is never predicted is exactly what this table exists to make visible.
+        # Sensitivity is undefined on an empty true set, PPV on an empty prediction set; a class
+        # that stays unpredicted is exactly what this table exists to make visible.
         sens = tp / support if support else float("nan")
         ppv = tp / predicted if predicted else float("nan")
         per_class[names[i]] = {"support": int(support), "predicted": int(predicted),

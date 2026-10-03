@@ -45,11 +45,11 @@ core to the analog array over a four-phase (req/ack) address-event interface.
   reference pad. Two capacitively coupled low-noise amplifiers (one pad-coupled,
   one pin-driven) buffer the transduced signal into the array.
 - **Neurons.** Sixteen analog leaky-integrate-and-fire somas. Firing rate is set
-  by bias currents (`vleakn`, `ifdcp`, …), **not** by synapse weight.
+  by bias currents (`vleakn`, `ifdcp`, …).
 - **Synapses.** 512 current-mode differential-pair-integrator (DPI) synapses:
   16 excitatory + 16 inhibitory per neuron, each with a 4-bit weight word. The
-  weight is programmed over the digital bridge; it behaves as a cliff, not a
-  smooth rate knob (see `HARDWARE_TRAPS.md`).
+  weight is programmed over the digital bridge; it behaves as a sharp threshold
+  (see `HARDWARE_TRAPS.md`).
 - **Biases.** The only analog input to the chip is a set of DAC-programmed bias
   voltages, driven bit-banged over FTDI. There are 23 DAC channels.
 
@@ -57,8 +57,8 @@ core to the analog array over a four-phase (req/ack) address-event interface.
 
 - **Core.** VexRiscv RV32I (`rv32i_zicsr`), running from SRAM after boot from
   flash. The AER read-out drain is copied to SRAM at boot (`.ramtext` →
-  `dff2`), so the handshake is not limited by XIP flash (`req/ack ≈ 250 ms` in
-  flash vs `≈ 50 µs` from SRAM; only a couple of µs is CPU work, the rest is
+  `dff2`), so the handshake avoids the XIP-flash bottleneck (`req/ack ≈ 250 ms`
+  in flash vs `≈ 50 µs` from SRAM; a couple of µs is CPU work, the rest is
   analog neuron reset dead time).
 - **AER.** A four-phase req/ack handshake pulls one spike address at a time off
   the array. Spikes carry a 21-bit Timer0 timestamp. Over UART they are sent as

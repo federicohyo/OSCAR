@@ -3,7 +3,7 @@
 
 The runner sends a frozen array rather than deriving the stimulus on the measurement
 path, ever since a rebuild inside the runner produced event counts the identical
-standalone code did not. The frozen cur is checked against the unit-weight build here,
+standalone code missed. The frozen cur is checked against the unit-weight build here,
 and --check verifies that regenerating the ORIGINAL seed reproduces the reference
 stimulus bit for bit -- which is what licenses freezing the remaining two seeds of the
 olfaction_emul_accuracy.py protocol (100 + 7919*r for r = 0, 1, 2) at all.
@@ -28,7 +28,7 @@ def freeze(seed0, out):
     assert np.all(cur % W == 0), "weighted drive is not a multiple of the weight"
     # numpy's temporary elision can turn `ev = cur // W` into an IN-PLACE divide when
     # cur's refcount allows it -- line-traced here destroying cur between statements.
-    # Divide into a copy, never into cur.
+    # Divide into a copy, leaving cur untouched.
     ev = cur.copy()
     ev //= W                                    # the unit-weight build, for the check
     assert np.max(np.abs(ev)) <= 127, "event count exceeds int8"
@@ -56,7 +56,7 @@ def main():
         print(f"seed {args.seed} against frozen stimulus: "
               f"{'IDENTICAL' if same else 'DIFFERS'}")
         if not same:
-            raise SystemExit("freeze step does not reproduce the verified stimulus")
+            raise SystemExit("freeze step mismatches the verified stimulus")
 
 
 if __name__ == "__main__":

@@ -9,12 +9,12 @@ the sound card's true full scale and the ADC's gain all cancel exactly. The
 jack->chip anchor that was wrong by 15x cannot touch this number. It also gives
 the high-pass corner independently -- sim puts -3 dB near 1.6 Hz, the measured
 magnitude curve says 0.49 Hz, and the corner and the phase transition are locked
-together, so the phase settles it without trusting any level.
+together, so the phase settles it independently of any single level.
 
 Three modes:
 
   --through   BOTH probes on the SAME node. Any phase difference measured then
-              is instrumental, not the amplifier: the firmware converts ch1
+              is instrumental rather than the amplifier: the firmware converts ch1
               (PC4, pin 2) and then ch2 (PC3, pin 4) back to back, ~47 us apart,
               and labels both with one timestamp. That puts -360*f*tau into
               every reading. Sweep, fit a straight line, and the slope IS tau.
@@ -33,20 +33,20 @@ Method, all three modes: coherent least-squares fit at the known drive
 frequency, on both channels out of the same sample pair. Amplitude is never a
 peak-to-peak or percentile spread.
 
-Two things that are not obvious:
+Two subtle points:
 
   * EACH WINDOW STARTS AT AN ARBITRARY POINT IN THE TONE, so the individual
     phases are meaningless across windows -- only their DIFFERENCE is stable.
     So the repeats are combined as unit phasors of the difference: the mean
     direction is the answer and the resultant length R is the error bar (R = 1
-    is perfect agreement). Averaging the raw angles would be wrong at the
+    is perfect agreement). Averaging the raw angles would be off at the
     +/-180 deg wrap, which is exactly where the passband sits.
 
-  * A DROPPED SAMPLE SLEWS PHASE DIRECTLY, and it is the one failure that
-    produces a plausible wrong angle. Every window is required to come back on
-    the reconstructed uniform 1 ms grid; anything else is discarded, not fitted.
+  * A DROPPED SAMPLE SLEWS PHASE DIRECTLY, and it is the one defect that
+    produces a plausible off angle. Every window is required to come back on
+    the reconstructed uniform 1 ms grid; anything else is discarded rather than fitted.
 
-The frequency band is set at both ends by the bench, not by the amplifier:
+The frequency band is set at both ends by the bench rather than the amplifier:
 below ~0.15 Hz the audio jack delivers nothing (it is AC-coupled -- see
 lna_transfer_ref.csv, which is dead at 0.1 Hz and 16 dB down at 0.2 Hz), and
 above ~200 Hz the 1 kS/s ADC runs out of samples per cycle. The HF roll-off and
@@ -83,7 +83,7 @@ PILOT_HZ = [0.5, 5.0, 50.0]
 # compressed output has the phase of a limiter -- flat at 180 deg -- and it
 # looks perfectly repeatable while it does it (R = 0.999).
 TARGET_OUT_VPP = 0.600
-ACCEPT_OUT = (0.45, 0.80)    # bounds, not a ratio band: near the knee the
+ACCEPT_OUT = (0.45, 0.80)    # bounds rather than a ratio band: near the knee the
                              # output barely responds to level, so a generous
                              # band accepts a saturated point
 
@@ -93,7 +93,7 @@ def uniform_grid(t):
 
     longest_contiguous() rebuilds the time axis from the sample index when the
     board clock and the sample count agree, and falls back to the raw board
-    clock when they do not -- i.e. when samples were dropped. For phase the
+    clock when the measured ones differ -- i.e. when samples were dropped. For phase the
     fallback is useless, so treat it as a rejected window."""
     return (len(t) > 100 and abs(float(t[0])) < 1e-9
             and np.allclose(np.diff(t), BOARD_DT, atol=1e-9))
@@ -102,11 +102,11 @@ def uniform_grid(t):
 def fit_channel(t, v, f0):
     """Fit whichever way this node needs.
 
-    A node sitting at ~0 V with its negative half missing is AC-coupled and has
+    A node sitting at ~0 V with its negative half clipped is AC-coupled and has
     been chopped by the unipolar ADC -- the amplifier INPUT, and also the
     divider output if the through-jumper is fitted there. A node riding on a DC
     level is an ordinary sine -- the amplifier OUTPUT. Deciding from the data
-    means the script does not care which probe is on which pin."""
+    means the script is agnostic to which probe is on which pin."""
     if float(np.percentile(v, 5)) < 0.005 and float(v.mean()) < 0.15:
         return halfwave_fit(t, v, f0), "chopped"
     return sine_fit(t, v, f0), "sine"
@@ -168,9 +168,9 @@ def find_drive(sc, audio, wavdir, f0, start_jack, target, settle, window):
     at 5 Hz. Two proportional steps get inside 40% from anywhere."""
     jack = float(np.clip(start_jack, 2e-4, 1.0))
     for _ in range(6):
-        # reps=2, not 1: measure() needs two windows to form a mean direction
+        # reps=2 rather than 1: measure() needs two windows to form a mean direction
         # and returns None below that. Called with reps=1 it ALWAYS returned
-        # None, so the search read "no signal" at every level and quadrupled
+        # None, so the search read "silent" at every level and quadrupled
         # the drive to full scale -- which railed the amplifier and produced a
         # pilot that measured a limiter instead of an amplifier.
         r = measure(sc, audio, wavdir, f0, jack, settle, window, 2)
@@ -190,10 +190,10 @@ def find_drive(sc, audio, wavdir, f0, start_jack, target, settle, window):
 def preflight_wiring(sc, audio, wavdir, min_gain_db=20.0):
     """Refuse to sweep when both probes are on the same node.
 
-    This is not hypothetical: a through-calibration leaves both probes tied
+    This happens in practice: a through-calibration leaves both probes tied
     together, and if the jumper is not removed the sweep still runs, still
     reports R = 1.000, and returns a phase of 0.00 deg at every frequency. That
-    looks like a clean measurement of an amplifier that does not exist.
+    looks like a clean measurement of an amplifier outside the circuit.
 
     Two independent tells, both free:
       * the amplifier INPUT is AC-coupled and rests near 0 V, so the unipolar
@@ -213,7 +213,7 @@ def preflight_wiring(sc, audio, wavdir, min_gain_db=20.0):
             f"[{r['kinds']}]")
     if not np.isfinite(gdb) or gdb < min_gain_db:
         return False, (
-            f"the two probes are not across the amplifier.\n       {what}\n"
+            f"the two probes sit away from the amplifier.\n       {what}\n"
             f"       Expected ~50 dB and a chopped ch2. A fraction of a dB with "
             f"zero phase is\n       what one node read twice looks like -- "
             f"check the through-jumper is removed\n       and that pin 4 is "
@@ -268,7 +268,7 @@ def main():
     try:
         sc = Scope2()
     except Exception as e:
-        sys.exit(f"ERROR: no scope server on 127.0.0.1:5555 ({e})\n"
+        sys.exit(f"ERROR: scope server on 127.0.0.1:5555 is unreachable ({e})\n"
                  "       start it with:\n"
                  "         ../.venv-meas/bin/python3 "
                  "../ofxLPM/scope-pixhawk/tools/server.py")

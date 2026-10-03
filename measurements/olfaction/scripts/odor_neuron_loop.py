@@ -3,17 +3,17 @@
 
     ../.venv-meas/bin/python3 LNA/odor_neuron_loop.py
 
-WHAT CLOSES THE LOOP. The RISC-V core cannot see the amplifier -- there is no
-on-die path from the LNA output to the core -- so the host does the detection:
+WHAT CLOSES THE LOOP. The RISC-V core sees spikes, not the amplifier -- the LNA output
+reaches the core only through the host -- so the host does the detection:
 it reads the LNA output from the scope stream, and when the output rises above a
 baseline-relative threshold it injects spikes into neuron 9 through the bridge.
 The chip amplifies and the chip spikes; the decision between them is made off-die.
 This is a host-in-the-loop demonstration and must be described as one.
 
-THRESHOLD IS BASELINE-RELATIVE, never an absolute voltage: the amplifier's output
+THRESHOLD IS BASELINE-RELATIVE rather than an absolute voltage: the amplifier's output
 DC wanders by tens of millivolts over minutes, so a fixed level would drift into
 either permanent firing or permanent silence. The baseline is a trailing median
-over a window longer than the event, so the event itself cannot pull it up.
+over a window longer than the event, so the event itself leaves it steady.
 
 RATE CODING. Excess over threshold is mapped to an input spike rate. Measured
 transfer at vleakn = 0.34: 6 Hz in -> 18 spikes, 30 -> 66, 60 -> 73, 119 -> 89;

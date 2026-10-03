@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Bring the LNA to its working point and prove it is there.
 
-Called by LNA_bringup.sh -- run that, not this, unless the firmware is already
+Called by LNA_bringup.sh -- run that rather than this, unless the firmware is already
 flashed and the clock already engaged.
 
     ch1 = LNA output        ch2 = LNA input (amplifier pin 4)
@@ -15,15 +15,15 @@ Four steps:
 
   2. NOISE, no drive. Records ch1 with the audio path silent. The pass/fail
      number is the BROADBAND rms with the mains lines removed: 50/60 Hz and
-     their harmonics are room pickup, not the amplifier. Total rms and
+     their harmonics are room pickup rather than the amplifier. Total rms and
      peak-to-peak are printed too, because they are what a scope shows.
 
      A quiet output does NOT prove the amplifier is alive -- a dead LNA is
      quiet and sits at ~1.80 V. Hence the DC check alongside.
 
   3. GAIN at three tones, small drive. Coherent least-squares sine fit on ch1
-     at the known drive frequency, never a peak-to-peak or percentile spread:
-     with no tone playing this node already carries ~50-66 mVpp of hum, which a
+     at the known drive frequency rather than a peak-to-peak or percentile spread:
+     with the tone off this node already carries ~50-66 mVpp of hum, which a
      spread estimator turns into a fake ~19 dB gain floor. Test frequencies are
      nudged off any simple ratio with the 1 kS/s sampler (decommensurate());
      100.000 Hz sampled at 1000 S/s repeats the same 10 phases forever.
@@ -40,7 +40,7 @@ Four steps:
      the recovery would contaminate step 3's DC.
 
      ch2 is AC-coupled and swings about 0 V, so the unipolar ADC keeps only its
-     positive half -- fitted with halfwave_fit(), not sine_fit().
+     positive half -- fitted with halfwave_fit() rather than sine_fit().
 
 Read-only on the chip apart from the DAC write in step 1. It writes whatever
 the .biases file holds, which is why the file matters: several files in this
@@ -67,7 +67,7 @@ from lna_gain_tune import DACs
 
 FS = 1.0 / BOARD_DT
 DEAD_DC_V = 1.75        # output DC above this = amplifier off (dead reads 1.80)
-MIN_GAIN_X = 10.0       # below this it is not an amplifier
+MIN_GAIN_X = 10.0       # below this it stops behaving as an amplifier
 MAX_H2_PCT = 5.0        # above this the output is clipping, so the gain is a lie
 MAX_SPREAD_PCT = 10.0   # repeat-to-repeat gain spread that still counts as settled
 
@@ -135,7 +135,7 @@ def mains_excluded_rms(v, mains=(50.0, 60.0), nperseg=4096, band=(0.2, 500.0)):
     # Sum x df, NOT trapz over the surviving bins: dropping the mains bins from
     # the array leaves a ~1.5 Hz hole that trapz then spans with a straight line
     # between the two flanks of the peak -- which adds most of the hum back.
-    # Measured 14.90 mV "mains excluded" against a 13.62 mV total that included
+    # Measured 14.90 mV with mains masked against a 13.62 mV total that included
     # it. The rectangular rule over a masked spectrum is exact for Welch.
     rms = lambda m: math.sqrt(float(np.sum(pxx[m])) * df) if m.sum() else float("nan")
     return rms(inband & ~line), rms(inband & line)
@@ -147,15 +147,15 @@ def play_and_fit(sc, audio, wavdir, f0, jack_vpp, settle, window, reps, fit_fn,
 
     Repeats are the guard the bench rule asks for: an unsettled node, or a
     playback hiccup, shows up as scatter between windows rather than as one
-    plausible wrong number."""
+    plausible off number."""
     # The duration is in the NAME: the file must outlast settle+windows, and a
-    # cache keyed only on (freq, level) would hand a longer run a short file.
+    # cache keyed on (freq, level) alone would hand a longer run a short file.
     # pw-play relaunches when one ends, and the ~100 ms gap that leaves cost 17%
     # of the amplitude the one time it landed inside a window.
     min_dur = settle + reps * window + min_dur_extra
     wav = os.path.join(
         wavdir, f"tone_{f0:.2f}hz_{jack_vpp:.5f}vpp_{min_dur:.0f}s.wav")
-    if not os.path.exists(wav):     # never rewrite a file pw-play may hold open
+    if not os.path.exists(wav):     # leave a file pw-play may hold open untouched
         make_wav(wav, f0, jack_vpp, min_dur=min_dur)
     audio.play(wav)
     sc.drain(settle)                # drains the socket instead of sleeping on it
@@ -200,7 +200,7 @@ def main():
     ap.add_argument("--noise-s", type=float, default=30.0,
                     help="silent capture length for the noise check")
     ap.add_argument("--noise-limit-mv", type=float, default=55.0,
-                    help="pass/fail on the mains-excluded output rms")
+                    help="pass/alert on the mains-masked output rms")
     ap.add_argument("--freqs", default="80,100,150", help="test tones in Hz")
     ap.add_argument("--tone-s", type=float, default=4.0, help="fit window")
     ap.add_argument("--reps", type=int, default=3, help="fit windows per tone")
@@ -234,11 +234,11 @@ def main():
     warn = []
 
     # ---------------------------------------------------- scope server
-    # The bench rule: check it, never start it.
+    # The bench rule: check it, leaving starting to the operator.
     try:
         sc = Scope2()
     except Exception as e:
-        sys.exit(f"ERROR: no scope server on 127.0.0.1:5555 ({e})\n"
+        sys.exit(f"ERROR: scope server on 127.0.0.1:5555 is unreachable ({e})\n"
                  "       start it with:\n"
                  "         ../.venv-meas/bin/python3 "
                  "../ofxLPM/scope-pixhawk/tools/server.py")
@@ -322,10 +322,10 @@ def main():
                 warn.append(f"{f_nom:g} Hz fit residual "
                             f"{fit['resid_rms']*1e3:.1f} mV against a "
                             f"{fit['vpp']/2*1e3:.1f} mV amplitude -- what is "
-                            f"on this node is not mostly the tone")
+                            f"on this node carries more than the tone")
             if sp > MAX_SPREAD_PCT:
                 warn.append(f"{f_nom:g} Hz output scattered {sp:.1f}% between "
-                            f"repeats -- not settled, or a playback hiccup")
+                            f"repeats -- still settling, or a playback hiccup")
             if np.isfinite(h2) and h2 > MAX_H2_PCT:
                 warn.append(f"{f_nom:g} Hz second harmonic {h2:.1f}% -- the "
                             f"output is clipping, so its gain is a lie. "
@@ -363,7 +363,7 @@ def main():
                       f"        {r:.4f}")
                 cal[f_nom] = r
                 # The ratio multiplies straight into the gain, so scatter here
-                # is not cosmetic. Any other sound playing while this runs --
+                # carries real weight. Any other sound playing while this runs --
                 # a notification, a browser tab -- lands in the same window and
                 # shows up exactly like this.
                 if sp > MAX_SPREAD_PCT:
@@ -401,22 +401,22 @@ def main():
     clipped = [r for r in rows if np.isfinite(r["h2_pct"])
                and r["h2_pct"] > MAX_H2_PCT]
     if rows and len(clipped) == len(rows):
-        warn.append("every tone clipped -- the gain figures above are not "
+        warn.append("every tone clipped -- the gain figures above stop being "
                     "gain. Lower --jack-vpp and re-run")
         ok = False
 
     # A resistive divider is flat and the sound card is flat over 80-150 Hz, so
     # the input Vpp should track the output Vpp across the three tones. When the
-    # output is flat and the input is not, it is the ch2 fit that moved, not the
+    # output is flat while the input moves, it is the ch2 fit that moved rather than the
     # amplifier -- say which, or the number gets read as a frequency response.
     if len(rows) > 1:
         out_sp = spread_pct([r["vout_pp"] for r in rows])
         in_sp = spread_pct([r["vin_pp"] for r in rows])
         if in_sp > 3 * max(out_sp, 1.0) and in_sp > MAX_SPREAD_PCT:
             warn.append(f"the output is flat across the three tones "
-                        f"({out_sp:.1f}%) but the measured input is not "
+                        f"({out_sp:.1f}%) but the measured input stays "
                         f"({in_sp:.1f}%) -- that is the ch2 calibration "
-                        f"moving, not the amplifier's transfer. Trust the "
+                        f"moving rather than the amplifier's transfer. Trust the "
                         f"tone with the smallest calibration spread, or pin "
                         f"one ratio with --ratio")
 
@@ -427,7 +427,7 @@ def main():
         res["gain_median_x"] = gmed
         res["gain_median_db"] = 20 * math.log10(gmed)
         if gmed < MIN_GAIN_X:
-            warn.append(f"{gmed:.1f}x is not an amplifier -- check lna_iref / "
+            warn.append(f"{gmed:.1f}x is below the amplifier floor -- check lna_iref / "
                         f"TUNEp / VB1 / VB2 / VREF in the bias file")
             ok = False
     else:
