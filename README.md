@@ -1,8 +1,8 @@
 # OSCAR — Open-Silicon Chemosensing Analog RISC-V array
 
 OSCAR is a public, self-contained release of a fabricated mixed-signal
-neuromorphic chip and everything needed to understand it and to **replot its
-published results**. The die, designed with the open SkyWater 130-nm PDK through
+neuromorphic chip and everything needed to understand it and to **replot the
+results in its accompanying manuscripts**. The die, designed with the open SkyWater 130-nm PDK through
 the Efabless Caravel/Caravan harness, couples a capacitively coupled low-noise
 amplifier (LNA) and an exposed TiO₂-coated chemosensing electrode pad to an
 array of sixteen analog leaky-integrate-and-fire (LIF) neurons with 512
@@ -15,14 +15,14 @@ timestamping output spikes, and running calibration and read-out firmware.
 OSCAR ships (a) the chip **design** sources (schematic, layout, GDS, LVS,
 netlists, test files), (b) the RISC-V **firmware** and the host-side Python
 bridge/control layer, and (c) the archived **data** plus the plotting scripts
-that regenerate the figures and tables of the ISCAS 2026 and ISCAS 2027 papers
-and the shared TBioCAS journal panels.
+that regenerate the figures and tables of the ISCAS 2026 and ISCAS 2027
+submissions (under review; not accepted) and the shared TBioCAS panels.
 
 > **This repository does not host the manuscripts.** There is no `paper/`
-> directory, no `.tex`, `.bib`, `.cls`, `.sty`, or manuscript PDF. The published
-> articles are © IEEE and are **cited, not redistributed** (see
-> `CITATION.cff` / `NOTICE`). What OSCAR provides is the *data and the plotting
-> code* to reproduce the results.
+> directory, no `.tex`, `.bib`, `.cls`, `.sty`, or manuscript PDF. The manuscripts
+> are under review (not accepted) and are © IEEE; they are **cited, not
+> redistributed** (see `CITATION.cff` / `NOTICE`). What OSCAR provides is the
+> *data and the plotting code* to reproduce the results.
 
 ## Hardware overview
 
@@ -36,7 +36,7 @@ and the shared TBioCAS journal panels.
 - **Clocking:** 10 MHz crystal × on-die DLL → 100/N MHz (50, 33, 25, 20 MHz).
 
 <a id="hardware-figure"></a>
-### Figure — chip layout, fabricated die and daughter-board (ISCAS 2026, Fig. 2)
+### Figure — chip layout, fabricated die and daughter-board (ISCAS 2026 submission, Fig. 2)
 
 ![OSCAR chip layout, die micrograph and daughter-board](docs/figures/fig_hardware_layout.png)
 
@@ -49,11 +49,11 @@ and the shared TBioCAS journal panels.
 > tape-out). Right: the chip on its daughter-board, seated in the well that
 > holds the droplet; the dashed circle marks the die, magnified in the inset.
 >
-> *Reproduced from Fig. 2 of the ISCAS 2026 paper "An Open-Silicon Neuromorphic
-> Chemosensing Front-End with Electrode-Pad Wet Transduction" (F. Corradi,
-> S. Ye, M. Fattori, R. Jordans), © IEEE. The article itself is not distributed
-> in this repository; it is cited. Composed from the paper's layout/die/board
-> image assets.*
+> *Reproduced from Fig. 2 of the ISCAS 2026 submission "An Open-Silicon
+> Neuromorphic Chemosensing Front-End with Electrode-Pad Wet Transduction"
+> (F. Corradi, S. Ye, M. Fattori, R. Jordans), © IEEE; under review, not accepted.
+> The manuscript itself is not distributed in this repository; it is cited.
+> Composed from the submission's layout/die/board image assets.*
 
 Additional design assets live in `docs/figures/`:
 
@@ -150,10 +150,13 @@ PYTHONPATH=. ./.venv-meas/bin/python3 \
 - Code and design: **Apache-2.0** (`LICENSE`); third-party notices in `NOTICE`.
 - How to cite: [`CITATION.cff`](CITATION.cff).
 
-## Links (external; papers are not part of this repository)
+## Links (external; manuscripts are not part of this repository)
+
+Both conference manuscripts below are **submitted and under review; acceptance
+is not implied** (submission October 2026).
 
 - ISCAS 2026 — *An Open-Silicon Neuromorphic Chemosensing Front-End with
-  Electrode-Pad Wet Transduction* (front-end / pad).
+  Electrode-Pad Wet Transduction* (front-end / pad) — submitted.
 - ISCAS 2027 — *A RISC-V-Managed Analog Spiking Neural Network Array for
-  On-Sensor Olfactory Processing*.
+  On-Sensor Olfactory Processing* — submitted.
 - IEEE TBioCAS journal companion (shared result panels).

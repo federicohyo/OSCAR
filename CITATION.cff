@@ -1,8 +1,9 @@
 cff-version: 1.2.0
 message: >-
   If you use this chip design, firmware, data, or plotting code, please cite the
-  associated papers and the design deposit below. The papers themselves are not
-  distributed in this repository; they are cited only.
+  associated manuscripts (under review, not yet accepted) and the design deposit
+  below. The manuscripts themselves are not distributed in this repository; they
+  are cited only.
 title: "OSCAR: Open-Silicon Chemosensing Analog RISC-V array"
 abstract: >-
   Design sources, RISC-V firmware, host bridge, archived datasets and plotting
@@ -15,13 +16,13 @@ authors:
     given-names: Federico
     affiliation: "Neuromorphic Edge Computing Systems Lab, Eindhoven University of Technology"
   - family-names: Ye
-    given-names: Sheng
+    given-names: Shimeng
     affiliation: "Neuromorphic Edge Computing Systems Lab, Eindhoven University of Technology"
   - family-names: Fattori
-    given-names: Matteo
+    given-names: Marco
     affiliation: "Neuromorphic Edge Computing Systems Lab, Eindhoven University of Technology"
   - family-names: Jordans
-    given-names: Ruud
+    given-names: Roel
     affiliation: "Eindhoven University of Technology"
 license: Apache-2.0
 repository-code: "https://github.com/federicohyo/OSCAR.git"
@@ -41,7 +42,7 @@ referenced-software:
         given-names: Federico
     notes: "Chip design sources released together with this repository."
 references:
-  - type: conference-paper
+  - type: manuscript
     title: >-
       An Open-Silicon Neuromorphic Chemosensing Front-End with Electrode-Pad Wet
       Transduction
@@ -49,15 +50,16 @@ references:
       - family-names: Corradi
         given-names: Federico
       - family-names: Ye
-        given-names: Sheng
+        given-names: Shimeng
       - family-names: Fattori
-        given-names: Matteo
+        given-names: Marco
       - family-names: Jordans
-        given-names: Ruud
-    conference:
-      name: "IEEE International Symposium on Circuits and Systems (ISCAS) 2026"
+        given-names: Roel
     year: 2026
-  - type: conference-paper
+    notes: >-
+      Submitted for review (under review; not accepted); submission October 2026.
+      Target venue: IEEE International Symposium on Circuits and Systems (ISCAS).
+  - type: manuscript
     title: >-
       A RISC-V-Managed Analog Spiking Neural Network Array for On-Sensor
       Olfactory Processing
@@ -65,11 +67,12 @@ references:
       - family-names: Corradi
         given-names: Federico
       - family-names: Ye
-        given-names: Sheng
+        given-names: Shimeng
       - family-names: Fattori
-        given-names: Matteo
+        given-names: Marco
       - family-names: Jordans
-        given-names: Ruud
-    conference:
-      name: "IEEE International Symposium on Circuits and Systems (ISCAS) 2027"
-    year: 2027
+        given-names: Roel
+    year: 2026
+    notes: >-
+      Submitted for review (under review; not accepted); submission October 2026.
+      Target venue: IEEE International Symposium on Circuits and Systems (ISCAS).

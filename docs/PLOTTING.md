@@ -6,8 +6,9 @@ repository, and the **output file** the script writes — so the plots can be
 produced **without the paper source**.
 
 **Nothing here needs a manuscript.** OSCAR ships no `.tex`, `.bib`, `.cls`,
-`.sty`, or paper `.pdf`. The published articles are cited (see `CITATION.cff` /
-`NOTICE`); figure/table ids below are labels from those articles.
+`.sty`, or paper `.pdf`. The manuscripts (under review) are cited (see
+`CITATION.cff` / `NOTICE`); figure/table ids below are labels from those
+manuscripts.
 
 Rows whose producer or data is genuinely missing are marked **[GAP]** rather
 than invented. Non-data-driven floats are **[ASSET]** and ship as exported
@@ -54,7 +55,7 @@ depth corrected in addition to the fragment rewrite:
 `make_paper_figures.py` now writes to `measurements/lna/figures/` and reads
 `measurements/lna/data/`.
 
-## ISCAS 2026 — "An Open-Silicon Neuromorphic Chemosensing Front-End with Electrode-Pad Wet Transduction"
+## ISCAS 2026 — "An Open-Silicon Neuromorphic Chemosensing Front-End with Electrode-Pad Wet Transduction" (submission; under review)
 
 | Paper result | Data file(s) | Plotting script | Output file | Notes |
 |---|---|---|---|---|
@@ -66,12 +67,12 @@ depth corrected in addition to the fragment rewrite:
 | Fig. 6 pad-evoked spiking | `measurements/wet_pad/data/scope_20260831_123139_single_payed_back_chip1_v1.csv` | `measurements/wet_pad/scripts/make_fig_pad_evoked.py` | `measurements/wet_pad/figures/fig18_pad_evoked_chip1.pdf` | |
 | Table I SOTA | — | — | `docs/` Markdown/CSV (hand-entered) | Compiled from literature; not LaTeX. |
 
-## ISCAS 2027 — "A RISC-V-Managed Analog Spiking Neural Network Array for On-Sensor Olfactory Processing"
+## ISCAS 2027 — "A RISC-V-Managed Analog Spiking Neural Network Array for On-Sensor Olfactory Processing" (submission; under review)
 
 | Paper result | Data file(s) | Plotting script | Output file | Notes |
 |---|---|---|---|---|
 | Fig. 1 domain map | — (design asset) | — (asset export) | `docs/figures/domain_map.{pdf,png}` | **[ASSET]** composed from the layout + die micrograph. |
-| Fig. 2a weight code | `data/synapse/onset_n5.json`, `onset_n5_ladder.json` | `measurements/paper_figures/make_synapse_weight.py --panels b --out …` | `measurements/paper_figures/weight_code_words.pdf` | Default invocation emits the two-panel `weight_code.pdf`; `--panels b` emits the published all-words panel. Inputs produced by `measurements/array/scripts/synapse_onset.py`. |
+| Fig. 2a weight code | `data/synapse/onset_n5.json`, `onset_n5_ladder.json` | `measurements/paper_figures/make_synapse_weight.py --panels b --out …` | `measurements/paper_figures/weight_code_words.pdf` | Default invocation emits the two-panel `weight_code.pdf`; `--panels b` emits the all-words panel used in the submission. Inputs produced by `measurements/array/scripts/synapse_onset.py`. |
 | Fig. 2b neuron FI | `data/array/neuron_fi_allneurons.csv`, `data/array/scope_{14,17,20}_neu14_if.csv` | `measurements/array/scripts/plot_fi_insets_all16.py --style iscas --out …` | `measurements/array/figures/neuron_fi_iscas.pdf` | Default output is `neuron_fi_all16_insets.pdf`; `--style iscas` is the paper figure. The three scope CSVs are required. |
 | Fig. 3 pipeline row | `data/olfaction/olf_validate/*.npz` (one held-out chunk) | `measurements/olfaction/scripts/make_fig_pipeline1row.py` | `measurements/olfaction/figures/fig_pipeline_row.pdf` | Cross-imports `olfaction_bias_bo.py` and `make_fig_odorclass.py` (same `scripts/` dir; the script adds its dir to `sys.path`). |
 | Table II command set | `firmware/neuron_handshake/neuron_handshake.c` | — (derived) | `firmware/README.md` (Markdown table) | Derived from opcodes; printed, not LaTeX. |
