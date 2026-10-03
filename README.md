@@ -5,9 +5,9 @@ neuromorphic chip and everything needed to understand it and to **replot the
 results**. The die, designed with the open SkyWater 130-nm PDK through
 the Efabless Caravel/Caravan harness, couples a capacitively coupled low-noise
 amplifier (LNA) and an exposed TiO₂-coated chemosensing electrode pad to an
-array of sixteen analog leaky-integrate-and-fire (LIF) neurons with 512
-current-mode differential-pair-integrator (DPI) synapses (16 excitatory + 16
-inhibitory per neuron, 4-bit weights). A VexRiscv RV32I core manages the analog
+analog spiking neural network (SNN) of sixteen leaky-integrate-and-fire (LIF)
+neurons with 512 current-mode differential-pair-integrator (DPI) synapses
+(16 excitatory + 16 inhibitory per neuron, 4-bit weights). A VexRiscv RV32I core manages the analog
 array entirely through a digital four-phase address-event (AER) interface:
 programming weights and routes, pacing stimuli, wiring on-die recurrence,
 timestamping output spikes, and running calibration and read-out firmware.
@@ -26,8 +26,9 @@ that regenerate the figures and tables of the measured results.
 - **Process / harness:** SkyWater 130-nm CMOS, Efabless Caravel/Caravan
   (open PDK, open toolchain).
 - **Analog:** electrode + reference pads; two capacitively coupled LNAs (one
-  pad-coupled, one pin-driven); 16 LIF somas; 512 DPI synapses (16 exc + 16 inh
-  per neuron, 4-bit); bias currents are the only analog input, set by board DACs.
+  pad-coupled, one pin-driven); a 16-neuron analog spiking neural network (SNN)
+  of LIF somas; 512 DPI synapses (16 exc + 16 inh per neuron, 4-bit); bias
+  currents are the only analog input, set by board DACs.
 - **Digital:** VexRiscv RV32I, SRAM, boot flash, memory-mapped AER bridge; 21-bit
   spike timestamps; 4-phase req/ack; stimuli as address/sign words.
 - **Clocking:** 10 MHz crystal × on-die DLL → 100/N MHz (50, 33, 25, 20 MHz).
