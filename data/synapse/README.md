@@ -89,7 +89,7 @@ CARAVAN_CLK_MHZ=50 ./.venv-meas/bin/python3 synapse_onset.py \
 
 CARAVAN_CLK_MHZ=50 ./.venv-meas/bin/python3 synapse_onset.py \
     --neuron 5 --stages code --repeats 3 --spikes 150 --rate 800 \
-    --lo 0.295 --hi 0.455 --ladder results/synapse/ladder_n5.json --tag n5_ladder
+    --lo 0.295 --hi 0.455 --ladder data/synapse/ladder_n5.json --tag n5_ladder
 
 ./.venv-meas/bin/python3 measurements/plotting/make_synapse_weight.py --tag n5 --ladder-tag n5_ladder
 ```
@@ -202,7 +202,7 @@ cp firmware/neuron_handshake/binaries/neuron_handshake_25MHz.hex \
 
 CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 bench_bringup_check.py    # gate + positive control
 
-export CARAVAN_DAC_LOG=results/synapse/logs/dac_writes_25mhz.log
+export CARAVAN_DAC_LOG=data/synapse/logs/dac_writes_25mhz.log
 CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 synapse_onset.py \
     --neuron 5 --stages branches,slope,code --repeats 3 --spikes 150 \
     --rate 800 --lo 0.350 --hi 0.480 --tag n5_25mhz
@@ -211,7 +211,7 @@ CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 synapse_onset.py \
 
 CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 synapse_onset.py \
     --neuron 5 --stages code --repeats 3 --spikes 150 --rate 800 \
-    --lo 0.290 --hi 0.460 --ladder results/synapse/ladder_n5_25mhz.json \
+    --lo 0.290 --hi 0.460 --ladder data/synapse/ladder_n5_25mhz.json \
     --tag n5_25mhz_ladder
 
 ./.venv-meas/bin/python3 measurements/plotting/make_synapse_weight.py \

@@ -71,8 +71,8 @@ The firmware is built with the external `riscv64-unknown-elf` GCC toolchain
 Authors / institution
 --------------------------------------------------------------------------
 The chip was designed by the Neuromorphic Edge Computing Systems Lab,
-Eindhoven University of Technology (TU/e), by F. Corradi, S. Ye, M. Fattori
-and R. Jordans. Author copyright and attribution should be preserved.
+Eindhoven University of Technology (TU/e), by F. Corradi, S. van Himste, S. Ye,
+M. Fattori and R. Jordans. Author copyright and attribution should be preserved.
 
 --------------------------------------------------------------------------
 Hardware figure assets

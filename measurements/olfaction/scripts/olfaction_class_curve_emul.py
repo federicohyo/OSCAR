@@ -97,8 +97,8 @@ def main():
     replica = res[5]["typical"]["v5"]
     print(f"\nreplica check: emulated 5-class voted5 = {replica:.3f} "
           f"(reference row 0.822 +/- 0.042) -> {'OK' if abs(replica - 0.822) < 0.085 else 'MISMATCH'}")
-    json.dump(res, open("data/olfaction_class_curve_emul.json", "w"), indent=1)
-    print("wrote data/olfaction_class_curve_emul.json")
+    json.dump(res, open("data/olfaction/olfaction_class_curve_emul.json", "w"), indent=1)
+    print("wrote data/olfaction/olfaction_class_curve_emul.json")
     return 0
 
 if __name__ == "__main__":

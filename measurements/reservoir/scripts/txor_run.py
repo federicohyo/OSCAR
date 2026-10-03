@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Temporal-XOR ON-CHIP via firmware SETRECUR recurrence (Phase 2). Two bits are presented at
 DIFFERENT times to a bank of input neurons; the label is a XOR b. The readout uses a LATE window
-(after both bits) so a FEEDFORWARD network -- which has forgotten bit a by then -- cannot compute
-the a*b interaction (chance), while ON-DIE RECURRENCE (self-loops, tuned REC_SYN weight ~7,
+(after both bits) so a FEEDFORWARD network -- which has forgotten bit a by then -- scores chance
+on the a*b interaction, while ON-DIE RECURRENCE (self-loops, tuned REC_SYN weight ~7,
 count 2) sustains bit a's trace into the late window so a LINEAR readout separates XOR.
 
 Recurrence is a NETWORK property -> all input neurons run simultaneously under ONE global bias

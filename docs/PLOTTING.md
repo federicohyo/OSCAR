@@ -60,7 +60,6 @@ depth corrected in addition to the fragment rewrite:
 |---|---|---|---|---|
 | System architecture | — (design asset) | — (asset export) | `docs/figures/arch_overview.pdf` / `.png` | **[ASSET]** exported system-overview float. |
 | **Hardware layout** | — (design assets) | — (one-time compose/export) | `docs/figures/fig_hardware_layout.{pdf,png}` | **[ASSET]** composed from `ISLPED2025-layout.png`, `skywater_2024_avlsi_chip_SNN_RISCV.jpg`, `19701130_045846_826317_daugther_chip.jpg`. Also the README figure. |
-| LNA schematic | `design/xschem/` (LNA cell) | — | `docs/figures/lna_schematic.pdf` | **[MANUAL]** produced manually from the LNA cell (xschem GUI → SVG/PDF). |
 | LNA transfer, gain + noise (`fig12_lna_gain_noise.pdf`) | `measurements/lna/data/lna_transfer_final.csv`, `lna_transfer_ref.csv`, `lna_noise.csv` | `measurements/lna/clean_2026-08-26/scripts/make_figures.py` | `measurements/lna/figures/fig12_lna_transfer.pdf` (gain) **and** `fig14_lna_noise.pdf` (noise) | Script emits the two panels separately. The combined two-panel `fig12_lna_gain_noise.pdf` is produced manually → **[MANUAL]**; recommend `make_fig12_gain_noise.py`. A reference copy of the combined asset is provided at `measurements/lna/figures/fig12_lna_gain_noise.pdf`. |
 | TiO2 wet-transduction panels | `measurements/wet_pad/data/scope_20260829_094236.csv`, `scope_20260829_103015.csv` | `measurements/wet_pad/scripts/tio2_combi.py` | `measurements/wet_pad/figures/fig16_tio2_wetting.pdf`, `fig17_tio2_dilute3x.pdf` | Shadows: `tio2_three_panel.py`, `tio2_dilute3x_panel.py`, `tio2_injection_recovery.py`, `make_fig_saline_chain.py`. |
 | Pad-evoked spiking | `measurements/wet_pad/data/scope_20260831_123139_single_payed_back_chip1_v1.csv` | `measurements/wet_pad/scripts/make_fig_pad_evoked.py` | `measurements/wet_pad/figures/fig18_pad_evoked_chip1.pdf` | |
@@ -75,7 +74,7 @@ depth corrected in addition to the fragment rewrite:
 | Neuron FI insets | `data/array/neuron_fi_allneurons.csv`, `data/array/scope_{14,17,20}_neu14_if.csv` | `measurements/array/scripts/plot_fi_insets_all16.py --style compact --out …` | `measurements/array/figures/neuron_fi_reference.pdf` | Default output is `neuron_fi_all16_insets.pdf`; `--style compact` is the reference rendering. The three scope CSVs are required. |
 | Classification pipeline row | `data/olfaction/olf_validate/*.npz` (one held-out chunk) | `measurements/olfaction/scripts/make_fig_pipeline1row.py` | `measurements/olfaction/figures/fig_pipeline_row.pdf` | Cross-imports `olfaction_bias_bo.py` and `make_fig_odorclass.py` (same `scripts/` dir; the script adds its dir to `sys.path`). |
 | UART command set | `firmware/neuron_handshake/neuron_handshake.c` | — (derived) | `firmware/README.md` (Markdown table) | Derived from opcodes. |
-| Odor capacity | `data/olfaction/olfaction_class_curve.json` ← `data/olfaction/olf_validate/*.npz` (9 acquisitions) | `measurements/olfaction/scripts/olfaction_class_curve.py`; figure `make_fig_olfaction.py` | `measurements/olfaction/figures/olfaction_capacity.pdf` + CSV/JSON | `make_fig_olfaction.py` re-verifies against the JSON and caches `data/olfaction/olfaction_k3.json`. |
+| Odor capacity | `data/olfaction/olfaction_class_curve.json` ← `data/olfaction/olf_validate/*.npz` (9 acquisitions) | curve `measurements/olfaction/scripts/olfaction_class_curve.py`; figure `measurements/plotting/make_olfaction_capacity.py` | `measurements/plotting/figures/olfaction_capacity.pdf` + `data/olfaction/olfaction_class_curve.json` | `make_olfaction_capacity.py` draws the capacity panel from the JSON; `measurements/olfaction/scripts/make_fig_olfaction.py` re-verifies the JSON and caches `data/olfaction/olfaction_k3.json`. |
 | Energy per decision | `data/olfaction/olfaction_hybrid_score.json`, `olfaction_hybrid_slot.json`, `olfaction_mismatch_payoff.json` | `measurements/plotting/constants.py` | `measurements/plotting/energy_table.csv` | `constants.py` emits **CSV** (and prints the values). |
 | SOTA comparison | — | — | `docs/` Markdown/CSV (hand-entered) | Compiled from literature. |
 
@@ -120,6 +119,16 @@ PYTHONPATH=. "$PY" measurements/plotting/make_synapse_weight.py --panels b \
 
 # Energy/decision table -> CSV
 "$PY" measurements/plotting/constants.py
+
+# Odor-capacity panel (reads data/olfaction/olfaction_class_curve*.json)
+"$PY" measurements/plotting/make_olfaction_capacity.py
+
+# Extra panels: comparator, drift, DEFF, scaling
+for s in make_comparator make_comparator_drift make_comparator_drift2 \
+         make_drift2d make_drift3d make_deff_v2 make_deff_v3 \
+         make_olfaction make_olfaction_scaling; do
+    PYTHONPATH=. "$PY" "measurements/plotting/$s.py"
+done
 ```
 
 ## Manual figures and open decisions
@@ -128,10 +137,8 @@ PYTHONPATH=. "$PY" measurements/plotting/make_synapse_weight.py --panels b \
    are produced separately; the combined figure is produced manually. Recommend
    writing
    `measurements/lna/clean_2026-08-26/scripts/make_fig12_gain_noise.py`.
-2. **`docs/figures/lna_schematic.pdf` — produced manually.** The schematic is
-   produced manually from the `design/xschem/` LNA cell.
-3. **SOTA tables — hand-entered.** Compiled from literature into Markdown/CSV
+2. **SOTA tables — hand-entered.** Compiled from literature into Markdown/CSV
    under `docs/`.
-4. **Operating point.** Many results are operating-point and clock dependent.
+3. **Operating point.** Many results are operating-point and clock dependent.
    Where a row says `_25mhz` or a named bias file, reproduce that clock and that
    named bias file. See `docs/HARDWARE_TRAPS.md`.

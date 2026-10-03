@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""What does D_eff actually measure here? Two controls the analysis never had.
+"""What does D_eff actually measure here? Two controls that pin its meaning.
 
 CONTROL 1 -- the ceiling. Poisson trains with zero structure, at silicon's own
 per-neuron rates, score D_eff ~68.9, and flat across 4.6-45.5 Hz. So D_eff is

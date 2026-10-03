@@ -30,11 +30,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # OSCAR: this module emits a CSV table (see docs/PLOTTING.md).
 CSV_OUT = os.path.join(HERE, "energy_table.csv")
 
-# OSCAR reorg: results/ -> data/, and the olfaction result JSONs live under
-# data/olfaction/. (This file used to be measurements/plotting/constants.py.)
+# The olfaction result JSONs live under data/olfaction/.
 _RESDIR = os.path.join(HERE, "..", "..", "data", "olfaction")
-if not os.path.isdir(_RESDIR):
-    _RESDIR = os.path.join(HERE, "..", "..", "data")
 with open(os.path.join(_RESDIR, "olfaction_hybrid_score.json")) as _f:
     _HYB = json.load(_f)
 with open(os.path.join(_RESDIR, "olfaction_hybrid_slot.json")) as _f:
@@ -151,7 +148,7 @@ OLF_ACC_ARRAY_BEST_V5, OLF_ACC_ARRAY_BEST_V5_SD = 0.789, 0.016
 # reset, refractory), operating point swept and best taken, 3 projection seeds --
 # the same fairness the array's operating point got. Supersedes 0.867 +/- 0.037, which
 # came from a FLOAT LIF and overstated the emulation by 0.045.
-# MEASURED ON SILICON 2026-08-18 (olfaction_emul_run.py / data/olfaction_emul_onchip*.json):
+# MEASURED ON SILICON 2026-08-18 (olfaction_emul_run.py / data/olfaction/olfaction_emul_onchip*.json):
 # the three stimulus seeds were executed row by row on the core (UART_CMD_LIFRUN2), all
 # 7200 rows returned spike times bit-identical to the host mirror of the firmware
 # arithmetic, and scoring those times gives 0.691 +/- 0.028 / 0.822 +/- 0.042 exactly --
@@ -319,206 +316,159 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
              path=CSV_OUT):
     """Write the energy/cost table as CSV (OSCAR ships no LaTeX).
 
-    The `lines` below are the historical macro definitions; each
-    `\\newcommand{\\name}{value}` is emitted as a `name,value` CSV row so the
-    reference the reference table / energy numbers are machine-readable instead of a .tex.
+    `table` below holds `(name, value)` pairs, emitted as `name,value` CSV rows
+    so the energy numbers are machine-readable.
     """
     e_an = op1_energy_mJ * 1e-3
     e_ro = aer_cyc_pb * E_CYCLE_J          # OP1's read-out share, J
     e_op3 = op3_energy_uJ * 1e-6
-    lines = [
-        "% ==========================================================================",
-        "% GENERATED FILE -- DO NOT EDIT BY HAND.",
-        "% Regenerate:  python3 measurements/plotting/constants.py",
-        "% Every cost-frontier number in the reference analysis routes through these macros so",
-        "% the abstract, body, the reference table, the reference figure and the conclusion cannot drift apart.",
-        "% ==========================================================================",
-        "",
-        "% --- measured, SRAM-resident: THE REFERENCE BASIS -------------------------",
-        r"\newcommand{\cycstep}{%d}" % CYC_STEP_SRAM,
-        r"\newcommand{\dtstar}{%.0f}" % (DT_STAR_MEASURED * 1e6),
-        r"\newcommand{\dtstarfifty}{%.1f}" % (dt_star(CYC_STEP_SRAM, 50e6) * 1e6),
-        r"\newcommand{\ratioonems}{%.1f}" % (numeric_energy_J(1e-3, CYC_STEP_SRAM) / e_an),
-        r"\newcommand{\ratioatfloor}{%.1f}" % (
-            numeric_energy_J(DT_STAR_MEASURED, CYC_STEP_SRAM) / e_an),
-        r"\newcommand{\crossover}{%.1f}" % (crossover_dt(CYC_STEP_SRAM, e_an) * 1e3),
-        r"\newcommand{\numcyconems}{%.2f}" % (
-            numeric_cycles_per_beat(1e-3, CYC_STEP_SRAM) / 1e6),
-        r"\newcommand{\numlatonems}{%.0f}" % (
-            numeric_cycles_per_beat(1e-3, CYC_STEP_SRAM) / F_CLK * 1e3),
-        r"\newcommand{\numenergyonems}{%.2f}" % (numeric_energy_J(1e-3, CYC_STEP_SRAM) * 1e3),
-        "",
-        "% --- counted, 1-CPI idealised: LOWER BOUND, favours the digital baseline ---",
-        r"\newcommand{\cycstepideal}{%d}" % CYC_STEP_IDEAL,
-        r"\newcommand{\dtstarideal}{%.0f}" % (DT_STAR_IDEAL * 1e6),
-        r"\newcommand{\ratioonemsideal}{%.1f}" % (
-            numeric_energy_J(1e-3, CYC_STEP_IDEAL) / e_an),
-        r"\newcommand{\idealflatter}{%.1f}" % (CYC_STEP_SRAM / CYC_STEP_IDEAL),
-        "",
-        "% --- measured, flash-resident: as shipped ---------------------------------",
-        r"\newcommand{\cycstepflash}{%s}" % f"{CYC_STEP_FLASH:,}".replace(",", "{,}"),
-        r"\newcommand{\dtstarflash}{%.1f}" % (DT_STAR_FLASH * 1e3),
-        "",
-        "% --- measured rail power --------------------------------------------------",
-        r"\newcommand{\panalog}{%.2f}" % (P_ANALOG_W * 1e3),
-        r"\newcommand{\pcore}{%.1f}" % (P_CORE_W * 1e3),
-        r"\newcommand{\ecycle}{%.0f}" % (E_CYCLE_J * 1e12),
-        r"\newcommand{\railratio}{%.1f}" % RAIL_POWER_RATIO,
-        r"\newcommand{\eanalog}{%.2f}" % op1_energy_mJ,
-        r"\newcommand{\eanalogstatic}{%.2f}" % (E_ANALOG_STATIC_J * 1e3),
-        r"\newcommand{\staticshare}{%.0f}" % (E_ANALOG_STATIC_J / (op1_energy_mJ*1e-3) * 100),
-        r"\newcommand{\aercyc}{%s}" % f"{int(round(aer_cyc_pb)):,}".replace(",", "{,}"),
-        r"\newcommand{\aerevents}{%.0f}" % events_pb,
-        "",
-        "% --- olfaction: the second point on the decision-rate axis ----------------",
-        r"\newcommand{\olfcyc}{%s}" % f"{OLF_CYC_MEASURED_Q16:,}".replace(",", "{,}"),
-        r"\newcommand{\olfcycqeight}{%s}" % f"{OLF_CYC_MEASURED_Q8:,}".replace(",", "{,}"),
-        r"\newcommand{\olfcyccounted}{%s}" % f"{OLF_CYC_COUNTED:,}".replace(",", "{,}"),
-        r"\newcommand{\olfroutecyc}{%s}" % f"{OLF_ROUTE_CYC:,}".replace(",", "{,}"),
-        # --- olfaction array, measured on silicon ---
-        r"\newcommand{\olfarrproj}{%s}" % f"{OLF_ARR_PROJ_CYC:,}".replace(",", "{,}"),
-        r"\newcommand{\olfarrenc}{%s}" % f"{OLF_ARR_ENC_CYC:,}".replace(",", "{,}"),
-        r"\newcommand{\olfarrdrain}{%s}" % f"{OLF_ARR_DRAIN_CYC:,}".replace(",", "{,}"),
-        r"\newcommand{\olfarrkern}{%s}" % f"{OLF_ARR_KERN_CYC:,}".replace(",", "{,}"),
-        r"\newcommand{\olfarrclf}{%s}" % f"{OLF_ARR_CLF_CYC:,}".replace(",", "{,}"),
-        r"\newcommand{\olfarrprojuj}{%.0f}" % (OLF_ARR_PROJ_CYC * E_CYCLE_J * 1e6),
-        r"\newcommand{\olfarrencuj}{%.1f}" % (OLF_ARR_ENC_CYC * E_CYCLE_J * 1e6),
-        r"\newcommand{\olfarrdrainuj}{%.1f}" % (OLF_ARR_DRAIN_CYC * E_CYCLE_J * 1e6),
-        r"\newcommand{\olfarrkernuj}{%.0f}" % (OLF_ARR_KERN_CYC * E_CYCLE_J * 1e6),
-        r"\newcommand{\olfarrclfuj}{%.0f}" % (OLF_ARR_CLF_CYC * E_CYCLE_J * 1e6),
-        r"\newcommand{\olfarrrailuj}{%.1f}" % OLF_ARR_RAIL_UJ,
-        r"\newcommand{\olfarrtotuj}{%s}" % f"{_olf_arr_tot_uj:,.0f}".replace(",", "{,}"),
-        r"\newcommand{\olfarrdigfrac}{%.1f}" % _olf_arr_digfrac,
-        r"\newcommand{\olfemulchunkuj}{%s}" % f"{_olf_emul_chunk_uj:,.0f}".replace(",", "{,}"),
-        r"\newcommand{\olfcommonuj}{%s}" % f"{_olf_common_cyc * E_CYCLE_J * 1e6:,.0f}".replace(",", "{,}"),
-        # neuron block: what the array actually replaces
-        r"\newcommand{\olfblockanalog}{%.1f}" % _olf_block_analog,
-        r"\newcommand{\olfblocksram}{%.1f}" % _olf_block_sram,
-        r"\newcommand{\olfblockflash}{%.0f}" % _olf_block_flash,
-        r"\newcommand{\olflifsram}{%.1f}" % OLF_LIF_SRAM_CYC,
-        r"\newcommand{\olflifcyc}{%s}" % f"{OLF_LIF_SRAM_CYC*OLF_LIF_N*OLF_LIF_TICKS:,.0f}".replace(",", "{,}"),
-        r"\newcommand{\olflifflash}{%.1f}" % OLF_LIF_FLASH_CYC,
-        r"\newcommand{\olflifratio}{%.1f}" % (OLF_LIF_FLASH_CYC / OLF_LIF_SRAM_CYC),
-        r"\newcommand{\olfblockpenalty}{%.1f}" % (_olf_block_analog / _olf_block_sram),
-        # per-decision totals
-        r"\newcommand{\olfdecarray}{%s}" % f"{_olf_dec_array:,.0f}".replace(",", "{,}"),
-        r"\newcommand{\olfdecemul}{%s}" % f"{_olf_dec_emul:,.0f}".replace(",", "{,}"),
-        r"\newcommand{\olfdecqsixteen}{%.0f}" % _olf_dec_q16,
-        r"\newcommand{\olfdecqeight}{%.0f}" % _olf_dec_q8,
-        # accuracy, one protocol
-        r"\newcommand{\olfaccarray}{%.3f}" % OLF_ACC_ARRAY_V5,
-        r"\newcommand{\olfaccarraysd}{%.3f}" % OLF_ACC_ARRAY_V5_SD,
-        r"\newcommand{\olfaccarraybest}{%.3f}" % OLF_ACC_ARRAY_BEST_V5,
-        r"\newcommand{\olfaccarraybestsd}{%.3f}" % OLF_ACC_ARRAY_BEST_V5_SD,
-        r"\newcommand{\olfaccemul}{%.3f}" % OLF_ACC_EMUL_V5,
-        r"\newcommand{\olfaccemulsd}{%.3f}" % OLF_ACC_EMUL_V5_SD,
-        r"\newcommand{\olfanalogpenalty}{%.3f}" % (OLF_ACC_EMUL_V5 - OLF_ACC_ARRAY_V5),
-        r"\newcommand{\olfanalogpenaltysd}{%.3f}"
-        % ((OLF_ACC_EMUL_V5_SD**2 + OLF_ACC_ARRAY_V5_SD**2) ** 0.5),
-        r"\newcommand{\olfaccqsixteen}{%.3f}" % OLF_ACC_Q16_V5,
-        r"\newcommand{\olfaccqsixteensd}{%.3f}" % OLF_ACC_Q16_V5_SD,
-        r"\newcommand{\olfaccqeight}{%.3f}" % OLF_ACC_Q8_V5,
-        r"\newcommand{\olfaccqeightsd}{%.3f}" % OLF_ACC_Q8_V5_SD,
-        # hybrid analog tree, measured on silicon (olfaction_hybrid_score.json,
-        # olfaction_hybrid_slot.json). Read from the result files rather than typed, so
-        # the reference analysis stays locked to the run that produced them.
-        r"\newcommand{\accthree}{%.3f}" % _HYB["analog"]["voted5"],
-        r"\newcommand{\accthreesd}{%.3f}" % _HYB["voted5_sd"],
-        r"\newcommand{\accceil}{%.3f}" % _HYB["digital_snapped"]["voted5"],
-        r"\newcommand{\accfull}{%.3f}" % _HYB["digital_full"]["voted5"],
-        r"\newcommand{\hybdecuj}{%s}"
-        % f"{_SLOT['e_decision_J'] * 1e6:,.0f}".replace(",", "{,}"),
-        r"\newcommand{\hybnodeerr}{%.1f}" % (100 * _HYB["node_disagreement"]),
-        r"\newcommand{\hybslotms}{%.1f}" % (_SLOT["t_slot_s"] * 1e3),
-        r"\newcommand{\hybrearmms}{%.0f}" % (3 * _SLOT["tau_s"] * 1e3),
-        r"\newcommand{\hybtaums}{%.0f}" % (_SLOT["tau_s"] * 1e3),
-        r"\newcommand{\hybvisituj}{%.1f}" % (_SLOT["e_visit_J"] * 1e6),
-        # Rather than a /16 number. Sixteen-way multiplexing lies out of reach: the bias DACs are
-        # array-wide, so the neurons in range share one threshold, and
-        # weighting levels by their share of node visits gives 1.13x
-        # (olfaction_mismatch_payoff.py). The /16 macro this replaces was 9.8x optimistic
-        # and is deleted rather than kept unused, so it stays out of future runs.
-        r"\newcommand{\hybpar}{%.2f}" % _PAY["speedup"],
-        r"\newcommand{\hybvisitparuj}{%.1f}"
-        % ((_SLOT["e_visit_J"] - K_RAIL + K_RAIL / _PAY["speedup"]) * 1e6),
-        # optimised read-out
-        r"\newcommand{\olfchunks}{%d}" % OLF_CHUNKS_PER_DECISION,
-        # design targets
-        r"\newcommand{\olfdigstep}{%.1f}" % _olf_dig_step_nj,
-        r"\newcommand{\olfrailstep}{%.1f}" % _olf_rail_step_nj,
-        r"\newcommand{\olfdrainstep}{%.1f}" % _olf_drain_step_nj,
-        r"\newcommand{\olfanalogstep}{%.1f}" % (_olf_rail_step_nj + _olf_drain_step_nj),
-        r"\newcommand{\olfdrainev}{%.0f}" % _olf_drain_ev_nj,
-        r"\newcommand{\olfspikesteps}{%.1f}" % _olf_spikes_per_step,
-        r"\newcommand{\olfsparsityceil}{%.1f}" % _olf_sparsity_ceiling,
-        r"\newcommand{\olfsparsitymeas}{%.1f}" % (100.0 * 85 / _olf_steps),
-        r"\newcommand{\olfrailbudget}{%.0f}" % _olf_rail_budget_uw,
-        r"\newcommand{\olfrailover}{%.1f}" % _olf_rail_over,
-        r"\newcommand{\olfanalogfrac}{%.1f}" % _olf_analog_frac,
-        r"\newcommand{\olfamort}{%.0f}" % _olf_amort,
-        # projected substrate-matched algorithm
-        r"\newcommand{\olfmatcheduj}{%.0f}" % _olf_matched_uj,
-        r"\newcommand{\olfmatchedgain}{%.0f}" % _olf_matched_gain,
-        r"\newcommand{\olfmatchedtree}{%.1f}" % _olf_matched_vs_tree,
-        r"\newcommand{\olfmatchedshare}{%.0f}" % _olf_matched_analog_share,
-        # hybrid
-        r"\newcommand{\olftreevisits}{%.0f}" % OLF_TREE_VISITS,
-        r"\newcommand{\olftreenodes}{%d}" % OLF_TREE_NODES,
-        r"\newcommand{\olfdigvisit}{%.0f}" % _olf_dig_visit_nj,
-        r"\newcommand{\olfslot}{%.1f}" % (_olf_slot_nj / 1e3),
-        r"\newcommand{\olfslotratio}{%.0f}" % (_olf_slot_nj / _olf_dig_visit_nj),
-        r"\newcommand{\olfdigintegrate}{%.2f}" % (_olf_dig_integrate_nj / 1e3),
-        r"\newcommand{\olfslotticks}{%.0f}" % _olf_slot_ticks,
-        r"\newcommand{\olfcountspc}{%.3f}" % OLF_ACC_COUNTS_PC,
-        r"\newcommand{\olfcountsvfive}{%.3f}" % OLF_ACC_COUNTS_V5,
-        r"\newcommand{\olfoptproj}{%s}" % f"{OLF_OPT_PROJ_CYC:,}".replace(",", "{,}"),
-        r"\newcommand{\olfoptkern}{%s}" % f"{OLF_OPT_KERN_CYC:,}".replace(",", "{,}"),
-        r"\newcommand{\olfoptprojx}{%.1f}" % (OLF_NAIVE_PROJ_SAMERUN / OLF_OPT_PROJ_CYC),
-        r"\newcommand{\olfoptkernx}{%.0f}" % (OLF_NAIVE_KERN_SAMERUN / OLF_OPT_KERN_CYC),
-        r"\newcommand{\olfnaiveproj}{%s}" % f"{OLF_NAIVE_PROJ_SAMERUN:,}".replace(",", "{,}"),
-        r"\newcommand{\olfnaivekern}{%s}" % f"{OLF_NAIVE_KERN_SAMERUN:,}".replace(",", "{,}"),
-        r"\newcommand{\olfoptsaveduj}{%s}" % f"{_olf_opt_saved:,.0f}".replace(",", "{,}"),
-        r"\newcommand{\olfeopthree}{%.1f}" % ((olf_e_op3 or 0) * 1e6),
-        r"\newcommand{\olfearray}{%.1f}" % ((olf_e_arr or 0) * 1e6),
-        r"\newcommand{\olfereadout}{%.1f}" % ((olf_e_read or 0) * 1e6),
-        r"\newcommand{\olfrate}{%.0f}" % OLF_DECISION_HZ,
-        r"\newcommand{\olfbreakhz}{%.0f}" % (olf_break_hz or 0),
-        r"\newcommand{\olfratio}{%.2f}" % ((olf_e_op3 or 1) / (olf_e_arr or 1)),
-        "",
-        "% --- the comparison that does not favour the array ------------------------",
-        r"\newcommand{\treeratio}{%.0f}" % (op1_energy_mJ * 1e3 / op3_energy_uJ),
-        r"\newcommand{\etree}{%.1f}" % op3_energy_uJ,
-        r"\newcommand{\opthreecyc}{%s}" % f"{OP3_CYC_TOTAL:,}".replace(",", "{,}"),
-        r"\newcommand{\opthreeresample}{%s}" % f"{OP3_CYC_RESAMPLE:,}".replace(",", "{,}"),
-        r"\newcommand{\opthreenorm}{%s}" % f"{OP3_CYC_NORMALISE:,}".replace(",", "{,}"),
-        r"\newcommand{\opthreerr}{%d}" % OP3_CYC_RR,
-        r"\newcommand{\opthreetrees}{%s}" % f"{OP3_CYC_TREES:,}".replace(",", "{,}"),
-        r"\newcommand{\opthreecompares}{672}",
-        "",
-        "% --- Task Q: what the gap is made of (DERIVED, see constants.py) ----------",
-        r"\newcommand{\ereadout}{%.1f}" % (e_ro * 1e6),
-        r"\newcommand{\gapslope}{%.0f}" % gap_slope_in_core_efficiency(E_ANALOG_STATIC_J, e_op3),
-        r"\newcommand{\gapcorehalf}{%.0f}" % (
-            2 * gap_slope_in_core_efficiency(E_ANALOG_STATIC_J, e_op3)
-            + gap_floor(e_ro, e_op3)),
-        r"\newcommand{\gapfloor}{%.2f}" % gap_floor(e_ro, e_op3),
-        r"\newcommand{\gapbestcase}{%.1f}" % (1.0 / gap_floor(e_ro, e_op3)),
-        r"\newcommand{\analogparity}{%.0f}" % analog_reduction_for_parity(
-            E_ANALOG_STATIC_J, e_ro, e_op3),
-        r"\newcommand{\arrayrate}{%.0f}" % (events_pb / T_BEAT),
-        r"\newcommand{\ratepowerheadroom}{%.0f}" % (
-            N_NEURONS * 26.0 / (events_pb / T_BEAT)),
-        "",
-        "% --- AER drain (the reference analysis), measured ------------------------------------",
-        r"\newcommand{\drainfixed}{%d}" % DRAIN_FIXED_CYC,
-        r"\newcommand{\drainmarginal}{%d}" % DRAIN_MARGINAL_CYC,
+    table = [
+        ("cycstep", '%d' % (CYC_STEP_SRAM)),
+        ("dtstar", '%.0f' % ((DT_STAR_MEASURED * 1e6))),
+        ("dtstarfifty", '%.1f' % ((dt_star(CYC_STEP_SRAM, 50e6) * 1e6))),
+        ("ratioonems", '%.1f' % ((numeric_energy_J(1e-3, CYC_STEP_SRAM) / e_an))),
+        ("ratioatfloor", '%.1f' % ((
+        numeric_energy_J(DT_STAR_MEASURED, CYC_STEP_SRAM) / e_an))),
+        ("crossover", '%.1f' % ((crossover_dt(CYC_STEP_SRAM, e_an) * 1e3))),
+        ("numcyconems", '%.2f' % ((
+        numeric_cycles_per_beat(1e-3, CYC_STEP_SRAM) / 1e6))),
+        ("numlatonems", '%.0f' % ((
+        numeric_cycles_per_beat(1e-3, CYC_STEP_SRAM) / F_CLK * 1e3))),
+        ("numenergyonems", '%.2f' % ((numeric_energy_J(1e-3, CYC_STEP_SRAM) * 1e3))),
+        ("cycstepideal", '%d' % (CYC_STEP_IDEAL)),
+        ("dtstarideal", '%.0f' % ((DT_STAR_IDEAL * 1e6))),
+        ("ratioonemsideal", '%.1f' % ((
+        numeric_energy_J(1e-3, CYC_STEP_IDEAL) / e_an))),
+        ("idealflatter", '%.1f' % ((CYC_STEP_SRAM / CYC_STEP_IDEAL))),
+        ("cycstepflash", '%s' % (f"{CYC_STEP_FLASH:,}".replace(",", "{,}"))),
+        ("dtstarflash", '%.1f' % ((DT_STAR_FLASH * 1e3))),
+        ("panalog", '%.2f' % ((P_ANALOG_W * 1e3))),
+        ("pcore", '%.1f' % ((P_CORE_W * 1e3))),
+        ("ecycle", '%.0f' % ((E_CYCLE_J * 1e12))),
+        ("railratio", '%.1f' % (RAIL_POWER_RATIO)),
+        ("eanalog", '%.2f' % (op1_energy_mJ)),
+        ("eanalogstatic", '%.2f' % ((E_ANALOG_STATIC_J * 1e3))),
+        ("staticshare", '%.0f' % ((E_ANALOG_STATIC_J / (op1_energy_mJ*1e-3) * 100))),
+        ("aercyc", '%s' % (f"{int(round(aer_cyc_pb)):,}".replace(",", "{,}"))),
+        ("aerevents", '%.0f' % (events_pb)),
+        ("olfcyc", '%s' % (f"{OLF_CYC_MEASURED_Q16:,}".replace(",", "{,}"))),
+        ("olfcycqeight", '%s' % (f"{OLF_CYC_MEASURED_Q8:,}".replace(",", "{,}"))),
+        ("olfcyccounted", '%s' % (f"{OLF_CYC_COUNTED:,}".replace(",", "{,}"))),
+        ("olfroutecyc", '%s' % (f"{OLF_ROUTE_CYC:,}".replace(",", "{,}"))),
+        ("olfarrproj", '%s' % (f"{OLF_ARR_PROJ_CYC:,}".replace(",", "{,}"))),
+        ("olfarrenc", '%s' % (f"{OLF_ARR_ENC_CYC:,}".replace(",", "{,}"))),
+        ("olfarrdrain", '%s' % (f"{OLF_ARR_DRAIN_CYC:,}".replace(",", "{,}"))),
+        ("olfarrkern", '%s' % (f"{OLF_ARR_KERN_CYC:,}".replace(",", "{,}"))),
+        ("olfarrclf", '%s' % (f"{OLF_ARR_CLF_CYC:,}".replace(",", "{,}"))),
+        ("olfarrprojuj", '%.0f' % ((OLF_ARR_PROJ_CYC * E_CYCLE_J * 1e6))),
+        ("olfarrencuj", '%.1f' % ((OLF_ARR_ENC_CYC * E_CYCLE_J * 1e6))),
+        ("olfarrdrainuj", '%.1f' % ((OLF_ARR_DRAIN_CYC * E_CYCLE_J * 1e6))),
+        ("olfarrkernuj", '%.0f' % ((OLF_ARR_KERN_CYC * E_CYCLE_J * 1e6))),
+        ("olfarrclfuj", '%.0f' % ((OLF_ARR_CLF_CYC * E_CYCLE_J * 1e6))),
+        ("olfarrrailuj", '%.1f' % (OLF_ARR_RAIL_UJ)),
+        ("olfarrtotuj", '%s' % (f"{_olf_arr_tot_uj:,.0f}".replace(",", "{,}"))),
+        ("olfarrdigfrac", '%.1f' % (_olf_arr_digfrac)),
+        ("olfemulchunkuj", '%s' % (f"{_olf_emul_chunk_uj:,.0f}".replace(",", "{,}"))),
+        ("olfcommonuj", '%s' % (f"{_olf_common_cyc * E_CYCLE_J * 1e6:,.0f}".replace(",", "{,}"))),
+        ("olfblockanalog", '%.1f' % (_olf_block_analog)),
+        ("olfblocksram", '%.1f' % (_olf_block_sram)),
+        ("olfblockflash", '%.0f' % (_olf_block_flash)),
+        ("olflifsram", '%.1f' % (OLF_LIF_SRAM_CYC)),
+        ("olflifcyc", '%s' % (f"{OLF_LIF_SRAM_CYC*OLF_LIF_N*OLF_LIF_TICKS:,.0f}".replace(",", "{,}"))),
+        ("olflifflash", '%.1f' % (OLF_LIF_FLASH_CYC)),
+        ("olflifratio", '%.1f' % ((OLF_LIF_FLASH_CYC / OLF_LIF_SRAM_CYC))),
+        ("olfblockpenalty", '%.1f' % ((_olf_block_analog / _olf_block_sram))),
+        ("olfdecarray", '%s' % (f"{_olf_dec_array:,.0f}".replace(",", "{,}"))),
+        ("olfdecemul", '%s' % (f"{_olf_dec_emul:,.0f}".replace(",", "{,}"))),
+        ("olfdecqsixteen", '%.0f' % (_olf_dec_q16)),
+        ("olfdecqeight", '%.0f' % (_olf_dec_q8)),
+        ("olfaccarray", '%.3f' % (OLF_ACC_ARRAY_V5)),
+        ("olfaccarraysd", '%.3f' % (OLF_ACC_ARRAY_V5_SD)),
+        ("olfaccarraybest", '%.3f' % (OLF_ACC_ARRAY_BEST_V5)),
+        ("olfaccarraybestsd", '%.3f' % (OLF_ACC_ARRAY_BEST_V5_SD)),
+        ("olfaccemul", '%.3f' % (OLF_ACC_EMUL_V5)),
+        ("olfaccemulsd", '%.3f' % (OLF_ACC_EMUL_V5_SD)),
+        ("olfanalogpenalty", '%.3f' % ((OLF_ACC_EMUL_V5 - OLF_ACC_ARRAY_V5))),
+        ("olfanalogpenaltysd", '%.3f' % (((OLF_ACC_EMUL_V5_SD**2 + OLF_ACC_ARRAY_V5_SD**2) ** 0.5))),
+        ("olfaccqsixteen", '%.3f' % (OLF_ACC_Q16_V5)),
+        ("olfaccqsixteensd", '%.3f' % (OLF_ACC_Q16_V5_SD)),
+        ("olfaccqeight", '%.3f' % (OLF_ACC_Q8_V5)),
+        ("olfaccqeightsd", '%.3f' % (OLF_ACC_Q8_V5_SD)),
+        ("accthree", '%.3f' % (_HYB["analog"]["voted5"])),
+        ("accthreesd", '%.3f' % (_HYB["voted5_sd"])),
+        ("accceil", '%.3f' % (_HYB["digital_snapped"]["voted5"])),
+        ("accfull", '%.3f' % (_HYB["digital_full"]["voted5"])),
+        ("hybdecuj", '%s' % (f"{_SLOT['e_decision_J'] * 1e6:,.0f}".replace(",", "{,}"))),
+        ("hybnodeerr", '%.1f' % ((100 * _HYB["node_disagreement"]))),
+        ("hybslotms", '%.1f' % ((_SLOT["t_slot_s"] * 1e3))),
+        ("hybrearmms", '%.0f' % ((3 * _SLOT["tau_s"] * 1e3))),
+        ("hybtaums", '%.0f' % ((_SLOT["tau_s"] * 1e3))),
+        ("hybvisituj", '%.1f' % ((_SLOT["e_visit_J"] * 1e6))),
+        ("hybpar", '%.2f' % (_PAY["speedup"])),
+        ("hybvisitparuj", '%.1f' % (((_SLOT["e_visit_J"] - K_RAIL + K_RAIL / _PAY["speedup"]) * 1e6))),
+        ("olfchunks", '%d' % (OLF_CHUNKS_PER_DECISION)),
+        ("olfdigstep", '%.1f' % (_olf_dig_step_nj)),
+        ("olfrailstep", '%.1f' % (_olf_rail_step_nj)),
+        ("olfdrainstep", '%.1f' % (_olf_drain_step_nj)),
+        ("olfanalogstep", '%.1f' % ((_olf_rail_step_nj + _olf_drain_step_nj))),
+        ("olfdrainev", '%.0f' % (_olf_drain_ev_nj)),
+        ("olfspikesteps", '%.1f' % (_olf_spikes_per_step)),
+        ("olfsparsityceil", '%.1f' % (_olf_sparsity_ceiling)),
+        ("olfsparsitymeas", '%.1f' % ((100.0 * 85 / _olf_steps))),
+        ("olfrailbudget", '%.0f' % (_olf_rail_budget_uw)),
+        ("olfrailover", '%.1f' % (_olf_rail_over)),
+        ("olfanalogfrac", '%.1f' % (_olf_analog_frac)),
+        ("olfamort", '%.0f' % (_olf_amort)),
+        ("olfmatcheduj", '%.0f' % (_olf_matched_uj)),
+        ("olfmatchedgain", '%.0f' % (_olf_matched_gain)),
+        ("olfmatchedtree", '%.1f' % (_olf_matched_vs_tree)),
+        ("olfmatchedshare", '%.0f' % (_olf_matched_analog_share)),
+        ("olftreevisits", '%.0f' % (OLF_TREE_VISITS)),
+        ("olftreenodes", '%d' % (OLF_TREE_NODES)),
+        ("olfdigvisit", '%.0f' % (_olf_dig_visit_nj)),
+        ("olfslot", '%.1f' % ((_olf_slot_nj / 1e3))),
+        ("olfslotratio", '%.0f' % ((_olf_slot_nj / _olf_dig_visit_nj))),
+        ("olfdigintegrate", '%.2f' % ((_olf_dig_integrate_nj / 1e3))),
+        ("olfslotticks", '%.0f' % (_olf_slot_ticks)),
+        ("olfcountspc", '%.3f' % (OLF_ACC_COUNTS_PC)),
+        ("olfcountsvfive", '%.3f' % (OLF_ACC_COUNTS_V5)),
+        ("olfoptproj", '%s' % (f"{OLF_OPT_PROJ_CYC:,}".replace(",", "{,}"))),
+        ("olfoptkern", '%s' % (f"{OLF_OPT_KERN_CYC:,}".replace(",", "{,}"))),
+        ("olfoptprojx", '%.1f' % ((OLF_NAIVE_PROJ_SAMERUN / OLF_OPT_PROJ_CYC))),
+        ("olfoptkernx", '%.0f' % ((OLF_NAIVE_KERN_SAMERUN / OLF_OPT_KERN_CYC))),
+        ("olfnaiveproj", '%s' % (f"{OLF_NAIVE_PROJ_SAMERUN:,}".replace(",", "{,}"))),
+        ("olfnaivekern", '%s' % (f"{OLF_NAIVE_KERN_SAMERUN:,}".replace(",", "{,}"))),
+        ("olfoptsaveduj", '%s' % (f"{_olf_opt_saved:,.0f}".replace(",", "{,}"))),
+        ("olfeopthree", '%.1f' % (((olf_e_op3 or 0) * 1e6))),
+        ("olfearray", '%.1f' % (((olf_e_arr or 0) * 1e6))),
+        ("olfereadout", '%.1f' % (((olf_e_read or 0) * 1e6))),
+        ("olfrate", '%.0f' % (OLF_DECISION_HZ)),
+        ("olfbreakhz", '%.0f' % ((olf_break_hz or 0))),
+        ("olfratio", '%.2f' % (((olf_e_op3 or 1) / (olf_e_arr or 1)))),
+        ("treeratio", '%.0f' % ((op1_energy_mJ * 1e3 / op3_energy_uJ))),
+        ("etree", '%.1f' % (op3_energy_uJ)),
+        ("opthreecyc", '%s' % (f"{OP3_CYC_TOTAL:,}".replace(",", "{,}"))),
+        ("opthreeresample", '%s' % (f"{OP3_CYC_RESAMPLE:,}".replace(",", "{,}"))),
+        ("opthreenorm", '%s' % (f"{OP3_CYC_NORMALISE:,}".replace(",", "{,}"))),
+        ("opthreerr", '%d' % (OP3_CYC_RR)),
+        ("opthreetrees", '%s' % (f"{OP3_CYC_TREES:,}".replace(",", "{,}"))),
+        ("opthreecompares", "672"),
+        ("ereadout", '%.1f' % ((e_ro * 1e6))),
+        ("gapslope", '%.0f' % (gap_slope_in_core_efficiency(E_ANALOG_STATIC_J, e_op3))),
+        ("gapcorehalf", '%.0f' % ((
+        2 * gap_slope_in_core_efficiency(E_ANALOG_STATIC_J, e_op3)
+        + gap_floor(e_ro, e_op3)))),
+        ("gapfloor", '%.2f' % (gap_floor(e_ro, e_op3))),
+        ("gapbestcase", '%.1f' % ((1.0 / gap_floor(e_ro, e_op3)))),
+        ("analogparity", '%.0f' % (analog_reduction_for_parity(
+        E_ANALOG_STATIC_J, e_ro, e_op3))),
+        ("arrayrate", '%.0f' % ((events_pb / T_BEAT))),
+        ("ratepowerheadroom", '%.0f' % ((
+        N_NEURONS * 26.0 / (events_pb / T_BEAT)))),
+        ("drainfixed", '%d' % (DRAIN_FIXED_CYC)),
+        ("drainmarginal", '%d' % (DRAIN_MARGINAL_CYC)),
     ]
-    import re
-    rows = ["constant,value"]
-    for ln in lines:
-        m = re.match(r"\\newcommand\{\\([^}]+)\}\{(.*)\}\s*$", ln)
-        if m:
-            rows.append("%s,%s" % (m.group(1), m.group(2)))
+    rows = ["constant,value"] + ["%s,%s" % (n, v) for n, v in table]
     with open(path, "w") as f:
         f.write("\n".join(rows) + "\n")
     return path

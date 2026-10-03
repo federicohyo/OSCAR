@@ -61,17 +61,10 @@ comp.out
 *.swp
 *.wav
 /figures/
-/LNA/_wavs/
-/LNA/wavs*/
 recordings/
 newchipexploration/
-data_olfaction/
-results/scope_selfheal_aug24.csv
 
 # Editorial / working trees in-tree
-LNA/*/edit_plans/
-LNA/*/style_reviews/
-LNA/*/reviews*.md
 **/_backup_*/
 
 # Secrets / machine-specific

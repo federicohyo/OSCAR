@@ -1,8 +1,9 @@
 # OSCAR — Open-Silicon Chemosensing Analog RISC-V array
 
 OSCAR is a public, self-contained release of a fabricated mixed-signal
-neuromorphic chip and everything needed to understand it and to **replot the
-results**. The die, designed with the open SkyWater 130-nm PDK through
+neuromorphic chip, with the data and scripts to **replot the results** (a small
+number of manually composed assets are noted in `docs/PLOTTING.md`). The die,
+designed with the open SkyWater 130-nm PDK through
 the Efabless Caravel/Caravan harness, couples a capacitively coupled low-noise
 amplifier (LNA) and an exposed TiO₂-coated chemosensing electrode pad to an
 analog spiking neural network (SNN) of sixteen leaky-integrate-and-fire (LIF)
@@ -57,7 +58,6 @@ Additional design assets live in `docs/figures/`:
 | `fig_hardware_layout.{pdf,png}` | README hardware figure (above). |
 | `arch_overview.pdf` / `.png` | Architecture / system-overview float. |
 | `domain_map.pdf` / `.png` | Domain map built from layout + die micrograph. |
-| `lna_schematic.pdf` | Exported from the `design/xschem/` LNA cell (see `docs/PLOTTING.md`). |
 
 ## Repository layout
 

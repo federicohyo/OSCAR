@@ -23,9 +23,7 @@ import numpy as np
 import constants as K
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RES = os.path.join(HERE, "..", "..", "..", "results")
-if not os.path.isdir(RES):
-    RES = os.path.join(HERE, "..", "..", "results")
+RES = os.path.join(HERE, "..", "..", "data", "olfaction")
 INK, MUTED, GRID = "#1a1a1a", "#8a8a8a", "#d8d8d8"
 C_AN, C_DIGI = "#0b7285", "#6741d9"
 

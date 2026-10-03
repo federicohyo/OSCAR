@@ -34,9 +34,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                    "..", "..", ".."))
-sys.path.insert(0, REPO)
+                                    "..", ".."))
+sys.path.insert(0, os.path.join(REPO, "measurements", "reservoir", "scripts"))
 os.chdir(REPO)
+RES = os.path.join(REPO, "data", "olfaction")
 
 from reservoir_demo_proj import corr_effdim, load
 
@@ -70,10 +71,10 @@ def main():
     fig, ax = plt.subplots(figsize=(3.9, 2.9))
     out = {}
     for label, npz, color, mk, lw in CURVES:
-        if not os.path.exists(npz):
+        if not os.path.exists(os.path.join(RES, npz)):
             print(f"  SKIP (missing) {npz}")
             continue
-        sp, _, T = load(npz)
+        sp, _, T = load(os.path.join(RES, npz))
         eds = [corr_effdim(sp, T, K, "exp", t)[2] for t in TAUS]
         rho = corr_effdim(sp, T, K, "exp", TAU_TABLE)[1]
         n, nb = sp.shape
@@ -97,7 +98,7 @@ def main():
         p = os.path.join(HERE, f"deff_decomp_v2.{ext}")
         fig.savefig(p, dpi=300)
         print("wrote", p)
-    with open(os.path.join(REPO, "results", "deff_decomp_v2.json"), "w") as f:
+    with open(os.path.join(RES, "deff_decomp_v2.json"), "w") as f:
         json.dump(out, f, indent=2)
 
 

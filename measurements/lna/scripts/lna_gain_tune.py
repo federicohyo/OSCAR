@@ -5,9 +5,9 @@ maximizes the output amplitude seen on the membrane scope stream.
 Self-contained: bit-bangs the AD5664R DACs over the FT4232H (channels B/C)
 and reads Vout as a client of the scope broadcast server. Fully self-contained.
 
-Vout path: the LNA output node is what the pixhawk scope streams as
-"<time>,<volts>" lines. Connect via ofxLPM/scope-pixhawk/tools/server.py
-(127.0.0.1:5555); if no server answers, falls back to opening
+Vout path: the LNA output node is what the external bench scope streams as
+"<time>,<volts>" lines. Connect via the bench scope server
+(127.0.0.1:5555); with the server idle, it opens
 /dev/ttyACM0 directly. VPP is the 5th-95th percentile spread of volts in
 a window -- raw max-min is too easily inflated by single ADC spikes.
 
@@ -16,8 +16,8 @@ pass --vin-pp to also log the gain ratio and dB.
 
 Prereqs before running:
   - kill anything owning the FTDI:  pkill -f '[n]euron_bridge.py' ; close the GUI
-  - start the scope server once:    ./.venv-meas/bin/python3 ofxLPM/scope-pixhawk/tools/server.py
-    (or leave it off and make sure nothing else holds /dev/ttyACM0)
+  - start the bench scope server once (external tool), or leave it idle
+    and keep /dev/ttyACM0 free
 
 Usage:
   ../../.venv-meas/bin/python3 lna_gain_tune.py                  # from LNA/
@@ -147,7 +147,7 @@ def set_bias(dacs, name, volts):
 class ScopeClient:
     """Reader for the pixhawk scope stream: server first, raw port as fallback.
 
-    Same contract as ofxLPM/scope-pixhawk/tools/server.py: lines of
+    Same contract as the bench scope server: lines of
     "<board_time>,<volts>". Windowed stats use host arrival time; durations
     inside a window use the board clock (batches arrive together over TCP)."""
 

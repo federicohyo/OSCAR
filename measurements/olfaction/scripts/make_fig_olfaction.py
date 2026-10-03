@@ -9,7 +9,7 @@ Pipeline is olfaction_class_curve.py verbatim, k=3 only: reference readout
 (exponential kernel + LogReg), GroupKFold by trial, majority vote over a
 trial's 5 chunks.  Typical statistic = mean over ALL C(5,3) subsets and all
 9 acquisitions, exactly the reference value 0.877 -- asserted
-against data/olfaction_class_curve.json before drawing.
+against data/olfaction/olfaction_class_curve.json before drawing.
 
 DRAWN AT PRINT SIZE (3.45 x 0.85 in, two 5-row panels), single column,
 keep the same scale.
@@ -92,7 +92,7 @@ def main():
     # sanity: reproduce the reference typical statistic before drawing
     allv5 = [s["v5"] for per in out.values() for s in per.values()]
     allpc = [s["pc"] for per in out.values() for s in per.values()]
-    ref = json.load(open(os.path.join(REPO, "data/olfaction_class_curve.json")))
+    ref = json.load(open(os.path.join(REPO, "data/olfaction/olfaction_class_curve.json")))
     assert abs(np.mean(allv5) - ref["3"]["typical"]["v5"]) < 1e-9, "v5 mismatch"
     assert abs(np.mean(allpc) - ref["3"]["typical"]["pc"]) < 1e-9, "pc mismatch"
     print(f"typical k=3: pc {np.mean(allpc):.4f}  v5 {np.mean(allv5):.4f} "

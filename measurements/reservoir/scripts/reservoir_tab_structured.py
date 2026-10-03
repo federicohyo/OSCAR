@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce every row of Table~\\ref{tab:structured} (3-class N/S/V, inter-patient LORO,
+"""Reproduce every row of the structured-reservoir table (3-class N/S/V, inter-patient LORO,
 linear readout) from the committed npz files, so the reference campaign table is verifiable offline.
 
 Rows: raw ECG / raw+RR / RR-only (static feature baselines), the random-projection

@@ -93,8 +93,8 @@ def main():
         print(f"k={k}: typical {res[k]['typical']['v5']:.3f} +/- {res[k]['typical']['v5_sd']:.3f}"
               f"   data-pick {res[k]['data_pick']['v5']:.3f} +/- {res[k]['data_pick']['v5_sd']:.3f}"
               f"   (best subset {','.join(best[0])}: {res[k]['best_subset_v5']:.3f}, data-picked)")
-    json.dump(res, open("data/olfaction_class_curve.json", "w"), indent=1)
-    print("wrote data/olfaction_class_curve.json")
+    json.dump(res, open("data/olfaction/olfaction_class_curve.json", "w"), indent=1)
+    print("wrote data/olfaction/olfaction_class_curve.json")
     return 0
 
 if __name__ == "__main__":

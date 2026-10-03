@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Closed-loop bias tuner for the array's EVOKED firing rate.
 
-Fills the tooling needs behind the `\\todo{MEASURE:}` in Section 4.3.1: re-acquire the
-reservoir at the DIM recording's operating point so the D_eff decomposition and the
-accuracy can be compared like for like.
+Re-acquires the reservoir at the DIM recording's operating point so the D_eff
+decomposition and the accuracy can be compared like for like.
 
-`reservoir_biastune.py` cannot do this. It sweeps vleakn and measures the RESTING
-rate with zero stimulus, which is a different quantity: the recordings' 8.8 Hz is the
-rate the array emits WHILE BEATS ARE BEING PRESENTED, through the projected delta
-encoder. This script measures that quantity, through the same `present_delta` path
-the acquisition uses, and bisects a bias offset until it hits a target.
+`reservoir_biastune.py` measures a different quantity: it sweeps vleakn and reports
+the RESTING rate with zero stimulus. The recordings' 8.8 Hz is the rate the array
+emits WHILE BEATS ARE BEING PRESENTED, through the projected delta encoder. This
+script measures that quantity, through the same `present_delta` path the acquisition
+uses, and bisects a bias offset until it hits a target.
 
     PYTHONPATH=. CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 reservoir_ratetune.py \\
         --bias-pattern 'ofxCaravanViewer/bin/bias_synapse_characterization_super_n{k}_feedproj.biases' \\

@@ -37,9 +37,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                    "..", "..", ".."))
-sys.path.insert(0, REPO)
+                                    "..", ".."))
+sys.path.insert(0, os.path.join(REPO, "measurements", "reservoir", "scripts"))
 os.chdir(REPO)
+RES = os.path.join(REPO, "data", "olfaction")
 
 from reservoir_demo_proj import corr_effdim, load
 
@@ -54,7 +55,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 K = 8
 TAUS = np.array([0.01, 0.02, 0.04, 0.08, 0.16, 0.32])
 TAU_TABLE = 0.02
-MATCH = os.path.join(REPO, "results", "deff_ref25_match.json")
+MATCH = os.path.join(RES, "deff_ref25_match.json")
 
 SILICON = [
     ("Silicon REF25, 2026-08-12 (39 Hz, no lattice)",
@@ -83,10 +84,10 @@ def main():
     out = {}
 
     for label, npz, color, mk, lw in SILICON + SOFTWARE:
-        if not os.path.exists(npz):
+        if not os.path.exists(os.path.join(RES, npz)):
             print(f"  SKIP (missing) {npz}")
             continue
-        sp, _, T = load(npz)
+        sp, _, T = load(os.path.join(RES, npz))
         eds = [corr_effdim(sp, T, K, "exp", t)[2] for t in TAUS]
         ax.plot(TAUS * 1000, eds, mk, color=color, lw=lw, ms=3.4, label=label)
         out[label] = {"npz": npz, "deff": eds, "deff20": eds[1],
@@ -133,7 +134,7 @@ def main():
         p = os.path.join(HERE, f"deff_decomp_v3.{ext}")
         fig.savefig(p, dpi=300)
         print("wrote", p)
-    json.dump(out, open(os.path.join(REPO, "results", "deff_decomp_v3.json"), "w"),
+    json.dump(out, open(os.path.join(RES, "deff_decomp_v3.json"), "w"),
               indent=2)
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fine-grid, high-trial coincidence sweep on ONE neuron (Phase 1b, Task A).
 
-Sharpens the grid-quantized Delta-t discrimination of Fig.~\\ref{fig:frontier2} on real
+Sharpens the grid-quantized Delta-t discrimination of the frontier figure on real
 silicon: a sub-millisecond Delta-t grid densest across the window transition band, with
 >=100 trials/point, saving ALL raw per-trial outcomes (not just p_fire) so the
 discrimination Monte Carlo uses measured per-trial noise. Stock biases only -- if the

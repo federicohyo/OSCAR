@@ -269,9 +269,7 @@ def main():
         sc = Scope2()
     except Exception as e:
         sys.exit(f"ERROR: scope server on 127.0.0.1:5555 is unreachable ({e})\n"
-                 "       start it with:\n"
-                 "         ../.venv-meas/bin/python3 "
-                 "../ofxLPM/scope-pixhawk/tools/server.py")
+                 "       start the external bench scope server first")
     wavdir = os.path.join(HERE, "wavs_phase")
     os.makedirs(wavdir, exist_ok=True)
     audio = AudioOut()

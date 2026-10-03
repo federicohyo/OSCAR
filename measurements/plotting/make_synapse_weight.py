@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Figure: the 4-bit synaptic weight code, measured through the on-chip programming path.
 
-Reads data/synapse/onset_<tag>.json (written by ../../synapse_onset.py) and renders
+Reads data/synapse/onset_<tag>.json (written by
+measurements/array/scripts/synapse_onset.py) and renders
 weight_code.pdf.
 
 The measured quantity is the excitatory branch bias at which a given weight word just brings

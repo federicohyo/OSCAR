@@ -22,9 +22,7 @@ import numpy as np
 import constants as K
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RES = os.path.join(HERE, "..", "..", "..", "results")
-if not os.path.isdir(RES):
-    RES = os.path.join(HERE, "..", "..", "results")
+RES = os.path.join(HERE, "..", "..", "data", "olfaction")
 
 E = K.E_CYCLE_J
 T, N, TICKS, KCH = 0.15, 16, 150, 5

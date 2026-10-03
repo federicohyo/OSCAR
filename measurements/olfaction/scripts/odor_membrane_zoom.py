@@ -84,7 +84,7 @@ def main():
             if loop.poll() is not None and time.time() - t_arm > 25:
                 break
         if not triggered:
-            print("!! the scope never triggered -- no injection crossed "
+            print("!! scope armed but untriggered -- the injection stayed below "
                   f"{a.level:.2f} V on CH{a.chan} while armed")
         else:
             t, v = sc.read_waveform(a.chan)

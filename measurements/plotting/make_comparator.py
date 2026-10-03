@@ -22,9 +22,9 @@ single fixed threshold falls short.
       thing -- crushes levels 1..8 into half a millivolt against the free-run edge, where
       they stay unseparated; that earlier run is why the axes are split this way.
 
-Data: data/olfaction_comparator_tune.json (placement) and
-data/olfaction_hybrid_transfer.json (the transfer matrix), n14, 25 MHz. This is the
-ladder the hybrid tree of Section~\ref{par:hybridrun} actually executed against, measured
+Data: data/olfaction/olfaction_comparator_tune.json (placement) and
+data/olfaction/olfaction_hybrid_transfer.json (the transfer matrix), n14, 25 MHz. This is the
+ladder the hybrid tree actually executed against, measured
 after the bench was moved; the earlier ten-level ladder is superseded and its drift is
 the comparator-drift figure.
 
@@ -37,9 +37,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RES = os.path.join(HERE, "..", "..", "..", "results")
-if not os.path.isdir(RES):
-    RES = os.path.join(HERE, "..", "..", "results")
+RES = os.path.join(HERE, "..", "..", "data", "olfaction")
 INK, MUTED, GRID = "#1a1a1a", "#8a8a8a", "#d8d8d8"
 C_J = "#0b7285"
 

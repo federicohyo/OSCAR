@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RES = os.path.join(HERE, "..", "..", "..", "results")
+RES = os.path.join(HERE, "..", "..", "data", "olfaction")
 INK, MUTED = "#1a1a1a", "#8a8a8a"
 REF = [4, 6, 9, 11, 18, 26]
 DIE1 = ["base", "base2", "inj", "inj2", "inj3"]

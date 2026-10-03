@@ -133,7 +133,7 @@ def transfer():
     # Above 130 Hz its clipped fit degrades, and an audio output rolls off well above
     # 200 Hz, so the drive is taken as flat there -- same rule as before.
     gdb_c, fc_c = None, float("nan")
-    ref = os.path.join(ROOT, "..", "..", "lna_transfer_ref.csv")
+    ref = os.path.join(ROOT, "..", "data", "lna_transfer_ref.csv")
     if os.path.exists(ref):
         with open(ref) as fh:
             rr = [r for r in csv.DictReader(fh)]

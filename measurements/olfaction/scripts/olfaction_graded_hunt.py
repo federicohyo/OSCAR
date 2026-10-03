@@ -36,8 +36,8 @@ class Scope:
     """Membrane reader. Prefers the broadcast server, falls back to the raw serial port.
 
     The port admits one owner, which used to mean a measurement and a live view were
-    mutually exclusive -- precisely the wrong trade-off while tuning. With
-    `ofxLPM/scope-pixhawk/tools/server.py` running, this connects as one of many readers
+    mutually exclusive -- an unfavorable trade-off while tuning. With
+    the external bench scope server running, this connects as one of many readers
     and the GUI can watch the same stream. With the server off, it opens the device directly
     and behaves exactly as before, so nothing that used to work stops working."""
 

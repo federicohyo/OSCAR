@@ -1,0 +1,263 @@
+{
+  "neuron": 14,
+  "reps": 6,
+  "paper_ladder": [
+    6,
+    8,
+    11,
+    18,
+    21,
+    29
+  ],
+  "ref_ladder": [
+    4,
+    6,
+    9,
+    11,
+    18,
+    26
+  ],
+  "levels": [
+    6,
+    8,
+    12,
+    16,
+    24,
+    32
+  ],
+  "inject_level": 2,
+  "djexc": -0.0009,
+  "calls": [
+    {
+      "lvl": 0,
+      "ref": 4,
+      "meas": 4,
+      "now": 4,
+      "trip": 0,
+      "path": 0,
+      "ticks": 20,
+      "oor": 0,
+      "p0": 0,
+      "below": 0,
+      "above": 6,
+      "at": 6,
+      "ticks0": 25635995,
+      "level_idx": 0,
+      "level_file": 6,
+      "line": "CALM lvl=00 ref=04 meas=04 now=04 trip=0 path=0 ticks=14 oor=0 p0=00 below=00 above=06 at=06 ticks0=01872c9b",
+      "wall_s": 1.1069912910461426
+    },
+    {
+      "lvl": 1,
+      "ref": 6,
+      "meas": 6,
+      "now": 6,
+      "trip": 0,
+      "path": 0,
+      "ticks": 20,
+      "oor": 0,
+      "p0": 0,
+      "below": 0,
+      "above": 6,
+      "at": 6,
+      "ticks0": 25751787,
+      "level_idx": 1,
+      "level_file": 8,
+      "line": "CALM lvl=01 ref=06 meas=06 now=06 trip=0 path=0 ticks=14 oor=0 p0=00 below=00 above=06 at=06 ticks0=0188f0eb",
+      "wall_s": 1.1192362308502197
+    },
+    {
+      "lvl": 2,
+      "ref": 9,
+      "meas": 14,
+      "now": 9,
+      "trip": 1,
+      "path": 1,
+      "ticks": 80,
+      "oor": 0,
+      "p0": 0,
+      "below": 0,
+      "above": 0,
+      "at": 0,
+      "ticks0": 319234213,
+      "level_idx": 2,
+      "level_file": 12,
+      "line": "CALM lvl=02 ref=09 meas=0e now=09 trip=1 path=1 ticks=50 oor=0 p0=00 below=00 above=00 at=00 ticks0=130720a5",
+      "wall_s": 12.853898525238037
+    },
+    {
+      "lvl": 3,
+      "ref": 11,
+      "meas": 11,
+      "now": 11,
+      "trip": 0,
+      "path": 0,
+      "ticks": 20,
+      "oor": 0,
+      "p0": 0,
+      "below": 0,
+      "above": 6,
+      "at": 6,
+      "ticks0": 26472517,
+      "level_idx": 3,
+      "level_file": 16,
+      "line": "CALM lvl=03 ref=0b meas=0b now=0b trip=0 path=0 ticks=14 oor=0 p0=00 below=00 above=06 at=06 ticks0=0193f045",
+      "wall_s": 1.1433160305023193
+    },
+    {
+      "lvl": 4,
+      "ref": 18,
+      "meas": 18,
+      "now": 18,
+      "trip": 0,
+      "path": 0,
+      "ticks": 20,
+      "oor": 0,
+      "p0": 0,
+      "below": 0,
+      "above": 6,
+      "at": 6,
+      "ticks0": 27067681,
+      "level_idx": 4,
+      "level_file": 24,
+      "line": "CALM lvl=04 ref=12 meas=12 now=12 trip=0 path=0 ticks=14 oor=0 p0=00 below=00 above=06 at=06 ticks0=019d0521",
+      "wall_s": 1.1670706272125244
+    },
+    {
+      "lvl": 5,
+      "ref": 26,
+      "meas": 26,
+      "now": 26,
+      "trip": 0,
+      "path": 0,
+      "ticks": 20,
+      "oor": 0,
+      "p0": 0,
+      "below": 0,
+      "above": 6,
+      "at": 5,
+      "ticks0": 28038447,
+      "level_idx": 5,
+      "level_file": 32,
+      "line": "CALM lvl=05 ref=1a meas=1a now=1a trip=0 path=0 ticks=14 oor=0 p0=00 below=00 above=06 at=05 ticks0=01abd52f",
+      "wall_s": 1.2034494876861572
+    }
+  ],
+  "aer_before": {
+    "misaddressed": [],
+    "silent": [
+      0,
+      3,
+      8,
+      10,
+      12
+    ],
+    "noise": []
+  },
+  "derive_line": "CALD ok nval=06 oor=00 gap=02 head=06 margin=01 enc=0005070a0e161d lad=0406090b121a",
+  "derive": {
+    "nval": 6,
+    "oor": 0,
+    "gap": 2,
+    "head": 6,
+    "margin": 1,
+    "enc": [
+      0,
+      5,
+      7,
+      10,
+      14,
+      22,
+      29
+    ],
+    "lad": [
+      4,
+      6,
+      9,
+      11,
+      18,
+      26
+    ]
+  },
+  "aer_after": {
+    "misaddressed": [],
+    "silent": [
+      0,
+      3,
+      8,
+      10,
+      12
+    ],
+    "noise": []
+  },
+  "aer_after_ok": true,
+  "chip_encoding": [
+    0,
+    5,
+    7,
+    10,
+    14,
+    22,
+    29
+  ],
+  "chip_ladder": [
+    4,
+    6,
+    9,
+    11,
+    18,
+    26
+  ],
+  "ladder_relayed": [
+    4,
+    6,
+    9,
+    11,
+    18,
+    26
+  ],
+  "stale_encoding": [
+    0,
+    5,
+    7,
+    10,
+    14,
+    22,
+    29
+  ],
+  "damaged_ladder_meas": [
+    4,
+    6,
+    14,
+    11,
+    18,
+    26
+  ],
+  "damaged_scored": {
+    "node_error": 0.04334983567000874,
+    "per_chunk": 0.7733333333333333,
+    "voted5": 0.9
+  },
+  "chip_scored": {
+    "node_error": 0.0,
+    "per_chunk": 0.8466666666666667,
+    "voted5": 1.0
+  },
+  "stale_scored": {
+    "node_error": 0.0,
+    "per_chunk": 0.8466666666666667,
+    "voted5": 1.0
+  },
+  "hostlog_report": "window sweep_begin -> sweep_end: 26.501 s wall clock\n  host->chip lines inside window: 181 (181 expected, 0 unexpected)\n     +   0.000s  B JExcWn0 0.355440\n     +   0.000s  B JExcWn1 0.353350\n     +   0.000s  B JExcWn2 0.340000\n     +   0.000s  B JExcWn3 0.378940\n     +   0.000s  B JInhWp0 1.770333\n     +   0.000s  B JInhWp1 1.519000\n     +   0.000s  B JInhWp2 1.509333\n     +   0.000s  B JInhWp3 1.538333\n     +   0.000s  B TUNEp 1.780000\n     +   0.000s  B VB1 0.000000\n     +   0.000s  B VB2 0.000000\n     +   0.000s  B VREF 0.682333\n     +   0.000s  B buffermonp 0.267000\n     +   0.000s  B free 1.750333\n     +   0.000s  B ifdcp 1.780000\n     +   0.001s  B lna_iref 1.008667\n     +   0.001s  B vepulseextp 1.293330\n     +   0.001s  B vipulseextp 1.780000\n     +   0.001s  B vleakn 0.258200\n     +   0.001s  B vrefn 0.255000\n     +   0.001s  B vtaun 0.300000\n     +   0.001s  B vtaup 1.424333\n     +   0.001s  B vthrdn 0.830667\n     +   0.001s  B vthrdp 1.329000\n     +   0.001s  M 14\n     +   0.851s  P 0 15 exc\n     +   0.851s  S 0 14 exc\n     +   0.901s  MASK 16384\n     +   1.201s  PULSEFINE 21\n     +   1.301s  CALRUN 0 0 6 20 4 6 9 11 18 26\n     +   2.409s  B JExcWn0 0.354940\n     +   2.409s  B JExcWn1 0.352850\n     +   2.409s  B JExcWn2 0.339500\n     +   2.409s  B JExcWn3 0.378440\n     +   2.409s  B JInhWp0 1.770333\n     +   2.409s  B JInhWp1 1.519000\n     +   2.409s  B JInhWp2 1.509333\n     +   2.409s  B JInhWp3 1.538333\n     +   2.409s  B TUNEp 1.780000\n     +   2.409s  B VB1 0.000000\n     +   2.409s  B VB2 0.000000\n     +   2.409s  B VREF 0.682333\n     +   2.409s  B buffermonp 0.267000\n     +   2.409s  B free 1.750333\n     +   2.409s  B ifdcp 1.780000\n     +   2.409s  B lna_iref 1.008667\n     +   2.409s  B vepulseextp 1.293330\n     +   2.409s  B vipulseextp 1.780000\n     +   2.409s  B vleakn 0.258200\n     +   2.409s  B vrefn 0.255000\n     +   2.409s  B vtaun 0.300000\n     +   2.409s  B vtaup 1.424333\n     +   2.410s  B vthrdn 0.830667\n     +   2.410s  B vthrdp 1.329000\n     +   2.410s  M 14\n     +   3.260s  P 0 15 exc\n     +   3.260s  S 0 14 exc\n     +   3.310s  MASK 16384\n     +   3.610s  PULSEFINE 21\n     +   3.710s  CALRUN 0 1 6 20 4 6 9 11 18 26\n     +   4.830s  B JExcWn0 0.353040\n     +   4.830s  B JExcWn1 0.350950\n     +   4.830s  B JExcWn2 0.337600\n     +   4.830s  B JExcWn3 0.376540\n     +   4.830s  B JInhWp0 1.770333\n     +   4.830s  B JInhWp1 1.519000\n     +   4.830s  B JInhWp2 1.509333\n     +   4.830s  B JInhWp3 1.538333\n     +   4.830s  B TUNEp 1.780000\n     +   4.830s  B VB1 0.000000\n     +   4.830s  B VB2 0.000000\n     +   4.830s  B VREF 0.682333\n     +   4.830s  B buffermonp 0.267000\n     +   4.830s  B free 1.750333\n     +   4.830s  B ifdcp 1.780000\n     +   4.831s  B lna_iref 1.008667\n     +   4.831s  B vepulseextp 1.293330\n     +   4.831s  B vipulseextp 1.780000\n     +   4.831s  B vleakn 0.258200\n     +   4.831s  B vrefn 0.255000\n     +   4.831s  B vtaun 0.300000\n     +   4.831s  B vtaup 1.424333\n     +   4.831s  B vthrdn 0.830667\n     +   4.831s  B vthrdp 1.329000\n     +   4.831s  M 14\n     +   5.681s  P 0 15 exc\n     +   5.681s  S 0 14 exc\n     +   5.731s  MASK 16384\n     +   6.031s  PULSEFINE 21\n     +   6.132s  CALRUN 0 2 6 20 4 6 9 11 18 26\n     +  18.986s  B JExcWn0 0.353440\n     +  18.986s  B JExcWn1 0.351350\n     +  18.986s  B JExcWn2 0.338000\n     +  18.986s  B JExcWn3 0.376940\n     +  18.986s  B JInhWp0 1.770333\n     +  18.986s  B JInhWp1 1.519000\n     +  18.986s  B JInhWp2 1.509333\n     +  18.986s  B JInhWp3 1.538333\n     +  18.986s  B TUNEp 1.780000\n     +  18.986s  B VB1 0.000000\n     +  18.986s  B VB2 0.000000\n     +  18.986s  B VREF 0.682333\n     +  18.986s  B buffermonp 0.267000\n     +  18.986s  B free 1.750333\n     +  18.987s  B ifdcp 1.780000\n     +  18.987s  B lna_iref 1.008667\n     +  18.987s  B vepulseextp 1.293330\n     +  18.987s  B vipulseextp 1.780000\n     +  18.987s  B vleakn 0.258200\n     +  18.987s  B vrefn 0.255000\n     +  18.987s  B vtaun 0.300000\n     +  18.987s  B vtaup 1.424333\n     +  18.987s  B vthrdn 0.830667\n     +  18.987s  B vthrdp 1.329000\n     +  18.987s  M 14\n     +  19.837s  P 0 15 exc\n     +  19.837s  S 0 14 exc\n     +  19.887s  MASK 16384\n     +  20.187s  PULSEFINE 21\n     +  20.288s  CALRUN 0 3 6 20 4 6 9 11 18 26\n     +  21.431s  B JExcWn0 0.352440\n     +  21.431s  B JExcWn1 0.350350\n     +  21.431s  B JExcWn2 0.337000\n     +  21.431s  B JExcWn3 0.375940\n     +  21.431s  B JInhWp0 1.770333\n     +  21.431s  B JInhWp1 1.519000\n     +  21.432s  B JInhWp2 1.509333\n     +  21.432s  B JInhWp3 1.538333\n     +  21.432s  B TUNEp 1.780000\n     +  21.432s  B VB1 0.000000\n     +  21.432s  B VB2 0.000000\n     +  21.432s  B VREF 0.682333\n     +  21.432s  B buffermonp 0.267000\n     +  21.432s  B free 1.750333\n     +  21.432s  B ifdcp 1.780000\n     +  21.432s  B lna_iref 1.008667\n     +  21.432s  B vepulseextp 1.293330\n     +  21.432s  B vipulseextp 1.780000\n     +  21.432s  B vleakn 0.258200\n     +  21.432s  B vrefn 0.255000\n     +  21.432s  B vtaun 0.300000\n     +  21.432s  B vtaup 1.424333\n     +  21.432s  B vthrdn 0.830667\n     +  21.432s  B vthrdp 1.329000\n     +  21.432s  M 14\n     +  22.282s  P 0 15 exc\n     +  22.282s  S 0 14 exc\n     +  22.332s  MASK 16384\n     +  22.633s  PULSEFINE 21\n     +  22.733s  CALRUN 0 4 6 20 4 6 9 11 18 26\n     +  23.900s  B JExcWn0 0.351440\n     +  23.900s  B JExcWn1 0.349350\n     +  23.900s  B JExcWn2 0.336000\n     +  23.900s  B JExcWn3 0.374940\n     +  23.900s  B JInhWp0 1.770333\n     +  23.900s  B JInhWp1 1.519000\n     +  23.900s  B JInhWp2 1.509333\n     +  23.900s  B JInhWp3 1.538333\n     +  23.900s  B TUNEp 1.780000\n     +  23.900s  B VB1 0.000000\n     +  23.901s  B VB2 0.000000\n     +  23.901s  B VREF 0.682333\n     +  23.901s  B buffermonp 0.267000\n     +  23.901s  B free 1.750333\n     +  23.901s  B ifdcp 1.780000\n     +  23.901s  B lna_iref 1.008667\n     +  23.901s  B vepulseextp 1.293330\n     +  23.901s  B vipulseextp 1.780000\n     +  23.901s  B vleakn 0.258200\n     +  23.901s  B vrefn 0.255000\n     +  23.901s  B vtaun 0.300000\n     +  23.901s  B vtaup 1.424333\n     +  23.901s  B vthrdn 0.830667\n     +  23.901s  B vthrdp 1.329000\n     +  23.901s  M 14\n     +  24.751s  P 0 15 exc\n     +  24.751s  S 0 14 exc\n     +  24.801s  MASK 16384\n     +  25.101s  PULSEFINE 21\n     +  25.202s  CALRUN 0 5 6 20 4 6 9 11 18 26\n     +  26.405s  CALRUN 1 0 6 20 4 6 9 11 18 26\n  VERDICT: host was passive",
+  "prov_clk_mhz": 25,
+  "prov_unix_time": 1787563360.9703994,
+  "prov_utc": "2026-08-24T09:22:40Z",
+  "prov_firmware_sha256": "fed6ff7b81982e93",
+  "prov_git_head": "b513735af0c89f26bb53defe48e81252066ca822",
+  "prov_git_dirty": true,
+  "prov_git_dirty_files": "M ofxLPM-1959\n M ofxLPM/scope-pixhawk/bin/data/settings.json\n M ofxLPM/scope-pixhawk/bin/scope-pixhawk\n M ofxLPM/scope-pixhawk/src/ofApp.cpp\n D opencode.json\n M paper/RISCV_NeuronArray_2026/figures/neuron_fi_all16_insets.pdf\n M paper/micro/biblio.bib\n M paper/micro/figures/constants.py\n M paper/micro/figures/make_comparator.py\n M paper/micro/figures/make_synapse_weight.py\n M paper/micro/figures/tikz/system_overview.tikz\n M paper/micro/figures/weight_code.pdf\n M paper/micro/generated_constants.tex\n M paper/micro/iscas/iscas27.pdf\n M paper/micro/iscas/iscas27.tex\n M paper/micro/iscas/iscas27_claude.pdf\n M paper/micro/iscas/iscas27_claude.tex\n M plot_fi_insets_all16.py\n M resume_claude.txt\n M selfheal_sweep.py\n?? LPMReadme.md\n?? ofxCaravanViewer/bin/bias_ladder_25mhz_n0.biases\n?? ofxCaravanViewer/bin/data/audio.s16\n?? ofxCaravanViewer/bin/data/video.mp4\n?? ofxLPM/opencode.json\n?? ofxLPM/pixhawk-scope/tools/pixhawk_record.py\n?? ofxLPM/scope-pixhawk-client/bin/scope-pixhawk-client\n?? ofxLPM/scope-pixhawk/bin/data/scope_20260813_163231.csv\n?? ofxLPM/scope-pixhawk/bin/data/scope_20260816_150257.csv\n?? ofxLPM/scope-pixhawk/bin/scope-pixhawk_debug\n?? olfaction_spikes_array.npz\n?? paper/micro/figures/comparator_cal_ac.pdf\n?? paper/micro/figures/comparator_cal_ac.png\n?? paper/micro/figures/comparator_cal_pa.pdf\n?? paper/micro/figures/comparator_cal_pa.png\n?? paper/micro/figures/comparator_cal_pb.pdf\n?? paper/micro/figures/comparator_cal_pb.png\n?? paper/micro/figures/data/\n?? paper/micro/figures/neuron_fi_iscas.pdf\n?? paper/micro/figures/neuron_fi_iscas.png\n?? paper/micro/figures/tikz/system_overview_inset.tikz\n?? paper/micro/figures/tikz/tree_pipeline.tikz\n?? paper/micro/figures/weight_code_words.pdf\n?? paper/micro/iscas/Literature/\n?? paper/micro/iscas/review.md\n?? recordings/scope_pulsefine_20260819.csv\n?? results/olfaction_comparator_found.json\n?? results/olfaction_comparator_ladder.json\n?? results/olfaction_comparator_levels.json\n?? results/olfaction_graded_hunt.json\n?? results/olfaction_n14_extender.json\n?? results/olfaction_pulseext.json\n?? results/olfaction_vleak_to_threshold.json\n?? results/pacing_control_w010_raw.npz\n?? results/scope_selfheal_aug24.csv\n?? results/selfheal_base2_aug24.json\n?? results/selfheal_base2_aug24_hostlog.tsv\n?? results/selfheal_base_aug24.json\n?? results/selfheal_base_aug24_hostlog.tsv\n?? results/selfheal_hostlog.tsv\n?? results/selfheal_inj2_aug24_hostlog.tsv\n?? results/selfheal_inj_aug24.json\n?? results/selfheal_inj_aug24_hostlog.tsv\n?? texput.log",
+  "prov_bias_files": "ofxCaravanViewer/bin/comparator_n14_lvl6.biases;ofxCaravanViewer/bin/comparator_n14_lvl8.biases;ofxCaravanViewer/bin/comparator_n14_lvl12.biases;ofxCaravanViewer/bin/comparator_n14_lvl16.biases;ofxCaravanViewer/bin/comparator_n14_lvl24.biases;ofxCaravanViewer/bin/comparator_n14_lvl32.biases",
+  "prov_bias_hashes": "74e3a9e56f2c8cb3;f2c7eef60ba07741;0234cbddbce93b5a;2cd7b83523e65a95;3899716cb246808f;4f10dccd924867aa",
+  "prov_dac_log": "",
+  "prov_task": "selfheal_sweep"
+}

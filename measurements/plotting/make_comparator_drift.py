@@ -31,9 +31,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RES = os.path.join(HERE, "..", "..", "..", "results")
-if not os.path.isdir(RES):
-    RES = os.path.join(HERE, "..", "..", "results")
+RES = os.path.join(HERE, "..", "..", "data", "olfaction")
 INK, MUTED, GRID = "#1a1a1a", "#8a8a8a", "#d8d8d8"
 LADDER = [1, 2, 3, 4, 6, 8, 12, 16, 24, 32]
 T0 = dt.datetime(2026, 8, 16, 18, 42)          # calibration finished
