@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""The two replacement figures for the ISCAS27 draft (Fig. 12 and Fig. 14).
+"""The two LNA figures: measured transfer and input-referred noise.
 
-NO plot titles: in IEEE style the title lives in the caption.
+NO plot titles: the title lives in the caption.
 
   fig12_lna_transfer.pdf   measured transfer, BOTH operating points
   fig14_lna_noise.pdf      input-referred noise only, single panel
@@ -17,7 +17,7 @@ sys.path.insert(0, HERE)
 import analyze as A
 
 # OSCAR reorg: outputs go to measurements/lna/figures/, inputs to
-# measurements/lna/data/ (was LNA/*.csv, wrote into the paper build dir).
+# measurements/lna/data/ (was LNA/*.csv, wrote into an external build dir).
 OUT = os.path.abspath(os.path.join(HERE, "..", "..", "figures"))
 LNA = os.path.abspath(os.path.join(HERE, "..", "..", "data"))
 

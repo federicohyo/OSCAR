@@ -8,7 +8,7 @@ a **ground loop through a second bench scope** that was monitoring the LNA input
 It injected a 60 Hz harmonic ladder that appeared **only while the sound card was
 active**, i.e. only during a gain measurement and never during a baseline check.
 
-The paper's data predates the move and is unaffected — see `../README.md`.
+The earlier campaign's data predates the move and is unaffected — see `../README.md`.
 
 ## The chain
 
@@ -46,11 +46,11 @@ is a copy taken at 18:00:37, two minutes before the campaign began, and is the b
 available record — not a readback. The bias DACs are write-only; nothing can
 confirm the chip's actual state from the chip.
 
-**What actually changed between the paper's dataset and this one**, per Federico:
+**What actually changed between the earlier dataset and this one**, per Federico:
 a single bias, `lna_iref` — the gate of the PMOS current source setting the input
 pair's tail current.
 
-| | paper dataset | this campaign |
+| | earlier dataset | this campaign |
 |---|---|---|
 | `lna_iref` | 1.5 V | **1.079 V** |
 | midband gain | 39.8 dB (97.7x) | **48.6 dB (268x)** |

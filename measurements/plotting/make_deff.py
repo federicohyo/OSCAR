@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Regenerate deff_decomp.pdf (Fig. 11) for the MICPRO manuscript.
+"""Regenerate deff_decomp.pdf.
 
-Task 2 of the pre-submission fix list. The published figure decomposed the
+Task 2 of the pre-release fix list. The reference figure decomposed the
 dimensionality expansion as shared-input -> per-neuron projection -> "mismatch",
 where the last step was the contrast between *simulated identical software LIF*
 and *silicon*. That contrast attributes to mismatch everything that differs
@@ -13,7 +13,7 @@ per-neuron input projection, same exponential read-out kernel, 16 neurons x K=8
 kernel sample points = 128 dimensions). Two spreads are shown:
 
   * tau only, 65% relative spread -- isolates heterogeneous membrane time
-    constants, the mechanism the manuscript names;
+    constants, the mechanism the reference analysis names;
   * tau + threshold + weight, 65% -- the most generous parameter-mismatch model
     we can give the software LIF.
 
@@ -25,7 +25,7 @@ constants-free re-run; see data/deff_tau_controls.json.
 Reuses corr_effdim/load from reservoir_demo_proj -- the SAME implementation the
 hardware row uses, not a reimplementation.
 
-Run from the repo root:  python3 measurements/paper_figures/make_deff.py
+Run from the repo root:  python3 measurements/plotting/make_deff.py
 """
 import os
 import sys
@@ -53,7 +53,7 @@ matplotlib.rcParams.update({
 HERE = os.path.dirname(os.path.abspath(__file__))
 K = 8
 TAUS = np.array([0.01, 0.02, 0.04, 0.08, 0.16, 0.32])
-TAU_TABLE = 0.02          # the tau Table 4 tabulates
+TAU_TABLE = 0.02          # the tau the reference table tabulates
 
 CURVES = [
     # recording DIM (../../../reservoir_datasets.py) -- NOT the accuracy recording

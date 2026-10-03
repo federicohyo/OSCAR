@@ -13,7 +13,7 @@ TWO PROTOCOL BUGS this replaces, both of which flattered the digital side:
      voted) votes over all five; the first array run was given one and no vote.
   2. DIFFERENT SPLITS. The digital baseline trains on 1.0 s pulses and tests on 0.1 s
      (Dennler's generalisation protocol); the array run did CV inside 0.1 s. Here BOTH
-     substrates get the same folds on the same chunks. The paper-protocol version needs
+     substrates get the same folds on the same chunks. the reference-protocol version needs
      a 1.0 s array acquisition and is not done yet -- see olfaction.md.
 
 Chunks of one trial never split across folds (GroupKFold on trial), so voting is

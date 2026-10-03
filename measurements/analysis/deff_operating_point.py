@@ -3,7 +3,7 @@
 
 PREMISE TEST FIRST. The brief proposed matching the SILENCING FRACTION ("5/16
 silent on these beats"). That handle does not exist: no recording in this repo has
-a silent neuron. On the dataset Table 4 is computed from
+a silent neuron. On the dataset the reference table is computed from
 (reservoir_spikes_nv_randproj.npz) all 16 neurons are active, the quietest at
 3.62 spikes/beat. The same holds for the N/S/V structured recording (min 2.93)
 and the N/PVC delta recording (min 0.86, one neuron below 1/beat). So the

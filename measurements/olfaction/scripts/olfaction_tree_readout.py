@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Does a small DECISION TREE readout beat the kernel+LogReg readout on the array's
 measured spikes? Offline replay of data/olfaction/olf_validate/*.npz (the silicon
-acquisitions behind the paper's 0.756 / 0.789 rows), identical protocol:
+acquisitions behind the reference campaign's 0.756 / 0.789 rows), identical protocol:
 GroupKFold(5) by trial over the 150 chunks, voted accuracy over the 5 chunks of
-each trial. The LogReg control must reproduce the paper numbers, which validates
+each trial. The LogReg control must reproduce the reference campaign numbers, which validates
 the harness before any tree number is trusted.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_tree_readout.py
@@ -21,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 from olfaction_iso_compare import kernel, vote_acc
 
 MODELS = {
-    "LogReg (paper)": lambda: make_pipeline(
+    "LogReg (reference)": lambda: make_pipeline(
         StandardScaler(),
         LogisticRegression(C=0.1, max_iter=5000, class_weight="balanced")),
     "tree depth3":    lambda: DecisionTreeClassifier(max_depth=3, random_state=0),

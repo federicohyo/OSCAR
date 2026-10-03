@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Is the new acquisition free of the artefact that contaminated the old one?
 
-The manuscript's Section 4.3 decomposition currently attributes 2.4 of its 4.1
+The reference analysis decomposition currently attributes 2.4 of its 4.1
 rate-matched D_eff units to the ACQUISITION rather than to the array: every
 inter-event interval in all three 2026-07 ECG recordings lies on an 11.99 ms
 lattice whose phase is redrawn per presentation, with a two-slot floor at 23.97
@@ -9,7 +9,7 @@ ms. That lattice is the flash-resident read-out plus host-arrival timestamps.
 
 The 2026-08-11 re-acquisition runs on the fixed path -- SRAM-resident drain, 21-bit
 on-chip Timer0 timestamps -- so the lattice should be absent. If it is, the largest
-modelled term in the decomposition disappears and Fig. 11 can be regenerated on an
+modelled term in the decomposition disappears and the reference figure can be regenerated on an
 acquisition whose D_eff belongs to the array.
 
 This script runs the SAME lattice test the old recordings failed
@@ -79,11 +79,11 @@ def main(new="reservoir_spikes_nv_randproj_aug11.npz"):
     gone = (n["frac_int"] < 0.7) or (n["phase"] < 0.5)
     print("\n  the 11.99 ms acquisition lattice is "
           + ("GONE from the new recording -- the largest modelled term in the "
-             "Section 4.3\n  decomposition does not apply to it, and Fig. 11 can be "
+             "the reference analysis\n  decomposition does not apply to it, and the reference figure can be "
              "regenerated on it."
              if gone else
              "STILL PRESENT -- do not treat the new\n  recording as artefact-free; "
-             "investigate before regenerating Fig. 11."))
+             "investigate before regenerating the reference figure."))
 
 
 if __name__ == "__main__":

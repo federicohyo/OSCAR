@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fig 13 (fig:frontier2): MEASURED on-silicon continuous-time coincidence primitive on
+"""the coincidence-frontier figure: MEASURED on-silicon continuous-time coincidence primitive on
 neuron 14 -- a 2-panel figure of the membrane physics only. The cost argument (O(N/dt)
 digital integration vs O(1) analog) lives with the RESERVOIR frontier (fig:frontier), NOT
 here: for an isolated two-spike coincidence the right digital baseline is a

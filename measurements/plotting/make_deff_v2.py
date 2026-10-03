@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Fig. 11, regenerated on TWO silicon acquisitions instead of one.
+"""D_eff decomposition, regenerated on TWO silicon acquisitions instead of one.
 
-The published figure carries a single silicon curve, recording DIM (2026-07-05),
-taken with the flash-resident read-out and host-arrival timestamps. Section 4.3
+The reference figure carries a single silicon curve, recording DIM (2026-07-05),
+taken with the flash-resident read-out and host-arrival timestamps. the reference analysis
 later established that every inter-event interval in that recording lies on an
 11.99 ms acquisition lattice with a per-presentation phase, and that applying the
 same lattice to a software neuron carries 2.4 of the 4.1 rate-matched D_eff units
@@ -15,14 +15,14 @@ concentration 0.265 (against 0.998), and the shortest ISI now varies 1.2-7.5 ms
 across neurons instead of sitting at a uniform 23.97 ms.
 
 Plotting both is the honest presentation: it shows the reader what the acquisition
-was worth, and it converts the manuscript's "single acquisition" limitation into a
+was worth, and it converts the reference analysis's "single acquisition" limitation into a
 measurement.
 
 CAVEAT CARRIED INTO THE CAPTION: the two acquisitions differ in read-out path AND
 in drive (old 1.8-15.4 Hz, new 10.8-68.0 Hz), and D_eff falls with rate in this
 pipeline, so the 18.1 -> 14.9 difference is NOT attributable to the lattice alone.
 
-  ./.venv-meas/bin/python3 measurements/paper_figures/make_deff_v2.py
+  ./.venv-meas/bin/python3 measurements/plotting/make_deff_v2.py
 """
 import json
 import os

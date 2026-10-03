@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cross-acquisition accuracy: does the classification survive a new recording?
 
-The manuscript's Section 8 carries "every reservoir number here comes from a
+The reference analysis carries "every reservoir number here comes from a
 single acquisition ... cross-acquisition reproducibility is a measurement we have
 not made". The 2026-08-11 re-acquisition is that measurement, on the same 60
 beats, the same per-neuron projection and the same read-out pipeline as the
@@ -17,7 +17,7 @@ Both are scored here through the IDENTICAL pipeline, inter-patient
 
 Also reported: the untrained gross-activity control from Section 4.2 -- the
 array-wide event count for a beat, scored as an AUC. On recording ACC that cue
-alone reaches 0.995, which is why the manuscript builds no substrate claim on the
+alone reaches 0.995, which is why the reference analysis builds no substrate claim on the
 binary task; it is worth knowing where each of these recordings sits.
 
   PYTHONPATH=. ./.venv-meas/bin/python3 reservoir_acc_compare.py

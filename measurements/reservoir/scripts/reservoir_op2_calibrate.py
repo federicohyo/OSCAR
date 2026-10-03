@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Task A: give OP2 per-neuron time constants CALIBRATED to the measured array.
 
-Section 8.1 of the manuscript claims OP2 is integrated "with the measured
+The reference analysis finds OP2 is integrated "with the measured
 heterogeneous per-neuron time constants, so that the digital baseline is given
 the array's own diversity". reservoir_structured.py:103 in fact draws them from a
 seeded 15% Gaussian -- a SIMULATED spread, not a measurement. The sentence exists

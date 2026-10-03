@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """The array's capacity curve: voted accuracy vs number of odour classes, on the
 measured silicon spikes of data/olfaction/olf_validate/ (9 acquisitions: centre,
-bo_best1, bo_best2 x 3 reps), paper readout (exponential kernel + LogReg),
-paper protocol (GroupKFold by trial over 150 chunks, voted over the 5 chunks
+bo_best1, bo_best2 x 3 reps), reference readout (exponential kernel + LogReg),
+reference protocol (GroupKFold by trial over 150 chunks, voted over the 5 chunks
 of a trial).
 
 Two statistics per class count k:

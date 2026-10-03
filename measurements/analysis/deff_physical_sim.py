@@ -82,7 +82,7 @@ def simulate(up, dn, vth, T=T_BEAT, dt=DT_DEFAULT, tau_m=0.02, tref=0.005,
                  update is bit-identical to the linear filter above, which is the
                  limit syn_sat -> inf.
 
-                 PHENOMENOLOGICAL, and deliberately so: the published circuit
+                 PHENOMENOLOGICAL, and deliberately so: the reference circuit
                  equation is a Bernoulli form whose variable definitions we have not
                  verified against the primary source, so this reproduces the
                  quadratic self-limiting BEHAVIOUR rather than transcribing that
@@ -178,7 +178,7 @@ def simulate(up, dn, vth, T=T_BEAT, dt=DT_DEFAULT, tau_m=0.02, tref=0.005,
 def test_physical_sim_matches(n_check=40, seed=0):
     """The vectorised simulator must reproduce reservoir_sw_lif.sim_lif exactly in
     its default configuration, or nothing downstream is comparable to the
-    published rows."""
+    reference rows."""
     from reservoir_sw_lif import sim_lif
 
     rng = np.random.default_rng(seed)

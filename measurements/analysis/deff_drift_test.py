@@ -3,7 +3,7 @@
 
 If the array's operating point shifts during an acquisition, that adds variance
 across beats which is not input-driven. The software model has no drift, so this
-would be a mechanism for the Fig. 11 gap -- AND it would explain why D_eff rose
+would be a mechanism for the reference figure gap -- AND it would explain why D_eff rose
 14.1 -> 16.9 between a 36-minute recording and a 95-minute one at the same
 operating point. One hypothesis, both open questions.
 

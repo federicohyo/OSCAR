@@ -7,10 +7,10 @@ the accuracy-vs-duration curve is a genuine generalisation test, and it IS the
 accuracy-versus-latency curve the cost argument needs.
 
 Feature: a 50 ms chunk of the 8 sensor channels, prestimulus-baseline normalised. The
-paper reports the un-normalised version "approaches random classification for low
+reference reports the un-normalised version "approaches random classification for low
 concentrations", so the normalisation is load-bearing, not cosmetic.
 
-Classes follow the paper: 2H, EB, Eu, IA and Blank, with b1/b2 (two identical pure
+Classes follow the reference campaign: 2H, EB, Eu, IA and Blank, with b1/b2 (two identical pure
 solvent samples) merged into Blank.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_identity.py
@@ -45,7 +45,7 @@ def chunks(X, Th, t, dur_s, wl_s, pre=(-0.4, -0.05), phase_locked=True, tail=0.0
     w = int(wl_s * FS)
     base = X[:, (t >= pre[0]) & (t < pre[1]), :].mean(axis=1, keepdims=True)
     R = (X - base) / np.abs(base)
-    # The sensor response OUTLASTS the pulse -- the paper reports odour offset
+    # The sensor response OUTLASTS the pulse -- the reference campaign reports odour offset
     # detected ~106 ms after a pulse ends -- so the decision legitimately uses the
     # tail. Without it a 50 ms pulse yields one chunk and cannot be voted on.
     lo, hi = 0.0, min(dur_s + tail, t[-1])
@@ -82,7 +82,7 @@ def main():
     classes = [str(c) for c in d["classes"]]
     t = np.arange(X.shape[1]) / FS + float(d["t0"]) / 1000.0
     dur = np.array([m[0] for m in meta])
-    # merge the two solvent controls into one Blank class, as the paper does
+    # merge the two solvent controls into one Blank class, as the reference campaign does
     lab = np.array([{"b1": "Blank", "b2": "Blank"}.get(classes[k], classes[k]) for k in y])
     names = sorted(set(lab)); Y = np.array([names.index(v) for v in lab])
     print(f"{len(X)} trials, {len(names)} classes {names}, chance {1/len(names):.3f}")
@@ -112,7 +112,7 @@ def main():
         pred = clf.predict(F)
         truth = Y[m][it]
         acc = float((pred == truth).mean())
-        # PER-TRIAL majority vote over that trial's chunks. This is the paper's
+        # PER-TRIAL majority vote over that trial's chunks. This is the reference campaign's
         # "prediction over time" evaluation, and it is also exactly the averaging that
         # is FREE to the array and costs the digital path one kernel run per vote.
         votes, tacc = [], []

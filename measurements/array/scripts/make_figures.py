@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate camera-ready figures for the paper from the raw sweep CSVs at repo root.
+"""Regenerate camera-ready figures for the reference campaign from the raw sweep CSVs at repo root.
 
 Run from measurements/array/figures/:
     python3 make_figures.py

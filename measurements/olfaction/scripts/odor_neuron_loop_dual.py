@@ -316,7 +316,7 @@ def main():
         print(f"excess at injection: {fr[:,1].min():.0f} .. {fr[:,1].max():.0f} mV")
         print(f"instantaneous rate : {fr[:,2].min():.0f} .. {fr[:,2].max():.0f} Hz")
         # NOTE ON THE EVENT WINDOW: odor_timing.json's event_on/event_off
-        # (0.330-0.565 s) describe the SPICE/paper stimulus, NOT the WAV that is
+        # (0.330-0.565 s) describe the SPICE/reference stimulus, NOT the WAV that is
         # played. Measured on odor_stimulus.wav itself, the odor content of each
         # period runs 0.501-1.260 s and peaks at 1.047 s; the 137 Hz mark at
         # 0.124 s matches t_mark and is what any offline alignment should use

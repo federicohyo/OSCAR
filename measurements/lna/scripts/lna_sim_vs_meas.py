@@ -20,7 +20,7 @@ The closed-loop gain is set by the capacitor ratio inside the subcircuit:
     C1/C2 = 369.6 = 51.35 dB   (the design intent)
 
 so any gain shortfall on silicon is a statement about that ratio as fabricated,
-not about the OTA -- which is the useful thing for the draft to say.
+not about the OTA -- which is the useful thing for the earlier analysis to say.
 """
 
 import argparse

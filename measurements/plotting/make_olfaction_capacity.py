@@ -71,7 +71,7 @@ def energy(ax):
     sup = (K.OLF_ARR_PROJ_CYC + K.OLF_ARR_ENC_CYC + K.OLF_ARR_KERN_CYC
            + K.OLF_ARR_CLF_CYC) * K.E_CYCLE_J * 1e6 * K.OLF_CHUNKS_PER_DECISION
     an_block = (K.OLF_ARR_RAIL_UJ + K.OLF_ARR_DRAIN_CYC * K.E_CYCLE_J * 1e6) \
-        * K.OLF_CHUNKS_PER_DECISION       # the paper's analog block: rail + AER drain
+        * K.OLF_CHUNKS_PER_DECISION       # the reference campaign's analog block: rail + AER drain
     emul = K.OLF_DEC_EMUL_UJ
     ode = K.OLF_LIF_SRAM_CYC * K.OLF_LIF_N * K.OLF_LIF_TICKS * K.E_CYCLE_J * 1e6 \
         * K.OLF_CHUNKS_PER_DECISION                       # the neuron ODE on the core

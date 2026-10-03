@@ -28,7 +28,7 @@ Logs:  lna_gain_log.csv   every measurement
        lna_gain_best.json best bias set so far + its VPP (safe to re-feed via --start)
 
 Bias <-> schematic mapping and sweep windows live in the BIASES table below.
-Edit that one table if the pin mapping from the draft differs. All writes are
+Edit that one table if the pin mapping differs. All writes are
 clipped to [each bias's lo..hi]. lna_iref (DAC3 ch A) is powered down to
 high-Z at chip startup (pin shared with monout_single), so a power-up frame
 (mode=0b00) is sent before each write to it.

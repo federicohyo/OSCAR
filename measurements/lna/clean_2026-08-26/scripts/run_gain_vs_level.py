@@ -2,7 +2,7 @@
 """Gain vs input amplitude at 88.57 Hz, clean setup.
 
 Levels are re-scaled for the new operating point: at ~290x the 1.78 V rail caps
-the input near 1 mVpp, so the paper's 0.4-7 mVpp ladder no longer fits. The
+the input near 1 mVpp, so the reference campaign's 0.4-7 mVpp ladder no longer fits. The
 first point is repeated last as the repeat guard; <10% spread gates the rest of
 the campaign.
 

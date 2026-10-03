@@ -4,7 +4,7 @@
 The runner sends a frozen array rather than deriving the stimulus on the measurement
 path, ever since a rebuild inside the runner produced event counts the identical
 standalone code did not. The frozen cur is checked against the unit-weight build here,
-and --check verifies that regenerating the ORIGINAL seed reproduces the published
+and --check verifies that regenerating the ORIGINAL seed reproduces the reference
 stimulus bit for bit -- which is what licenses freezing the remaining two seeds of the
 olfaction_emul_accuracy.py protocol (100 + 7919*r for r = 0, 1, 2) at all.
 

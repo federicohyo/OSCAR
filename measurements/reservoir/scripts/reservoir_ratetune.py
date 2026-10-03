@@ -21,7 +21,7 @@ probes, so 25-40 minutes.
 
 WHAT IT TARGETS, AND WHY IT IS NOT 8.8 Hz
 -----------------------------------------
-The manuscript's 8.8 Hz is DIM's rate as REPORTED by the flash-resident read-out
+The reference analysis's 8.8 Hz is DIM's rate as REPORTED by the flash-resident read-out
 with host-arrival timestamps, whose 11.986 ms lattice with a two-slot floor drops
 42% of the events of a recording at today's drive (`lattice_rate_check.py`, which
 also carries the control showing the lattice is near-idempotent on data already on
@@ -50,7 +50,7 @@ DIRECTION IS MEASURED, NOT ASSUMED
 -----------------------------------
 The repo's two records of vleakn polarity disagree, and both are load-bearing:
 scope observation on 2026-07-12 found that LOWERING vleakn de-saturated neurons
-that were railed high (so higher vleakn = more excitable), while the manuscript's
+that were railed high (so higher vleakn = more excitable), while the reference analysis's
 Limitations say the neuron free-runs BELOW vleakn = 0.225 V. Both can hold if rate
 versus vleakn is non-monotonic -- free-run at the bottom, saturation-silence at the
 top, a usable band between. This script therefore measures the sign of the response
@@ -82,7 +82,7 @@ GRID_OLD = 0.011986        # MEASURED on the 2026-07 recordings, not refitted
 MIN_STEPS = 2              # the two-slot floor, also measured
 LATTICE_SEEDS = 8
 
-# Hard rails per knob, and the value below/above which the manuscript or the bench
+# Hard rails per knob, and the value below/above which the reference analysis or the bench
 # notes say the array stops behaving. Going outside these is never a solution.
 RAILS = {
     "vleakn": (0.150, 0.400),   # NMOS leak
@@ -105,7 +105,7 @@ def objective(sp, domain):
     """(objective_hz, raw_hz, latticed_hz, cv, per_neuron_hz) for one probe.
 
     `sp[j][b]` is neuron j's spike times on beat b. The rate definition is the
-    manuscript's, as used by reservoir_acq_compare.describe: total spikes over all
+    reference analysis's, as used by reservoir_acq_compare.describe: total spikes over all
     beats / beats / window."""
     n, nb = len(sp), len(sp[0])
     per = np.array([sum(len(sp[j][b]) for b in range(nb)) / nb / T_BEAT
@@ -544,7 +544,7 @@ def _finish(args, log, solution, ctx, paths, rc):
         print("RESULT: no feasible operating point reached the target.")
         print("This is a documented outcome, not a failure of the run. The "
               "pre-committed fallback in bench/README.md applies: MEASURE 1 demotes "
-              "to the Limitations text already in the manuscript, which is correct "
+              "to the Limitations text already in the reference analysis, which is correct "
               "as written. Report the probes below; do not widen the rails to "
               "manufacture a solution.")
         usable = [r for r in log if "rejected" not in r]

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Build the odor stimulus used to reproduce Fig. LNA_neuron_input on silicon.
+"""Build the odor stimulus used to reproduce the LNA-neuron input trace on silicon.
 
     ../.venv-meas/bin/python3 odor_stimulus.py
 
-The original synthetic trace behind the published figure is not in either repo,
-so this regenerates a trace matching its published shape: a resting baseline,
+The original synthetic trace behind the reference figure is not in either repo,
+so this regenerates a trace matching its reference shape: a resting baseline,
 a fast negative-going onset, a slower continued decline through the plateau,
 and a fast return to baseline, with band-limited noise on top. Read off
-`ISCAS27/.../figures/LNA_neuron_input.pdf`:
+the LNA-neuron input figure:
 
     total record        0.8 s
     event onset         ~0.33 s      offset ~0.565 s   (0.235 s long)
@@ -15,7 +15,7 @@ and a fast return to baseline, with band-limited noise on top. Read off
     plateau             -11 uV falling to -16 uV
     swing               ~13 uV peak-to-peak
 
-Two departures from the paper, both deliberate and both stated in the caption:
+Two deliberate departures, both stated in the caption:
 
 **Amplitude is scaled up.** 13 uVpp at the input would give ~1.3 mV at the LNA
 output, against ~19.5 mV rms of noise on that node -- unmeasurable. The shape is
@@ -23,7 +23,7 @@ preserved exactly and the amplitude scaled to `--chip-vpp` (default 3 mVpp),
 inside the linearity verified from 400 uVpp to 7 mVpp, so the scaling is a pure
 gain change and not a change of regime.
 
-**Timescale is 1:1 with the paper.** The event's content lands around 2-20 Hz,
+**Timescale is 1:1 with the reference.** The event's content lands around 2-20 Hz,
 inside the measured passband, so no time compression is needed. The one
 consequence worth naming: a 0.235 s plateau has content near 4 Hz and below,
 where the AC-coupled source is not quite flat (0.96 of plateau at 3 Hz, 0.84 at
@@ -33,7 +33,7 @@ where the AC-coupled source is not quite flat (0.96 of plateau at 3 Hz, 0.84 at
 Outputs:
     odor_stimulus.csv     t_s, v_norm (unit peak-to-peak), v_chip_v
     odor_stimulus.wav     for the bench, scaled so the chip sees --chip-vpp
-    odor_stimulus_paper.pwl  for ngspice at the published ~13 uVpp
+    odor_stimulus_ref.pwl    for ngspice at the reference ~13 uVpp
     odor_stimulus_chip.pwl   for ngspice at the bench amplitude
 """
 
@@ -54,9 +54,9 @@ FULL_SCALE_VRMS = 1.0         # same assumption as sine_out.sh
 
 
 def odor_trace(fs, dur=0.8, t_on=0.330, t_off=0.565, seed=3):
-    """Synthetic odor response matching the published trace's shape.
+    """Synthetic odor response matching the reference trace's shape.
 
-    Returns volts in the paper's own units (microvolts), so the shape can be
+    Returns volts in the reference's own units (microvolts), so the shape can be
     compared with the figure directly before any scaling."""
     rng = np.random.default_rng(seed)
     t = np.arange(int(dur * fs)) / fs
@@ -72,16 +72,16 @@ def odor_trace(fs, dur=0.8, t_on=0.330, t_off=0.565, seed=3):
     m = (t >= t_on) & (t < t_off)
     te = t[m] - t_on
     span = t_off - t_on
-    # fast onset onto a plateau, then a slower continued decline, as published
+    # fast onset onto a plateau, then a slower continued decline, as reference
     onset = 1.0 - np.exp(-te / 0.012)
     decline = 0.45 * (te / span)
     v[m] = -3.0 - (8.0 * onset + 5.0 * decline * onset)
 
-    # fast return to baseline (the published trace snaps back in ~10 ms)
+    # fast return to baseline (the reference trace snaps back in ~10 ms)
     m2 = t >= t_off
     v[m2] = -3.0 + (v[m][-1] + 3.0) * np.exp(-(t[m2] - t_off) / 0.010)
 
-    # a small pre-onset bump is visible in the published trace
+    # a small pre-onset bump is visible in the reference trace
     v += 1.6 * np.exp(-0.5 * ((t - 0.313) / 0.012) ** 2)
 
     # band-limited noise (~+/-1.5 uV, rolled off above ~40 Hz)
@@ -199,7 +199,7 @@ def main():
     span_uv = float(np.ptp(v_uv))
     mu = float(v_uv.mean())
     v_chip = (v_uv - mu) / (span_uv / 2) * (args.chip_vpp / 2)
-    print(f"stimulus: {t[-1]:.2f} s, published swing {span_uv:.1f} uVpp "
+    print(f"stimulus: {t[-1]:.2f} s, reference swing {span_uv:.1f} uVpp "
           f"-> scaled to {args.chip_vpp*1e3:.2f} mVpp at the chip "
           f"({args.chip_vpp/ (span_uv*1e-6):.0f}x)")
 
@@ -222,18 +222,18 @@ def main():
     td, vd, vc = t[::step], v_uv[::step], v_chip[::step]
     with open(os.path.join(HERE, "odor_stimulus.csv"), "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["t_s", "v_published_uv", "v_chip_v"])
+        w.writerow(["t_s", "v_reference_uv", "v_chip_v"])
         for a, b, c in zip(td, vd, vc):
             w.writerow([f"{a:.6f}", f"{b:.4f}", f"{c:.9f}"])
 
     # Two PWL files, because the two legs need different amplitudes:
-    #   _paper : the published ~13 uVpp. SPICE has no noise floor, so this
-    #            reproduces the published figure directly and stays linear.
+    #   _ref : the reference ~13 uVpp. SPICE has no noise floor, so this
+    #          reproduces the reference figure directly and stays linear.
     #   _chip  : the bench amplitude. At the simulated 315x, 3 mVpp would
     #            demand 0.95 Vpp out and the SIMULATED amplifier saturates --
     #            which is a property of the simulated gain, not of the stimulus.
-    vp = (vd - float(np.mean(vd))) * 1e-6          # published units -> volts
-    with open(os.path.join(HERE, "odor_stimulus_paper.pwl"), "w") as f:
+    vp = (vd - float(np.mean(vd))) * 1e-6          # reference units -> volts
+    with open(os.path.join(HERE, "odor_stimulus_ref.pwl"), "w") as f:
         for a, c in zip(td, vp):
             f.write(f"{a:.6f} {c:.9e}\n")
     with open(os.path.join(HERE, "odor_stimulus_chip.pwl"), "w") as f:

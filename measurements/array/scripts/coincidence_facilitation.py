@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Phase 2, Experiment (i): the facilitation-gating curve P(fire | inter-pair spacing S).
 
-Turns the paper's qualitative "absolute firing is facilitation-gated" into a measured
+Turns the reference campaign's qualitative "absolute firing is facilitation-gated" into a measured
 P(fire)-vs-pair-spacing curve on real silicon. Delta-t is pinned at the measured peak
 (-0.25 ms on n14 -> maximal within-pair summation) so the ONLY variable is the rest
 interval S between successive coincidence probes. Raising JExcWn0 (synaptic gain) is
 predicted to move the detector toward single-pair (rested, large-S) firing.
 
-Design (see paper/RISCV_NeuronArray_2026/PHASE2_PROTOCOL.md, Experiment (i)):
+Design (see the phase-2 protocol, Experiment (i)):
   * S is the INDEPENDENT variable and is set by the recent history of pair spacing, so
     each S is measured as a TRAIN (block) at fixed spacing -- NOT trial-randomized (that
     would destroy the very quantity). We randomize the ORDER of the S-blocks per repeat.

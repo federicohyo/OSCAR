@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Fig 13a: coincidence-detection membrane traces (neuron 14).
+"""Generate the coincidence-membrane figure: coincidence-detection membrane traces (neuron 14).
 
 Four oscilloscope captures of the membrane, one per input interval Delta-t, aligned on the
 first EPSP. Two subthreshold EPSPs summate in a Delta-t-graded way; at Delta-t=1 ms the

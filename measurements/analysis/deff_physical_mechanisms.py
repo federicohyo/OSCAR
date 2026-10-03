@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Can the unexplained D_eff residual be closed by soma physics the model omits?
 
-Section 4.3 of the manuscript accounts for the expansion from D_eff 9.6
+the reference analysis accounts for the expansion from D_eff 9.6
 (identical software LIF + input projection) to silicon's 18.1 through the
 operating-point distribution, a mean-rate control and the measured 11.99 ms
 acquisition lattice, and leaves ~1.4 units with no mechanism named. Every
@@ -18,14 +18,14 @@ reservoir_sw_lif.sim_lif (see deff_physical_sim.py for what each is and why):
 
 METHOD, and the one thing that makes it interpretable. Every mechanism changes
 the output rate, and in this pipeline D_eff rises as rate falls, so a mechanism
-can look explanatory purely by quietening the neuron -- the trap Section 4.3
+can look explanatory purely by quietening the neuron -- the trap the reference analysis
 already documents. Rather than correct for it afterwards with a rate-control
 family, we remove it by construction: for EVERY condition the 16 thresholds are
 re-bisected so that each model neuron reproduces its silicon counterpart's mean
 output rate, in rank order. Every row below therefore sits at silicon's own
 per-neuron rate distribution, and no D_eff difference between rows is a rate
 effect. The measured acquisition lattice is applied to every row as well, so each
-row is scored against the manuscript's BEST model (16.7), not its baseline.
+row is scored against the reference analysis's BEST model (16.7), not its baseline.
 
 The residual is reported with the paired bootstrap interval of
 deff_residual_ci.py, because a mechanism that "closes the gap" has only closed a
@@ -138,7 +138,7 @@ def main():
     flat = flatten_events(evs)
 
     conds = [
-        ("baseline (manuscript best model)", dict()),
+        ("baseline (reference analysis best model)", dict()),
         ("RECT  no rectification below rest", dict(rectify=False)),
         ("LEAK  constant-current leak", dict(leak_mode="const")),
         ("LEAK  constant leak, no rectification", dict(leak_mode="const", rectify=False)),
@@ -154,13 +154,13 @@ def main():
                        noise_sigma=0.10)))
 
     # E/I RATIO MISMATCH. The excitatory and inhibitory synapses are separate DPI
-    # circuits (Fig. 3) with their own bias lines and their own device mismatch,
+    # circuits (the reference figure) with their own bias lines and their own device mismatch,
     # so the ratio w_inh/w_exc differs from neuron to neuron. This is the one
     # parameter axis the per-neuron threshold bisection above CANNOT absorb: a
     # common per-neuron gain is exactly what the threshold trades against, but the
-    # BALANCE between the two input channels is not. Section 4.2's weight-code
+    # BALANCE between the two input channels is not. the reference analysis's weight-code
     # result makes it concrete -- the four branches are equal-sized rather than
-    # binary, and the ECG experiments ran on the uncalibrated code (Section 8), so
+    # binary, and the ECG experiments ran on the uncalibrated code (the reference analysis), so
     # the delivered exc and inh weights were not the programmed ones.
     for sp_ei in (0.20, 0.40, 0.65):
         conds.append((f"EI    E/I ratio mismatch {sp_ei*100:.0f}%",

@@ -19,7 +19,7 @@ many effective dimensions as its stimulus-driven response does. On this task D_e
 therefore cannot be read as stimulus-driven richness -- which also explains, without
 needing any further mechanism, why it never predicted accuracy.
 
-CAVEATS, and they are why this is not yet a manuscript claim:
+CAVEATS, and they are why this is not yet a reference analysis claim:
   * the repeat runs are at DIFFERENT bias sets from REF25 (43.7 and 32.1 Hz against
     35.6), so this is rate-comparable but not operating-point matched;
   * 51 trials against 160 beats, and D_eff grows with sample count (+2.2 units from

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """How well determined is the unexplained D_eff residual?
 
-Section 4.3 of the manuscript reports a residual of 1.4 D_eff units: silicon
+The reference analysis reports a residual of 1.4 D_eff units: silicon
 reaches 18.1 where the best model (operating-point matched thresholds + the
 measured 11.99 ms acquisition lattice) reaches 16.7. Before any further mechanism
 is proposed to account for those 1.4 units, the residual needs an uncertainty,
@@ -16,7 +16,7 @@ Two facts make that uncertainty large:
 
   2. The residual is a DIFFERENCE of two participation ratios scored on the same
      beats, so its uncertainty is a paired bootstrap over beats -- the same test
-     the manuscript already uses for the accuracy tie in Section 6.1 -- and not
+     the reference analysis already uses for the accuracy tie -- and not
      the marginal spread of either estimate.
 
 A third term, which the first version of this script missed: the model condition

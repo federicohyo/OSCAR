@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
-"""ISCAS27 wet-transduction panels for the combined Fig. 4 (LaTeX subfigures).
+"""TiO2 wet-transduction panels.
 
-Two output PDFs, side by side in one figure* row via subcaption:
-  fig16_tio2_wetting_paper    -- (a) wetting of the TiO2 pad
-                                 (scope_20260829_094236.csv, ch2 = pad amp);
-                                 NO pickup inset (it covered the signal), the
-                                 138 -> 7 mV rms numbers are a text note.
-  fig17_tio2_dilute3x_paper   -- (b) the 3x-diluted saline record
-                                 (scope_20260829_103015.csv), shorter with
-                                 larger fonts; injection zooms (c), (d) sit
-                                 high, clear of the trace.
+Two output PDFs, side by side in one figure row:
+  fig16_tio2_wetting    -- (a) wetting of the TiO2 pad
+                           (scope_20260829_094236.csv, ch2 = pad amp);
+                           NO pickup inset (it covered the signal), the
+                           138 -> 7 mV rms numbers are a text note.
+  fig17_tio2_dilute3x   -- (b) the 3x-diluted saline record
+                           (scope_20260829_103015.csv), shorter with
+                           larger fonts; injection zooms (c), (d) sit
+                           high, clear of the trace.
 
-Panel letters (a)/(b) come from LaTeX subcaptions, so they are NOT drawn
+Panel letters (a)/(b) come from subcaptions, so they are NOT drawn
 here; only the inner zoom tags (c)/(d) are.  Both figures are drawn at
 their exact print size (4.8 and 2.3 in wide, 1.75 in tall), so fonts are
-final-size -- do not rescale in LaTeX beyond the subfigure linewidths.
-The standalone fig16/fig17 PDFs used by TBioCAS.tex are NOT touched.
+final-size -- do not rescale beyond the panel linewidths.
 """
 import numpy as np
 import matplotlib
@@ -24,8 +23,8 @@ import matplotlib.pyplot as plt
 
 WET_CSV = "measurements/wet_pad/data/scope_20260829_094236.csv"
 DIL_CSV = "measurements/wet_pad/data/scope_20260829_103015.csv"
-OUT_A = "measurements/wet_pad/figures/fig16_tio2_wetting_paper"
-OUT_B = "measurements/wet_pad/figures/fig17_tio2_dilute3x_paper"
+OUT_A = "measurements/wet_pad/figures/fig16_tio2_wetting"
+OUT_B = "measurements/wet_pad/figures/fig17_tio2_dilute3x"
 FS = 1000.0
 TS = 0.85                     # printed at final size
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Trial-to-trial repeatability of the array on ONE repeated beat.
 
-WHY THIS EXISTS. The manuscript's Section 4.3 leaves ~1.4 D_eff units unexplained.
+WHY THIS EXISTS. The reference analysis leaves ~1.4 D_eff units unexplained.
 Simulation (deff_physical_mechanisms.py) shows the only mechanism that closes that
 number is per-trial excitability jitter -- each neuron's threshold redrawn per
 presentation -- and it needs ~20% of it. Two physical stories could supply that:

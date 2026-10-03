@@ -27,8 +27,8 @@ What the measurement can and cannot separate:
   * the amplifier's slow settling (~40 s, seen in the drift test) lands in the
     lowest bins. Below ~0.05 Hz the "noise" is really that drift.
 
-Comparison target: the ISCAS27 draft quotes a SPICE noise peak of
-200 uV/sqrt(Hz) at ~1 Hz (`IEEEConf.tex`, sec. Low-Noise Amplifier).
+Comparison target: the reference SPICE noise peak of
+200 uV/sqrt(Hz) at ~1 Hz (low-noise amplifier).
 
 Read-only on the chip -- no FTDI, no DAC writes.
 
@@ -152,7 +152,7 @@ def main():
         ax[0].grid(True, which="both", alpha=.3); ax[0].set_title("LNA output noise, no drive")
         b2 = band & ~line
         ax[1].loglog(fr[b2], asd_in[b2] * 1e6, lw=.9, color="C0", label="measured (mains removed)")
-        ax[1].axhline(200, ls="--", c="C3", lw=1.2, label="SPICE 200 $\\mu$V/$\\sqrt{Hz}$ @1 Hz (ISCAS27)")
+        ax[1].axhline(200, ls="--", c="C3", lw=1.2, label="SPICE 200 $\\mu$V/$\\sqrt{Hz}$ @1 Hz (reference)")
         ax[1].set_xlabel("frequency [Hz]"); ax[1].set_ylabel("input-referred [$\\mu$V/$\\sqrt{Hz}$]")
         ax[1].grid(True, which="both", alpha=.3); ax[1].legend(fontsize=8)
         fig.tight_layout(); fig.savefig(args.png, dpi=150)

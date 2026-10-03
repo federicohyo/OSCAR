@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract the odour-identity pulse trials -- the task the paper gets 100% on.
+"""Extract the odour-identity pulse trials -- the task the reference campaign gets 100% on.
 
 Dennler et al. Fig. 3D: 5-way identity (2H, EB, Eu, IA, Blank), RBF-SVM on 50 ms data
 features, 100% from 1000 ms down to 50 ms pulses. Their 50 ms feature is PHASE-LOCKED

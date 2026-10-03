@@ -5,7 +5,7 @@ The emulated row -- the olfaction pipeline with the sixteen LIF neurons computed
 firmware instead of on the analog array -- is the only comparison that isolates the
 substrate, since projection, encoding, kernel and classifier are identical on both sides.
 Its energy was measured; its accuracy was computed on the host and argued to be
-bit-identical if run. This runs it, so Fig. 15b can carry the point.
+bit-identical if run. This runs it, so the reference figure can carry the point.
 
 Firmware side is UART_CMD_LIFRUN (0xD1): header then T signed event counts, reply echoes
 the spike count, the received stimulus sum and the Timer0 cycles spent in the ticks. The

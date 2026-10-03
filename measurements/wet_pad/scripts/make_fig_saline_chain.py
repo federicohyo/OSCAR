@@ -10,7 +10,7 @@
         and sign-flipped, is replayed through it -- folded repeats from the
         CLEAN acquisition (a --dry dual run: the neuron never injects, so its
         spikes cannot couple into the amplifier channel -- the same reason
-        Fig. 10(b) is a single-channel run);
+        the reference figure(b) is a single-channel run);
     (c) the membrane of neuron 9, recorded simultaneously with the events that
         drove it (the live dual run), one representative repeat dark, the rest
         faint, with the integrate-and-fire inset.
@@ -229,15 +229,13 @@ def main():
     fig.tight_layout()
     for ext in ("png", "pdf"):
         fig.savefig(os.path.join(HERE, "figures", f"fig_saline_chain.{ext}"), dpi=200)
-        fig.savefig(os.path.join(HERE, "ISCAS27", "IEEE_PAD_SkyWater_2026",
-                                 "figures", f"fig18_saline_chain.{ext}"), dpi=200)
-    # the paper's panel (a) replays the recorded magnitudes
+    # panel (a) replays the recorded magnitudes
     print(f"panel (a): recorded dip {asm.min():+.0f} mV (smoothed), "
           f"{araw.min():+.0f} mV (raw)")
     if len(L):
         print(f"panel (b): replayed median peak {lmed.max()*1e3:+.1f} mV at "
               f"{grid[int(np.argmax(lmed))]:+.3f} s over {len(L)} repeats")
-    print("figures/fig_saline_chain.png + .pdf -> paper fig18_saline_chain")
+    print("figures/fig_saline_chain.png + .pdf")
 
 
 if __name__ == "__main__":

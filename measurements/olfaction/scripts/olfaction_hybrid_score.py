@@ -4,7 +4,7 @@
 Walks the ensemble using the analog outcome at every node visit instead of the arithmetic
 test, and reports the three rungs so the analog cost is attributable:
 
-  (i)   full-precision digital        -- the published baseline
+  (i)   full-precision digital        -- the reference baseline
   (ii)  same model, array representation, executed DIGITALLY -- the algorithm's ceiling
   (iii) same model, executed with the analog comparisons     -- this measurement
 

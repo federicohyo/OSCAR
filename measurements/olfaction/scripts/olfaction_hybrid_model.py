@@ -16,7 +16,7 @@ once with the arithmetic test and once through comparator semantics, and the two
 agree on every chunk before anything is run on silicon.
 
 THE THREE RUNGS, so the analog cost is attributable. (i) full-precision digital, the
-published baseline; (ii) the same model quantised to 33 burst levels with thresholds
+reference baseline; (ii) the same model quantised to 33 burst levels with thresholds
 snapped to the ten the array has, executed DIGITALLY -- the algorithm's own ceiling under
 the array's representation; (iii) rung (ii) executed with analog comparisons
 (olfaction_hybrid_chip.py). Only the (ii)->(iii) gap is the analog substrate's cost.
@@ -256,7 +256,7 @@ def main():
           f"{len(np.unique(ite))} trials, {nc} classes, burst alphabet 0..{NMAX}")
     print(f"representable thresholds t = {THRS}\n  (comparator levels L = {LADDER})\n")
 
-    # ---- rung (i): the published full-precision digital baseline ----------
+    # ---- rung (i): the reference full-precision digital baseline ----------
     ref = HGB(max_iter=10, max_leaf_nodes=8, random_state=0).fit(Ftr, Ytr)
     p = ref.predict(Fte)
     print(f"(i)   full-precision digital      per-chunk {acc(p, Yte, ite, nc)[0]:.3f}"

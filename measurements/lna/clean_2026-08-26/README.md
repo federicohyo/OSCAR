@@ -4,12 +4,12 @@ Re-measurement of the LNA after the bench was moved and a **ground loop was
 found and removed**. The setup is now at its quietest and highest-gain state of
 the day.
 
-**This is a NEW operating point, not a correction of the paper.** The bias file
-in force differs from the one used for the published Section IV, and the gain is
+**This is a NEW operating point, not a correction of the earlier campaign.** The bias file
+in force differs from the one used earlier, and the gain is
 ~3× higher. The two sets of numbers describe different bias points and must not
-be mixed. See "Relationship to the paper" below.
+be mixed. See "Relationship to the earlier measurement" below.
 
-| | this campaign | paper (`../../README_MEASUREMENTS.md`) |
+| | this campaign | earlier campaign (`../../README_MEASUREMENTS.md`) |
 |---|---|---|
 | `lna_iref` (the one bias that differs) | **1.079 V** | 1.5 V |
 | midband gain | ~272–293× (48.5–49.3 dB) | 97.7× (39.8 dB) |
@@ -90,7 +90,7 @@ real: 253.7× at 274 Hz, 223.3× at 400 Hz.
 1.91 Hz. Both curves are plotted — the gap between them is the sound card's own
 AC coupling, not the amplifier.
 
-Against the paper (39.8 dB, corner 0.49 Hz) gain and corner moved **up together**.
+Against the earlier campaign (39.8 dB, corner 0.49 Hz) gain and corner moved **up together**.
 That is what a higher-gain bias point does: the same DC-restoration element now
 works against more loop gain.
 
@@ -142,7 +142,7 @@ arrives. Nothing in any block touched the rail; the output DC sags from 1.673 to
 output stage was itself the fault this campaign exists to escape). 48 Welch
 averages, 8192-point segments.
 
-| | this campaign | paper |
+| | this campaign | earlier campaign |
 |---|---|---|
 | input-referred at 1 Hz | **6.8 µV/√Hz** | 12.4 µV/√Hz |
 | at 10 Hz | 2.24 µV/√Hz | — |
@@ -183,7 +183,7 @@ The output DC held at 1.634–1.645 V across the whole 4-minute noise record, wi
   not a measurement.
 - **Absolute level rides on the mixer setting**, unchanged since the original
   0.25 Vpp → 7 mVpp anchor. Nothing in this campaign re-verifies that anchor.
-- The gain ladder spans 23× in input (39–898 µVpp), against the paper's 17.5×,
+- The gain ladder spans 23× in input (39–898 µVpp), against the earlier campaign's 17.5×,
   but sits an order of magnitude lower: 39–898 µVpp against 400 µV–7 mVpp. The
   top is a hard headroom limit — at ~270× the rail arrives near 900 µVpp — and
   the bottom is set by the fit's own error bar (~1.7% at 40 µVpp), not by taste.
@@ -197,14 +197,14 @@ The output DC held at 1.634–1.645 V across the whole 4-minute noise record, wi
 
 ---
 
-## Relationship to the paper, and one open reconciliation
+## Relationship to the earlier measurement, and one open reconciliation
 
-Section IV and `../../README_MEASUREMENTS.md` are unaffected by anything here.
-Their data was taken before the bench was moved, and it carries its own evidence
+The earlier campaign (`../../README_MEASUREMENTS.md`) is unaffected by anything here.
+Its data was taken before the bench was moved, and it carries its own evidence
 of a quiet bench: fit error bars of 0.41–1.49 mV against 2.71–2.79 mV for the
 afternoon's contaminated runs, h2 of 0.6–3.9%, and no samples at the rail.
 
-**RESOLVED — the draft has been updated.** The draft attributed a 10.2 dB gap
+**RESOLVED — the write-up has been updated.** It attributed a 10.2 dB gap
 between simulated (50.05 dB) and measured (39.8 dB) gain to parasitic capacitance
 across C₂. With `lna_iref` at 1.079 V the measured gain is 48.6 dB, within 1.5 dB
 of simulation, so the capacitor ratio is close to drawn and the deficit at the
@@ -216,6 +216,6 @@ Two independent observations support loop gain over the capacitor ratio:
 more C₂ means less gain but a *longer* feedback time constant, hence a lower
 corner. Only the feedback factor scales both the same way.
 
-Fig. 12 and Fig. 14 of `ISCAS27/IEEE_PAD_SkyWater_2026/IEEEConf.tex` were
-replaced accordingly and the parasitic-C₂ paragraph rewritten. Untested: whether
-the residual 1.5 dB closes with still more bias current.
+The gain and noise figures were replaced accordingly and the parasitic-C₂
+paragraph rewritten. Untested: whether the residual 1.5 dB closes with still
+more bias current.

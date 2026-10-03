@@ -1,14 +1,15 @@
 # Synaptic weight-code characterization (2026-07-28, re-measured at 25 MHz 2026-08-02)
 
-Data behind **Fig. 6 of the MICPRO manuscript** (`paper/micro/figures/weight_code.pdf`),
+Data behind the synaptic weight-code figure (`../../measurements/plotting/make_synapse_weight.py`,
+output `../../measurements/plotting/figures/weight_code.pdf`),
 measured on neuron 5 / synapse 0, chip biased from
 `ofxCaravanViewer/bin/bias_synapse_characterization_super_n5_jul10.biases`.
 
-**Fig. 6 is now the 25 MHz measurement** (`onset_n5_25mhz*`), because the paper is unified on
+The weight-code figure now shows the 25 MHz measurement (`onset_n5_25mhz*`), with
 25 MHz as the nominal shipping clock. The original 50 MHz run (`onset_n5*`) is kept: the two
 together are the evidence that the calibration transfers across clock. See
 "Does the calibration transfer across clock?" at the end of this file, and
-`../../paper/micro/figures/weight_code_50mhz.pdf` for the superseded render.
+`../../measurements/plotting/figures/weight_code_50mhz.pdf` for the superseded render.
 
 ## What the measurement is, and why it isn't a rate sweep
 
@@ -35,10 +36,10 @@ readout of synaptic efficacy** — graded and repeatable to ~1 mV where the rate
 
 ## Results
 
-Both clocks, so this table is not silently a 50 MHz table. **The 25 MHz column is what Fig. 6
+Both clocks, so this table is not silently a 50 MHz table. **The 25 MHz column is what the reference figure
 now shows**; the two agree within the ±1 mV bisection resolution, which is the point.
 
-| quantity | 50 MHz (2026-07-28) | 25 MHz (2026-08-02, Fig. 6) |
+| quantity | 50 MHz (2026-07-28) | 25 MHz (2026-08-02) |
 |---|---|---|
 | `nUT` (weak-inversion slope) | **31.8 mV** → n ≈ 1.2 | **31.1 mV** → n ≈ 1.2 |
 | one doubling of branch current | **22.1 mV** | **21.6 mV** |
@@ -62,7 +63,7 @@ fall **monotonically across all 15 non-zero words**, following `V0 - nUT*ln(w)` 
 few mV: **14 resolvable levels, 3.9 of the nominal 4 bits.**
 
 > The 4-bit code is real, but it is a property of the **biasing**, not of the layout, and it
-> must be calibrated per die. The manuscript's earlier claim that the branches are
+> must be calibrated per die. An earlier claim that the branches are
 > "binary-weighted ... as designed" was not supported and has been corrected.
 
 ## Files
@@ -89,7 +90,7 @@ CARAVAN_CLK_MHZ=50 ./.venv-meas/bin/python3 synapse_onset.py \
     --neuron 5 --stages code --repeats 3 --spikes 150 --rate 800 \
     --lo 0.295 --hi 0.455 --ladder results/synapse/ladder_n5.json --tag n5_ladder
 
-./.venv-meas/bin/python3 paper/micro/figures/make_synapse_weight.py --tag n5 --ladder-tag n5_ladder
+./.venv-meas/bin/python3 measurements/plotting/make_synapse_weight.py --tag n5 --ladder-tag n5_ladder
 ```
 
 The bracket `--lo/--hi` must contain the onsets: the ladder shifts them ~85 mV lower, which
@@ -111,7 +112,7 @@ is why run 2 uses a lower bracket. A word whose onset lies outside the bracket i
 3. **Re-programming the weight inside a bisection is wasted time.** Only the biases move
    within one word's search, so `P`/`S`/`M` and their settling are hoisted out — 120 s per
    onset became 8–10 s.
-4. The old `Jexc_spikerate_w1_lab20260422.csv` behind the *previous* Fig. 6 has
+4. The old `Jexc_spikerate_w1_lab20260422.csv` behind the *previous* weight-code figure has
    `weight == 1` for every row: it swept the analog bias `JexcWn0_v`, never the programmed
    word, so it could not support the weight-code claim its caption made.
 
@@ -122,9 +123,9 @@ Every bench script loads its own biases, so this does not need undoing.
 
 ## Does the calibration transfer across clock? (re-measurement, 2026-08-02)
 
-§4.6 of the manuscript documents that delivered synaptic charge falls as the core clock
-rises, mechanism unexplained. That raised a fair objection to Fig. 6: if efficacy is
-clock-dependent, is the weight-code calibration a 50 MHz artefact?
+Delivered synaptic charge falls as the core clock rises, mechanism unexplained. That raised a
+fair objection to the weight-code figure: if efficacy is
+clock-dependent, is the calibration a 50 MHz artefact?
 
 It is not, and the argument for why is worth stating because it predicted the result. The
 calibration is a **ratio between branches**, so a common-mode gain shift should cancel and
@@ -210,7 +211,7 @@ CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 synapse_onset.py \
     --lo 0.290 --hi 0.460 --ladder results/synapse/ladder_n5_25mhz.json \
     --tag n5_25mhz_ladder
 
-./.venv-meas/bin/python3 paper/micro/figures/make_synapse_weight.py \
+./.venv-meas/bin/python3 measurements/plotting/make_synapse_weight.py \
     --tag n5_25mhz --ladder-tag n5_25mhz_ladder --out weight_code.pdf
 ```
 

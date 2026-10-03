@@ -13,13 +13,13 @@ with the SAME corr_effdim/build_features the hardware row uses.
 
 The dead time is DERIVED from the recorded data rather than assumed: we sweep the
 blanking interval and report which value reproduces the measured event count, and
-we cross-check that against the manuscript's ~250 ms REQ-hold figure.
+we cross-check that against the reference analysis's ~250 ms REQ-hold figure.
 
   ./.venv-meas/bin/python3 deff_acquisition_ablation.py
 
 SUPERSEDED IN PART (round 5, deff_refractory_ablation.py). This script's
 conclusion -- "the read-out path is ruled out" -- is too strong, and the
-manuscript no longer makes it. Both results here stand: 16 ms UNIFORM timestamp
+reference analysis no longer makes it. Both results here stand: 16 ms UNIFORM timestamp
 quantisation moves D_eff by -1%, and a 250 ms blanking dead time is excluded by
 the 282 events/window this recording carries. Neither tests what the acquisition
 actually did. Every interval in this recording lies on an 11.986 ms lattice whose
@@ -117,7 +117,7 @@ def main():
                  min(abs(r[1]-target) for r in rows) else ""))
     best = min(rows, key=lambda r: abs(r[1] - target))[0]
     print(f"  closest match: {best*1e3:.1f} ms blanking")
-    print(f"  NOTE the manuscript's ~250 ms REQ hold would leave at most "
+    print(f"  NOTE the reference analysis's ~250 ms REQ hold would leave at most "
           f"{16*2.0/0.250:.0f} events/beat across 16 neurons; silicon recorded {target:.1f}.")
 
     # --- the ablation -------------------------------------------------------

@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
-"""Fig. 7 for ISCAS2026.tex Section VI: three-odor classification on the
-analog array, from the same measured silicon spikes as the journal's
-capacity curve (data/olfaction/olf_validate/, 9 acquisitions: centre, bo_best1,
-bo_best2 x 3 reps).
+"""Three-odor classification on the analog array, from the measured silicon
+spikes behind the capacity curve (data/olfaction/olf_validate/, 9 acquisitions:
+centre, bo_best1, bo_best2 x 3 reps).
 
-    ./.venv-meas/bin/python3 LNA/make_fig_olfaction_iscas.py   (from repo root)
+    ./.venv-meas/bin/python3 measurements/olfaction/scripts/make_fig_olfaction.py   (from repo root)
 
-Pipeline is olfaction_class_curve.py verbatim, k=3 only: paper readout
+Pipeline is olfaction_class_curve.py verbatim, k=3 only: reference readout
 (exponential kernel + LogReg), GroupKFold by trial, majority vote over a
 trial's 5 chunks.  Typical statistic = mean over ALL C(5,3) subsets and all
-9 acquisitions, exactly the number the journal quotes as 0.877 -- asserted
+9 acquisitions, exactly the reference value 0.877 -- asserted
 against data/olfaction_class_curve.json before drawing.
 
 DRAWN AT PRINT SIZE (3.45 x 0.85 in, two 5-row panels), single column,
 do not rescale.
-Outputs fig19_olfaction_3odor.pdf (+ .png preview) in the paper's figures/,
-and caches the per-subset scores in data/olfaction_iscas_k3.json.
+Outputs fig19_olfaction_3odor.pdf (+ .png preview) in the figures directory,
+and caches the per-subset scores in data/olfaction/olfaction_k3.json.
 """
 import glob, itertools, json, os, sys
 
@@ -35,10 +34,10 @@ from olfaction_iso_compare import kernel, vote_acc  # noqa: E402
 
 OUT = os.path.join(REPO, "measurements", "olfaction", "figures",
                    "fig19_olfaction_3odor")
-CACHE = os.path.join(REPO, "data", "olfaction", "olfaction_iscas_k3.json")
+CACHE = os.path.join(REPO, "data", "olfaction", "olfaction_k3.json")
 
 INK, MUTED, GRID = "#1c1c1c", "#8a8a8a", "#e6e6e6"
-C_AN = "#0b7285"                      # the analog teal of the journal figure
+C_AN = "#0b7285"                      # the analog teal
 SHORT = {"2H": "2H", "Blank": "Bl", "EB": "EB", "Eu": "Eu", "IA": "IA"}
 
 
@@ -90,7 +89,7 @@ def main():
     })
     out = scores()
 
-    # sanity: reproduce the published typical statistic before drawing
+    # sanity: reproduce the reference typical statistic before drawing
     allv5 = [s["v5"] for per in out.values() for s in per.values()]
     allpc = [s["pc"] for per in out.values() for s in per.values()]
     ref = json.load(open(os.path.join(REPO, "data/olfaction_class_curve.json")))

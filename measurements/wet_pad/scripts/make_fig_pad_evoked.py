@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fig. 6 for ISCAS2026.tex Section V: the pad-evoked spiking response, chip1.
+"""The pad-evoked spiking response, chip1.
 
     ../.venv-meas/bin/python3 LNA/make_fig_pad_evoked.py   (from repo root)
 
 Data: scope_20260831_123139_single_payed_back_chip1_v1.csv -- the recorded
-saline event (Fig. 5b) replayed at 10 mVpp into the pad-amplifier input,
+saline event replayed at 10 mVpp into the pad-amplifier input,
 one event every 4 s; the GUI's Pad-Evoked mode thresholds the amplifier
 output (downward, trailing-median -150 mV) and injects AER spikes into
 neuron 11; ch2 watches its membrane.
@@ -13,13 +13,13 @@ DRAWING (Federico, 2026-08-31): all 15 repetitions folded onto the event
 onset, thin bright traces, ONE repetition (a median-count one) overdrawn in
 ink -- the overlay IS the repeatability claim.  Left column: pad-amplifier
 output over the spike raster, same folded time.  Right column: the soma
-circuit (tikz asset, from date27's neuron_circuit.tikz) with the
+circuit (tikz asset, from the earlier build's neuron_circuit.tikz) with the
 highlighted repetition's membrane below it, the event window in the same
 green as the left panels.
 
 Drawn at exact print size (3.45 x 2.45 in) for a single-column figure --
 do not rescale.
-Outputs fig18_pad_evoked_chip1.pdf (+ .png preview) in the paper's figures/.
+Outputs fig18_pad_evoked_chip1.pdf (+ .png preview) in the figures directory.
 """
 import numpy as np
 import matplotlib
@@ -93,7 +93,7 @@ ax1 = fig.add_axes([0.19, 0.225, 0.42, 0.345])
 # DISPLAY SCALE (2026-09-02, Federico): the replay was driven harder than
 # the wet event (10 mVpp at the input vs ~1.5 mV input-referred) so the
 # step is unambiguous on this die; the analog trace is displayed scaled to
-# the amplitude of the recorded event (-398 mV, Fig. 5b) so both panels
+# the amplitude of the recorded event (-398 mV, the reference figure) so both panels
 # read the same level.  Detection, folding, spikes and membrane all remain
 # computed on the unscaled data; only this display is scaled.
 K_DISP = 0.398 / (base1 - v1[down].min())
@@ -130,8 +130,8 @@ dress(ax0); dress(ax1)
 
 # ---- right column: the neuron, and its membrane -----------------------------
 # The top-right cell is left EMPTY here: the soma circuit is overlaid as
-# VECTOR tikz directly in ISCAS2026.tex (neuron_circuit_iscas.tikz) --
-# rasterising it blurs the thin circuit lines.  Below it, the membrane.
+# vector art -- rasterising it blurs the thin circuit lines.  Below it, the
+# membrane.
 axv = fig.add_axes([0.71, 0.235, 0.26, 0.215])
 a = segs[hero][0]
 z = (t >= a + VW0) & (t <= a + VW1)
@@ -151,7 +151,7 @@ fig.savefig(OUT + ".pdf")
 fig.savefig(OUT + ".png", dpi=200)
 print(f"saved {OUT}.pdf (+png)")
 
-# ---- text numbers (Section V + abstract) -----------------------------------
+# ---- text numbers (the reference analysis + abstract) -----------------------------------
 inside, leads = 0, []
 for (a, b), r in zip(segs, reps):
     inside += len(r["spk"])

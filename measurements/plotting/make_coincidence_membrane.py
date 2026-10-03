@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """Figure: the neuron as a continuous-time coincidence detector, membrane only.
 
-Single-panel companion of the RISCV paper's fig 13a (repo-root
+Single-panel companion of the coincidence-membrane figure (repo-root
 coincidence_frontier.py): the oscilloscope membrane of the analog neuron for
 two input spikes at four commanded intervals (Delta-t = 1/2/3/4 ms), aligned
 on the first EPSP. The Delta-t-graded EPSP summation crosses the 800 mV
 positive-feedback threshold only at the shortest interval; at 2--4 ms the
 second EPSP arrives after the first has partly leaked away and the membrane
 stays sub-threshold. The measured P(spike)-vs-Delta-t panel of the original
-figure is deliberately NOT included: this paper needs the membrane physics
+figure is deliberately NOT included: this reference needs the membrane physics
 only. Trace set, colours and threshold are imported from
 coincidence_frontier.py, which stays the single source of truth.
 
 Data: data/array/scopeCoinc/scope_{23,24,25,26}.csv
 
-Usage (from the repo root):  ./.venv-meas/bin/python3 measurements/paper_figures/make_coincidence_membrane.py
+Usage (from the repo root):  ./.venv-meas/bin/python3 measurements/plotting/make_coincidence_membrane.py
 """
 
 import csv

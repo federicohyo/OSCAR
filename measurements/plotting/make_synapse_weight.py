@@ -24,14 +24,14 @@ import os
 
 import matplotlib
 matplotlib.use("Agg")
-# fonttype 42 (TrueType) -- Type 3 fonts are rejected by several proceedings
-# pipelines (DATE, IEEE PDFeXpress)
+# fonttype 42 (TrueType) -- Type 3 fonts are rejected by several publisher
+# pipelines, so emit TrueType-embedded PDFs
 matplotlib.rcParams.update({"pdf.fonttype": 42, "ps.fonttype": 42})
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-# OSCAR reorg: this file lived in measurements/paper_figures/ (3 levels deep);
-# it is now measurements/paper_figures/ (2 levels deep). ROOT is the repo root.
+# OSCAR reorg: this file lived in measurements/plotting/ (3 levels deep);
+# it is now measurements/plotting/ (2 levels deep). ROOT is the repo root.
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 
 # Okabe-Ito, assigned in fixed order and never cycled; validated for CVD separation.
@@ -72,7 +72,7 @@ def main():
     ap.add_argument("--ladder-tag", default="n5_ladder",
                     help="second run, measured with the calibrated bias ladder applied")
     ap.add_argument("--panels", default="ab", choices=["ab", "b"],
-                    help="'ab' = the published two-panel figure; "
+                    help="'ab' = the reference two-panel figure; "
                          "'b'  = the all-words panel alone")
     ap.add_argument("--out", default="weight_code.pdf")
     args = ap.parse_args()
@@ -91,7 +91,7 @@ def main():
         fig, (axa, axb) = plt.subplots(1, 2, figsize=(7.0, 2.9))
     else:
         # same natural width and the same bottom margin in inches as
-        # neuron_fi_iscas.pdf, so the two panels' x-axes align when the
+        # neuron_fi_reference.pdf, so the two panels' x-axes align when the
         # figure places them side by side, bottom-aligned
         fig = plt.figure(figsize=(3.6, 2.9))
         axb = fig.add_axes([0.1722, 0.1793, 0.7978, 0.7607])
@@ -169,7 +169,7 @@ def main():
     print("wrote", out)
 
     # ---- numbers the caption and text quote ----------------------------------
-    print("\n--- numbers for the manuscript ---")
+    print("\n--- numbers for the reference analysis ---")
     if nut:
         print(f"nUT = {nut*1000:.1f} mV; one doubling of branch current = {delta*1000:.1f} mV")
     if axa is not None and bm:

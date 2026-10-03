@@ -26,7 +26,7 @@ Data: data/olfaction_comparator_tune.json (placement) and
 data/olfaction_hybrid_transfer.json (the transfer matrix), n14, 25 MHz. This is the
 ladder the hybrid tree of Section~\ref{par:hybridrun} actually executed against, measured
 after the bench was moved; the earlier ten-level ladder is superseded and its drift is
-Fig.~\ref{fig:comparatordrift}.
+the comparator-drift figure.
 
     python3 make_comparator.py
 """
@@ -68,7 +68,7 @@ def merged():
     """The calibration map and the graded ramps on ONE x axis (N): left y =
     Delta J_exc (the knob that walks the switching count), right y = membrane
     above rest (scope ramps at four of those settings). Replaces the separate
-    graded-integration and calibration-map panels in date27.tex Fig. 2c."""
+    graded-integration and calibration-map panels in the calibration map."""
     style()
     import collections
     d = json.load(open(os.path.join(RES, "olfaction_comparator_tune.json")))

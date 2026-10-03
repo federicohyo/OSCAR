@@ -17,7 +17,7 @@ by more than a second. The 137 Hz, 50 ms mark at t_mark = 0.125 s of every perio
 is found in ch1 itself and everything is referred to that.
 
 THE EVENT WINDOW COMES FROM THE WAV, not from odor_timing.json. That file's
-event_on/event_off (0.330-0.565 s) describe the SPICE/paper stimulus; in the WAV
+event_on/event_off (0.330-0.565 s) describe the SPICE/reference stimulus; in the WAV
 that is actually played the odor content of each period runs 0.50-1.26 s and
 peaks at 1.05 s. Scoring against the json window reports 0% and looks like a
 broken chain -- it is a mismatched clock, not a mismatched result.

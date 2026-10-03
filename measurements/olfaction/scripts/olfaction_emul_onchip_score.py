@@ -2,7 +2,7 @@
 """Score the ON-CHIP emulated-LIF spike times from olfaction_emul_run.py.
 
 The runner verified every row bit-exactly against lif_fixed() as it went, so this can
-only confirm -- the point of running at all is that the Fig. 15b emulated point can then
+only confirm -- the point of running at all is that the reference figure emulated point can then
 be drawn as measured on silicon rather than computed. Scoring is exactly the pipeline of
 olfaction_emul_accuracy.py: exponential kernel, GroupKFold by trial, StandardScaler +
 logistic regression, majority vote over 5 chunks; one projection seed per input file,

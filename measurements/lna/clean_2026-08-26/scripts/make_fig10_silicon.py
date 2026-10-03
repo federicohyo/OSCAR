@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Silicon counterpart of Fig. 10 panels (a) and (b): the odor stimulus at the
+"""Silicon counterpart of the reference figure panels (a) and (b): the odor stimulus at the
 chip input and the measured LNA output.
 
-Panel (c) of the published figure is the neuron membrane; that leg is not yet
+Panel (c) of the reference figure is the neuron membrane; that leg is not yet
 measured, so this figure carries (a) and (b) only.
 
 Two departures from analyze_odor.py, both for display only:
   * the fold uses a LOW-PASS (40 Hz) rather than the 1-40 Hz band, so the output
-    keeps its real DC level and the axis can be absolute, as in Fig. 10. The
+    keeps its real DC level and the axis can be absolute, as in the reference figure. The
     1-40 Hz band is still what FINDS the alignment -- that is the step that has
     to be robust, and it is unchanged.
-  * the record is shown in absolute time, 0-0.8 s, matching the published axis.
+  * the record is shown in absolute time, 0-0.8 s, matching the reference axis.
 """
 import csv, json, os, sys
 import numpy as np
@@ -85,6 +85,4 @@ for a_, lab, loc in zip(ax, ("(a)", "(b)"), ("lower left", "upper right")):
 fig.tight_layout()
 for e in ("png", "pdf"):
     fig.savefig(os.path.join(ROOT, "figures", f"fig10_silicon_ab.{e}"), dpi=200)
-    fig.savefig(os.path.join(LNA, "ISCAS27", "IEEE_PAD_SkyWater_2026", "figures",
-                             f"fig10_silicon_ab.{e}"), dpi=200)
-print("wrote fig10_silicon_ab.png/.pdf (archive + paper figures/)")
+print("wrote fig10_silicon_ab.png/.pdf")

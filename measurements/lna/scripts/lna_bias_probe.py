@@ -7,7 +7,7 @@ lna_iref sets the gate of the input-pair current mirror (PMOS: lower voltage =
 more current). More current raises the OTA's transconductance and therefore its
 open-loop gain, which pushes the closed-loop gain closer to the ideal C1/C2.
 
-This is a test of the explanation in the draft, not just a tuning knob:
+This is a test of the explanation in the earlier analysis, not just a tuning knob:
 
   * if the gain climbs toward C1/C2 = 369x (51.4 dB), the measured shortfall was
     INSUFFICIENT LOOP GAIN and is recoverable by biasing -- the parasitic-C2
@@ -125,10 +125,10 @@ def main():
     print("\nVERDICT: ", end="")
     if best[2] > 0.75 * C1_OVER_C2:
         print("gain recovers toward C1/C2 -- the shortfall was LOOP GAIN,\n"
-              "         and the parasitic-C2 explanation in the draft must be rewritten.")
+              "         and the parasitic-C2 explanation in the earlier analysis must be rewritten.")
     elif best[2] > 1.3 * rows[0][2]:
         print("gain improves substantially but stays well below C1/C2 --\n"
-              "         partly loop gain, partly the ratio. Both belong in the draft.")
+              "         partly loop gain, partly the ratio. Both belong in the earlier analysis.")
     else:
         print("more current buys little -- the capacitor ratio is what limits,\n"
               "         so the parasitic-C2 explanation stands.")

@@ -37,7 +37,7 @@ from scipy.stats import wilcoxon
 # ----------------------------------------------------------------------------------
 F_CLK = 25e6                 # RV32I core clock (firmware/soc.h CONFIG_CLOCK_FREQUENCY)
 # sky130 130nm small in-order RV32I core, ~1.8 V. No on-die power was measured in this
-# tape-out (the paper is an interface/throughput characterization), so E_CYCLE is a
+# tape-out (the reference campaign is an interface/throughput characterization), so E_CYCLE is a
 # LITERATURE-ORDER ESTIMATE used only as a linear scale on the energy axis; it does not
 # affect the analog-vs-numeric ORDERING or the O(N/dt) SLOPE (both digital paths share it,
 # and the analog feature-generation energy is orders of magnitude below either).
@@ -146,7 +146,7 @@ def main():
     for n in feats:
         am, asd, fm, fsd = summ(per[n], recs)
         # Uncertainty OF THE MEAN across held-out records: bootstrap 95% CI (20,000
-        # percentile resamples, the paper's convention). The marginal between-patient
+        # percentile resamples, the reference campaign's convention). The marginal between-patient
         # s.d. (acc_sd) is NOT the error of the mean marker; store both, plot the CI.
         a_rec = np.array([per[n][r][0] for r in recs])
         rng_ci = np.random.default_rng(0)

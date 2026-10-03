@@ -2,7 +2,7 @@
 
 A search that returns "nothing" is only informative if it would have said something
 had there been something. The per-neuron input projection is the one manipulation
-whose effect on D_eff is established (3.6 -> 9.6 in the published decomposition), so
+whose effect on D_eff is established (3.6 -> 9.6 in the reference decomposition), so
 run the identical harness with the projection REMOVED -- every neuron driven by the
 same shared delta stream -- and check the harness sees it collapse.
 """

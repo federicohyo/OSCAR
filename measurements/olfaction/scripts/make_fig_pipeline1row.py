@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""One-row variant of the odor-classification pipeline figure (TBioCAS Fig. 14
-reduced to its second row, per 2026-09-04 decision): one held-out chunk carried
+"""One-row variant of the odor-classification pipeline figure
+(reduced to its second row, per 2026-09-04 decision): one held-out chunk carried
 through (a) the 8-channel MOx recording, (b) the sixteen projections with
 level-crossing stimulus ticks, (c) the measured 16-neuron raster, (d) the
 exponential-kernel read-out. Same data and chunk-picking rule as the repo-root

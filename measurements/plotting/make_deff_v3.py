@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fig. 11 on REF25 -- three silicon acquisitions, and a model matched to the new one.
+"""D_eff decomposition on REF25 -- three silicon acquisitions, and a model matched to the new one.
 
 WHY v3. deff_decomp_v2 plots two silicon curves against software rows that run at
 1.5-5.3 Hz. REF25 runs at 39 Hz. D_eff falls with rate in this pipeline, so putting
@@ -8,10 +8,10 @@ between them is not a measurement of anything. v3 adds the row that makes REF25'
 comparison like-for-like: a software LIF whose per-neuron thresholds are bisected to
 REF25's own per-neuron rates.
 
-TWO MODEL CORRECTIONS FALL OUT OF DOING THAT, and both are physics the published
+TWO MODEL CORRECTIONS FALL OUT OF DOING THAT, and both are physics the reference
 model omitted rather than fitting knobs:
 
-1. THE PUBLISHED IMPULSE MODEL CANNOT REACH REF25's RATES AT ALL. With instantaneous
+1. THE REFERENCE IMPULSE MODEL CANNOT REACH REF25's RATES AT ALL. With instantaneous
    input jumps a LIF emits at most one spike per input event -- the jump crosses
    threshold once and resets -- so it caps at 22.5 Hz mean against silicon's 39.0,
    and 13 of 16 per-neuron targets are unreachable at any threshold. Silicon is not
@@ -25,7 +25,7 @@ So the model needs the DPI's synaptic tail, which `simulate(tau_syn=...)` alread
 implements and which deff_physical_mechanisms already calls "SYN DPI tail". At
 tau_syn = 10 ms the bisection reaches REF25's rates with 1 of 16 neurons off target.
 
-    ./.venv-meas/bin/python3 measurements/paper_figures/make_deff_v3.py
+    ./.venv-meas/bin/python3 measurements/plotting/make_deff_v3.py
 """
 import json
 import os

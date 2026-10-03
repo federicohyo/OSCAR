@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Make the classification-pipeline figure for the ISCAS27 paper (Sec. III.H).
+"""Make the classification-pipeline figure.
 
 Two held-out chunks, one row each -- eucalyptol (top) and another odor
 (bottom) -- carried through the four stages of the measured pipeline:

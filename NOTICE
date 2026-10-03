@@ -76,30 +76,18 @@ Eindhoven University of Technology (TU/e), by F. Corradi, S. Ye, M. Fattori
 and R. Jordans. Author copyright and attribution should be preserved.
 
 --------------------------------------------------------------------------
-Cited manuscripts (under review; NOT redistributed)
+Hardware figure assets
 --------------------------------------------------------------------------
-The following articles are cited references only. They are (c) IEEE and are
-NOT included in this repository — no manuscript PDF, LaTeX source, or figure
-beyond the small attributed image assets under docs/figures/ is shipped.
-
-  * F. Corradi, S. Ye, M. Fattori, R. Jordans, "An Open-Silicon Neuromorphic
-    Chemosensing Front-End with Electrode-Pad Wet Transduction," submitted to
-    IEEE ISCAS 2026; under review, not accepted.
-  * F. Corradi, S. Ye, M. Fattori, R. Jordans, "A RISC-V-Managed Analog Spiking
-    Neural Network Array for On-Sensor Olfactory Processing," submitted to
-    IEEE ISCAS 2027; under review, not accepted.
-  * The shared IEEE TBioCAS journal companion panels reuse the same data/scripts.
-
 The README hardware figure (docs/figures/fig_hardware_layout.{pdf,png}) is
-composed from image assets of the ISCAS 2026 submission and is reproduced here with
-attribution to the authors and (c) IEEE.
+composed from the layout, die-micrograph and daughter-board image assets
+shipped under docs/figures/.
 
 --------------------------------------------------------------------------
 Metal-oxide odor dataset
 --------------------------------------------------------------------------
 The olfaction experiments use a third-party metal-oxide gas-sensor dataset.
-It is cited in the papers; raw third-party features are not redistributed
-beyond the derived, paper-facing result files under data/olfaction/.
+Raw third-party features are not redistributed beyond the derived result
+files under data/olfaction/.
 
 --------------------------------------------------------------------------
 Large design files available on request

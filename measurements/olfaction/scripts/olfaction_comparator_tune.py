@@ -86,7 +86,7 @@ def pf(b, sc, k, n, reps, wait, echo=False, keep=None):
 
     `keep`: a list to append the RAW record of every repetition to -- burst size, the AER
     counts across all 16 neurons, and the membrane window itself. The decision path is
-    unchanged; this only exposes what it already measured, so a published result can be
+    unchanged; this only exposes what it already measured, so a reference result can be
     re-derived from the traces rather than from this function's summary of them."""
     g, mv, spark = 0, [], ""
     for _ in range(reps):

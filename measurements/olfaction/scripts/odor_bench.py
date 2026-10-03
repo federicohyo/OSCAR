@@ -153,7 +153,7 @@ def main():
           f"(single repeat {np.mean(sd[pre])*1e3:.2f} mV)")
     peak = float(mean[ev][int(np.argmax(np.abs(mean[ev])))])
     print(f"  event deflection: {peak*1e3:+7.2f} mV peak  "
-          f"({'UP - inverting, as published' if peak > 0 else 'DOWN'})")
+          f"({'UP - inverting, as reference' if peak > 0 else 'DOWN'})")
     print(f"  SNR on the event: {abs(peak) / (float(np.std(mean[pre])) or 1):.1f}x")
     print(f"  per-repeat spread over the event: {np.mean(sd[ev])*1e3:.2f} mV rms")
     print(f"  headroom used at the peak: {abs(peak)*1e3:.1f} mV of "

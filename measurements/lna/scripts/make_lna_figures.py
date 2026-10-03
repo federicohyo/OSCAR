@@ -177,14 +177,14 @@ def noise():
     ax[0].grid(True, which="both", alpha=.3); ax[0].set_title("LNA output noise, no drive")
     ax[1].loglog(f[~ln], ai[~ln] * 1e6, lw=.9, color="C0", label="measured (mains removed)")
     ax[1].axhline(200, ls="--", c="C3", lw=1.2,
-                  label="SPICE 200 $\\mu$V/$\\sqrt{Hz}$ @1 Hz (ISCAS27)")
+                  label="SPICE 200 $\\mu$V/$\\sqrt{Hz}$ @1 Hz (reference)")
     ax[1].set_xlabel("frequency [Hz]")
     ax[1].set_ylabel("input-referred [$\\mu$V/$\\sqrt{Hz}$]")
     ax[1].grid(True, which="both", alpha=.3); ax[1].legend(fontsize=8)
     fig.tight_layout(); fig.savefig(os.path.join(FIG, "lna_noise.png"), dpi=150)
     plt.close(fig)
 
-    # paper version: input-referred only, single panel
+    # reference version: input-referred only, single panel
     fig, ax = plt.subplots(figsize=(7, 4.6))
     ax.loglog(f[~ln], ai[~ln] * 1e6, lw=1.1, color="C0")
     ax.set_xlabel("frequency [Hz]")

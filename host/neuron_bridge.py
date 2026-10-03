@@ -475,7 +475,7 @@ COINC_DT_TICKS_MAX = min(3_000_000 * (CLK_MHZ // 10), 0xFFFFFF)
 def parse_weight_token(token):
     """Parse 4-bit weight token from decimal or binary text.
 
-    Accepted forms:
+    Recognised forms:
       - binary with prefix: 0b1010
       - 4-bit binary text: 1010, 0001
       - decimal: 0..15

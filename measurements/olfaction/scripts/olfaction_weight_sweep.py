@@ -2,12 +2,12 @@
 """Find a quieter operating point using the CALIBRATED weight ladder, not vleakn.
 
 F. Corradi, 2026-08-13: "maybe we can play with the weights values -- we did calibrate
-them in the paper." Right, and it is the better knob.
+them in the reference campaign." Right, and it is the better knob.
 
 At the reference point the four weight branches sit within 10 mV of each other, so the
 word delivers popcount(w): five levels, non-monotonic at the carries, and w<=7 drops
 most of the array silent ([[weight-code-is-popcount-not-binary]]). Useless as a dial.
-The published calibration fixes that. In weak inversion I_j = I* exp((V_j - V_j0)/nUT),
+The reference calibration fixes that. In weak inversion I_j = I* exp((V_j - V_j0)/nUT),
 so setting
 
     V_j = V_cm + (V_j0 - V_00) + j * nUT * ln2

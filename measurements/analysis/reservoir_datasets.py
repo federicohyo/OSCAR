@@ -3,10 +3,10 @@
 
 Task M. Four separate acquisitions of the array underlie the reservoir results,
 they differ in encoder, beat set and evoked activity by more than a factor of
-five, and for four rounds of manuscript review they were confused with one
+five, and for four rounds of reference analysis review they were confused with one
 another -- a rate dispersion from one was quoted against another, and a dead-time
 exclusion computed on one was applied to all three. Every analysis script should
-name which of these it is reading, and every number the manuscript quotes should
+name which of these it is reading, and every number the reference analysis quotes should
 be traceable to one of them.
 
     from reservoir_datasets import ACC, DIM, NSV, REF25, describe
@@ -47,8 +47,8 @@ ACC = Recording(
     coding="delta",                       # one shared level-crossing stream
     events_per_window=49.2,
     rate_cv=0.641,
-    used_for="Table 2 (binary N/PVC accuracy, 0.987 +/- 0.027 inter-patient) and "
-             "the random-projection control in Section 7.2.",
+    used_for="the reference table (binary N/PVC accuracy, 0.987 +/- 0.027 inter-patient) and "
+             "the random-projection control in the reference analysis.",
 )
 
 DIM = Recording(
@@ -60,8 +60,8 @@ DIM = Recording(
     coding="delta_randproj",              # per-neuron projected level-crossing
     events_per_window=281.8,
     rate_cv=0.495,
-    used_for="Section 7.3 in full: Table 3, Fig. 11, every D_eff number in the "
-             "paper, the operating-point dispersion match, and the acquisition "
+    used_for="the reference analysis in full: the reference table, the reference figure, every D_eff number in the "
+             "reference, the operating-point dispersion match, and the acquisition "
              "lattice measurement.",
     notes="The per-neuron input projection is what makes the comparison against a "
           "projected software LIF like-for-like; it is also why this recording "
@@ -78,7 +78,7 @@ NSV = Recording(
     coding="structured_hw",
     events_per_window=81.1,
     rate_cv=0.262,
-    used_for="Section 8, the cost frontier: OP1's accuracy in Fig. 13a, its 81.1 "
+    used_for="the reference analysis, the cost frontier: OP1's accuracy in the reference figure, its 81.1 "
              "events/beat in the energy accounting (constants.py reads this via "
              "reservoir_frontier.json), and the rate dispersion OP2 is matched to.",
 )
@@ -92,7 +92,7 @@ REF25 = Recording(
     coding="delta_randproj",              # same encoder as DIM, so directly comparable
     events_per_window=1249.3,
     rate_cv=0.482,                        # all 16, the registry convention; 0.394 over the 15 live
-    used_for="Section 7.4. The reference acquisition: the first recording taken at an "
+    used_for="the reference analysis. The reference acquisition: the first recording taken at an "
              "operating point selected in advance for margin and then SHOWN to "
              "reproduce (1.4% on a fixed 10-beat subset across the acquisition, "
              "against a tolerance fixed beforehand).",

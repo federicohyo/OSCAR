@@ -154,7 +154,7 @@ def build(figw, figh, fontscale, standalone=True):
 
 
 def build_long(figw=7.16, figh=2.6):
-    """Two-column layout for the ISCAS27 paper: the whole record spans both
+    """Two-column layout: the whole record spans both
     columns, the two injection zooms sit in it as insets (left, right)."""
     global TS
     TS = 0.72
@@ -213,7 +213,7 @@ for stem, figw, figh, ts, alone, exts in [
         print("wrote %s.%s" % (stem, ext))
     plt.close(fig)
 
-# ISCAS27 two-column variant with the zooms as insets inside the long record
+# two-column variant with the zooms as insets inside the long record
 fig = build_long()
 for ext in ("png", "pdf"):
     p = "measurements/wet_pad/figures/fig17_tio2_dilute3x.%s" % ext

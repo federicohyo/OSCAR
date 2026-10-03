@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Drift and repair on two dies, one level x run heatmap per die.
-Writes comparator_drift2.pdf -- ISCAS Fig. 2.
+Writes comparator_drift2.pdf.
 
 Both dies run the SAME six reference counts [4, 6, 9, 11, 18, 26] and the same
 firmware procedure; the columns are consecutive selfheal_sweep runs.

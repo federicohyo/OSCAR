@@ -27,7 +27,7 @@ def rates(kw, vth):
 
 print(f"silicon REF25 target: mean {targets.mean():.1f} Hz, max {targets.max():.1f} Hz")
 print(f"{'condition':34s} {'max achievable Hz':>18}   (thresholds driven to floor)")
-for lab, kw in [("impulse (as published)", dict()),
+for lab, kw in [("impulse (as reference)", dict()),
                 ("DPI tail tau_syn 5 ms",  dict(tau_syn=0.005)),
                 ("DPI tail tau_syn 10 ms", dict(tau_syn=0.010)),
                 ("DPI tail tau_syn 20 ms", dict(tau_syn=0.020))]:

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Regenerate ecg_frontier.pdf for the MICPRO manuscript.
+"""Regenerate ecg_frontier.pdf.
 
 Differences from the original `reservoir_frontier.py::make_figure` in the repo root:
 
   1. MEASURED energy axis. The original used a literature-order E_cycle = 100 pJ
-     estimate. We now have measured supply-rail power (BioCAS draft): the analog
+     estimate. We now have measured supply-rail power: the analog
      array draws 0.43 mW on aVDD and the RV32I draws 9.3 mW on DVDD at 25 MHz,
      i.e. 372 pJ/cycle. The analog point is additionally charged its own STATIC
      power over the whole 2 s beat window, which is the dominant term and which
@@ -43,7 +43,7 @@ F_CLK      = K.F_CLK
 E_CYCLE_J  = K.E_CYCLE_J     # 372 pJ/cycle, MEASURED
 
 # The digital path is plotted on the MEASURED SRAM-resident cost (481 cyc/neuron-step,
-# Timer0 microbenchmark), which is the basis the manuscript quotes throughout. The
+# Timer0 microbenchmark), which is the basis the reference analysis quotes throughout. The
 # idealised 1-CPI instruction count (153 cyc) is shown alongside as an explicit lower
 # bound that favours the digital baseline. Before this change the figure was plotted on
 # the idealised basis while the text quoted the measured one.

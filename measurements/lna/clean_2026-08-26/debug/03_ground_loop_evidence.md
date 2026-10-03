@@ -76,9 +76,9 @@ Diagnostic separation between contaminated and clean runs:
 | samples at rail | 9–37% | 0.0% |
 | repeat guard | 6.8–53.6% | 0.06–3.7% |
 
-## 5. The paper's data is unaffected
+## 5. The earlier campaign's data is unaffected
 
-Section IV was measured before the bench was moved, and carries its own evidence
+The earlier data was measured before the bench was moved, and carries its own evidence
 of a quiet bench: fit error bars of 0.41–1.49 mV, h2 of 0.6–3.9%, no samples at
 the rail, and `lna_noise.csv` giving an output ASD near 55 Hz of
 7.4 × 10⁻⁴ V/√Hz. The 60 Hz line seen this afternoon was ~228 mV; had it been

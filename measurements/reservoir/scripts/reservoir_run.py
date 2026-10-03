@@ -26,10 +26,10 @@ from reservoir_data import get_beats, encode_rate
 # CLOCK TRAP -- read this before running at anything but 10 MHz.
 #
 # This default set was tuned on the 10 MHz crystal (2026-07-04) and it is what the
-# ACC / DIM / NSV recordings in the manuscript were taken with. Its JInhWp[0:3] sit
+# ACC / DIM / NSV recordings in the reference analysis were taken with. Its JInhWp[0:3] sit
 # at 1.77-1.78 V, which for a PMOS bias is OFF: inhibition is essentially disabled,
 # which is fine at 10 MHz where excitatory efficacy is high. Synaptic efficacy falls
-# as the core clock rises (Section 4.6 of the manuscript), so running THIS set at
+# as the core clock rises (the reference analysis), so running THIS set at
 # 50 MHz is exactly the failure mode that section documents.
 #
 # The retuned 50 MHz set is the _jul10 one (2026-07-12), JInhWp ~ 1.27-1.29 V. It is
@@ -114,14 +114,14 @@ def check_bias_clock_pairing(pattern):
     # Two ways to be recognised as retuned. The tag list is the original by-convention
     # rule. The clock stamp is stronger and cannot be spoofed by an old file: a set
     # written by reservoir_ratetune.py embeds the clock it was tuned at, so it is
-    # accepted at that clock and refused at any other.
+    # valid at that clock and refused at any other.
     retuned = (any(tag in pattern for tag in ("_jul10", "_struct", "_feedproj"))
                or f"_{clk}mhz" in pattern.lower())
     if clk != 10 and not retuned and os.environ.get("RESERVOIR_ALLOW_BIAS_CLOCK") != "1":
         raise BiasClockMismatch(
             f"CARAVAN_CLK_MHZ={clk} with the 10 MHz-tuned bias set\n  {pattern}\n"
             f"whose JInhWp[0:3] are at ~1.78 V (PMOS OFF -- inhibition disabled). "
-            f"Synaptic efficacy is clock-dependent (manuscript Section 4.6); this "
+            f"Synaptic efficacy is clock-dependent; this "
             f"pairing is the documented failure mode, not a valid operating point.\n"
             f"Use --bias-pattern '{BIAS_PATTERN_50MHZ}', or set CARAVAN_CLK_MHZ=10, "
             f"or RESERVOIR_ALLOW_BIAS_CLOCK=1 to override deliberately.")

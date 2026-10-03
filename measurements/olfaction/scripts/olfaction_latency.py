@@ -20,7 +20,7 @@ given accuracy with short windows and averaging, it wins even where a single one
 its decisions is worse than a single digital one.
 
 So: sweep the decision window, measure accuracy, and price both substrates at each
-point using the constants the manuscript already pins.
+point using the constants the reference analysis already pins.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_latency.py
 
@@ -41,7 +41,7 @@ from sklearn.preprocessing import StandardScaler
 FS = 1000.0
 T0 = -1.0
 
-# from measurements/paper_figures/constants.py -- the same numbers the cost frontier uses
+# from measurements/plotting/constants.py -- the same numbers the cost frontier uses
 P_ANALOG_W = 0.43e-3
 E_CYCLE_J = 372e-12
 DRAIN_FIXED, DRAIN_MARGINAL = 105, 480

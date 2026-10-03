@@ -5,7 +5,7 @@ lif_steps_ram), best operating point of olfaction_emul_accuracy.json
 (decay 64000, w 20000, vth 32768, refr 10, 3 projection seeds). Same chunks,
 same kernel+LogReg readout, same GroupKFold/voted5 protocol, same subset
 statistics (typical + nested data-pick). The k=5 pooled number must reproduce
-the paper's emulated row (0.822 +/- 0.042) -- that is the replica check.
+the reference campaign's emulated row (0.822 +/- 0.042) -- that is the replica check.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_class_curve_emul.py
 """
@@ -96,7 +96,7 @@ def main():
               f"   (best {','.join(best[0])}: {res[k]['best_subset_v5']:.3f})")
     replica = res[5]["typical"]["v5"]
     print(f"\nreplica check: emulated 5-class voted5 = {replica:.3f} "
-          f"(paper row 0.822 +/- 0.042) -> {'OK' if abs(replica - 0.822) < 0.085 else 'MISMATCH'}")
+          f"(reference row 0.822 +/- 0.042) -> {'OK' if abs(replica - 0.822) < 0.085 else 'MISMATCH'}")
     json.dump(res, open("data/olfaction_class_curve_emul.json", "w"), indent=1)
     print("wrote data/olfaction_class_curve_emul.json")
     return 0

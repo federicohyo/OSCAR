@@ -185,7 +185,7 @@ def main():
     e_rt = ROUTE_CYC * E_CYCLE_J
     e_visit = e_rail + e_aer + e_rt
     e_dec = e_visit * args.visits * 5            # voted over 5 chunks
-    # /16 is NOT reachable and the paper no longer quotes it. The bias DACs are
+    # /16 is NOT reachable and the reference campaign no longer quotes it. The bias DACs are
     # array-wide, so the neurons in range do not hold different thresholds; weighting
     # levels by their share of node visits gives 1.13x (olfaction_mismatch_payoff.py).
     # Kept as an upper bound only, and labelled as one.

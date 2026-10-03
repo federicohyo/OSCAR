@@ -25,7 +25,7 @@ Guards, each of which has burned bench time before:
 Output CSV is one row per trial (not per mean), so the analysis can compute its own statistics:
   repeat, weight, input_hz, spikes_in, elapsed_s, out_spikes, out_hz, total_hz, drops, stalls
 
-Example (the paper's Fig. 6):
+Example (the reference figure):
   ./.venv-meas/bin/python3 synapse_rate_transfer.py --syn 0 --neuron 5 \
       --weights 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 \
       --rates 100,200,400,600,800 --spikes 300 --repeats 5 \

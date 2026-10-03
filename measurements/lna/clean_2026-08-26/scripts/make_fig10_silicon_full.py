@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Silicon counterpart of Fig. 10, all three panels: input, LNA output, membrane.
+"""Silicon counterpart of the reference figure, all three panels: input, LNA output, membrane.
 
 Panel (c) is the real membrane trace, not a raster, and it carries no timing
 correction: the membrane and the injection commands are both on the host clock,
@@ -111,7 +111,7 @@ ax[1].plot(grid, lmed*1e3, lw=1.3, color="#8c1010", label=r"$V_{LNA}^{out}$ (mV)
 ax[1].set_ylabel(r"$V_{LNA}^{out}$ (mV)", color=RED); ax[1].tick_params(axis="y", labelcolor=RED)
 # NO median here. Spikes do not align sample-by-sample across repeats, so a
 # median across them reads ~0.36 V while individual spikes reach 1.13 V -- it
-# would understate the membrane by a factor of three. The published panel shows a
+# would understate the membrane by a factor of three. The reference panel shows a
 # single transient; one representative repeat is drawn dark, the rest faint. All
 # nine repeats of the two-channel run are drawn.
 for row in M: ax[2].plot(grid, row, lw=.5, color=GRN, alpha=.28)
@@ -148,7 +148,7 @@ for a_, lab, lloc in zip(ax, ("(a)", "(b)", "(c)"),
 # ramp between spikes is resolved rather than inferred. The inset is a
 # measurement again.
 INSET = True
-# --- the inset itself, as in the simulated Fig. 10 ---------------------------
+# --- the inset itself, as in the simulated the reference figure ---------------------------
 # Both faults that blocked this are gone: the membrane is now recorded during the
 # live run, on the same instrument as the amplifier channel, so the baseline
 # matches the panel it sits in and the neuron is driven by real event-time
@@ -158,7 +158,7 @@ INSET = True
 # rests, is driven through threshold in a burst, resets, and recovers. It is NOT
 # zoomed to a single interspike interval: within a burst the ISI is 3-4 ms and the
 # digitiser runs at 1 kHz, so an interval holds three or four samples and the
-# sub-threshold ramp that Fig. 10 draws from simulation is simply not resolved
+# sub-threshold ramp that the reference figure draws from simulation is simply not resolved
 # here. Zooming further would draw an interpolation, not a measurement.
 if INSET:
     INS_T0, INS_T1 = 0.090, 0.230   # one reset, one full ramp, the next spike
@@ -202,8 +202,6 @@ if INSET:
 fig.tight_layout()
 for e in ("png", "pdf"):
     fig.savefig(os.path.join(ROOT, "figures", f"fig10_silicon_full.{e}"), dpi=200)
-    fig.savefig(os.path.join(LNA, "ISCAS27", "IEEE_PAD_SkyWater_2026", "figures",
-                             f"fig10_silicon_full.{e}"), dpi=200)
 np.savez_compressed(os.path.join(ROOT, "raw", "odor_neuron", "membrane.npz"),
     grid=grid, lna_trials=L, lna_median=lmed, lna_sd=lsd, mem_trials=M, mem_median=mmed,
     recovered_input=rec, period_s=P, smooth_delay_s=SMOOTH_DELAY)
@@ -213,4 +211,4 @@ print(f"membrane rest {rest:.3f} V; per-repeat peaks "
 print(f"membrane peak, max over repeats {max(r.max() for r in M):.3f} V")
 print(f"LNA median peak {lmed.max()*1e3:+.1f} mV at {grid[int(np.argmax(lmed))]:+.3f} s")
 
-print("figures/fig10_silicon_full.png + .pdf (archive + paper figures/)")
+print("figures/fig10_silicon_full.png + .pdf")

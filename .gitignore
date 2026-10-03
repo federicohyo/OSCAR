@@ -15,7 +15,7 @@ firmware/**/*.hex
 ofxCaravanViewer/obj/
 ofxCaravanViewer/bin/ofxCaravanViewer
 
-# LaTeX / manuscript -- NOT part of this repo (Revision 3 scope)
+# LaTeX sources -- NOT part of this repo (Revision 3 scope)
 *.tex
 *.bib
 *.cls
@@ -40,12 +40,7 @@ texput.log
 *.bcf
 *.run.xml
 generated_constants.tex
-/paper/
 /*.pdf
-**/ISCAS2026*.pdf
-**/ISCAS2027*.pdf
-**/TBioCAS*.pdf
-**/micpro*.pdf
 !docs/figures/*.pdf
 
 # Design backups / derived
@@ -74,9 +69,9 @@ data_olfaction/
 results/scope_selfheal_aug24.csv
 
 # Editorial / working trees in-tree
-LNA/ISCAS27/edit_plans/
-LNA/ISCAS27/style_reviews/
-LNA/ISCAS27/reviews*.md
+LNA/*/edit_plans/
+LNA/*/style_reviews/
+LNA/*/reviews*.md
 **/_backup_*/
 
 # Secrets / machine-specific

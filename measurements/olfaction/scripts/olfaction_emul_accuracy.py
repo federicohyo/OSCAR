@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Accuracy of the DIGITAL emulation of the array, in the firmware's own arithmetic.
 
-The paper's "digital, same pipeline emulated" row quoted 0.867 +/- 0.037, taken from a
+The reference campaign's "digital, same pipeline emulated" row quoted 0.867 +/- 0.037, taken from a
 FLOAT LIF at a hand-chosen operating point (olfaction_sim_sweep.py) -- and that model
 over-predicts the measured array by more than 0.10, so the number was flagged optimistic.
 The firmware does not use floats: lif_steps_ram() runs a Q16 shift-add decay on int32 with

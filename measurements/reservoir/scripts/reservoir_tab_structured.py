@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Reproduce every row of Table~\\ref{tab:structured} (3-class N/S/V, inter-patient LORO,
-linear readout) from the committed npz files, so the paper table is verifiable offline.
+linear readout) from the committed npz files, so the reference campaign table is verifiable offline.
 
 Rows: raw ECG / raw+RR / RR-only (static feature baselines), the random-projection
 reservoir (HW), and the structured feature-aware reservoir (SW and HW). Reservoir rows
@@ -60,11 +60,11 @@ def main():
     print(f"  S present in {nS}/{len(recs)} records; {max(sc.values())}/{sum(sc.values())} "
           f"S beats from record {max(sc, key=sc.get)}")
 
-    print("\n=== Table IV rows (macro-F1 = per-record LORO mean; per-class F1 pooled) ===")
+    print("\n=== the reference table rows (macro-F1 = per-record LORO mean; per-class F1 pooled) ===")
     row("raw ECG", X, y, g)
     row("raw ECG + RR", np.hstack([X, rr]), y, g)
     row("RR features only", rr, y, g)
-    # the paper's random-projection HW row is the tuned2 bias point (matches Table IV exactly)
+    # the reference campaign's random-projection HW row is the tuned2 bias point (matches the reference table exactly)
     rp = np.load("reservoir_spikes_nsv_randproj_tuned2.npz", allow_pickle=True)
     row("reservoir, random proj. HW", bank(rp["spikes"], float(rp["T"])), y, g)
     sw = np.load("reservoir_spikes_nsv_structured.npz", allow_pickle=True)

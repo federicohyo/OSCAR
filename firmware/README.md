@@ -58,7 +58,7 @@ reset toggle.
 > which **does not exist**. It is intentionally a no-op that errors out; use the
 > host tools instead. See `docs/BRINGUP.md`.
 
-## UART command set (one-byte opcodes; firmware + paper Table II)
+## UART command set (one-byte opcodes)
 
 | opcode | name | function |
 |---|---|---|

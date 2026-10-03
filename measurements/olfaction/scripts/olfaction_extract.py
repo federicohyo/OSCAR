@@ -17,7 +17,7 @@ Both classes deliver *exactly the same amount of each gas*, so a rate code over 
 window carries ZERO information about the class, and any classifier that succeeds is
 necessarily using temporal structure. That is true by construction of the stimulus
 rather than by argument, which is what makes this the olfactory analogue of the XOR
-control in the MICPRO paper.
+control.
 
 Trials are 35 s at 1 kHz with 8 MOx channels; only the stimulus window is kept, so the
 output is ~100 MB rather than the ~4 GB the raw trials would take.

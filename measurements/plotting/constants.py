@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Single source of truth for every cost-frontier number in the MICPRO manuscript.
+"""Single source of truth for every cost-frontier number.
 
-Task 1 of the pre-submission fix list. Several quantities (dt*, the OP1/OP2 energy
+Task 1 of the pre-release fix list. Several quantities (dt*, the OP1/OP2 energy
 ratio, the crossover, the 580x) appear simultaneously in the abstract, the body text,
-Table 5, Fig. 13 and the conclusion. Before this module they were hand-maintained in
+the reference table, the reference figure and the conclusion. Before this module they were hand-maintained in
 five places and had already drifted: the figure was plotted on the idealised 153-cycle
 1-CPI instruction count while the text quoted the measured 481-cycle SRAM-resident
 cost.
@@ -32,7 +32,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CSV_OUT = os.path.join(HERE, "energy_table.csv")
 
 # OSCAR reorg: results/ -> data/, and the olfaction result JSONs live under
-# data/olfaction/. (This file used to be paper/micro/figures/constants.py.)
+# data/olfaction/. (This file used to be measurements/plotting/constants.py.)
 _RESDIR = os.path.join(HERE, "..", "..", "data", "olfaction")
 if not os.path.isdir(_RESDIR):
     _RESDIR = os.path.join(HERE, "..", "..", "data")
@@ -50,16 +50,16 @@ K_RAIL = P_ANALOG_W * _SLOT["t_slot_s"]      # rail joules in one node visit
 # ============================================================================
 # MEASURED on the fabricated die
 # ============================================================================
-F_CLK = 25e6              # [Hz]  nominal core clock (Section 3.1)
+F_CLK = 25e6              # [Hz]  nominal core clock (the reference analysis)
 T_BEAT = 2.0              # [s]   ECG analysis window
 N_NEURONS = 16
 
 # Timer0 microbenchmark (BENCH, 0xEB), two copies of the identical LIF loop.
 # Both return identical tick counts at 25 and 50 MHz -> fixed cycle cost.
-CYC_STEP_SRAM = 481       # [cyc/neuron-step]  MEASURED, SRAM-resident  <-- PUBLISHED BASIS
+CYC_STEP_SRAM = 481       # [cyc/neuron-step]  MEASURED, SRAM-resident  <-- REFERENCE BASIS
 CYC_STEP_FLASH = 50447    # [cyc/neuron-step]  MEASURED, flash-resident (as shipped)
 
-# AER read-out drain decomposition (Section 4.2), MEASURED, SRAM-resident.
+# AER read-out drain decomposition (the reference analysis), MEASURED, SRAM-resident.
 DRAIN_FIXED_CYC = 105     # [cyc/call]
 DRAIN_MARGINAL_CYC = 480  # [cyc/event]
 
@@ -110,7 +110,7 @@ OLF_ROUTE_CYC = 532
 # ---- olfaction, array measured on silicon (2026-08-15) ---------------------
 # Every stage timed with Timer0 in ONE image at -O2 (UART_CMD_ARRAYBENCH 0xEF,
 # UART_CMD_OLFBENCH 0xEE, UART_CMD_BENCH 0xEB, UART_CMD_LIFRAM 0xE7). An earlier
-# version of these numbers was published internally with the array pipeline compiled
+# version of these numbers was reference internally with the array pipeline compiled
 # at -O0 against an -O2 baseline and a corrupted tick calibration; it understated the
 # array stages by ~49x. These are the corrected values.
 OLF_ARR_PROJ_CYC = 7074902     # [cyc/chunk] random projection 8->16, MEASURED
@@ -140,9 +140,9 @@ OLF_NAIVE_KERN_SAMERUN = 4907006
 # Accuracy, all under ONE protocol: within-0.1s chunks, GroupKFold by trial, voted over
 # the 5 heater-cycle chunks of a trial. NOT the train-on-1.0s Dennler protocol that the
 # 1.000/0.933 figures above come from -- the two must not be mixed.
-# WITH the digital kernel read-out (Table 6 row "analog array + digital read-out").
+# WITH the digital kernel read-out (the reference table row "analog array + digital read-out").
 OLF_ACC_ARRAY_V5, OLF_ACC_ARRAY_V5_SD = 0.756, 0.042      # 3 chip re-acquisitions
-# COUNTS-ONLY on the same measured array -- the quantity the width sweeps in Fig. 15a
+# COUNTS-ONLY on the same measured array -- the quantity the width sweeps in the reference figure
 # report, so this is the point that belongs on that axis. Naming them here rather than
 # inlining the literals; a with-kernel number was previously plotted on the counts-only
 # axis, which understated how well the simulation agrees with silicon.
@@ -181,7 +181,7 @@ _olf_block_flash = OLF_LIF_FLASH_CYC * OLF_LIF_N * OLF_LIF_TICKS * E_CYCLE_J * 1
 _olf_dec_array = _olf_arr_tot_uj * OLF_CHUNKS_PER_DECISION
 _olf_emul_chunk_uj = _olf_common_cyc * E_CYCLE_J * 1e6 + _olf_block_sram
 _olf_dec_emul = _olf_emul_chunk_uj * OLF_CHUNKS_PER_DECISION
-OLF_DEC_EMUL_UJ = _olf_dec_emul          # public, for figures (panel b of Fig. 15)
+OLF_DEC_EMUL_UJ = _olf_dec_emul          # public, for figures (panel b of the reference figure)
 _olf_dec_q16 = OLF_CYC_MEASURED_Q16 * E_CYCLE_J * 1e6 * OLF_CHUNKS_PER_DECISION
 _olf_dec_q8 = OLF_CYC_MEASURED_Q8 * E_CYCLE_J * 1e6 * OLF_CHUNKS_PER_DECISION
 # --- design targets an analog array must hit to beat this core, all derived from the
@@ -250,11 +250,11 @@ def aer_cycles_per_beat(events_per_beat, calls_per_beat=1):
 
     Task F. reservoir_frontier.py:212 costs the read-out at an estimated
     200 cyc/spike. The measured SRAM-resident drain is 105 cyc fixed per call plus
-    480 cyc marginal per event (Section 4.2), so we use that instead: same
+    480 cyc marginal per event (the reference analysis), so we use that instead: same
     quantity, measured basis rather than estimated. The static-power share moves
     from ~99% to ~98% and every ratio moves by well under 1%, so no conclusion
     changes -- but the label was wrong, and a wrong basis label is the defect this
-    paper's discipline exists to prevent."""
+    reference campaign's discipline exists to prevent."""
     return calls_per_beat * DRAIN_FIXED_CYC + events_per_beat * DRAIN_MARGINAL_CYC
 
 
@@ -310,7 +310,7 @@ def analog_reduction_for_parity(e_static_J, e_readout_J, e_op3_J):
 
 
 # --- the two bases, side by side -------------------------------------------
-DT_STAR_MEASURED = dt_star(CYC_STEP_SRAM)     # 308 us   <-- published
+DT_STAR_MEASURED = dt_star(CYC_STEP_SRAM)     # 308 us   <-- reference
 DT_STAR_IDEAL = dt_star(CYC_STEP_IDEAL)       #  98 us   <-- lower bound
 DT_STAR_FLASH = dt_star(CYC_STEP_FLASH)       #  32.3 ms (as shipped)
 
@@ -322,7 +322,7 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
 
     The `lines` below are the historical macro definitions; each
     `\\newcommand{\\name}{value}` is emitted as a `name,value` CSV row so the
-    published Table IV / energy numbers are machine-readable instead of a .tex.
+    reference the reference table / energy numbers are machine-readable instead of a .tex.
     """
     e_an = op1_energy_mJ * 1e-3
     e_ro = aer_cyc_pb * E_CYCLE_J          # OP1's read-out share, J
@@ -330,12 +330,12 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
     lines = [
         "% ==========================================================================",
         "% GENERATED FILE -- DO NOT EDIT BY HAND.",
-        "% Regenerate:  python3 measurements/paper_figures/constants.py",
-        "% Every cost-frontier number in the manuscript routes through these macros so",
-        "% the abstract, body, Table 5, Fig. 13 and the conclusion cannot drift apart.",
+        "% Regenerate:  python3 measurements/plotting/constants.py",
+        "% Every cost-frontier number in the reference analysis routes through these macros so",
+        "% the abstract, body, the reference table, the reference figure and the conclusion cannot drift apart.",
         "% ==========================================================================",
         "",
-        "% --- measured, SRAM-resident: THE PUBLISHED BASIS -------------------------",
+        "% --- measured, SRAM-resident: THE REFERENCE BASIS -------------------------",
         r"\newcommand{\cycstep}{%d}" % CYC_STEP_SRAM,
         r"\newcommand{\dtstar}{%.0f}" % (DT_STAR_MEASURED * 1e6),
         r"\newcommand{\dtstarfifty}{%.1f}" % (dt_star(CYC_STEP_SRAM, 50e6) * 1e6),
@@ -422,7 +422,7 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
         r"\newcommand{\olfaccqeightsd}{%.3f}" % OLF_ACC_Q8_V5_SD,
         # hybrid analog tree, measured on silicon (olfaction_hybrid_score.json,
         # olfaction_hybrid_slot.json). Read from the result files rather than typed, so
-        # the manuscript cannot drift from the run that produced them.
+        # the reference analysis cannot drift from the run that produced them.
         r"\newcommand{\accthree}{%.3f}" % _HYB["analog"]["voted5"],
         r"\newcommand{\accthreesd}{%.3f}" % _HYB["voted5_sd"],
         r"\newcommand{\accceil}{%.3f}" % _HYB["digital_snapped"]["voted5"],
@@ -510,7 +510,7 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
         r"\newcommand{\ratepowerheadroom}{%.0f}" % (
             N_NEURONS * 26.0 / (events_pb / T_BEAT)),
         "",
-        "% --- AER drain (Section 4.2), measured ------------------------------------",
+        "% --- AER drain (the reference analysis), measured ------------------------------------",
         r"\newcommand{\drainfixed}{%d}" % DRAIN_FIXED_CYC,
         r"\newcommand{\drainmarginal}{%d}" % DRAIN_MARGINAL_CYC,
     ]
@@ -526,7 +526,7 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
 
 
 def selfcheck(op1_energy_mJ, op3_energy_uJ=None, aer_cyc_pb=None):
-    """Regression assertions. These all close in the manuscript text as submitted;
+    """Regression assertions. These all close in the reference analysis text as released;
     if one trips, the figure and the text have drifted apart again."""
     e_an = op1_energy_mJ * 1e-3
     ok = lambda got, want, tol, what: (
@@ -553,7 +553,7 @@ def selfcheck(op1_energy_mJ, op3_energy_uJ=None, aer_cyc_pb=None):
     ok(numeric_energy_J(DT_STAR_MEASURED, CYC_STEP_SRAM) / e_an, RAIL_POWER_RATIO, 6.5,
        "ratio at floor == rail-power ratio")
 
-    # --- Task Q: the gap decomposition the Section 8.4 / Section 10 prose rests on.
+    # --- Task Q: the gap decomposition the prose rests on.
     # These are pinned on the CURRENT (counted) OP3 basis. Task 6c will replace
     # OP3_CYC_TOTAL with a measured value; when it does, update these numbers to the
     # new basis -- every one of them is an equality, none is a bound to be relaxed.
@@ -564,7 +564,7 @@ def selfcheck(op1_energy_mJ, op3_energy_uJ=None, aer_cyc_pb=None):
         ok(e_an / e_op3, 10.42, 0.2, "OP1/OP3 ratio")
         # the identity the prose depends on: ratio = k*slope + floor, so a MORE
         # efficient core (k>1) widens the gap. If this ever comes out <= 0 the
-        # sentence in Section 8.4 is wrong. (slope = analog-static share, so it
+        # sentence in the reference analysis is wrong. (slope = analog-static share, so it
         # moved 41.8 -> 9.7 with the corrected 100 uW rail; the floor is rail-free.)
         slope = gap_slope_in_core_efficiency(E_ANALOG_STATIC_J, e_op3)
         floor = gap_floor(e_ro, e_op3)

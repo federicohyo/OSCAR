@@ -22,7 +22,7 @@ single period of 11.986 ms, to a mean residual of 0.9% of a period, with
 An analog refractory period cannot do that. An acquisition clock started at trial
 onset can, and these three files are all from 2026-07-05, before the 2026-07-10
 change to chip Timer0 timestamps (reservoir_run.py:905c46c) -- so they carry HOST
-ARRIVAL times, exactly as Section 7 of the manuscript already says. The recorded
+ARRIVAL times, exactly as the reference analysis already says. The recorded
 ISI distribution is therefore a measurement of the host read cadence, not of the
 neurons. "73% above 26 Hz" is the fraction of intervals at lattice steps 2 and 3.
 
@@ -37,9 +37,9 @@ the data: 15954 intervals, not one below 23.2 ms.
 So this script runs both readings of "refractory", on top of the
 operating-point-matched condition (D_eff 12.2, <|rho|> 0.30 at tau = 20 ms):
 
-  R  a genuine NEURON refractory in sim_lif, swept over the values the paper can
+  R  a genuine NEURON refractory in sim_lif, swept over the values the reference campaign can
      point at: 5 ms (the sim_lif default), 24 ms (this recording's own ISI floor)
-     and 38.5 ms (the 26 Hz f-I saturation of Fig. 5, a different bias point);
+     and 38.5 ms (the 26 Hz f-I saturation of the reference figure, a different bias point);
   A  the ACQUISITION LATTICE measured above, applied to the software neuron's
      output exactly as the recording path applied it to silicon's: quantise to the
      11.986 ms grid at a per-trial phase, merge spikes landing in one slot, and

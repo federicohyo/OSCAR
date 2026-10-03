@@ -5,7 +5,7 @@ The marginal mean+/-s.d. across held-out records overstates the uncertainty of t
 reservoir-vs-baseline DIFFERENCE, because a hard patient hurts both. The correct test is
 PAIRED across held-out records: per-record accuracy (and macro-F1), reservoir minus
 baseline, tested with Wilcoxon signed-rank + a paired bootstrap 95% CI of the mean
-difference. Uses the measured-HW structured reservoir (the paper's headline feature source)
+difference. Uses the measured-HW structured reservoir (the reference campaign's headline feature source)
 vs raw and raw+RR.
 """
 import warnings; warnings.filterwarnings("ignore")

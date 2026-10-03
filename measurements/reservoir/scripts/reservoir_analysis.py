@@ -2,7 +2,7 @@
 """Full offline analysis of a recorded reservoir-spike npz: kernel sweep (A8),
 reservoir vs raw baseline, A1a replicate-one-neuron, A2 dose-response, A4 diversity,
 A5 software random-feature baseline. Inter-patient (leave-one-record-out) primary.
-Prints all numbers for the paper logbook."""
+Prints all numbers for the reference logbook."""
 import argparse
 import numpy as np
 from reservoir_kernel import build_features, cv_acc

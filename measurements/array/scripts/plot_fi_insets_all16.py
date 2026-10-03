@@ -26,7 +26,7 @@ DATA = "data/array"
 CSV = "neuron_fi_allneurons.csv"
 OUT = "measurements/array/figures/neuron_fi_all16_insets.pdf"
 HILITE = 14  # neuron whose scope traces are shown as insets
-STYLE = "default"  # "iscas" = open spines + geometry matched to weight_code_words.pdf
+STYLE = "default"  # "compact" = open spines + geometry matched to weight_code_words.pdf
 
 # (scope file, label) for low / mid / high input rate
 INSETS = [
@@ -75,16 +75,16 @@ def main():
     std = np.array([g.get_group(f).std(ddof=0) for f in freqs])
     n14 = curve(df, freqs, HILITE)
 
-    if STYLE == "iscas":
+    if STYLE == "compact":
         fig = plt.figure(figsize=(3.6, 3.4))
         ax = fig.add_axes([0.1722, 0.1529, 0.7978, 0.500])
     else:
         fig = plt.figure(figsize=(5.4, 4.2))
         ax = fig.add_axes([0.10, 0.09, 0.86, 0.50])   # main f-I (bottom)
 
-    # encoding band used for ECG (20-200 Hz); irrelevant to the ISCAS paper,
-    # whose task is olfaction, so the variant leaves it out
-    if STYLE != "iscas":
+    # encoding band used for ECG (20-200 Hz); irrelevant to the olfaction task,
+    # so the compact variant leaves it out
+    if STYLE != "compact":
         ax.axvspan(20, 200, color="tab:orange", alpha=0.10, zorder=0)
 
     # per-neuron curves (heterogeneity across the array)
@@ -107,7 +107,7 @@ def main():
     ax.grid(alpha=0.25, lw=0.5)
     ax.set_xlim(-12, max(freqs) * 1.05)
     ax.set_ylim(-1, float(np.nanmax([mean.max() + std.max(), n14.max()])) * 1.15)
-    if STYLE == "iscas":
+    if STYLE == "compact":
         for _s in ("top", "right"):
             ax.spines[_s].set_visible(False)
     ax.legend(fontsize=7.5, frameon=False, loc="lower right")
@@ -128,7 +128,7 @@ def main():
 
     inset_x = [0.10, 0.40, 0.70]
     for (tag, in_hz, tt, vv), ix in zip(traces, inset_x):
-        iy, ih = (0.735, 0.200) if STYLE == "iscas" else (0.70, 0.22)
+        iy, ih = (0.735, 0.200) if STYLE == "compact" else (0.70, 0.22)
         axi = fig.add_axes([ix + 0.02, iy, 0.24, ih])
         axi.plot(tt, vv, color="tab:red", lw=0.7)
         axi.set_xlim(0, WIN_MS)
@@ -152,7 +152,7 @@ def main():
         fig.add_artist(con)
         ax.plot([in_hz], [oi], "o", color="tab:red", ms=5, zorder=6)
 
-    bb = None if STYLE == "iscas" else "tight"
+    bb = None if STYLE == "compact" else "tight"
     fig.savefig(OUT, bbox_inches=bb)
     fig.savefig(os.path.splitext(OUT)[0] + ".png", dpi=160, bbox_inches=bb)
     print("wrote", OUT)
@@ -161,7 +161,7 @@ def main():
 if __name__ == "__main__":
     _ap = argparse.ArgumentParser()
     _ap.add_argument("--out", default=OUT)
-    _ap.add_argument("--style", default="default", choices=["default", "iscas"])
+    _ap.add_argument("--style", default="default", choices=["default", "compact"])
     _a = _ap.parse_args()
     OUT, STYLE = _a.out, _a.style
     main()

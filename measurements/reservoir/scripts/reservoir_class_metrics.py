@@ -8,7 +8,7 @@ record. And a three-class macro accuracy can sit comfortably above chance while 
 never predicted at all, which sensitivity and PPV expose immediately.
 
 Deliberately separate from reservoir_analysis.py / reservoir_frontier.py: those reproduce the
-manuscript's numbers and are not to be perturbed. This only adds columns beside them, using
+reference analysis's numbers and are not to be perturbed. This only adds columns beside them, using
 the same features, the same read-out and the same leave-one-record-out protocol.
 
     ./.venv-meas/bin/python3 reservoir_class_metrics.py \

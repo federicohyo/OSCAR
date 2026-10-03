@@ -4,8 +4,8 @@
     ../.venv-meas/bin/python3 saline_stimulus.py
 
 Same trick as odor_stimulus.py, with one change that matters: the input shape is
-not a synthetic mimic of a published trace but the measured saline injection of
-Fig. 16/17 -- the second injection of scope_20260829_103015.csv (the dilute3x
+not a synthetic mimic of a reference trace but the measured saline injection of
+the reference figure/17 -- the second injection of scope_20260829_103015.csv (the dilute3x
 run, biases LNA_chip0_pad_wet_diluted3x.biases, lna_iref = 1.157 V): -398 mV at
 the pad-amplifier output, settled back within 20 mV after 106 ms.
 

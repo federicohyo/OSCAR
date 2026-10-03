@@ -11,7 +11,7 @@ reproduces the array has to match the whole kernel sweep and the mean pairwise
 correlation, not one point of one curve. Three statistics, paired-bootstrapped
 over beats:
 
-    D_eff at tau = 20 ms   the manuscript's number, which jitter matches
+    D_eff at tau = 20 ms   the reference analysis's number, which jitter matches
     D_eff at tau = 320 ms  the long-kernel tail, which it does not
     <|rho|>                mean pairwise neuron correlation
 

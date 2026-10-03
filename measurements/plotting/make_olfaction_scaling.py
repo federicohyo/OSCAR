@@ -122,8 +122,8 @@ def main():
 
 def draw_panel_b(a2, tag="(b)", legend_ncol=1):
     """Panel (b) on any axes: energy vs accuracy per decision, measured points only.
-    Also used standalone (--b-only) to render olfaction_scaling_b.pdf for the ISCAS
-    paper, so the conference figure can never drift from the journal one."""
+    Also used standalone (--b-only) to render olfaction_scaling_b.pdf as the
+    single-panel variant, so it can never drift from the main figure."""
     # ---- (b) amortisation: energy vs accuracy, PER DECISION ----------------
     # per voted5 DECISION (5 chunks), so the energy axis and the accuracy axis describe
     # the same event. Quoting per-chunk energy against a voted-over-5 accuracy compares
@@ -204,7 +204,7 @@ def draw_panel_b(a2, tag="(b)", legend_ncol=1):
 
 
 def b_only():
-    """Panel (b) on its own axes, single-column sized, for paper/micro/date/."""
+    """Panel (b) on its own axes, single-column sized, for reference/micro/date/."""
     style()
     fig, ax = plt.subplots(1, 1, figsize=(3.5, 2.9))
     draw_panel_b(ax, tag=None)

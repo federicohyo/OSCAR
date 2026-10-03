@@ -2,7 +2,7 @@
 
 OSCAR is a public, self-contained release of a fabricated mixed-signal
 neuromorphic chip and everything needed to understand it and to **replot the
-results in its accompanying manuscripts**. The die, designed with the open SkyWater 130-nm PDK through
+results**. The die, designed with the open SkyWater 130-nm PDK through
 the Efabless Caravel/Caravan harness, couples a capacitively coupled low-noise
 amplifier (LNA) and an exposed TiO₂-coated chemosensing electrode pad to an
 array of sixteen analog leaky-integrate-and-fire (LIF) neurons with 512
@@ -15,14 +15,11 @@ timestamping output spikes, and running calibration and read-out firmware.
 OSCAR ships (a) the chip **design** sources (schematic, layout, GDS, LVS,
 netlists, test files), (b) the RISC-V **firmware** and the host-side Python
 bridge/control layer, and (c) the archived **data** plus the plotting scripts
-that regenerate the figures and tables of the ISCAS 2026 and ISCAS 2027
-submissions (under review; not accepted) and the shared TBioCAS panels.
+that regenerate the figures and tables of the measured results.
 
-> **This repository does not host the manuscripts.** There is no `paper/`
-> directory, no `.tex`, `.bib`, `.cls`, `.sty`, or manuscript PDF. The manuscripts
-> are under review (not accepted) and are © IEEE; they are **cited, not
-> redistributed** (see `CITATION.cff` / `NOTICE`). What OSCAR provides is the
-> *data and the plotting code* to reproduce the results.
+> **This repository is a self-contained release.** It hosts no publication
+> source files — no `.tex`, `.bib`, `.cls`, `.sty`, or article PDF. What OSCAR
+> provides is the *data and the plotting code* to reproduce the results.
 
 ## Hardware overview
 
@@ -36,7 +33,7 @@ submissions (under review; not accepted) and the shared TBioCAS panels.
 - **Clocking:** 10 MHz crystal × on-die DLL → 100/N MHz (50, 33, 25, 20 MHz).
 
 <a id="hardware-figure"></a>
-### Figure — chip layout, fabricated die and daughter-board (ISCAS 2026 submission, Fig. 2)
+### Figure — chip layout, fabricated die and daughter-board
 
 ![OSCAR chip layout, die micrograph and daughter-board](docs/figures/fig_hardware_layout.png)
 
@@ -49,11 +46,8 @@ submissions (under review; not accepted) and the shared TBioCAS panels.
 > tape-out). Right: the chip on its daughter-board, seated in the well that
 > holds the droplet; the dashed circle marks the die, magnified in the inset.
 >
-> *Reproduced from Fig. 2 of the ISCAS 2026 submission "An Open-Silicon
-> Neuromorphic Chemosensing Front-End with Electrode-Pad Wet Transduction"
-> (F. Corradi, S. Ye, M. Fattori, R. Jordans), © IEEE; under review, not accepted.
-> The manuscript itself is not distributed in this repository; it is cited.
-> Composed from the submission's layout/die/board image assets.*
+> *Chip layout, fabricated die and daughter-board. Composed from the layout,
+> die-micrograph and daughter-board image assets in `docs/figures/`.*
 
 Additional design assets live in `docs/figures/`:
 
@@ -62,7 +56,7 @@ Additional design assets live in `docs/figures/`:
 | `fig_hardware_layout.{pdf,png}` | README hardware figure (above). |
 | `arch_overview.pdf` / `.png` | Architecture / system-overview float. |
 | `domain_map.pdf` / `.png` | Domain map built from layout + die micrograph. |
-| `lna_schematic.pdf` | **[GAP]** paper used TikZ; no clean xschem export shipped yet (see `docs/PLOTTING.md`). |
+| `lna_schematic.pdf` | **[GAP]** no clean xschem export shipped yet (see `docs/PLOTTING.md`). |
 
 ## Repository layout
 
@@ -71,8 +65,8 @@ Additional design assets live in `docs/figures/`:
 | `design/` | Chip design sources: `gds/`, `mag/`, `xschem/`, `verilog/`, `netlists/`, `lef/`, `lvs/`, `netgen/`, `script/`, `python/`, `tools_visualization/`, `Makefile`. Apache-2.0. |
 | `firmware/` | RISC-V firmware `neuron_handshake/` (+ prebuilt `binaries/*.hex`), shared `common/`, optional `variants/`. |
 | `host/` | Host control layer: `neuron_bridge.py` (single FTDI owner), `meas_common.py`, `run_neuron_test.py`, `riscvprog.py` (`HKSPI`), `test_spike_timestamp.py`, bring-up `*.sh`. |
-| `measurements/` | Bench campaigns and the plotting scripts: `lna/`, `wet_pad/`, `array/`, `olfaction/`, `reservoir/`, `paper_figures/`, `analysis/`. |
-| `data/` | Archived, paper-facing datasets: `olfaction/`, `synapse/`, `array/`, `biases/`. |
+| `measurements/` | Bench campaigns and the plotting scripts: `lna/`, `wet_pad/`, `array/`, `olfaction/`, `reservoir/`, `plotting/`, `analysis/`. |
+| `data/` | Archived result datasets: `olfaction/`, `synapse/`, `array/`, `biases/`. |
 | `docs/` | `ARCHITECTURE.md`, `HARDWARE_TRAPS.md`, `BRINGUP.md`, `PLOTTING.md`, and exported `figures/`. |
 
 ## Fabrication, PDK and how to open the GDS
@@ -102,45 +96,44 @@ Additional design assets live in `docs/figures/`:
 See [`docs/HARDWARE_TRAPS.md`](docs/HARDWARE_TRAPS.md) for the full list, and
 [`docs/BRINGUP.md`](docs/BRINGUP.md) for the flashing/bring-up recipe.
 
-## Reproducing the paper results
+## Reproducing the results
 
-Plotting is first-class and needs **no manuscript**. Start from
-[`docs/PLOTTING.md`](docs/PLOTTING.md), which maps each paper result
-(figure/table id) → data → script → output and documents the required
+Plotting is first-class. Start from
+[`docs/PLOTTING.md`](docs/PLOTTING.md), which maps each result
+(what it plots) → data → script → output and documents the required
 path-rewrite (`results/`→`data/`, `LNA/`→`measurements/`, …). Example:
 
 ```bash
-# LNA transfer/noise (ISCAS 2026 Fig. 4 / TBioCAS)
-./.venv-meas/bin/python3 measurements/lna/clean_2026-08-26/scripts/make_paper_figures.py
+# LNA transfer/noise
+./.venv-meas/bin/python3 measurements/lna/clean_2026-08-26/scripts/make_figures.py
 
-# TiO2 wet-transduction panels (ISCAS 2026 Fig. 5)
-./.venv-meas/bin/python3 measurements/wet_pad/scripts/tio2_combi_ISCAS.py
+# TiO2 wet-transduction panels
+./.venv-meas/bin/python3 measurements/wet_pad/scripts/tio2_combi.py
 
-# Neuron FI insets (ISCAS 2027 Fig. 2b)
+# Neuron FI insets
 PYTHONPATH=. ./.venv-meas/bin/python3 \
-    measurements/array/scripts/plot_fi_insets_all16.py --style iscas \
-    --out measurements/array/figures/neuron_fi_iscas.pdf
+    measurements/array/scripts/plot_fi_insets_all16.py --style compact \
+    --out measurements/array/figures/neuron_fi_reference.pdf
 
-# Weight-code words (ISCAS 2027 Fig. 2a)
+# Weight-code words (--out resolves next to the script)
 PYTHONPATH=. ./.venv-meas/bin/python3 \
-    measurements/paper_figures/make_synapse_weight.py --panels b \
-    --out measurements/paper_figures/weight_code_words.pdf
+    measurements/plotting/make_synapse_weight.py --panels b \
+    --out weight_code_words.pdf
 ```
 
 ## Scope notes and decisions
 
-- **No papers / no LaTeX** (Revision 3 scope).
+- **No publication sources / no LaTeX** (Revision 3 scope).
 - **No Git LFS.** To stay under GitHub's limits, three oversized design files
   are omitted and listed in `NOTICE` / `docs/HARDWARE_TRAPS.md`
   ("Large files available on request"): `gds/RF_block.gds`, `mag/RF_block.mag`,
   `mag/neuron_synapse_array_with_input_output_logic_v2_flat.mag`.
 - **Jupyter/venv omitted;** reproduce the environment from the pinned
   requirements if provided.
-- **Non-paper datasets excluded:** the autonomous XOR / T-XOR / NARMA and ECG
-  acquisitions are not shipped under `data/` in this release (they are not part
-  of the two cited papers). The reservoir/analysis scripts that could consume
-  them are still present under `measurements/reservoir/` and
-  `measurements/analysis/`.
+- **Additional datasets excluded:** the autonomous XOR / T-XOR / NARMA and ECG
+  acquisitions are not shipped under `data/` in this release. The
+  reservoir/analysis scripts that could consume them are still present under
+  `measurements/reservoir/` and `measurements/analysis/`.
 - **GUI not shipped:** `ofxCaravanViewer` and the `ofx*` tuning forks are
   excluded. Build prerequisites only are documented in
   `docs/BRINGUP.md`.
@@ -149,14 +142,3 @@ PYTHONPATH=. ./.venv-meas/bin/python3 \
 
 - Code and design: **Apache-2.0** (`LICENSE`); third-party notices in `NOTICE`.
 - How to cite: [`CITATION.cff`](CITATION.cff).
-
-## Links (external; manuscripts are not part of this repository)
-
-Both conference manuscripts below are **submitted and under review; acceptance
-is not implied** (submission October 2026).
-
-- ISCAS 2026 — *An Open-Silicon Neuromorphic Chemosensing Front-End with
-  Electrode-Pad Wet Transduction* (front-end / pad) — submitted.
-- ISCAS 2027 — *A RISC-V-Managed Analog Spiking Neural Network Array for
-  On-Sensor Olfactory Processing* — submitted.
-- IEEE TBioCAS journal companion (shared result panels).
