@@ -21,7 +21,7 @@ only as sqrt(N). Fitting
 
 to the 16 neurons -- which span a 6.7x range of rate at one operating point --
 therefore separates them, and returns `c`, the coherent fractional jitter, as a
-number that does NOT depend on which rate the array happens to sit at.
+number independent of which rate the array happens to sit at.
 
 `c` is exactly the quantity the D_eff simulation needs: data/jitter_to_countcv
 .json says the model requires a coherent count CV of 25-35% to close the residual.

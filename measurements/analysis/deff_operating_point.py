@@ -2,13 +2,13 @@
 """Task G: does operating-point dispersion explain the D_eff gap?
 
 PREMISE TEST FIRST. The brief proposed matching the SILENCING FRACTION ("5/16
-silent on these beats"). That handle does not exist: no recording in this repo has
-a silent neuron. On the dataset the reference table is computed from
+silent on these beats"). That handle stays out of reach: recordings in this repo keep every
+neuron active. On the dataset the reference table is computed from
 (reservoir_spikes_nv_randproj.npz) all 16 neurons are active, the quietest at
 3.62 spikes/beat. The same holds for the N/S/V structured recording (min 2.93)
 and the N/PVC delta recording (min 0.86, one neuron below 1/beat). So the
 interpretive note that "silicon's 18.1 is carried by eleven active neurons" is
-also wrong -- it is carried by all sixteen.
+also off -- it is carried by all sixteen.
 
 The MECHANISM behind the brief's hypothesis survives that, and is worth testing on
 its own terms. Silicon's per-neuron rates are strongly bimodal:
@@ -16,10 +16,10 @@ its own terms. Silicon's per-neuron rates are strongly bimodal:
     3.6 5.1 6.2 8.4 8.8 9.9 | 17.8 21.9 22.1 23.0 23.3 24.0 24.6 25.1 27.3 30.9
 
 -- six neurons in a low-rate cluster and ten in a high-rate cluster, an 8.5x
-range. That is neurons sitting at genuinely different points on the f-I curve, not
+range. That is neurons sitting at genuinely different points on the f-I curve rather than
 a symmetric scatter around one operating point, which is what a Gaussian on tau
 and V_th produces. So the right handle is the RATE DISTRIBUTION, matched by
-quantile, not a dispersion statistic and not a silencing fraction.
+quantile, rather than a dispersion statistic or a silencing fraction.
 
 Method: bisect each SW neuron's threshold so that, in rank order, its mean output
 rate matches the corresponding silicon neuron's. Threshold is monotone in rate

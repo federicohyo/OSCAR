@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Silicon counterpart of the reference figure, all three panels: input, LNA output, membrane.
 
-Panel (c) is the real membrane trace, not a raster, and it carries no timing
+Panel (c) is the real membrane trace rather than a raster, and it stays free of timing
 correction: the membrane and the injection commands are both on the host clock,
-so no chip-to-host mapping enters. That also made the outbound command latency
+so chip-to-host mapping stays out. That also made the outbound command latency
 directly measurable -- 4.4 ms median over 30 matched injections, against the
 14.8 ms that halving the 29.6 ms round trip had implied. The round trip is
 asymmetric; most of it is the FTDI read-latency timer on the way back.
@@ -13,7 +13,7 @@ now comes from the LATER two-channel run (odor_neuron_loop_dual.npz, 23:0x),
 where the amplifier and the membrane were recorded at the same time -- the whole
 point of the second scope channel.
 
-Panel (b) is deliberately NOT taken from that same two-channel run. With the
+Panel (b) is deliberately kept out of that same two-channel run. With the
 neuron firing, its spikes couple into the amplifier output: >30 Hz RMS on the LNA
 channel is 34.8 mV during events against 11.5 mV outside them, a 3x rise that is
 absent from the single-channel recording. Panel (b) therefore keeps the clean
@@ -21,9 +21,9 @@ acquisition and panel (c) takes the membrane, which is what the second channel
 was needed for.
 
 The two runs are separate closed loops with DIFFERENT injection schedules, so
-they are no longer aligned on a shared train. Both lock to the same 1.6 s
+they align to separate trains. Both lock to the same 1.6 s
 stimulus period (circular concentration R = 0.98 in the new run), and both panels
-are folded on event onset, so the alignment is to the stimulus, not to each other.
+are folded on event onset, so the alignment is to the stimulus rather than to each other.
 
 The membrane axis carries a small residual offset: ch2 is stamped by the scope
 board clock and the injections by the host clock, tied together at the first

@@ -9,7 +9,7 @@ saturation signature on silicon is weak (corr(input rate, gain) = -0.082 +/- 0.1
 So rather than pick one operating point, sweep the nonlinearity from linear to strong
 and ask how far from linear the synapse would have to be for the gap to move. That is
 informative whichever way it comes out. Rates are re-bisected at every point, so this
-measures the nonlinearity's effect on TEMPORAL structure, not on rate.
+measures the nonlinearity's effect on TEMPORAL structure rather than on rate.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 deff_dpi_sweep.py
 """

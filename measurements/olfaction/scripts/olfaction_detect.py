@@ -52,7 +52,7 @@ def build(X, V, t, wl_s, vcol, stim=(0.05, 0.95), max_per_trial=40, seed=0):
         idx = rng.choice(ok, size=min(max_per_trial, len(ok)), replace=False)
         for a in idx:
             seg = R[i, a - w:a, :]
-            # Remove the WINDOW mean per channel. Without this the features are the
+            # Remove the WINDOW mean per channel. This keeps the features from being the
             # slow response envelope, which is near-constant inside a 5-100 ms window
             # and carries nothing about the instantaneous valve state. Keep the
             # derivative too: the sensor lags, so the slope leads the level.

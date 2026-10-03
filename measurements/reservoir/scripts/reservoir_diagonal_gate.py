@@ -20,7 +20,7 @@ comparable to the historical 0.833 / 0.987.
   stays around  ~0.83    -> contention was NOT the (only) blocker; STOP.
 
 NOTE this is N vs V, the BINARY task, which is saturated (a single neuron can solve
-it). A high diagonal proves the READOUT is fixed. It does NOT show that mismatch
+it). A high diagonal proves the READOUT is fixed. It leaves open whether mismatch
 dimensionality converts to accuracy -- that needs the hard 3-class N/S/V run.
 """
 import argparse

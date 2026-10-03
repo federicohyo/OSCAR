@@ -8,7 +8,7 @@ Three panels, one point each:
   (b) cost of ONE neuron-step -- the unit an analog neuron has to beat, and how the
       analog side spends it (rail + its own read-out) against the digital bar
   (c) the analog neuron block versus rail power -- where the break-even actually sits,
-      and the floor the AER read-out imposes no matter how good the analog gets
+      and the floor the AER read-out imposes regardless of analog quality
 
 All values measured on this die; see data/olfaction_*.json.
 

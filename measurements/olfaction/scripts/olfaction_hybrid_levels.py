@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Does spending neurons on more THRESHOLD LEVELS buy accuracy? Settled on the 1.0 s set.
 
-The question comes from the reference figure. Time-multiplexing sixteen neurons cannot change
+The question comes from the reference figure. Time-multiplexing sixteen neurons leaves unchanged
 accuracy -- the same comparisons are made against the same thresholds -- but sixteen
 neurons could instead hold sixteen distinct levels, and the array's representation costs
 0.100 voted, which is exactly the quantity more levels would attack.
 
-WHY NOT THE 0.1 s SET. That is the reference campaign's test split, and it has 30 trials. Voted
+WHY THE 0.1 s SET IS PASSED OVER. That is the reference campaign's test split, and it has 30 trials. Voted
 accuracy over 30 trials moves in steps of 0.033, so 0.900 and 1.000 are three trials
 apart; a first attempt there produced a non-monotonic sweep (6 levels beating 8, 10 and
 12) with bootstrap intervals that overlapped completely. The measurement was not capable

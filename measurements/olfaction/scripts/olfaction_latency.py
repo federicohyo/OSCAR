@@ -2,7 +2,7 @@
 """Accuracy versus latency, and the energy that follows -- the olfactory cost frontier.
 
 F. Corradi's reframing, 2026-08-13, and it is the right one. Asking "is the task
-solvable at 21 decisions/s" was the wrong question. The right one is a TRADE-OFF:
+solvable at 21 decisions/s" framed the question too narrowly. A broader one is a TRADE-OFF:
 
     a short decision window is cheap and inaccurate; a long one is accurate and slow.
 
@@ -24,8 +24,8 @@ point using the constants the reference analysis already pins.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 olfaction_latency.py
 
-CAVEAT held throughout: windows drawn from one trial are NOT independent, so they stay
-in one CV fold, and the averaging-over-k model below assumes independence it does not
+CAVEAT held throughout: windows drawn from one trial are correlated, so they stay
+in one CV fold, and the averaging-over-k model below assumes an independence beyond what it has
 have. The k-averaged accuracies are therefore an UPPER bound on what averaging buys,
 and are labelled as such.
 """

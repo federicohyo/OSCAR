@@ -13,8 +13,8 @@ to every beat, train and test -- leakage-free). This is a random-feature project
 continuous-signal domain that decorrelates the input each neuron sees, which the offline
 diagnostics (A4) identified as the true bottleneck: filtering the SAME correlated spike
 train with different kernels stays correlated, so the decorrelation must be injected at
-the INPUT. Goal: push effective dimensionality (A4 participation ratio) past ~8 WITHOUT
-recurrence, sidestepping the AER-readout-contention wall entirely.
+the INPUT. Goal: push effective dimensionality (A4 participation ratio) past ~8 with
+recurrence off, sidestepping the AER-readout-contention wall entirely.
 
 Output npz is the same format as reservoir_run.py, so reservoir_analysis.py / reservoir_kernel.py
 consume it unchanged (coding="delta_randproj").
@@ -67,7 +67,7 @@ def load_proj(path):
         if os.path.exists(alt):
             path = alt
         else:
-            raise FileNotFoundError(f"projection config not found: {path} (nor {alt})")
+            raise FileNotFoundError(f"projection config expected at {path} (nor {alt})")
     with open(path) as f:
         cfg = json.load(f)
     proj = {int(c["neuron"]): c for c in cfg["proj"]}

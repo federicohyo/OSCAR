@@ -9,7 +9,7 @@ predicted to move the detector toward single-pair (rested, large-S) firing.
 
 Design (see the phase-2 protocol, Experiment (i)):
   * S is the INDEPENDENT variable and is set by the recent history of pair spacing, so
-    each S is measured as a TRAIN (block) at fixed spacing -- NOT trial-randomized (that
+    each S is measured as a TRAIN (block) at fixed spacing -- rather than trial-randomized (that
     would destroy the very quantity). We randomize the ORDER of the S-blocks per repeat.
   * A fixed reference-S block (--s-ref, default 50 ms) runs before every sweep block as a
     slow-drift monitor: if P(fire | S_ref) wanders over the session, we see it.

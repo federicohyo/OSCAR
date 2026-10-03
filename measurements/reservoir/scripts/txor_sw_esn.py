@@ -3,7 +3,7 @@
 
 Single input channel. Bit a -> a pulse in an early window, bit b -> a pulse in a late window,
 separated by a gap. Label = a XOR b = "exactly one pulse". The readout reads only the FINAL
-reservoir state (NOT a time-accumulator -- an accumulator would just count pulses and could
+reservoir state (rather than a time-accumulator -- an accumulator would just count pulses and could
 never do XOR anyway, but final-state makes the memory requirement explicit): to know XOR the
 network must remember whether the EARLY window had a pulse when it reaches the end. With a
 short leak, feedforward (rho=0) has forgotten the early pulse by the end -> chance on XOR.

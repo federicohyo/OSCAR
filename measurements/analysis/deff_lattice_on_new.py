@@ -15,7 +15,7 @@ D_eff moves is the lattice and nothing else.
 
   PYTHONPATH=. ./.venv-meas/bin/python3 deff_lattice_on_new.py
 
-NOTE: do NOT read the "best-fit period" that fit_lattice returns on the new
+NOTE: avoid reading the "best-fit period" that fit_lattice returns on the new
 recording (8.030 ms). With 0% of intervals on integer multiples and a phase
 concentration of 0.265, that fit is returning noise -- lattice signal is zero there
 to find.
@@ -91,7 +91,7 @@ def main():
           f"({r_new:.3f} ->\n{r_lat:.3f}), the sign expected from a per-presentation "
           f"phase -- but only by {r_new-r_lat:.3f}, against\nthe {r_new-r_old:.3f} "
           f"separating the two acquisitions. So the 2026-07 recording's low\n"
-          f"<|rho|> is NOT mainly a read-out artefact either; like the D_eff "
+          f"<|rho|> stays largely clear of read-out artefacts too; like the D_eff "
           f"difference it is\ndominated by the operating point.")
 
     json.dump({"grid_s": GRID_OLD, "min_steps": MIN_STEPS, "seeds": SEEDS,

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Why no mechanism moved D_eff -- and what the gap actually is.
 
-The mechanism search found nothing, and its upward control then failed: amplifying
-the per-neuron projection spread 2x and 3x did not raise D_eff either. A search whose
-positive control cannot move the measurement upward is not evidence of anything, so
+The mechanism search found nothing, and its upward control then came up short: amplifying
+the per-neuron projection spread 2x and 3x left D_eff flat too. A search whose
+positive control that leaves the measurement flat leaves the question open, so
 the cause had to be found before any negative could be believed.
 
 It is this. In the software model D_eff is very nearly a FUNCTION OF OUTPUT RATE
 ALONE. Scale the thresholds and let the rate move, and D_eff traces one tight
 monotone curve. Fix the rate -- which is exactly what the rate-matching bisection
-does, correctly -- and D_eff is fixed too, so no mechanism can move it. The negatives
+does, correctly -- and D_eff is fixed too, so the mechanism stays fixed. The control results
 were real; they were measuring a constraint the model imposes on itself.
 
 Silicon does not sit on that curve, and THAT is the gap:
@@ -26,7 +26,7 @@ per event (Section 8), so it is the same axis the cost frontier is measured on.
 
 CAVEATS. One recording, one model class, 160 beats. Rate is swept by scaling
 thresholds only; another route to the same rate could trace a different curve. The
-8.0 Hz figure is interpolation inside the swept range (4.7-45.5 Hz), not
+8.0 Hz figure is interpolation inside the swept range (4.7-45.5 Hz) rather than
 extrapolation.
 """
 import json

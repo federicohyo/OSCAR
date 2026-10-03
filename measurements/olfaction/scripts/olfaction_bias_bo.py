@@ -42,7 +42,7 @@ centres" the centre stayed unmeasured and the GP was built around measured point
 AER BRACKET (CLAUDE.md, [[aer-encoder-latch]]). The encoder on this die can latch -- every
 spike reading as neuron 15, or every address coming back one low -- and it survives reset,
 reflash and bias reprogramming; only a physical power cycle clears it. Silently, a latched
-encoder turns a masked run into a plausible recording of the WRONG neurons. So an unmasked
+encoder turns a masked run into a plausible recording of the SHIFTED neurons. So an unmasked
 16-neuron addressing scan runs before the search, every --scan-every evaluations, and at
 A scan that latches ABORTS: every point after a latch is garbage, and continuing would
 bury good data under bad. The partial signal otherwise is `live` collapsing across all
@@ -148,7 +148,7 @@ def aer_scan(b, neurons, base, tag=""):
         c = np.asarray(b.inject_spikes(150.0, INJECT), dtype=int)
         counts.append(int(c[k]))
         if c.sum() == 0:
-            # NOT a latch. A silent unit is a bias/device issue and it already costs
+            # rather than a latch. A silent unit is a bias/device issue and it already costs
             # the objective through the live penalty; aborting on it would kill a long
             # run over one marginal neuron (n0 flickers on this die, 2026-08-13).
             silent.append(k)
@@ -158,7 +158,7 @@ def aer_scan(b, neurons, base, tag=""):
                    "count_at_reported": int(c[r]), "total": int(c.sum())}
             if int(c[r]) >= LATCH_MIN_COUNT and int(c[k]) == 0:
                 # THIS is the latch signature: the injected train came back, at the
-                # WRONG address.
+                # SHIFTED address.
                 mis.append(hit)
             else:
                 # a neighbour fired a spike or two of its own; k itself said nothing
@@ -327,7 +327,7 @@ def main():
                           open(args.state, "w"), indent=2)
                 if not ok:
                     raise AERLatch(
-                        f"AER scan did not pass after evaluation {i}: {bad}. Every point since "
+                        f"AER scan flagged an issue after evaluation {i}: {bad}. Every point since "
                         f"the previous passing scan is suspect; power-cycle the chip.")
             print(f"{i:3d} {off['d_vleakn']*1000:+6.1f}m {off['d_vthrdn']*1000:+6.1f}m "
                   f"{off['d_exc']*1000:+6.1f}m {off['d_inh']*1000:+6.1f}m "
@@ -342,7 +342,7 @@ def main():
                    "digital": {"per_chunk": 0.880, "voted5": 0.967}},
                   open(args.state, "w"), indent=2)
         if not ok:
-            raise AERLatch(f"CLOSING AER scan did not pass: {bad}. The whole run since the last "
+            raise AERLatch(f"CLOSING AER scan flagged an issue: {bad}. The whole run since the last "
                            "passing scan is suspect -- do not use these results.")
 
     xb, yb = bo.best()

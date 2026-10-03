@@ -3,10 +3,10 @@
 
     ../.venv-meas/bin/python3 LNA/odor_neuron_membrane.py
 
-The readout ADC is single-channel, so the amplifier and the membrane cannot be
+The readout ADC is single-channel, so the amplifier and the membrane are captured one at a
 watched at once and the closed loop needs the amplifier. This pass therefore
 replays, verbatim, the injection train that the closed-loop run produced, and
-records the membrane instead. The neuron cannot tell where its input spikes came
+records the membrane instead. The neuron's output leaves the input origin unreported, so
 from, and the replayed times are ones we command exactly rather than detect, so
 the input timing here is better defined than a live pass would be.
 

@@ -10,7 +10,7 @@ each frequency to refer the noise back to the input:
 The gain curve comes from `lna_transfer_final.csv` (the sweep with the audio
 path divided out), interpolated in log-log. Referring the noise to the input
 is only meaningful where the gain is actually known -- below ~0.2 Hz the drive
-delivered nothing and the measured gain stays at zero, so it carries no entry.
+delivered nothing and the measured gain stays at zero, so it is left out of the table.
 
 What the measurement resolves:
 

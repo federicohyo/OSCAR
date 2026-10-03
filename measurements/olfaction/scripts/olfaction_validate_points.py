@@ -4,8 +4,8 @@ per-chunk and voted at every depth.
 
 Why this exists. The BO evaluated 13 points x 3 reps x 150 chunks and kept only a scalar
 per-chunk accuracy: `score()` returns the predictions and the caller discarded them, so
-voted accuracy -- one line away and free -- was never computed, and the spikes were never
-written. None of that is recoverable without going back to the chip. F. Corradi, on being
+voted accuracy -- one line away and free -- was left uncomputed, and the spikes were left
+unwritten. Recovering it requires going back to the chip. F. Corradi, on being
 shown the gap: "then we probably need to save the spikes..." Quite.
 
 So this takes the points worth keeping (the incumbent, the BO's best, and any others

@@ -39,7 +39,7 @@ DEFAULT_BIASES = [
     (2, 0b010, "vipulseextp",  1.78),     # PMOS → OFF = VDD
     (2, 0b011, "JInhWp0",      1.78),     # PMOS → OFF = VDD
 
-    # DAC3 ch A (lna_iref) NOT programmed here — powered down to high-Z below.
+    # DAC3 ch A (lna_iref) left unprogrammed here — powered down to high-Z below.
     # Pin 54 shared with monout_single; tri-state keeps monitor working.
     # Set lna_iref from the GUI slider when LNA characterisation is needed.
     (3, 0b001, "JInhWp1",      1.78),     # PMOS → OFF = VDD
@@ -265,7 +265,7 @@ def flash_handshake_firmware(hex_path=None):
 
     print()
     print("  RISC-V is now running neuron handshake firmware!")
-    # (The LED does NOT blink per spike: reg_gpio_out is written only by blink() at
+    # (The LED stays dark per spike: reg_gpio_out is written only by blink() at
     # boot and then held off. Claiming otherwise sends people hunting a dead LED.)
     print()
     return True

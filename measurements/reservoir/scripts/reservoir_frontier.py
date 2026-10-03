@@ -147,7 +147,7 @@ def main():
         am, asd, fm, fsd = summ(per[n], recs)
         # Uncertainty OF THE MEAN across held-out records: bootstrap 95% CI (20,000
         # percentile resamples, the reference campaign's convention). The marginal between-patient
-        # s.d. (acc_sd) is NOT the error of the mean marker; store both, plot the CI.
+        # s.d. (acc_sd) is separate from the error of the mean marker; store both, plot the CI.
         a_rec = np.array([per[n][r][0] for r in recs])
         rng_ci = np.random.default_rng(0)
         boot_m = np.array([a_rec[rng_ci.integers(0, len(a_rec), len(a_rec))].mean()

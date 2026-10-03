@@ -70,7 +70,7 @@ def main():
     env = dict(os.environ); env.setdefault("CARAVAN_CLK_MHZ", "50")
     r = subprocess.run(collect, env=env)
     if r.returncode != 0:
-        sys.exit(f"collection failed (rc={r.returncode})")
+        sys.exit(f"collection stopped before completion (rc={r.returncode})")
     print("\n>> scoring ff vs rec ...", flush=True)
     subprocess.run(score)
     return 0

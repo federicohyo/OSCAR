@@ -6,7 +6,7 @@ the reference analysis accounts for the expansion from D_eff 9.6
 operating-point distribution, a mean-rate control and the measured 11.99 ms
 acquisition lattice, and leaves ~1.4 units unnamed. Every
 mechanism tested there is a property of the ACQUISITION or a spread of LIF
-PARAMETERS. None of them changes the model neuron's EQUATIONS.
+PARAMETERS. Every one leaves the model neuron's EQUATIONS unchanged.
 
 This script tests the four ways the fabricated soma's equations differ from
 reservoir_sw_lif.sim_lif (see deff_physical_sim.py for what each is and why):
@@ -23,9 +23,9 @@ already documents. Rather than correct for it afterwards with a rate-control
 family, we remove it by construction: for EVERY condition the 16 thresholds are
 re-bisected so that each model neuron reproduces its silicon counterpart's mean
 output rate, in rank order. Every row below therefore sits at silicon's own
-per-neuron rate distribution, and no D_eff difference between rows is a rate
+per-neuron rate distribution, and a D_eff difference between rows stays clear of rate
 effect. The measured acquisition lattice is applied to every row as well, so each
-row is scored against the reference analysis's BEST model (16.7), not its baseline.
+row is scored against the reference analysis's BEST model (16.7) rather than its baseline.
 
 The residual is reported with the paired bootstrap interval of
 deff_residual_ci.py, because a mechanism that "closes the gap" has only closed a
@@ -156,7 +156,7 @@ def main():
     # E/I RATIO MISMATCH. The excitatory and inhibitory synapses are separate DPI
     # circuits (the reference figure) with their own bias lines and their own device mismatch,
     # so the ratio w_inh/w_exc differs from neuron to neuron. This is the one
-    # parameter axis the per-neuron threshold bisection above CANNOT absorb: a
+    # parameter axis the per-neuron threshold bisection above leaves unabsorbed: a
     # common per-neuron gain is exactly what the threshold trades against, but the
     # BALANCE between the two input channels is the lever. the reference analysis's weight-code
     # result makes it concrete -- the four branches are equal-sized rather than
@@ -165,7 +165,7 @@ def main():
     for sp_ei in (0.20, 0.40, 0.65):
         conds.append((f"EI    E/I ratio mismatch {sp_ei*100:.0f}%",
                       dict(_ei=sp_ei)))
-    conds.append(("EI+RECT  E/I 40%, no rectification",
+    conds.append(("EI+RECT  E/I 40%, rectification off",
                   dict(_ei=0.40, rectify=False)))
     conds.append(("EI+NOISE E/I 40% + sigma 0.10",
                   dict(_ei=0.40, noise_sigma=0.10)))
@@ -180,7 +180,7 @@ def main():
     # (per-neuron rather than common-mode) form.
     for jz in (0.05, 0.10, 0.20, 0.35, 0.50):
         conds.append((f"JIT   per-trial excitability {jz*100:.0f}%", dict(_jit=jz)))
-    conds.append(("JIT+RECT per-trial 20%, no rectification",
+    conds.append(("JIT+RECT per-trial 20%, rectification off",
                   dict(_jit=0.20, rectify=False)))
 
     # dt refinement is required once a synaptic tail of a few ms is in play; keep

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fold and score the odor response. Offline -- re-runs from the saved raw record.
 
-ALIGNMENT: on the signal, not the sync marker. `odor_bench.py` locks a comb of
+ALIGNMENT: on the signal rather than the sync marker. `odor_bench.py` locks a comb of
 137 Hz marker bursts, and at this drive level that fails silently: scaling the
 stimulus down to 0.55 mVpp scaled the marker down with it, leaving an envelope
 only 3.7x above its own floor with 2 of 10 bursts detectable. Two consecutive
@@ -15,7 +15,7 @@ The expected response is the drive passed through a single pole at the MEASURED
 1.53 Hz corner, then band-limited 1-40 Hz to match the analysis band. The odor
 event lives at 2-20 Hz; the band-pass also removes the 272 Hz bench interferer,
 which matters here because 272 Hz x 1.6 s = 435.0 cycles per period -- so close
-to an integer that it is period-locked and does NOT average away over repeats.
+to an integer that it is period-locked and stays averaged over repeats.
 """
 import csv, json, os, sys
 import numpy as np
@@ -41,7 +41,7 @@ def expected(drive, n):
 def main():
     raw = np.load(os.path.join(LNA, "odor_bench_trials.npz"))
     if "raw_v" not in raw.files:
-        sys.exit("that npz has no raw record -- re-run odor_bench.py")
+        sys.exit("re-run odor_bench.py to include a raw record in that npz")
     v = raw["raw_v"].astype(float)
     tm = json.load(open(os.path.join(LNA, "odor_timing.json")))
     P, reps = tm["period_s"], tm["repeats"]

@@ -3,7 +3,7 @@
 
     ../.venv-meas/bin/python3 LNA/odor_neuron_loop.py
 
-WHAT CLOSES THE LOOP. The RISC-V core sees spikes, not the amplifier -- the LNA output
+WHAT CLOSES THE LOOP. The RISC-V core sees spikes rather than the amplifier -- the LNA output
 reaches the core only through the host -- so the host does the detection:
 it reads the LNA output from the scope stream, and when the output rises above a
 baseline-relative threshold it injects spikes into neuron 9 through the bridge.

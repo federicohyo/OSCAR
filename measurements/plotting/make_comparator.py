@@ -5,12 +5,12 @@ import argparse
 This is the primitive the hybrid decision tree needs: a neuron that fires only after it
 has received at least N input spikes, with N set by a bias. It replaces a digital compare
 in the tree's decision node, so it has to be graded and it has to be programmable -- a
-single fixed threshold is not enough.
+single fixed threshold falls short.
 
   (a) MECHANISM. The membrane after a burst of N input spikes, at four calibration
       points. Sub-threshold and monotone in N: the neuron integrates the burst rather
       than responding to the first spike, which is what makes a count comparator possible
-      at all. AER cannot see any of this -- it is one bit, and reads 0 across the whole
+      at all. AER is blind to all of this -- it is one bit, and reads 0 across the whole
       panel -- so this is a scope measurement (/dev/ttyACM0).
   (b) TRANSFER. p(fire | N) for every level in the ladder, over ALL N in 0..32 rather
       than only the ladder points -- the tree presents every count, and measuring only
@@ -20,7 +20,7 @@ single fixed threshold is not enough.
       input spike climbs, so it spreads the low levels; vleakn sets rest relative to
       threshold and carries the top of the ladder. Tuning vleakn alone -- the obvious
       thing -- crushes levels 1..8 into half a millivolt against the free-run edge, where
-      they are not separable; that failed run is why the axes are split this way.
+      they stay unseparated; that earlier run is why the axes are split this way.
 
 Data: data/olfaction_comparator_tune.json (placement) and
 data/olfaction_hybrid_transfer.json (the transfer matrix), n14, 25 MHz. This is the
@@ -186,7 +186,7 @@ def main():
         a2 = plt.figure().add_subplot(1, 1, 1)
 
     # ---- (a) membrane vs N, sub-threshold ---------------------------------
-    # Only points where the neuron did NOT fire: once it spikes, "peak membrane" is the
+    # Only points where the neuron stayed silent: once it spikes, "peak membrane" is the
     # spike amplitude (~490 mV) and stops measuring integration.
     # Settings the LADDER actually uses, taken from the placement record rather than
     # chosen for a pretty ramp. Deeper settings give longer sub-threshold ramps --

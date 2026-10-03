@@ -99,7 +99,7 @@ def main():
     ev_on, ev_off, ev_pk = event_window(seg, fsw)
 
     spk = np.atleast_2d(np.loadtxt(str(d["spikes_file"]), comments="#"))
-    # The file's microsecond column is NOT zero-based despite its header (this run
+    # The file's microsecond column is offset rather than zero-based despite its header (this run
     # starts at 14.994 s): it is the wrap-corrected chip clock, whose origin is the
     # bridge rather than the recording. Differences are what matter, so pin the first
     # spike to the first injection -- neuron 9 is quiescent with input at zero (0 AER

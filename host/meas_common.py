@@ -57,7 +57,7 @@ def load_biases(path: str) -> Dict[str, float]:
         if key in BRIDGE_BIASES and isinstance(value, (int, float)):
             biases[key] = clamp(float(value), 0.0, 1.79)
     if not biases:
-        raise RuntimeError(f"No valid bridge bias keys in {path}")
+        raise RuntimeError(f"Bridge bias keys required in {path}")
     return biases
 
 
@@ -120,7 +120,7 @@ class BridgeSession:
 
     def send(self, command: str) -> None:
         if self.proc is None or self.proc.stdin is None:
-            raise RuntimeError("Bridge not started")
+            raise RuntimeError("Bridge start required")
         self.proc.stdin.write(command + "\n")
         self.proc.stdin.flush()
 
@@ -211,8 +211,8 @@ class BridgeSession:
         Also totals the chip's own integrity flags for the window:
           drops  -- the on-chip ring overflowed: spikes were LOST.
           stalls -- the flush waited on the UART FIFO: the link is back-pressuring
-                    the array, so these counts are not free-running.
-        A window with either nonzero is NOT a measurement of the array. This matters:
+                    the array, so these counts track the throttle.
+        A window with either nonzero falls outside a valid measurement of the array. This matters:
         dropped spikes from a contended AER bus are what collapsed the recurrent
         reservoir (0.987 -> 0.58/0.77), and the old readout reported no error at all.
         Callers should assert both are zero, or mask neurons to buy bandwidth.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Calibrate the spike-count comparator ladder on n14, scope-in-the-loop.
 
-WHY THE SEARCH AXIS IS JExc AND NOT vleakn (2026-08-16). Both knobs move the switching
+WHY THE SEARCH AXIS IS JExc RATHER THAN vleakn (2026-08-16). Both knobs move the switching
 count, in a different way: vleakn sets where the membrane rests relative to threshold,
 JExc sets how much each input spike climbs, i.e. the RAMP STEEPNESS. Bisecting vleakn
 alone -- the first thing I did -- makes one knob cover the whole ladder, and the low
@@ -18,7 +18,7 @@ the edge is measured first, and why a SAVED level demands p(N=0) == 0.00 exactly
 p(target) == 1.00; the loose p0 <= 0.3 classifier is for the sweep only, and it has
 already let a free-running point through once.
 
-OPERATING CONDITION. A .biases file alone does NOT reproduce the comparator: it is
+OPERATING CONDITION. A .biases file alone falls short of reproducing the comparator: it is
 calibrated against synapse 0 at weight 15, excitatory, routed to the neuron, driven by
 BURST (firmware-paced, spikes back to back roughly a microsecond apart) at the firmware's
 default input-pulse width. The leak means N spikes spread over a longer window integrate
@@ -140,7 +140,7 @@ def center(trace, n):
     """Deepest point inside level n's plateau: p(n)=1, p(prev)=0, p0=0, widest margin.
 
     The greedy first-crossing pick lands on the plateau EDGE (level 12 was saved at
-    p=0.88). Sweeping first and choosing offline costs no extra bench time."""
+    p=0.88). Sweeping first and choosing offline costs nothing extra in bench time."""
     i = LEV.index(n)
     ok = [t for t in trace
           if t["p0"] == 0.0 and t["p"][i] == 1.0

@@ -7,7 +7,7 @@ and you already call accuracy is capped here. I would disagree because we
 can make simulations in which the accuracy is higher and we can probably tune the bias
 better." Correct, and this project already recorded the lesson: ECG accuracy moved
 0.913 -> 0.700 on a 2.7x drive change alone ([[reservoir-results-are-operating-point-
-dependent]]). The measured 0.647/0.833 is ONE operating point, chosen for liveness, never
+dependent]]). The measured 0.647/0.833 is ONE operating point, chosen for liveness rather than
 tuned for this task.
 
 STRUCTURE: anchor, then explore.
@@ -152,7 +152,7 @@ def main():
     d_pc = anchor["per_chunk"] - MEAS["per_chunk"]
     print(f"  sim - measured = {d_pc:+.3f} per-chunk"
           + ("   CREDIBLE, sim tracks silicon here" if abs(d_pc) <= 0.10
-             else "   NOT credible: sim does not reproduce the measured point,"
+             else "   unconvincing: sim misses the measured point,"
                   " treat the sweep as indicative only"))
     print(f"\nBEST simulated point: vth={best['vth']} w={best['w']} "
           f"tau_m={best['tau_m']*1000:.0f}ms tau_syn={best['tau_syn']*1000:.0f}ms")

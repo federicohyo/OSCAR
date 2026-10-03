@@ -2,7 +2,7 @@
 """Silicon counterpart of the reference figure panels (a) and (b): the odor stimulus at the
 chip input and the measured LNA output.
 
-Panel (c) of the reference figure is the neuron membrane; that leg is not yet
+Panel (c) of the reference figure is the neuron membrane; that leg is still pending
 measured, so this figure carries (a) and (b) only.
 
 Two departures from analyze_odor.py, both for display only:

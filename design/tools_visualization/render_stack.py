@@ -8,7 +8,7 @@ path is periodic over the frame count, so the frames loop seamlessly.
   ./render_stack.py BUILD_DIR OUT_DIR N_FRAMES
 
 OUT_DIR of "-" streams raw RGBA frames to stdout instead of writing one PNG per
-frame, so they can be piped straight into ffmpeg without ever hitting disk (900
+frame, so they can be piped straight into ffmpeg while staying off disk (900
 frames of PNG is ~400 MB of clutter). Progress then goes to stderr, to keep
 stdout a clean video stream.
 
@@ -272,7 +272,7 @@ def rock_at(frac, keys, az_amp, el_amp):
     A straight traverse wants the camera angle held still: with the rock
     running, azimuth and elevation swing underneath the pan and the apparent
     height and level of detail drift even though span and elevation are fixed.
-    Taking the amplitudes to zero freezes the angle without a discontinuity,
+    Taking the amplitudes to zero freezes the angle with a continuous result,
     since the rock is amplitude * sin(u) and only the amplitude changes.
     """
     if not keys:

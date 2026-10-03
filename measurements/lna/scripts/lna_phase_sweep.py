@@ -3,7 +3,7 @@
 
     ch1 = one probe (pin 2)      ch2 = the other (pin 4)
 
-The point of measuring phase: it needs NO amplitude calibration. Phase is the
+The point of measuring phase: it needs zero amplitude calibration. Phase is the
 difference between two channels sampled on the same tick, so the divider ratio,
 the sound card's true full scale and the ADC's gain all cancel exactly. The
 jack->chip anchor that was wrong by 15x cannot touch this number. It also gives
@@ -30,8 +30,8 @@ Three modes:
   (default)   The sweep: 0.2 .. 200 Hz, log spaced.
 
 Method, all three modes: coherent least-squares fit at the known drive
-frequency, on both channels out of the same sample pair. Amplitude is never a
-peak-to-peak or percentile spread.
+frequency, on both channels out of the same sample pair. Amplitude comes from the fit
+rather than a peak-to-peak or percentile spread.
 
 Two subtle points:
 

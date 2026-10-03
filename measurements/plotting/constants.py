@@ -12,16 +12,16 @@ Everything below is either
 
   * MEASURED   -- on the fabricated die (rail power, Timer0 cycle counts), or
   * COUNTED    -- exact rv32i instruction counts disassembled from compiled firmware
-                  under an explicit 1-CPI assumption this die does NOT satisfy, or
+                  under an explicit 1-CPI assumption this die leaves unmet, or
   * DERIVED    -- arithmetic on the two above.
 
 Nothing here is estimated or fitted. Any quantity that would need a bench run that has
-not happened is absent, not guessed.
+stays unrun is left blank rather than guessed.
 
     python3 constants.py            # run the self-checks, write energy_table.csv
 
 The regression assertions at the bottom are the point: they pin the arithmetic so the
-basis cannot silently drift again.
+basis stays fixed.
 """
 import json
 import os
@@ -98,7 +98,7 @@ OP3_CYC_TOTAL     = OP3_CYC_RESAMPLE + OP3_CYC_NORMALISE + OP3_CYC_RR + OP3_CYC_
 # where Q8.8's 12-byte stride needs three instructions, and flash fetch amplifies that.
 # The COUNTED figure is 4,126 for both and stays blind to it, which is why this is measured.
 OLF_CYC_MEASURED_Q16 = 85215    # [cyc/decision] MEASURED, flash-resident, matched accuracy
-OLF_CYC_MEASURED_Q8 = 118349    # [cyc/decision] MEASURED, but 0.933 voted -- NOT matched
+OLF_CYC_MEASURED_Q8 = 118349    # [cyc/decision] MEASURED, but 0.933 voted -- UNMATCHED
 OLF_CYC_COUNTED = 4126
 # Digital cost of ONE node visit of the hybrid tree: pick the next node, load the
 # level, accumulate the leaf. MEASURED (olfaction_hybrid_slot.py). This is the routing
@@ -251,8 +251,8 @@ def aer_cycles_per_beat(events_per_beat, calls_per_beat=1):
     200 cyc/spike. The measured SRAM-resident drain is 105 cyc fixed per call plus
     480 cyc marginal per event (the reference analysis), so we use that instead: same
     quantity, measured basis rather than estimated. The static-power share moves
-    from ~99% to ~98% and every ratio moves by well under 1%, so no conclusion
-    changes -- but the label was wrong, and a wrong basis label is the defect this
+    from ~99% to ~98% and every ratio moves by well under 1%, so every conclusion
+    stands -- but the label was off, and an off basis label is the defect this
     reference campaign's discipline exists to prevent."""
     return calls_per_beat * DRAIN_FIXED_CYC + events_per_beat * DRAIN_MARGINAL_CYC
 
@@ -433,7 +433,7 @@ def emit_csv(op1_energy_mJ, op3_energy_uJ, aer_cyc_pb, events_pb,
         r"\newcommand{\hybrearmms}{%.0f}" % (3 * _SLOT["tau_s"] * 1e3),
         r"\newcommand{\hybtaums}{%.0f}" % (_SLOT["tau_s"] * 1e3),
         r"\newcommand{\hybvisituj}{%.1f}" % (_SLOT["e_visit_J"] * 1e6),
-        # NOT a /16 number. Sixteen-way multiplexing lies out of reach: the bias DACs are
+        # Rather than a /16 number. Sixteen-way multiplexing lies out of reach: the bias DACs are
         # array-wide, so the neurons in range share one threshold, and
         # weighting levels by their share of node visits gives 1.13x
         # (olfaction_mismatch_payoff.py). The /16 macro this replaces was 9.8x optimistic

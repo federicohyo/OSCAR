@@ -4,14 +4,14 @@
   (a) voted accuracy against the number of odour classes for the analog array
       (measured silicon spikes, 9 acquisitions) and for the identical pipeline with
       the neurons emulated in the firmware's exact fixed-point arithmetic. Both
-      saturate identically: the ceiling is a property of the encoding, not the
+      saturate identically: the ceiling is a property of the encoding rather than the
       substrate. Solid = typical (mean over all class subsets, band = 1 sd);
       dashed = data-picked best subset, chosen on training folds only (nested).
   (b) energy per decision of the same two substrates (per-chunk stages from
       constants.py, all measured; decomposition shows the neuron block is a
       sliver and the digital support is the bill).
 
-No digital tree anywhere -- a different algorithm does not belong on these axes.
+Digital trees are kept off these axes -- a different algorithm sits outside this comparison.
 
     python3 make_olfaction_capacity.py
 """

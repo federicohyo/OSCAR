@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Output noise of the LNA, clean setup — long quiet record, raw traces kept.
 
-No tone plays. The sound card is left IDLE, not merely silent: this afternoon a
+The tone stays off. The sound card is left IDLE rather than merely silent: this afternoon a
 zero-amplitude WAV still raised the noise 24 -> 179 mV rms, because activating
 the output stage was itself the fault (see ../debug/). So this block asserts the
 absence of any player rather than assuming it.

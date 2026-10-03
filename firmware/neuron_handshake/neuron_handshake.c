@@ -590,7 +590,7 @@ static uint32_t umul32(uint32_t a, uint32_t b)
 // the timed loops (and the calibration loop stays out of closed-form folding).
 volatile uint32_t bench_sink;
 
-// The LIF step is INLINED here (lif_step/umul32 call frames omitted): the firmware RAM is only
+// The LIF step is INLINED here (lif_step/umul32 call frames inlined): the firmware RAM is only
 // 1 KB (dff: data+bss+stack), and bench_cmd runs deep inside main()'s large -O0 frame, so
 // extra call depth overflows the stack. Inlining also matches numeric_lif.lst, where at -O2
 // umul32 is inlined into the step. Values are printed as 32-bit hex (the firmware's print_dec
@@ -1058,7 +1058,7 @@ static void arrayopt_cmd(void)
  * whole digital baseline. Too load-bearing to leave modelled, so each stage is timed here
  * with Timer0, in the SAME binary at the SAME optimisation as olfbench_cmd's OP3 kernel.
  *
- * THE optimize("O2") ATTRIBUTE BELOW IS LOAD-BEARING. Without it this function compiles
+ * THE optimize("O2") ATTRIBUTE BELOW IS LOAD-BEARING. This attribute is what keeps the function from compiling
  * at the file's -O0 while olfbench_cmd (which carries the attribute) compiles at O2, and
  * the comparison is meaningless: the identical calibration loop took 6 register-only
  * instructions in olfbench_cmd and 14 stack-based ones here, a 49x difference in the
@@ -1175,7 +1175,7 @@ static void arraybench_cmd(void)
     print("\n");
 }
 
-/* O2 like olfbench_cmd and arraybench_cmd. Without it this compiles at the file's -O0
+/* O2 like olfbench_cmd and arraybench_cmd. This attribute keeps it from compiling at the file's -O0
  * and the numeric-LIF baseline is handicapped against the O2 tree kernel it is compared
  * with -- the same error that invalidated the first array-pipeline table. The digital
  * emulation must be the STRONGEST this core can do, rather than the laziest. */
@@ -1622,8 +1622,8 @@ __attribute__((optimize("Os")))
  * fine; the phase structure was the issue.
  *
  *   Phase A (mode 0), calrun_measure: probe ONE level, report where its threshold now is,
- *      and try to walk it back to its calibrated value with the pulse width. No validation
- *      and an empty encoding table -- validation waits on a complete ladder.
+ *      and try to walk it back to its calibrated value with the pulse width. Validation is
+ *      deferred and the encoding table starts empty -- validation waits on a complete ladder.
  *   Phase B (mode 1), calrun_derive: given all six counts, validate the ladder ONCE
  *      (range, order, gap) and derive the encoding ONCE, then print it.
  *
@@ -1954,8 +1954,8 @@ void main()
 
     // Hold the analog reset LOW long enough for x3/x5 to actually reset. The store
     // above and the release below are a few instructions apart, so nRes was pulsed
-    // for only ~100 ns at 50 MHz. (Measured: lengthening it to ~100 us does NOT by
-    // itself fix an AER encoder stuck reading all-ones -- that survives this reset.)
+    // for only ~100 ns at 50 MHz. (Measured: an AER encoder stuck reading all-ones
+    // survives even a lengthening of this reset to ~100 us.)
     delay_loop(1000);                  // ~100 us, clock-scaled by delay_loop()
 
     // Release nRes: drive HIGH to release active-low reset

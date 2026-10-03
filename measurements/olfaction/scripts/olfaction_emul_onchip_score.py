@@ -26,7 +26,7 @@ def score_one(path):
     nneur, nchunk, T = d["nneur"], d["nchunk"], d["T"]
     Y, it = np.array(d["labels"]), np.array(d["trial"])
     assert len(d["times"]) == nneur * nchunk, path
-    assert d["agree"], f"{path}: rows did not all match the host mirror"
+    assert d["agree"], f"{path}: rows diverged from the host mirror"
     sp = np.empty((nneur, nchunk), dtype=object)
     for k in range(nneur):
         for j in range(nchunk):

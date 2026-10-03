@@ -3,7 +3,7 @@
 
 This supplies the input the energy number needs. Rail energy is power x time, so the slot
 time is what converts a measured 430 uW into joules per node visit, and it is the one
-quantity the accuracy run does NOT measure: the 0.25 s I wait between bursts at the bench
+quantity the accuracy run leaves unmeasured: the 0.25 s I wait between bursts at the bench
 is a settle window chosen for measurement reliability, not a property of the circuit.
 Quoting it would inflate the rail term by three orders of magnitude.
 
@@ -11,7 +11,7 @@ Two components, measured separately because they are set by different things:
 
 1. DELIVERY. The burst is N input spikes, each a REQ pulse of fixed width, so delivery
    time is linear in N. Timed against the chip's OWN spike stream -- m bursts are issued
-   and the clock stops at the last spike to come back, which the chip cannot emit before
+   and the clock stops at the last spike to come back, which the chip emits only after
    it has processed all of them. The slope against N is the per-spike cost; the fixed
    UART and per-burst overheads are constant in N and land in the intercept. The scope
    cannot do this: it streams at ~1 kHz and one input pulse is tens of microseconds.
@@ -23,7 +23,7 @@ Two components, measured separately because they are set by different things:
 
 Reported per visit, and per visit at 16-way time multiplexing, where the same array rail
 covers sixteen concurrent slots and the per-visit rail cost falls by 16 while delivery and
-re-arm do not.
+re-arm stay flat.
 
     PYTHONPATH=. CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_hybrid_slot.py
 """

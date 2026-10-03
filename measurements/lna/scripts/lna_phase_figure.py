@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Measured LNA magnitude and phase against the Fig. 7 simulation.
 
-Offline -- no bench, no FTDI. Reads lna_phase.csv (from lna_phase_sweep.py) and
+Offline -- bench and FTDI untouched. Reads lna_phase.csv (from lna_phase_sweep.py) and
 lna_sim_ac.csv (the ngSpice AC analysis behind Fig. 7, fig:LNA-freq) and draws
 them on one pair of axes.
 
@@ -45,7 +45,7 @@ def unwrap_deg(f, p):
     """Put the measured phase on the same branch as the simulation.
 
     The passband sits at -180 deg, exactly where atan2 wraps, so half the points
-    can come back as +179 and half as -179 with nothing wrong. Shift each point
+    can come back as +179 and half as -179 cleanly. Shift each point
     by whole turns to the branch nearest its neighbour, walking up in
     frequency."""
     p = np.array(p, float)
@@ -81,7 +81,7 @@ def main():
     sim["phase_deg"] = unwrap_deg(sim["freq_hz"], sim["phase_deg"])
     m = load(a.meas, ["f_used", "gain_db", "dphi_corr_deg", "sem_deg", "R"])
     if not len(m["f_used"]):
-        sys.exit(f"no usable rows in {a.meas}")
+        sys.exit(f"empty measurement file: {a.meas}")
 
     keep = m["R"] >= a.rmin
     dropped = int((~keep).sum())

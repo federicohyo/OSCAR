@@ -5,17 +5,17 @@ and its spread rather than a single average.
 
 TIME BASES. The spike file carries the chip's own Timer0 clock; the LNA trace and
 the injections carry host time. They are related by fitting host = a*chip + b on
-spike bursts matched to injection groups -- not by anchoring on the first spike.
-Anchoring failed: the neuron fires spontaneously at ~0.7 Hz and RECORD starts
-before the warm-up, so the first logged spike is spontaneous and has no injection
-behind it. Using it shifted the whole raster by ~0.19 s and made the spikes appear
+spike bursts matched to injection groups rather than by anchoring on the first spike.
+Anchoring came up short: the neuron fires spontaneously at ~0.7 Hz and RECORD starts
+before the warm-up, so the first logged spike is spontaneous rather than an injection
+response. Using it shifted the whole raster by ~0.19 s and made the spikes appear
 to precede the stimulus that caused them.
 
-Panel (c) is a raster, not a membrane trace: the readout ADC is single-channel, so
-the amplifier and the membrane cannot be watched at once, and the loop needs the
+Panel (c) is a raster rather than a membrane trace: the readout ADC is single-channel, so
+the amplifier and the membrane are watched one at a time, and the loop needs the
 amplifier.
 
-HOST-IN-THE-LOOP: the core has no path to the LNA output, so the host thresholds
+HOST-IN-THE-LOOP: the core reaches the LNA output only through the host, so the host thresholds
 the amplifier and injects the spikes. The chip amplifies and the chip spikes; the
 decision between them is made off-die.
 """

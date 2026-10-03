@@ -2,7 +2,7 @@
 """Execute the hybrid tree on silicon: every node comparison is a real burst into one
 time-multiplexed analog neuron.
 
-WHAT IS ANALOG AND WHAT IS NOT. Each node test is performed by neuron 14 acting as a
+WHAT IS ANALOG AND WHAT IS DIGITAL. Each node test is performed by neuron 14 acting as a
 spike-count comparator: the feature's burst is presented, and the neuron's own membrane
 decides the branch. The routing between visits -- which node next, which leaf value to
 accumulate -- is digital, exactly as the architecture intends (6.15: conditionality is
@@ -67,7 +67,7 @@ def archive(path, keep, levels, **extra):
 def switch_now(b, sc, k, hint, reps, wait):
     """The count this level ACTUALLY switches at, right now.
 
-    A single before/after ladder check tells you drift happened without timing it, and run 1
+    A single before/after ladder check tells you drift happened, leaving its timing open, and run 1
     drifted on three of ten levels over five hours. Bracketing each level's node group
     turns that into a measured, attributable quantity for ~9 s per call: if a level moved
     while its own nodes were being evaluated, its comparisons are the suspect ones and

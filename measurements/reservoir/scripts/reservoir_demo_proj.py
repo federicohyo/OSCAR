@@ -60,7 +60,7 @@ def main():
     ap.add_argument("--out", default="measurements/array/figures/reservoir_demo_proj.pdf")
     args = ap.parse_args()
 
-    conds = [("Shared input\n(no projection)", *load(args.no_proj)),
+    conds = [("Shared input\n(projection off)", *load(args.no_proj)),
              ("Per-neuron\ninput projection", *load(args.with_proj))]
     # same example Normal beat index in both (identical loader order / beat set)
     bi = pick_normal(conds[0][2], conds[0][1])  # (name, spikes, labels, T)

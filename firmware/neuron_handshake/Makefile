@@ -22,7 +22,7 @@ STREAM_SPIKES ?= 1
 
 # Core clock in MHz the firmware is calibrated for. 50 = DLL engaged (fb=10, out
 # div /2), 10 = crystal. Scales delay_loop() pulse widths and Timer0 tick
-# constants. The DLL does NOT survive a power cycle, so whatever runs this image
+# constants. The DLL setting resets on a power cycle, so whatever runs this image
 # must engage it: run_neuron_test.py does (--clock, default 50) and so does
 # neuron_bridge.py (CARAVAN_CLK_MHZ, default 50). Keep all three in step.
 F_CPU_MHZ ?= 50

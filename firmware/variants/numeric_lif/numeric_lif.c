@@ -1,5 +1,5 @@
-// Numeric-LIF reservoir cost microbenchmark for the RISC-V (RV32I @ 25 MHz, NO
-// hardware multiply/divide). This is the DIGITAL SAME-ALGORITHM baseline (OP2 of the
+// Numeric-LIF reservoir cost microbenchmark for the RISC-V (RV32I @ 25 MHz, using software
+// multiply/divide). This is the DIGITAL SAME-ALGORITHM baseline (OP2 of the
 // ECG frontier): the co-integrated core must reproduce the analog reservoir by Euler-
 // integrating 16 heterogeneous LIF ODEs. It is compiled to rv32i and disassembled to
 // count the instruction path; the dynamic per-beat cost is O(N_neurons * T/dt) and is

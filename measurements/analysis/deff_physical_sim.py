@@ -2,18 +2,18 @@
 """A software neuron carrying the analog soma's physics, vectorised.
 
 Section 4.3 leaves ~1.4 D_eff units unexplained. Every mechanism tested there is
-a non-ideality of the ACQUISITION or a spread of LIF PARAMETERS; none of them
-changes the model neuron's equations, which stay those of reservoir_sw_lif.
-sim_lif. Four things the fabricated soma does that sim_lif does not are visible
+a non-ideality of the ACQUISITION or a spread of LIF PARAMETERS; each one
+leaves the model neuron's equations as those of reservoir_sw_lif.
+sim_lif. Four things the fabricated soma does that sim_lif leaves out are visible
 by inspection of that function:
 
   RECT   `if v < 0: v = 0.0` discards all inhibitory state below rest. The delta
          encoder sends DOWN events to the inhibitory synapse, so on a quiet
          neuron the model throws away history the membrane retains. Zero free
-         parameters -- this one is a bug-shaped difference, not a physical model.
+         parameters -- this one is a bug-shaped difference rather than a physical model.
   SYN    `jump[i] += w` injects charge as an impulse. The fabricated synapse is a
          differential-pair integrator (Section 3.2) with its own time constant,
-         so each event delivers a shaped current, not a delta.
+         so each event delivers a shaped current rather than a delta.
   LEAK   `v = v * decay` is an ohmic leak. The soma's leak is a current-starved
          transistor at a fixed gate bias, i.e. a constant current, so the
          membrane ramps DOWN LINEARLY rather than decaying exponentially.
@@ -83,10 +83,10 @@ def simulate(up, dn, vth, T=T_BEAT, dt=DT_DEFAULT, tau_m=0.02, tref=0.005,
                  limit syn_sat -> inf.
 
                  PHENOMENOLOGICAL, and deliberately so: the reference circuit
-                 equation is a Bernoulli form whose variable definitions we have not
-                 verified against the primary source, so this reproduces the
+                 equation is a Bernoulli form whose variable definitions await
+                 verification against the primary source, so this reproduces the
                  quadratic self-limiting BEHAVIOUR rather than transcribing that
-                 equation. Do not present it as the circuit equation.
+                 equation. Present it as a behavioural match rather than the circuit equation.
     leak_mode    'exp'   v <- v*exp(-dt/tau_m)              (sim_lif)
                  'const' v <- v - leak_rate*dt, floored     (current-starved)
     leak_rate    constant-leak slope in units of v per second; defaults to the

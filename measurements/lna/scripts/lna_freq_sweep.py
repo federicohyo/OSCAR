@@ -7,7 +7,7 @@ same NMOS/PMOS references as neuron_bridge), plays each test tone out of
 the audio jack with pw-play, and reads Vpp from the scope server
 (127.0.0.1:5555, fallback /dev/ttyACM0) via ScopeClient.
 
-The scope samples ~1 kS/s, so above ~200 Hz the cycles are not resolved --
+The scope samples ~1 kS/s, so above ~200 Hz the cycles fall below resolution --
 but the samples still cover the sine's phase quasi-uniformly, so the
 p5..p95 spread remains a good amplitude estimator. What degrades is the
 ability to VERIFY the frequency on the scope side; the generator is

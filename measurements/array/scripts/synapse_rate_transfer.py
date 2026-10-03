@@ -81,8 +81,8 @@ def quiesce(b, quiet_s=0.4, max_s=8.0):
     """Drain and discard until no line has arrived for `quiet_s`. Returns spikes discarded.
 
     The bridge hands spikes to the host over USB in ~16 ms batches, so packets for spikes the
-    chip emitted inside one measurement keep arriving well after it. Without this, a point's
-    tail lands in the NEXT point's count and the sweep reports the previous weight word --
+    chip emitted inside one measurement keep arriving well after it. This keeps a point's
+    tail from landing in the NEXT point's count and the sweep reports the previous weight word --
     which is exactly what made the first scans erratic and order-dependent.
     """
     counts = [0] * 16
@@ -162,7 +162,7 @@ def main() -> int:
     ap.add_argument("--settle", type=float, default=0.3)
     ap.add_argument("--warmup", type=int, default=30, help="discarded warm-up spikes after reprogram")
     ap.add_argument("--seed", type=int, default=20260728)
-    ap.add_argument("--no-shuffle", action="store_true", help="visit points in order (debug only)")
+    ap.add_argument("--no-shuffle", action="store_true", help="visit points in order (debug)")
     ap.add_argument("--out", default="data/synapse/rate_transfer.csv")
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()

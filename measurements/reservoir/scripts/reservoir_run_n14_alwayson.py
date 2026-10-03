@@ -80,7 +80,7 @@ def main():
         b.send("RECURCTRL 0"); time.sleep(0.2)
         b.apply_biases(load_biases(args.bias)); b.monitor(K); time.sleep(1.0)
         b.program_weight(0, args.weight, exc=False)      # inhibitory synapse
-        # quick rest check: tonic rate with NO input
+        # quick rest check: tonic rate with zero input
         b.drain(max_lines=200000); s = b.sample_spikes(1.0)
         print(f"  tonic rest rate (no input): {s['counts'][K]} Hz, clean={s['clean']}")
         for r in range(args.reps):

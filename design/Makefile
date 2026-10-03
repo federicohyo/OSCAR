@@ -206,7 +206,7 @@ openlane:
 	fi
 	cd openlane && $(MAKE) openlane
 
-#### Not sure if the targets following are of any use
+#### Targets below are exploratory
 
 # Create symbolic links to caravel's main files
 .PHONY: simlink

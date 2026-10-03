@@ -51,7 +51,7 @@ def delta_kernel_feats(r, theta, taus=(0.002, 0.005, 0.02, 0.08), K=96):
     """Level-crossing encode each channel, then an exponential kernel sampled at K
     points.
 
-    K and the tau set are NOT the ECG pipeline's. K=8 over 1.5 s is one sample per
+    K and the tau set differ from the ECG pipeline's. K=8 over 1.5 s is one sample per
     187 ms, which cannot represent a 60 Hz modulation at all -- inheriting it made the
     high-frequency rows uninformative rather than negative. K=96 gives ~16 ms
     resolution, and tau=2 ms resolves a 60 Hz period."""

@@ -54,7 +54,7 @@ def present(b, kin, events, T, reset_vl, op_vl):
                     except (ValueError, KeyError):
                         pass
             elif line.startswith("DROPS ") or line.startswith("STALLS "):
-                # A beat with either nonzero is NOT a measurement of the array: the
+                # A beat with either nonzero falls outside a valid measurement of the array: the
                 # readout lost spikes (drops) or throttled it (stalls). Contended-AER
                 # spike loss is exactly what collapsed this reservoir before.
                 p = line.split()
@@ -124,7 +124,7 @@ def main():
             print(f"  --> stimulating + monitoring neuron {k} on scope")
             for syn, exc in ((0, True), (0, False), (1, True), (1, False)):
                 b.program_weight(syn, args.weight, exc=exc)
-            # load W_rec EXCLUDING connections that feed back into the stimulated neuron k,
+            # load W_rec keeping out connections that feed back into the stimulated neuron k,
             # so k fires cleanly (feedforward-calibrated) while its spikes spread to the rest.
             b.send("RECURCTRL 2")   # clear
             for s, d, c, e in wrec:

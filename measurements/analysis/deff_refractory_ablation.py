@@ -26,7 +26,7 @@ ARRIVAL times, exactly as the reference analysis already says. The recorded
 ISI distribution is therefore a measurement of the host read cadence rather than of the
 neurons. "73% above 26 Hz" is the fraction of intervals at lattice steps 2 and 3.
 
-That does NOT make the mechanism uninteresting -- it makes it a different
+That keeps the mechanism interesting -- it makes it a different
 mechanism that round 2 left untested. Round 2 ruled out a 250 ms blanking dead
 time (it would cap the array at 128 events/window against 282 observed) and
 modelled 16 ms uniform timestamp quantisation (-1% on D_eff). A 24 ms per-neuron
@@ -52,7 +52,7 @@ PROVENANCE
              per-neuron rate distribution -- all read off the silicon recording
   DERIVED    per-neuron thresholds, bisected to reproduce the measured rates
              (unchanged from deff_operating_point.py)
-  SIMULATED  every ablation condition; C and F in particular have NO measured
+  SIMULATED  every ablation condition; C and F in particular have zero measured
              parameter on this die, so they are swept rather than calibrated
 
 Run:  ./.venv-meas/bin/python3 deff_refractory_ablation.py

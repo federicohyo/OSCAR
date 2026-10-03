@@ -27,8 +27,8 @@ AC-coupled, so its own high-pass is in series with the amplifier:
   3. divide                   :  lna_audio_sweep.py --divide lna_transfer_out.csv lna_transfer_ref.csv
 
 Pass 2 measures what the chip is actually being fed at each frequency, so
-pass 3 cancels the jack and the divider and leaves the LNA alone. Without
-the sub-20 Hz decade is the sound card's roll-off rather than the amp's.
+pass 3 cancels the jack and the divider and leaves the LNA alone. That also fixes
+the sub-20 Hz decade as the sound card's roll-off rather than the amp's.
 
 Prereqs: the scope server must be running (127.0.0.1:5555). The GUI and
 neuron_bridge.py may stay open -- the FTDI is left untouched. Leave
@@ -326,7 +326,7 @@ def decommensurate(f, fs=1.0 / BOARD_DT):
     """Nudge a test frequency off any simple ratio with the sample rate.
 
     At 1000 S/s a 100.000 Hz tone is sampled at exactly 10 samples per cycle
-    and the SAME 10 phases repeat forever -- the sampler never sees the rest of
+    and the SAME 10 phases repeat endlessly -- the sampler misses the rest of
     the waveform. Measured: 100.00 Hz gave 11 distinct phases and 8.1% spread
     over three trials; 97.30 Hz gave 1001 phases and 0.5%. Harmless for an
     unclipped sine (least squares is exact from 3 phases) but ruinous for the
@@ -408,7 +408,7 @@ def measure_point(scope, audio, wavdir, f0, args, label=""):
     r["gain"] = gain
     r["gain_db"] = 20 * math.log10(gain) if gain > 0 else float("nan")
     # A coherent fit averages uncorrelated noise down over N samples, so the
-    # error bar on the amplitude is resid*sqrt(2/N) -- NOT amp/resid, which
+    # error bar on the amplitude is resid*sqrt(2/N) -- rather than amp/resid, which
     # would condemn a perfectly good point just because the node is noisy.
     r["amp_se"] = r["resid_rms"] * math.sqrt(2.0 / r["n"])
     r["amp_err_pct"] = 100.0 * r["amp_se"] / r["amp"] if r["amp"] > 0 else float("nan")

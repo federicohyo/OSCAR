@@ -19,7 +19,7 @@ Run it in `screen`. Budget ~4 min per probe (16 neurons x 6 beats x 2 s) and 6-1
 probes, so 25-40 minutes.
 
 
-WHAT IT TARGETS, AND WHY IT IS NOT 8.8 Hz
+WHAT IT TARGETS, AND WHY IT AIMS ELSEWHERE THAN 8.8 Hz
 -----------------------------------------
 The reference analysis's 8.8 Hz is DIM's rate as REPORTED by the flash-resident read-out
 with host-arrival timestamps, whose 11.986 ms lattice with a two-slot floor drops
@@ -46,7 +46,7 @@ common dV multiplies every neuron's current by the same exp(dV/nUT), so the
 log-domain spacing between neurons -- the mismatch -- is preserved exactly.
 
 
-DIRECTION IS MEASURED, NOT ASSUMED
+DIRECTION IS MEASURED RATHER THAN ASSUMED
 -----------------------------------
 The repo's two records of vleakn polarity disagree, and both are load-bearing:
 scope observation on 2026-07-12 found that LOWERING vleakn de-saturated neurons
@@ -131,7 +131,7 @@ def probe(b, delta, ctx):
 
     Returns a record for the log. Every gate that could invalidate the reading is
     evaluated here and recorded, so a rejected probe is visible in the JSON rather
-    than merely absent."""
+    than merely left blank."""
     knob, base, neurons, enc, beats = (ctx["knob"], ctx["base"], ctx["neurons"],
                                        ctx["enc"], ctx["beats"])
     lo, hi = RAILS[knob]
@@ -175,8 +175,8 @@ def probe(b, delta, ctx):
         rec["rejected"] = "silent"
         rec["detail"] = (
             f"{len(silent)} neurons emitted nothing ({silent}), above the "
-            f"--allow-silent budget of {ctx['allow_silent']}. Silence here is NOT "
-            "self-explanatory: it can be an under-driven neuron or a membrane "
+            f"--allow-silent budget of {ctx['allow_silent']}. Silence here stays "
+            "unexplained: it can be an under-driven neuron or a membrane "
             "railed high, and only a scope tells them apart "
             "(scope_diag_neuron.py, silent_neuron_revive.py). Either way a mean "
             "rate computed over dead channels is not the quantity being tuned.")
@@ -362,8 +362,8 @@ def main():
                         if abs(moved) <= DEAD * r0["objective_hz"]:
                             print(f"\nABORT: {args.knob} moves the evoked rate by "
                                   f"less than {DEAD*100:.0f}% in either direction at "
-                                  f"+/-{args.step:.3f} V. This knob does not control "
-                                  "the operating point here; try --knob ifdcp or a "
+                                  f"+/-{args.step:.3f} V. This knob leaves the operating point unchanged "
+                                  "here; try --knob ifdcp or a "
                                   "larger --step before concluding anything.")
                             return _finish(args, log, None, ctx, paths, 1)
                 if usable(r1) and (moved < 0) != need_less:
@@ -418,7 +418,7 @@ def main():
                     else:
                         a = mid
                 else:
-                    # Ran out of probes mid-bisection. The closest endpoint is NOT a
+                    # Ran out of probes mid-bisection. The closest endpoint counts as an approximation rather than a
                     # converged result and is kept out of the reported set.
                     solution = min((a, c),
                                    key=lambda r: abs(r["objective_hz"] - args.target))
@@ -557,8 +557,8 @@ def _finish(args, log, solution, ctx, paths, rc):
               f"{solution['delta']:+.4f} V -> {solution['objective_hz']:.2f} Hz "
               f"against a target of {args.target:.2f} "
               f"({100*abs(solution['objective_hz']-args.target)/args.target:.1f}% off, "
-              f"tolerance {args.tol*100:.0f}%). Do NOT acquire on this point without "
-              "saying so; re-run with a larger --max-probes.")
+              f"tolerance {args.tol*100:.0f}%). Record this point clearly when acquiring; "
+              "re-run with a larger --max-probes.")
     else:
         print(f"RESULT: delta = {solution['delta']:+.4f} V on {args.knob}")
         print(f"  raw {solution['raw_hz']:.2f} Hz, latticed {solution['latticed_hz']:.2f} Hz, "

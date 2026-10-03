@@ -96,7 +96,7 @@ def fit_tau_eff(t: np.ndarray, v: np.ndarray) -> float:
         slope = np.polyfit(tt[mask] - tt[0], np.log(aa[mask]), 1)[0]
     except Exception:
         return 0.0
-    if slope >= -1e-6:                                   # ~flat or rising -> decay absent = railed/latched
+    if slope >= -1e-6:                                   # ~flat or rising -> decay flat = railed/latched
         return float("inf")
     tau = -1.0 / slope
     return float(tau) if tau < 10.0 * len(t) else float("inf")   # absurdly long = effectively railed

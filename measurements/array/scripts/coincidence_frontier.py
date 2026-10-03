@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """the coincidence-frontier figure: MEASURED on-silicon continuous-time coincidence primitive on
 neuron 14 -- a 2-panel figure of the membrane physics only. The cost argument (O(N/dt)
-digital integration vs O(1) analog) lives with the RESERVOIR frontier (fig:frontier), NOT
+digital integration vs O(1) analog) lives with the RESERVOIR frontier (fig:frontier) rather than
 here: for an isolated two-spike coincidence the right digital baseline is a
 timestamp-and-subtract (O(1), us-precise), so this figure keeps clear of any cost/dominance claim.
 

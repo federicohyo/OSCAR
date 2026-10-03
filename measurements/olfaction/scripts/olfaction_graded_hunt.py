@@ -38,7 +38,7 @@ class Scope:
     The port admits one owner, which used to mean a measurement and a live view were
     mutually exclusive -- precisely the wrong trade-off while tuning. With
     `ofxLPM/scope-pixhawk/tools/server.py` running, this connects as one of many readers
-    and the GUI can watch the same stream. With no server, it opens the device directly
+    and the GUI can watch the same stream. With the server off, it opens the device directly
     and behaves exactly as before, so nothing that used to work stops working."""
 
     def __init__(self, port=PORT, server=SERVER):
@@ -50,7 +50,7 @@ class Scope:
         time.sleep(1.5)
         if not self.s:
             raise SystemExit(
-                f"no scope stream (tried server {server[0]}:{server[1]} then {port}). "
+                f"scope stream empty (tried server {server[0]}:{server[1]} then {port}). "
                 "Is the GUI holding the port, or the server not running?")
 
     def _connect(self, server):
@@ -97,7 +97,7 @@ class Scope:
         """Store (host_arrival, volts, board_time).
 
         The BOARD time is field 0 and it matters. Host arrival is fine for windowing a
-        burst -- "which samples came after I sent it" -- but it cannot measure intervals
+        burst -- "which samples came after I sent it" -- but interval measurement is beyond it
         once samples arrive in batches: over the broadcast server a whole recv() worth of
         lines is stamped with almost the same time.time(), which collapsed a membrane
         decay to tau = 0.0 ms. The board's own clock is immune to that and is what any
@@ -146,7 +146,7 @@ def score(ds):
     """ds = [dV(1), dV(4), dV(16)] -> (objective, verdict)."""
     g = [x for x in ds if x == x]
     if len(g) < 3:
-        return -1.0, "no data"
+        return -1.0, "data empty"
     if max(g) > FIRE_MV:
         return -1.0, "fires"
     if ds[0] < NOISE_MV:

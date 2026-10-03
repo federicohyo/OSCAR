@@ -100,7 +100,7 @@ class HKSPI:
             self.ftdi_device = ftdi_device
         else:
             if len(gooddevs) == 0:
-                raise RuntimeError("No suitable FTDI devices found. Please connect a FTDI device and try again.")
+                raise RuntimeError("A suitable FTDI device is required. Please connect a FTDI device and try again.")
             elif len(gooddevs) > 1:
                 print("Multiple suitable FTDI devices found. Defaulting to the first one:", gooddevs[0])
             self.ftdi_device = gooddevs[0]
@@ -308,7 +308,7 @@ class AD5664RBitBang:
 
     def _apply_uart_enable_mode(self, uart_enable_mode: int) -> None:
         if uart_enable_mode not in (self.UART_ENABLE, self.UART_DISABLE, self.UART_DEFAULT):
-            raise ValueError(f'Invalid uart_enable_mode {uart_enable_mode}')
+            raise ValueError(f'Unknown uart_enable_mode {uart_enable_mode}')
         # Backward compatibility: legacy UART gate control mode is now a pass-through.
         self._uart_enable_mode = uart_enable_mode
 
@@ -327,7 +327,7 @@ class AD5664RBitBang:
     def _set_clk_data(self, clk: int, data: int) -> None:
         clk_mask = 1 << self.PIN_CLK
         data_mask = 1 << self.PIN_DATA
-        force_out_mask = 1 << self.PIN_FORCE_OUT ## remove when not connected anymore
+        force_out_mask = 1 << self.PIN_FORCE_OUT ## temporary until the connection is finalized
 
         if clk:
             self._b_state |= clk_mask
@@ -336,17 +336,17 @@ class AD5664RBitBang:
 
         if data:
             self._b_state |= data_mask
-            self._b_state |= force_out_mask ## remove when not connected anymore
+            self._b_state |= force_out_mask ## temporary until the connection is finalized
         else:
             self._b_state &= ~data_mask
-            self._b_state &= ~force_out_mask ## remove when not connected anymore
+            self._b_state &= ~force_out_mask ## temporary until the connection is finalized
 
         self._gpio_b.write(self._b_state)
 
     # Select the DAC by activating its CS line and deactivating all others
     def _select_dac(self, dac_id: int) -> None:
         if dac_id not in self.DAC_TO_CDBUS:
-            raise ValueError(f'Invalid DAC id {dac_id}, use 1..6')
+            raise ValueError(f'Unknown DAC id {dac_id}, use 1..6')
 
         cs_pin = self.DAC_TO_CDBUS[dac_id]
         cs_mask = 1 << cs_pin
@@ -399,11 +399,11 @@ class AD5664RBitBang:
 
     def write_dac(self, dac_id: int, command: int, address: int, data_16: int, half_period_s: float = 1e-6) -> None:
         if not (0 <= command <= 0x7):
-            raise ValueError(f'Invalid command {command:#x}, use 0x0..0x7')
+            raise ValueError(f'Unknown command {command:#x}, use 0x0..0x7')
         if not (0 <= address <= 0x7):
-            raise ValueError(f'Invalid address {address:#x}, use 0x0..0x7')
+            raise ValueError(f'Unknown address {address:#x}, use 0x0..0x7')
         if not (0 <= data_16 <= 0xFFFF):
-            raise ValueError(f'Invalid data {data_16:#x}, use 0x0000..0xFFFF')
+            raise ValueError(f'Unknown data {data_16:#x}, use 0x0000..0xFFFF')
 
         # AD5664R 24-bit frame: [2-bit don't care][3-bit command][3-bit address][16-bit data]
         frame = ((command & 0b111) << 19) | ((address & 0b111) << 16) | (data_16 & 0xFFFF)
@@ -425,9 +425,9 @@ class AD5664RBitBang:
     def drive_static(self, data: int, clk: int = 0, duration_s: float = 3.0) -> None:
         """Drive DATA/CLK to fixed levels for probing with DMM/scope."""
         if data not in (0, 1):
-            raise ValueError(f'Invalid DATA level {data}, use 0 or 1')
+            raise ValueError(f'Unknown DATA level {data}, use 0 or 1')
         if clk not in (0, 1):
-            raise ValueError(f'Invalid CLK level {clk}, use 0 or 1')
+            raise ValueError(f'Unknown CLK level {clk}, use 0 or 1')
 
         self._deselect_all()
         self._set_clk_data(clk, data)
@@ -438,7 +438,7 @@ class AD5664RBitBang:
 
     def pulse_dac_cs_low(self, dac_id: int, duration_s: float = 3.0) -> None:  ## test pulse selected DAC CS low
         if dac_id not in self.DAC_TO_CDBUS:
-            raise ValueError(f'Invalid DAC id {dac_id}, use 1..6')
+            raise ValueError(f'Unknown DAC id {dac_id}, use 1..6')
 
         cs_pin = self.DAC_TO_CDBUS[dac_id]
         cs_mask = 1 << cs_pin
@@ -494,7 +494,7 @@ def parse_cli_args(argv):
 
             if key in ('HK', 'DAC'):
                 if value not in ('0', '1'):
-                    raise ValueError(f'Invalid value for {key}: {value}. Use 0 or 1.')
+                    raise ValueError(f'Unknown value for {key}: {value}. Use 0 or 1.')
                 if key == 'HK':
                     run_hk = int(value)
                 else:

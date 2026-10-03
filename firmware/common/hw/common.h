@@ -51,7 +51,7 @@ static inline unsigned long csr_read_simple(unsigned long a)
 
 /* Number of subregs required for various total byte sizes, by subreg width:
  * NOTE: 1, 2, 4, and 8 bytes represent uint[8|16|32|64]_t C types; However,
- *       CSRs of intermediate byte sizes (24, 40, 48, and 56) are NOT padded
+ *       CSRs of intermediate byte sizes (24, 40, 48, and 56) stay unpadded
  *       (with extra unallocated subregisters) to the next valid C type!
  *  +-----+-----------------+
  *  | csr |      bytes      |

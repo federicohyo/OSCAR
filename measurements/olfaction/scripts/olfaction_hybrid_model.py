@@ -9,7 +9,7 @@ to fire at >= L spikes, and take "silent" as the left branch.
 
 THE OFF-BY-ONE, which is the whole reason this file exists separately. The tree asks
 `N <= t`; the comparator answers `N >= L`. Those agree only for L = t+1, so the thresholds
-this array can represent are t in {L-1} = {0,1,2,3,5,7,11,15,23,31}, NOT the calibrated
+this array can represent are t in {L-1} = {0,1,2,3,5,7,11,15,23,31}, rather than the calibrated
 ladder {1,2,3,4,6,8,12,16,24,32} itself. Snapping to a mismatched set costs accuracy that
 then looks exactly like analog error. Hence check(): the snapped model is executed twice,
 once with the arithmetic test and once through comparator semantics, and the two must
@@ -112,7 +112,7 @@ def quantiser(Ftr, LADDER, SW=None):
 
         Ordinal j needs N >= switch_j and N < switch_{j+1}, so any count in that interval
         is valid. Taking the midpoint spends the slack on margin. Levels 1-3 have adjacent
-        switches and get no margin -- they also measured 0.0% error, so they need nothing further
+        switches and get zero margin -- they also measured 0.0% error, so they need nothing further
         any."""
         j = ordinal(F)
         nxt = sw[1:] + [NMAX + 1]
@@ -228,7 +228,7 @@ def main():
         # STRICT: the first count that fires EVERY repetition. The p >= 0.5 rule put
         # lvl8 at N=7 and lvl12 at N=10, both counts the transfer itself flagged as
         # ambiguous, and the tree run then disagreed with them ~100% of the time -- the
-        # chip reliably does NOT fire there. A comparator's switch is the first count it
+        # chip stays reliably silent there. A comparator's switch is the first count it
         # fires reliably, rather than the first occasional fire.
         have = [L for L in list(LADDER) if str(L) in t.get("p", {})]
         # A level that fires with input at zero falls outside the comparator role: it reports "at least N"

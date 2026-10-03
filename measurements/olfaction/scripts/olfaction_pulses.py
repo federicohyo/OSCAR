@@ -7,7 +7,7 @@ to the 50 ms hotplate cycle, so the condition matters: LconstRcycle25ms and
 LconstRcycle100ms cycle the right bank, Lcycle25msRcycle25ms cycles both.
 
 We keep the heater-temperature channels too (T_heat_*), because the cycle phase is
-what the features align to and we cannot reconstruct it from resistance alone.
+what the features align to, and resistance alone underdetermines it.
 
     ./.venv-meas/bin/python3 olfaction_pulses.py
 """

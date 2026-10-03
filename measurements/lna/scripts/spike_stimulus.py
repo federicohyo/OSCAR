@@ -12,13 +12,13 @@ triphasic shape: a small positive foot, a large fast negative trough as the
 sodium current flows in, then a slower positive repolarisation hump. Modelled
 here as a sum of three Gaussians whose widths and spacing are the parameters --
 trough 0.30 ms FWHM, hump at +0.55 ms and 45% of the trough, foot 8%. That is a
-textbook shape, not a recording; --template loads a real one (CSV: t_s, v_uv)
+textbook shape rather than a recording; --template loads a real one (CSV: t_s, v_uv)
 if you have it, and everything downstream is unchanged.
 
 AMPLITUDE is peak-to-peak, trough to hump, default 400 uVpp -- inside the
 linearity verified on this chip from 400 uVpp to 7 mVpp.
 
-TIME-STRETCH, and why it is not optional here. A 1 ms spike carries its energy
+TIME-STRETCH, and why it is essential here. A 1 ms spike carries its energy
 around 1-2 kHz. The amplifier passes that happily, but the pixhawk digitiser
 runs at 1 kS/s, so a real-time spike arrives as a single sample and everything
 drawn from it would be an alias. Stretching by --stretch (default 50) puts the
@@ -28,12 +28,12 @@ any caption: this is a shape-preserving time dilation, the same kind of stated
 departure as the amplitude scaling in odor_stimulus.py.
 
     --stretch 1   gives the real-time spike. The LNA will amplify it correctly
-                  and the pixhawk CANNOT record it. Use that only with a fast
+                  and the pixhawk falls outside its capture. Use that only with a fast
                   scope on the output.
 
 LEVEL. The jack-to-chip ratio is passed in (--ratio, measured, default 0.50),
 NOT taken from the 0.25 Vpp -> 7 mVpp anchor in README_MEASUREMENTS: that
-anchor is wrong by a factor of ~15 and using it drives ~18x too hard, which is
+anchor is off by a factor of ~15 and using it drives ~18x too hard, which is
 enough to push a stimulus meant for 0.55 mVpp past this chip's ~8 mVpp
 saturation onset. spike_record.py re-measures the ratio at run time rather than
 trusting any stored number, and that is the number to believe.
@@ -109,7 +109,7 @@ def main():
     ap.add_argument("--uvpp", type=float, default=400.0,
                     help="spike amplitude at the CHIP, peak-to-peak, in uV")
     ap.add_argument("--rate", type=float, default=3.7,
-                    help="firing rate of the train in Hz. NOT 4.0: at a 250 ms "
+                    help="firing rate of the train in Hz. Rather than 4.0: at a 250 ms "
                          "interval, 60 Hz mains is exactly 15 cycles, so every "
                          "sweep starts on the same mains phase and the hum adds "
                          "coherently through the average instead of falling as "

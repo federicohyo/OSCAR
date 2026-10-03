@@ -4,7 +4,7 @@
 The JExcWn ladder produced ~360 Hz output at every weight word once the bias passed ~0.43,
 which is exactly what a neuron driven by static current looks like -- the weight word would
 then be irrelevant and the "graded" window meaningless. This measures, at each candidate bias,
-the neuron's rate with NO input spikes at all (baseline) alongside its rate under stimulation,
+the neuron's rate with zero input spikes (baseline) alongside its rate under stimulation,
 so evoked = stimulated - baseline can be separated from free-run.
 
 A bias point is only usable for weight-code characterization if baseline ~ 0.

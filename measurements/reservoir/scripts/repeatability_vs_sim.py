@@ -13,7 +13,7 @@ point -- the model sits at DIM's 1.8-15.4 Hz, and the beat the bench repeated
 carries 92 UP against 92 DOWN events, which nearly cancel and evoke nothing.
 Instead the same 60 beats are presented twice under two INDEPENDENT jitter draws:
 for a given beat the signal is identical in both, so var(A-B) = 2*var_jitter
-isolates the jitter, so model and bench need not share an operating point.
+isolates the jitter, so model and bench can work at different operating points.
 
   PYTHONPATH=. ./.venv-meas/bin/python3 repeatability_vs_sim.py
 

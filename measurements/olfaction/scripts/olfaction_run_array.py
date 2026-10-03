@@ -24,7 +24,7 @@ TIME-MULTIPLEXED PROJECTIONS (--nproj, 2026-08-13). Sixteen neurons means sixtee
 1-D projections of a 400-D feature, and olfaction_loss_budget.py prices that bottleneck
 at -0.107 per-chunk / -0.067 voted -- as much as the analog array itself costs. Unlike
 the array's own loss, which is noise and averages away under voting, this is lost
-INFORMATION that repetition cannot recover. So run each neuron over M different
+INFORMATION beyond what repetition recovers. So run each neuron over M different
 projections in sequence and treat each (neuron, projection) as its own read-out unit:
 M x 16 effective dimensions from 16 devices, at M times the presentations.
 

@@ -64,7 +64,7 @@ def main():
                     help="add to JExcWn0..3 ONLY for neurons NOT in --live-neurons (wakes the "
                          "ones dead at 10 MHz; live ones stay at their tuned _jul10 point)")
     ap.add_argument("--live-neurons", default="1,2,5,6,7,13",
-                    help="neurons already responsive at baseline (get NO boost)")
+                    help="neurons already responsive at baseline (get zero boost)")
     ap.add_argument("--T", type=float, default=0.8)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--max-samples", type=int, default=0, help="balanced subset of samples (0=all)")

@@ -10,7 +10,7 @@
 #
 # Note: neuron_bridge.py / the GUI / bench scripts also auto-engage the DLL on startup
 # (CARAVAN_CLK_MHZ default is 50), so for normal use you can just start them -- this
-# script is the explicit helper. Biases are NOT programmed here (bench scripts load
+# script is the explicit helper. Biases stay untouched here (bench scripts load
 # per-neuron biases; run_neuron_test's generic DAC path hits the VREF trap).
 set -e
 cd "$(dirname "$0")"

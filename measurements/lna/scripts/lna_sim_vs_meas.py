@@ -7,7 +7,7 @@
 The simulation is Federico's own testbench, run unmodified except for the
 `.control` block, which is replaced by an AC sweep that writes data instead of
 opening plot windows. Nothing about the circuit or its bias sources is touched,
-so this is "the design as simulated" against "the chip as measured" -- not a
+so this is "the design as simulated" against "the chip as measured" rather than a
 re-tuned simulation made to agree.
 
   testbench: aVLSI-SkyWater130-2024/netlists/low_noise_amp_fc_v3_loopgain_tb.spice
@@ -60,7 +60,7 @@ def run_spice(workdir):
     open(net, "w").write(s[:i] + ctrl + s[j:])
     r = subprocess.run(["ngspice", "-b", net], capture_output=True, text=True, timeout=900)
     if not os.path.exists(out):
-        sys.exit("ngspice produced no data:\n" + r.stdout[-2000:] + r.stderr[-2000:])
+        sys.exit("ngspice produced an empty result:\n" + r.stdout[-2000:] + r.stderr[-2000:])
     rows = []
     for ln in open(out):
         p = ln.split()

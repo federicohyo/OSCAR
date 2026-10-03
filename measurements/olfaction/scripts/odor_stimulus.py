@@ -103,7 +103,7 @@ def odor_trace(fs, dur=0.8, t_on=0.330, t_off=0.565, seed=3):
 def preemphasis(t, v, ref_csv):
     """Divide the stimulus by the source's measured frequency response.
 
-    The audio source is AC-coupled; without this the low-frequency part of the
+    The audio source is AC-coupled; this correction keeps the low-frequency part of the
     plateau arrives attenuated and the event droops more than the amplifier
     alone would make it droop."""
     rows = list(csv.DictReader(open(ref_csv)))

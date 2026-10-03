@@ -5,9 +5,9 @@ scope_20260829_103015.csv, 1 kHz, 29.3 s, biases
 data/biases/LNA_chip0_pad_wet_diluted3x.biases (lna_iref = 1.157 V).
 
 CHANNEL: ch2 = output of the PAD amplifier, input the exposed TiO2 pad. That is
-the measurement and the only trace here. ch1 (the connector-fed amplifier) is NOT
+the measurement and the only trace here. ch1 (the connector-fed amplifier) stays out of
 usable as a control on this bench -- the two channels cross-talk inside the ESP
-digitiser, so ch1 follows ch2 whatever the pad does. It is not plotted.
+digitiser, so ch1 follows ch2 whatever the pad does. It stays out of the plot.
 """
 import numpy as np
 import matplotlib
@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 CSV = "measurements/wet_pad/data/scope_20260829_103015.csv"
 OUT = "measurements/wet_pad/figures/tio2_dilute3x"
 FS = 1000.0
-GAIN = 268.0                   # measured at Viref = 1.079 V, NOT at the 1.157 V here
+GAIN = 268.0                   # measured at Viref = 1.079 V rather than the 1.157 V here
 TS = 1.0                       # type scale, set by build()
 
 INK, INK2, MUTED = "#1c1c1c", "#5a5a5a", "#b8b8b8"
@@ -134,7 +134,7 @@ def build(figw, figh, fontscale, standalone=True):
         ax.set_ylim(1.00, 1.53)
         ax.set_xlabel("time from the dip  (ms)", color=INK2, fontsize=10 * TS)
         dress(ax)
-        head(ax, name, cap("%s: %+.0f mV, no residual offset" % (sub, -dep)))
+        head(ax, name, cap("%s: %+.0f mV, zero residual offset" % (sub, -dep)))
         if k == 1 and standalone:
             ax.annotate("50 Hz mains hum on the droplet\n(the hand and the needle "
                         "make it worse)", xy=(120, 1.425), xytext=(175, 1.34),

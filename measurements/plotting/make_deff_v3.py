@@ -4,21 +4,21 @@
 WHY v3. deff_decomp_v2 plots two silicon curves against software rows that run at
 1.5-5.3 Hz. REF25 runs at 39 Hz. D_eff falls with rate in this pipeline, so putting
 those on one axis compares a 2 Hz model against a 39 Hz array and the vertical gap
-between them is not a measurement of anything. v3 adds the row that makes REF25's
+between them measures nothing. v3 adds the row that makes REF25's
 comparison like-for-like: a software LIF whose per-neuron thresholds are bisected to
 REF25's own per-neuron rates.
 
 TWO MODEL CORRECTIONS FALL OUT OF DOING THAT, and both are physics the reference
-model omitted rather than fitting knobs:
+model left out rather than fitting knobs:
 
 1. THE REFERENCE IMPULSE MODEL CANNOT REACH REF25's RATES AT ALL. With instantaneous
    input jumps a LIF emits at most one spike per input event -- the jump crosses
    threshold once and resets -- so it caps at 22.5 Hz mean against silicon's 39.0,
-   and 13 of 16 per-neuron targets are unreachable at any threshold. Silicon is not
-   bounded that way: it emits up to 2.08x its input event count (n15), measured.
+   and 13 of 16 per-neuron targets are unreachable at any threshold. Silicon exceeds
+   that bound: it emits up to 2.08x its input event count (n15), measured.
 2. THAT GAIN IS NOT FREE-RUNNING. Measured on the bench at the REF25 bias point with
    no stimulus at all: 0.00 Hz on every one of the 16 neurons. The array is silent
-   without input, so gain > 1 is the DPI synapse delivering charge over time, not
+   without input, so gain > 1 is the DPI synapse delivering charge over time rather than
    spontaneous activity.
 
 So the model needs the DPI's synaptic tail, which `simulate(tau_syn=...)` already
@@ -95,7 +95,7 @@ def main():
 
     # The row that makes REF25's comparison mean something.
     if os.path.exists(MATCH):
-        # tau_syn is NOT measurable from spikes alone -- only the membrane current
+        # tau_syn stays unmeasurable from spikes alone -- only the membrane current
         # would give it, and this bench reads spikes. So plot the ENVELOPE over
         # every tau_syn that can reach silicon's rates, and show that the gap is
         # independent of the parameter outside our measurement.

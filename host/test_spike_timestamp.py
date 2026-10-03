@@ -134,7 +134,7 @@ def test_resync_mid_stream():
     data += encode_spike(6, 200)  # but 0x80 then gets consumed as next start...
 
     # Actually, after discarding 0x8F (because buf[1]=0x80 has MSB set),
-    # we resync on 0x80 which is encode_spike(6, 200)'s first byte? No:
+    # we resync on 0x80 which is encode_spike(6, 200)'s first byte? Instead:
     # buf = [0x8F, 0x80, <4 bytes of spike(6,200)>]
     # buf[0]=0x8F (sync), buf[1]=0x80 (MSB set!) → discard buf[0]
     # buf = [0x80, <4 bytes of spike(6,200)>]

@@ -16,7 +16,7 @@ Also reported:
     at that trial measures DAC programming rather than the neuron
   * drift vs white -- lag-1 autocorrelation and a linear trend over the block.
     Slow drift (1/f, temperature) is autocorrelated; independent per-trial noise
-    is not.
+    is uncorrelated.
   * the excitability jitter IMPLIED by the measured count CV, which is what the
     simulation's jitter parameter has to match
 
@@ -73,7 +73,7 @@ def main(path="repeatability_spikes.npz"):
     if live.any():
         d0 = (t0[live] - rest[live].mean(axis=1)) / rest[live].mean(axis=1) * 100
         print(f"\ntrial 0 vs the rest: {np.mean(d0):+.1f}% on average "
-              f"(range {np.min(d0):+.0f}% to {np.max(d0):+.0f}%) -- excluded")
+              f"(range {np.min(d0):+.0f}% to {np.max(d0):+.0f}%) -- set aside")
 
     print(f"\n{'neuron':>6s} {'mean':>7s} {'sd':>6s} {'CV':>7s} {'lag-1 r':>8s} "
           f"{'trend':>8s} {'jitter needed':>14s}")
@@ -119,7 +119,7 @@ def main(path="repeatability_spikes.npz"):
             print(f"\nDAC-reload control (same file re-applied before trial "
                   f"{reload_at}):")
             print(f"  mean step {np.mean(step):+.1f}%, |max| {np.max(np.abs(step)):.1f}% "
-                  f"-- a large step here would mean DAC programming, not the neuron")
+                  f"-- a large step here would mean DAC programming rather than the neuron")
 
     # --- cross-neuron correlation (PASS B) -----------------------------------
     if interleave:

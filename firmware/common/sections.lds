@@ -61,7 +61,7 @@ SECTIONS
 	/* .ramnoinit are immune to the down-growing-stack-clobbers-.bss bug.     */
 	/* Force the flash load address to a 256-byte page boundary: the hkflash */
 	/* tool writes whole pages, and a record sharing a page with .data made   */
-	/* verify fail. Aligning the LMA puts .ramtext on its own flash page.      */
+	/* verify mismatch. Aligning the LMA puts .ramtext on its own flash page.      */
 	.ramtext : AT ( ALIGN(LOADADDR(.data) + SIZEOF(.data), 256) )
 	{
 		. = ALIGN(4);

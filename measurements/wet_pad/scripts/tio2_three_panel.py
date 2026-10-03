@@ -11,7 +11,7 @@ CHANNELS (there are two amplifiers on the die):
         This is the only trace plotted here; it is the measurement.
   ch1 = output of the second amplifier, whose input is the PCB jack driven
         from the PC. Nothing is played into it during this run, so it carries
-        only noise and says nothing about the pad. Not plotted.
+        only noise and speaks to the pad's behaviour. Left out of the plot.
 """
 import numpy as np
 import matplotlib

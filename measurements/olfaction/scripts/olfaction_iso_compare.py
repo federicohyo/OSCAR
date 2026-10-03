@@ -10,7 +10,7 @@ TWO PROTOCOL BUGS this replaces, both of which flattered the digital side:
 
   1. ONE CHUNK vs FIVE. chunks() emits one chunk per 50 ms heater cycle, so a 0.1 s
      pulse plus its 0.2 s tail gives five. The digital number (0.900 per-chunk, 1.000
-     voted) votes over all five; the first array run used a single pass without voting.
+     voted) votes over all five; the first array run used a single pass with voting off.
   2. DIFFERENT SPLITS. The digital baseline trains on 1.0 s pulses and tests on 0.1 s
      (Dennler's generalisation protocol); the array run did CV inside 0.1 s. Here BOTH
      substrates get the same folds on the same chunks. the reference-protocol version needs

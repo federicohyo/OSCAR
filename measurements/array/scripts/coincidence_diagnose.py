@@ -6,7 +6,7 @@ likely non-tuning causes before any bias hunting:
   (b) unprogrammed synapse weights / route post-reflash -> (re)program weight+route
       explicitly and report whether the neuron then responds.
 
-Gentle on the link: few reps per probe. Does NOT tune biases (guardrail) -- it only
+Gentle on the link: few reps per probe. Leaves biases untouched (guardrail) -- it only
 tests the two config hypotheses and reports per-neuron coincidence vs baseline P(fire).
 """
 import argparse, os, time

@@ -24,7 +24,7 @@ partially calibrated, and each neuron keeps its own reference common mode V_cm =
 JExcWn0. Inhibition gets the binary term only -- its branch onsets stay unmeasured --
 and PMOS polarity inverts the sign.
 
-WHY THE WEIGHT AND NOT THE LEAK (measured 2026-08-13). The rate here is EVOKED: ~16
+WHY THE WEIGHT RATHER THAN THE LEAK (measured 2026-08-13). The rate here is EVOKED: ~16
 output spikes from 29 input events per presentation. Cutting it with vleakn comes up short --
 probed at +60 mV it silenced 6/16 neurons and at +90 mV 9/16, while the rate only fell
 108 -> 45 Hz, never near the 20 Hz the simulation wants. Leak and threshold remove

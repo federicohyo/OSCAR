@@ -2,7 +2,7 @@
 #
 # Reads one GDS and writes the flattened, merged geometry of every drawn layer
 # as JSON. Each polygon is decomposed into trapezoids first: they are convex
-# quads, so the renderer can extrude them without worrying about holes.
+# quads, so the renderer can extrude them with holes pre-resolved.
 #
 #   VIZ_CELL  basename of the .gds to read and the .json to write
 #   VIZ_OUT   directory holding both (default: ./build)

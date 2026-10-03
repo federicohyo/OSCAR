@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Comparator drift: hours matter, minutes do not. Writes comparator_drift.pdf.
 
-The calibrated ladder does not hold indefinitely, and the way it fails decides how a
+The calibrated ladder shifts over time, and the way it moves decides how a
 hybrid has to be operated. Two independent measurements, on the same axes:
 
   LONG TIMESCALE -- transfer matrices, p(fire | N) over ALL N in 0..32, acquired hours
-  apart. The switching count of every upper level moves upward; levels 1-4 do not move at
+  apart. The switching count of every upper level moves upward; levels 1-4 stay put at
   all.
 
   SHORT TIMESCALE -- during a five-hour execution each level's switching count was
@@ -14,12 +14,12 @@ hybrid has to be operated. Two independent measurements, on the same axes:
 
 Together they say the ladder is stable across a working block and shifts across a
 session, which is an operational instruction rather than a curiosity: re-measure the
-transfer immediately before a run that depends on the switch values, and do not reuse one
-from earlier in the day. A run that did reuse one had two levels wrong by four and five
+transfer immediately before a run that depends on the switch values, and avoid reusing one
+from earlier in the day. A run that reused one had two levels off by four and five
 counts, and those two levels produced all of its error.
 
 Only levels whose switch is resolvable are drawn; a level that stops firing within the
-probe window has no count to plot and is marked instead.
+probe window has zero counts to plot and is marked instead.
 
     python3 make_comparator_drift.py
 """
@@ -190,7 +190,7 @@ def main():
         a2.set_xticks(x); a2.set_xticklabels([str(L) for L in LADDER])
         a2.set_xlabel("bias file (nominal level)")
         a2.set_ylabel(r"change in $N^{*}$ (counts)")
-        a2.set_title("(b) hours matter, minutes do not", fontsize=7.5, loc="left")
+        a2.set_title("(b) hours matter, minutes hold", fontsize=7.5, loc="left")
         a2.legend(fontsize=5.8, loc="upper left")
 
     for ax in (a1, a2):

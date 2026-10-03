@@ -4,7 +4,7 @@
 The main block spans 150-900 uVpp: only 6x, because the 1.78 V rail caps the top
 at this ~272x operating point. The range can only be widened from below.
 
-How far down is set by the fit's own error bar, not by taste. In the main block
+How far down is set by the fit's own error bar rather than by taste. In the main block
 `amp_se` held at 0.24-0.32 mV regardless of level, so at an output of A mVpp the
 fractional error is ~0.25/A. At 50 uVpp the output is ~14 mVpp, giving ~1.7% --
 still a real measurement. Below that it degrades quickly, so 40 uVpp is the floor.

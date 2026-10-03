@@ -188,7 +188,7 @@ def _ecg_loop(port, stop_ev, events, neuron, weight):
 
     Pacing is host-side, so inter-event timing carries whatever jitter the serial lock
     imposes (port.write can block for milliseconds). That is fine for BIAS TUNING on the
-    scope -- the morphology and the UP/DOWN mix are what matter -- but it is NOT a timing
+    scope -- the morphology and the UP/DOWN mix are what matter -- but it is outside any timing
     measurement. Use the reservoir scripts for data.
     """
     # weight on synapse 0, both polarities: UP drives exc, DOWN drives inh
@@ -406,9 +406,9 @@ TS_MASK = TS_WRAP - 1
 class LockedPort:
     """Serialize access to the FTDI serial handle.
 
-    pyftdi's port is backed by one USB handle and is NOT thread-safe. The spike
+    pyftdi's port is backed by one USB handle and needs serialised access. The spike
     reader thread sits in read() while the stdin thread issues write() for every
-    command, and the writes were being lost -- e.g. the 0xEC neuron mask never
+    command, and the writes were being lost -- e.g. the 0xEC neuron mask was dropped before it
     reached the chip, though the identical bytes worked single-threaded.
     """
 
@@ -690,7 +690,7 @@ def main():
     base_url = find_ftdi_base_url()
     if not base_url:
         print("Error: No FTDI 4232H device found!", file=sys.stderr)
-        emit("ERROR No FTDI 4232H device found")
+        emit("ERROR FTDI 4232H search came up empty")
         return 1
 
     print(f"FTDI device: {base_url}", file=sys.stderr)
@@ -804,7 +804,7 @@ def main():
                     weight = parse_weight_token(parts[2])
                     synapse_type = parts[3].lower()
                 except ValueError:
-                    emit("ERROR Invalid P command format")
+                    emit("ERROR Malformed P command format")
                     continue
 
                 if not (0 <= syn_addr <= 15 and 0 <= weight <= 15 and synapse_type in ("exc", "nexc")):
@@ -823,7 +823,7 @@ def main():
                     neu_addr = int(parts[2])
                     synapse_type = parts[3].lower()
                 except ValueError:
-                    emit("ERROR Invalid S command format")
+                    emit("ERROR Malformed S command format")
                     continue
 
                 if not (
@@ -845,14 +845,14 @@ def main():
                 try:
                     n = max(1, min(255, int(parts[1])))
                 except ValueError:
-                    emit("ERROR Invalid BURST command format")
+                    emit("ERROR Malformed BURST command format")
                     continue
                 port.write(bytes([0xDD, n]))
                 emit(f"BURSTOK {n}")
 
             elif cmd == "CALRUN" and len(parts) == 11:
                 # [0xD5, lvl, reps, ref_ticks, n0..n5]. The calibrated ladder rides the
-                # opening command because the firmware keeps NO persistent state: main()'s
+                # opening command because the firmware keeps zero persistent state: main()'s
                 # -O0 frame spans .bss, so anything stored between calls is clobbered.
                 # Once these bytes land, detection/recovery/re-verification run to
                 # completion with zero further host traffic -- which is the claim.
@@ -864,7 +864,7 @@ def main():
                                               int(parts[3]), int(parts[4]))
                     lad = [int(x) for x in parts[5:11]]
                 except ValueError:
-                    emit("ERROR Invalid CALRUN command format")
+                    emit("ERROR Malformed CALRUN command format")
                     continue
                 port.write(bytes([0xD5, mode & 0xFF, lvl & 0xFF, reps & 0xFF,
                                   ticks & 0xFF] + [v & 0xFF for v in lad]))
@@ -904,7 +904,7 @@ def main():
                 try:
                     n = max(0, min(255, int(parts[1])))
                 except ValueError:
-                    emit("ERROR Invalid PULSEFINE command format")
+                    emit("ERROR Malformed PULSEFINE command format")
                     continue
                 port.write(bytes([0xDF, n]))
                 emit(f"PULSEFINEOK {n}")
@@ -914,7 +914,7 @@ def main():
                 try:
                     count = int(parts[1]) if len(parts) == 2 else 1
                 except ValueError:
-                    emit("ERROR Invalid T command format")
+                    emit("ERROR Malformed T command format")
                     continue
 
                 if count <= 0:
@@ -932,7 +932,7 @@ def main():
                 try:
                     hz = float(parts[1])
                 except ValueError:
-                    emit("ERROR Invalid POISSON rate")
+                    emit("ERROR Malformed POISSON rate")
                     continue
                 mean_ticks = int(round(TIMER_HZ / hz)) if hz > 0 else POISSON_MEAN_TICKS_MAX
                 # Say so when the request is out of range. Silently clamping a rate is
@@ -960,7 +960,7 @@ def main():
                 try:
                     hz = float(parts[1])
                 except ValueError:
-                    emit("ERROR Invalid TRIGRUN rate")
+                    emit("ERROR Malformed TRIGRUN rate")
                     continue
                 if hz <= 0:
                     emit("ERROR TRIGRUN rate must be > 0")
@@ -992,7 +992,7 @@ def main():
                     try:
                         f = open(path, "w", buffering=1)
                     except OSError as e:
-                        emit(f"ERROR RECORD cannot open {path}: {e}")
+                        emit(f"ERROR RECORD open error {path}: {e}")
                         continue
                     f.write(f"# neuron_id\tticks\tmicroseconds\n")
                     f.write(f"# core_clock_MHz={CLK_MHZ} tick_ns={1000.0/CLK_MHZ:.1f} "
@@ -1011,7 +1011,7 @@ def main():
                         _rec_file.close(); _rec_file = None
                         emit(f"RECORDSTOPOK {n} spikes -> {os.path.abspath(path)}")
                     else:
-                        emit("RECORDSTOPOK 0 spikes (not recording)")
+                        emit("RECORDSTOPOK 0 spikes (idle)")
 
             elif cmd == "ECGRUN" and len(parts) in (2, 3, 4):
                 # Loop one canonical ECG beat (N or V) into a neuron, for bias tuning.
@@ -1027,7 +1027,7 @@ def main():
                 try:
                     events = _load_ecg(cls)
                 except OSError as e:
-                    emit(f"ERROR ECGRUN cannot read beat file: {e}")
+                    emit(f"ERROR ECGRUN beat-file read error: {e}")
                     continue
                 _ecg_stop.clear()
                 _ecg_thread = threading.Thread(target=_ecg_loop,
@@ -1053,7 +1053,7 @@ def main():
                 try:
                     mask = int(parts[1], 0) & 0xFFFF
                 except ValueError:
-                    emit("ERROR Invalid MASK value")
+                    emit("ERROR Malformed MASK value")
                     continue
                 port.write(bytes([UART_CMD_SPIKE_MASK,
                                   mask & 0x3F,
@@ -1066,7 +1066,7 @@ def main():
                 try:
                     laps = int(parts[1])
                 except ValueError:
-                    emit("ERROR Invalid SYNFIRE laps")
+                    emit("ERROR Malformed SYNFIRE laps")
                     continue
                 laps = max(0, min(63, laps))  # 6-bit, 0 = 5 default in firmware
                 port.write(bytes([UART_CMD_SYNFIRE_START, laps & 0x3F]))
@@ -1131,7 +1131,7 @@ def main():
                 proj_delta = f"reservoir_delta_proj_n{nid}.txt"
                 if not os.path.exists(_find_file(proj_delta)):
                     proj_delta = RESERVOIR_DELTA          # fallback to shared trace
-                    emit(f"STIMNEURON WARN no per-neuron proj trace, using shared delta")
+                    emit(f"STIMNEURON WARN per-neuron proj trace empty, using shared delta")
                 _reservoir_thread = threading.Thread(
                     target=_reservoir_loop,
                     args=(port, _reservoir_stop, RESERVOIR_WREC, proj_delta, [nid], 15),
@@ -1159,7 +1159,7 @@ def main():
                     neuron = int(parts[3]) & 0x0F
                     dt_us = float(parts[4])
                 except ValueError:
-                    emit("ERROR Invalid COINC args")
+                    emit("ERROR Malformed COINC args")
                     continue
                 dt_ticks = int(round(dt_us * (TIMER_HZ / 1_000_000.0)))   # us -> ticks at CLK_MHZ
                 if dt_ticks > COINC_DT_TICKS_MAX:
@@ -1185,7 +1185,7 @@ def main():
                     chan_a = int(parts[5]) if len(parts) > 5 else 0   # 0=exc, 1=inh
                     chan_b = int(parts[6]) if len(parts) > 6 else 1
                 except ValueError:
-                    emit("ERROR Invalid XORPROBE args")
+                    emit("ERROR Malformed XORPROBE args")
                     continue
                 exc_a = 1 if chan_a == 0 else 0
                 exc_b = 1 if chan_b == 0 else 0
@@ -1226,7 +1226,7 @@ def main():
                     rec_cnt  = int(parts[4]) if len(parts) > 4 else 2
                     burst    = int(parts[5]) if len(parts) > 5 else 12
                 except ValueError:
-                    emit("ERROR Invalid TXORPROBE args")
+                    emit("ERROR Malformed TXORPROBE args")
                     continue
                 reps, gap_s, late_s = 4, 0.12, 0.40
                 with _reservoir_lock:
@@ -1271,7 +1271,7 @@ def main():
                     rec_w   = int(parts[2]) if len(parts) > 2 else 6
                     in_w    = int(parts[3]) if len(parts) > 3 else 15
                 except ValueError:
-                    emit("ERROR Invalid NARMAPROBE args")
+                    emit("ERROR Malformed NARMAPROBE args")
                     continue
                 in_neurons = list(range(8)); M = 90; tstep = 0.1; kmax = 8
                 if _narma_thread is not None and _narma_thread.is_alive():
@@ -1334,7 +1334,7 @@ def main():
                     in_w    = int(parts[7]) if len(parts) > 7 else 15
                     inh_pct = int(parts[8]) if len(parts) > 8 else 20      # % of recurrent conns inhibitory
                 except ValueError:
-                    emit("ERROR Invalid NARMACOLLECT args")
+                    emit("ERROR Malformed NARMACOLLECT args")
                     continue
                 in_neurons = list(range(8))
                 if _narma_thread is not None and _narma_thread.is_alive():
@@ -1382,14 +1382,14 @@ def main():
 
             elif cmd == "NARMASETUP" and len(parts) >= 1:
                 # Wire the cross-coupled reservoir (regenerate wrec at density, load SETRECUR,
-                # program REC_SYN) WITHOUT streaming — for the collection runner, which drives the
+                # program REC_SYN) with streaming off — for the collection runner, which drives the
                 # input and reads per-timestep itself. RECURCTRL is left OFF (caller sets it).
                 try:
                     density = int(parts[1]) if len(parts) > 1 else 3
                     rec_w   = int(parts[2]) if len(parts) > 2 else 6
                     in_w    = int(parts[3]) if len(parts) > 3 else 15
                 except ValueError:
-                    emit("ERROR Invalid NARMASETUP args")
+                    emit("ERROR Malformed NARMASETUP args")
                     continue
                 _setup_reservoir(port, density, rec_w, in_w)
                 with _reservoir_lock:
@@ -1401,7 +1401,7 @@ def main():
                     density = int(parts[1]) if len(parts) > 1 else 3
                     rec_w   = int(parts[2]) if len(parts) > 2 else 6
                 except ValueError:
-                    emit("ERROR Invalid NARMASTREAM args")
+                    emit("ERROR Malformed NARMASTREAM args")
                     continue
                 if _narma_thread is not None and _narma_thread.is_alive():
                     emit("NARMA already running")

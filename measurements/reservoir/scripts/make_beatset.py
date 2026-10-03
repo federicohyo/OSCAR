@@ -15,7 +15,7 @@ Freeze it once, load it everywhere:
     ./.venv-meas/bin/python3 reservoir_run.py --beats beats_nv_30.npz ...
     ./.venv-meas/bin/python3 reservoir_run_recur_collapse.py --beats beats_nv_30.npz ...
 
-The encoding (--thr) is deliberately NOT frozen here: it is a knob of the experiment,
+The encoding (--thr) is deliberately kept unfrozen here: it is a knob of the experiment,
 not of the dataset. Keep it identical across runs you intend to compare.
 """
 import argparse

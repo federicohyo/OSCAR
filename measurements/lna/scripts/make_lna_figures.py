@@ -26,7 +26,7 @@ so it is spelled out rather than buried:
     so those points are DROPPED rather than reported as a number.
   * above 130 Hz the reference's own clipped-fit degrades as samples/cycle
     falls under ~8 (0.98 of plateau at 129 Hz -> 0.49 at 400 Hz). An audio
-    output cannot roll off at 200 Hz, so the drive is taken as FLAT there and
+    output rolls off well above 200 Hz, so the drive is taken as FLAT there and
     the reference's plateau is used instead of its measured value.
   * the 100.000 Hz anchor row of the out-sweep is dropped: at exactly 10
     samples/cycle the sampling phase freezes (11 distinct phases) and that
@@ -174,7 +174,7 @@ def noise():
     fig, ax = plt.subplots(2, 1, figsize=(9, 8))
     ax[0].loglog(f, ao * 1e6, lw=.8, color="0.5")
     ax[0].set_ylabel("output noise [$\\mu$V/$\\sqrt{Hz}$]")
-    ax[0].grid(True, which="both", alpha=.3); ax[0].set_title("LNA output noise, no drive")
+    ax[0].grid(True, which="both", alpha=.3); ax[0].set_title("LNA output noise, drive off")
     ax[1].loglog(f[~ln], ai[~ln] * 1e6, lw=.9, color="C0", label="measured (mains removed)")
     ax[1].axhline(200, ls="--", c="C3", lw=1.2,
                   label="SPICE 200 $\\mu$V/$\\sqrt{Hz}$ @1 Hz (reference)")

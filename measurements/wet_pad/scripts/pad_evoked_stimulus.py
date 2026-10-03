@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Stimulus for the pad-evoked run: 137 Hz tone bursts as the events,
-direct playback (no bench divider), one burst per period.
+direct playback (bench divider bypassed), one burst per period.
 
     ../.venv-meas/bin/python3 LNA/pad_evoked_stimulus.py
 
-WHY BURSTS AND NOT THE SALINE STEP (2026-08-31, measured on the new die):
+WHY BURSTS RATHER THAN THE SALINE STEP (2026-08-31, measured on the new die):
 this die's amplifier parks its output DC ~19 mV off the ground rail as soon as
 anything is driven (input-side rectification; idle 227 mV). A DC-step event
 (the saline_stimulus.py replay, unity 1.15 mVpp) is squashed flat against that
 floor -- folded records show the event window indistinguishable from noise. A
 CONTINUOUS tone, by contrast, reads out clearly (2 mVpp in -> 212 mVpp visible
 at the output, measured). The host thresholds the burst and injects spikes via
-UART; the burst is the event marker, its amplitude makes no analog claim.
+UART; the burst is the event marker, its amplitude is a marker only.
 
 Layout of one period: [1.0 s silence][BURST][1.5 s silence]; N repeats,
 MONO 44.1 kHz. Event window for scoring = the burst.

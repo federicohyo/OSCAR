@@ -146,7 +146,7 @@ class ChipBackend:
             except OSError: pass
             os.close(fd)
         except OSError as e:
-            self._log(f"  scope device-clear on {dev} failed: {e}")
+            self._log(f"  scope device-clear on {dev} stopped early: {e}")
         sys.path.insert(0, ".")
         from scope_usb import Scope
         sc = Scope(); sc.connect()

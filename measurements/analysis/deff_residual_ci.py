@@ -11,12 +11,12 @@ Two facts make that uncertainty large:
 
   1. D_eff is a participation ratio of a 128-dimensional covariance (16 neurons
      x K=8 kernel samples) estimated from 60 beats, so the covariance has rank at
-     most 59. The estimate is NOT converged in beat count -- subsampling shows it
+     most 59. The estimate stays unconverged in beat count -- subsampling shows it
      still climbing at ~1 unit per 3 beats at nb=60.
 
   2. The residual is a DIFFERENCE of two participation ratios scored on the same
      beats, so its uncertainty is a paired bootstrap over beats -- the same test
-     the reference analysis already uses for the accuracy tie -- and not
+     the reference analysis already uses for the accuracy tie -- and rather than
      the marginal spread of either estimate.
 
 A third term, which the first version of this script missed: the model condition

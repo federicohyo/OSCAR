@@ -8,8 +8,8 @@
         written by saline_stimulus.py);
     (b) the connector-fed amplifier's output when that event, input-referred
         and sign-flipped, is replayed through it -- folded repeats from the
-        CLEAN acquisition (a --dry dual run: the neuron never injects, so its
-        spikes cannot couple into the amplifier channel -- the same reason
+        CLEAN acquisition (a --dry dual run: neuron injection is off, so its
+        spikes stay out of the amplifier channel -- the same reason
         the reference figure(b) is a single-channel run);
     (c) the membrane of neuron 9, recorded simultaneously with the events that
         drove it (the live dual run), one representative repeat dark, the rest
@@ -25,7 +25,7 @@ Bench runs this figure consumes:
         --wav saline_stimulus.wav --timing saline_timing.json \
         --bias <your.biases> --syn <K> --out saline_chain_dual.npz
 
-The dry run has no fires, so panel (b) folds on event onsets re-detected
+The dry run records zero fires, so panel (b) folds on event onsets re-detected
 offline from the raw channel with the run's own detector (25 ms box, 1.2 s
 trailing median, 40 mV); the -12 ms smoother group delay is subtracted.
 """
@@ -45,7 +45,7 @@ plt.rcParams.update({"font.size": 8.5, "axes.edgecolor": MUT, "xtick.color": MUT
     "font.family": "serif", "savefig.bbox": "tight"})
 BLUE, RED, GRN = "#1f4fd8", "#c62828", "#137a5f"
 
-BENCH_HINT = """missing data. On the bench, in LNA/:
+BENCH_HINT = """data needed. On the bench, in LNA/:
   ../.venv-meas/bin/python3 saline_stimulus.py
   CARAVAN_CLK_MHZ=25 ../.venv-meas/bin/python3 odor_neuron_loop_dual.py \\
       --wav saline_stimulus.wav --timing saline_timing.json \\
@@ -101,7 +101,7 @@ def main():
     args = ap.parse_args()
     for p in (args.event, args.loop, args.dual, args.timing):
         if not os.path.exists(p):
-            sys.exit(f"{p}: not found\n{BENCH_HINT}")
+            sys.exit(f"{p}: required\n{BENCH_HINT}")
 
     tm = json.load(open(args.timing))
     P = tm["period_s"]
@@ -130,7 +130,7 @@ def main():
     vmb = draw[:, 3]
     _f = dual["fires"][:, 0]
     if len(_f) == 0:
-        sys.exit(f"{args.dual}: no fires -- was this run really live (not --dry)?")
+        sys.exit(f"{args.dual}: zero fires -- was this run really live (rather than --dry)?")
     _ev = [[_f[0]]]
     for _x in _f[1:]:
         (_ev[-1] if _x - _ev[-1][-1] < 0.5 else _ev.append([]) or _ev[-1]).append(_x)

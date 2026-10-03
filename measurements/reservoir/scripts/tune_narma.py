@@ -62,7 +62,7 @@ def preflight(backend, bridge):
     spikes = int(state.sum())
     print(f"   NARMACOLLECT recur: {spikes} spikes, per-neuron={state.sum(0).tolist()}", flush=True)
     if tot == 0 and spikes < 5:
-        raise SystemExit("preflight FAILED: array appears dead (no spikes). Re-bring-up "
+        raise SystemExit("preflight flagged the array as silent. Re-bring-up "
                          "(./bringup_50.sh) and load biases before tuning.")
     print(">> preflight OK\n", flush=True)
 

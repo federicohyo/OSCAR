@@ -14,7 +14,7 @@ firmware procedure; the columns are consecutive selfheal_sweep runs.
       through the per-die trims that re-spread the ladder onto the reference
       (shaded columns), to the injected episodes. The bottom four levels hold;
       the top two wander upward within minutes until the highest leaves the
-      probe range (hatched oor cells, excluded at derive).
+      probe range (hatched oor cells, set aside at derive).
 
     python3 make_comparator_drift2.py
 """

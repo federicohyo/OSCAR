@@ -22,7 +22,7 @@ Windows are long because the point of interest is small: at the lowest level
 h2 is ~1.5 mV against ~19.5 mV of node noise, so it needs ~30 s of coherent
 averaging to land within 10%.
 
-Read-only on the chip -- no FTDI, no DAC writes. Biases stay as loaded.
+Read-only on the chip -- FTDI closed, DACs untouched. Biases stay as loaded.
 
   ../.venv-meas/bin/python3 lna_distortion_vs_level.py
 """
@@ -46,7 +46,7 @@ def main():
     ap.add_argument("--freq", type=float, default=88.57,
                     help="fixed test frequency (decommensurate with 1 kS/s)")
     ap.add_argument("--levels", default="0.25,0.177,0.125,0.088,0.0625",
-                    help="jack Vpp levels, high to low; must not exceed 0.25")
+                    help="jack Vpp levels, high to low; keep at or below 0.25")
     ap.add_argument("--vin-at-025", type=float, default=0.007,
                     help="chip input Vpp when the jack is at 0.25 Vpp")
     ap.add_argument("--window", type=float, default=30.0)

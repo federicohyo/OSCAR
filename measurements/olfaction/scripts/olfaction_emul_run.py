@@ -9,13 +9,13 @@ bit-identical if run. This runs it, so the reference figure can carry the point.
 
 Firmware side is UART_CMD_LIFRUN (0xD1): header then T signed event counts, reply echoes
 the spike count, the received stimulus sum and the Timer0 cycles spent in the ticks. The
-handler blocks but times out per byte, so a lost byte no longer wedges it.
+handler blocks but times out per byte, so a lost byte leaves it running.
 
 Two things this rewrite fixes by construction rather than by patching:
   - the stimulus is derived ONCE, here, and the event array is asserted to be small before
     anything is sent. The previous runner had been edited so many times that D_ev and
-    D_cur reported identical minima, which the source never produces;
-  - the transport check compares the echoed sum against the bytes ACTUALLY SENT, not
+    D_cur reported identical minima, which lies outside the source's output;
+  - the transport check compares the echoed sum against the bytes ACTUALLY SENT, rather than
     against the array they encode, so an encoding slip is caught.
 
     CARAVAN_CLK_MHZ=25 ./.venv-meas/bin/python3 olfaction_emul_run.py --limit 20
@@ -88,7 +88,7 @@ def one(port, drv, decay, w, vth, refr, tries=8, settle=0.15):
                          if words[t >> 5] >> (t & 31) & 1]
                 return sp, ticks
         time.sleep(settle)
-    raise RuntimeError(f"transport failed: chip echoed {ds}, wire carried {sent}")
+    raise RuntimeError(f"transport stopped early: chip echoed {ds}, wire carried {sent}")
 
 
 def main():

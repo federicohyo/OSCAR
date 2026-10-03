@@ -2,7 +2,7 @@
 """Gain vs input amplitude at 88.57 Hz, clean setup.
 
 Levels are re-scaled for the new operating point: at ~290x the 1.78 V rail caps
-the input near 1 mVpp, so the reference campaign's 0.4-7 mVpp ladder no longer fits. The
+the input near 1 mVpp, so the reference campaign's 0.4-7 mVpp ladder sits above the range. The
 first point is repeated last as the repeat guard; <10% spread gates the rest of
 the campaign.
 
@@ -18,7 +18,7 @@ FREQ, SETTLE, WINDOW = 88.57, 60.0, 8.0
 VINS = [0.00015, 0.00030, 0.00050, 0.00070, 0.00090, 0.00015]   # Vpp at the chip
 
 with Session(ROOT, "gain_vs_level") as s:
-    _, q = s.point("quiet_before", FREQ, 0.0, settle=20.0, window=WINDOW, note="no drive")
+    _, q = s.point("quiet_before", FREQ, 0.0, settle=20.0, window=WINDOW, note="drive off")
     print(f"QUIET  DC {q['dc_v']} V  noise-at-{FREQ}Hz {float(q['vout_pp'])*1e3:.2f} mVpp  "
           f"resid {float(q['resid_rms_v'])*1e3:.1f} mV rms", flush=True)
     rows = []
@@ -31,7 +31,7 @@ with Session(ROOT, "gain_vs_level") as s:
               f"gain {float(row['gain']):6.1f}x ({row['gain_db']} dB)  DC {row['dc_v']}  "
               f"peak {row['peak_v']}  h2 {row['h2']}  +-{float(row['amp_se_v'])*1e3:.2f}mV  "
               f"rail {float(row['frac_at_rail'])*100:.1f}%  {row['flag']}", flush=True)
-    s.point("quiet_after", FREQ, 0.0, settle=20.0, window=WINDOW, note="no drive")
+    s.point("quiet_after", FREQ, 0.0, settle=20.0, window=WINDOW, note="drive off")
 
 ok, spread = guard(rows)
 print(f"\nrepeat guard: {rows[0]['gain']}x vs {rows[-1]['gain']}x  spread {spread:.1f}%  "

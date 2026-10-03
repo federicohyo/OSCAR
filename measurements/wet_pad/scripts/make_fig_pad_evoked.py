@@ -18,7 +18,7 @@ highlighted repetition's membrane below it, the event window in the same
 green as the left panels.
 
 Drawn at exact print size (3.45 x 2.45 in) for a single-column figure --
-do not rescale.
+keep the same scale.
 Outputs fig18_pad_evoked_chip1.pdf (+ .png preview) in the figures directory.
 """
 import numpy as np

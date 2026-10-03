@@ -2,10 +2,10 @@
 """Positive control: a task where dimensionality > 1 is PROVABLY required (XOR).
 
 The ECG N/V task is threshold-solvable (1 bit/neuron ~ 0.94), so raising reservoir
-dimensionality offers no gain there. Before concluding "dimensionality stays flat on
+dimensionality adds nothing there. Before concluding "dimensionality stays flat on
 this chip", we must show our pipeline (D_eff + kernel scorer) CAN detect the benefit when
-a task genuinely needs it. XOR is the textbook case: it needs more than one dimension, so no single
-projection suffices, so a D_eff = 1 reservoir MUST fall short and a diverse one CAN succeed.
+a task genuinely needs it. XOR is the textbook case: it needs more than one dimension, so a single
+projection falls short, so a D_eff = 1 reservoir MUST fall short and a diverse one CAN succeed.
 
 Design (hardware-mappable):
   - Each trial carries two bits (a, b), encoded as a burst of UP events in window A
@@ -56,7 +56,7 @@ def make_trials(n_per_cell, T, burst, jitter, rng):
                         e += [(float(np.clip(t, 0, T)) / T, 0) for t in ts]  # UP/exc
                 ev.append(e)
                 ab.append((a, b))
-                grp.append(rep)              # group = repetition index, NOT the cell
+                grp.append(rep)              # group = repetition index rather than the cell
     ab = np.array(ab)
     labels = {"XOR": (ab[:, 0] ^ ab[:, 1]),
               "OR":  (ab[:, 0] | ab[:, 1]),

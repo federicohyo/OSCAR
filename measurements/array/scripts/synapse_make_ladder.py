@@ -38,7 +38,7 @@ def main():
 
     nut = args.nut if args.nut is not None else d.get("nUT_volts")
     if not nut:
-        raise SystemExit(f"nUT absent from {src}; run the 'slope' stage first or pass --nut")
+        raise SystemExit(f"nUT needed from {src}; run the 'slope' stage first or pass --nut")
     delta = nut * math.log(2)
 
     br = d.get("branches") or {}

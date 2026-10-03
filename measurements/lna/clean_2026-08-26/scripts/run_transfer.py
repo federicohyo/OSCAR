@@ -9,10 +9,10 @@ number of samples per cycle on the 1 kS/s grid and freezes the sampling phase,
 which biases the fit (README_MEASUREMENTS.md, trap 2).
 
 The window grows at low frequency -- a coherent fit needs several whole cycles,
-and below ~1 Hz an 8 s window does not contain one.
+and below ~1 Hz an 8 s window holds less than one.
 
 NOTE ON THE DRIVE CORRECTION: the audio jack is AC-coupled with a ~0.93 Hz
-corner, so the raw curve below ~20 Hz is the sound card, not the amplifier.
+corner, so the raw curve below ~20 Hz is the sound card rather than the amplifier.
 Correcting it needs a reference pass with a probe on the divider output -- which
 is exactly the instrument whose earth caused this afternoon's ground loop. So
 this block measures the RAW chain and the correction reuses the previous
@@ -33,7 +33,7 @@ def window_for(f):
     return min(60.0, max(8.0, 6.0 / f))
 
 with Session(ROOT, "transfer") as s:
-    s.point("quiet_before", 88.57, 0.0, settle=20.0, window=8.0, note="no drive")
+    s.point("quiet_before", 88.57, 0.0, settle=20.0, window=8.0, note="drive off")
     rows = []
     order = FREQS + [FREQS[0]]           # repeat the first frequency as the guard
     for i, f in enumerate(order):
@@ -46,7 +46,7 @@ with Session(ROOT, "transfer") as s:
               f"gain {float(row['gain']):7.1f}x ({row['gain_db']:>7} dB)  DC {row['dc_v']}  "
               f"h2 {row['h2']}  +-{float(row['amp_se_v'])*1e3:.2f}mV  "
               f"rail {float(row['frac_at_rail'])*100:.1f}%  {row['flag']}", flush=True)
-    s.point("quiet_after", 88.57, 0.0, settle=20.0, window=8.0, note="no drive")
+    s.point("quiet_after", 88.57, 0.0, settle=20.0, window=8.0, note="drive off")
 
 ok, spread = guard(rows)
 print(f"\nrepeat guard at {FREQS[0]} Hz: {rows[0]['gain']}x vs {rows[-1]['gain']}x  "

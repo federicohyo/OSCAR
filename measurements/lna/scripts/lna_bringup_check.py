@@ -18,7 +18,7 @@ Four steps:
      their harmonics are room pickup rather than the amplifier. Total rms and
      peak-to-peak are printed too, because they are what a scope shows.
 
-     A quiet output does NOT prove the amplifier is alive -- a dead LNA is
+     A quiet output leaves the amplifier's health open -- a dead LNA is
      quiet and sits at ~1.80 V. Hence the DC check alongside.
 
   3. GAIN at three tones, small drive. Coherent least-squares sine fit on ch1
@@ -28,7 +28,7 @@ Four steps:
      nudged off any simple ratio with the 1 kS/s sampler (decommensurate());
      100.000 Hz sampled at 1000 S/s repeats the same 10 phases forever.
 
-  4. INPUT CALIBRATION, large drive, LAST. What the chip is actually fed cannot
+  4. INPUT CALIBRATION, large drive, LAST. What the chip is actually fed is too weak to
      be read at the level step 3 drives it: gain is ~220x, so a clean output
      (<800 mVpp) needs ~3 mVpp in, and ch2 carries ~4 mV rms of its own noise
      on an 0.805 mV/step unipolar ADC. So the jack->chip ratio is measured
@@ -132,7 +132,7 @@ def mains_excluded_rms(v, mains=(50.0, 60.0), nperseg=4096, band=(0.2, 500.0)):
         for h in range(1, int(FS / 2 / f_line) + 1):
             line |= np.abs(fr - h * f_line) < max(0.5, 3 * FS / nps)
     inband = (fr >= band[0]) & (fr <= band[1])
-    # Sum x df, NOT trapz over the surviving bins: dropping the mains bins from
+    # Sum x df, rather than trapz over the surviving bins: dropping the mains bins from
     # the array leaves a ~1.5 Hz hole that trapz then spans with a straight line
     # between the two flanks of the peak -- which adds most of the hum back.
     # Measured 14.90 mV with mains masked against a 13.62 mV total that included

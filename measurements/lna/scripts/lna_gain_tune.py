@@ -3,7 +3,7 @@
 maximizes the output amplitude seen on the membrane scope stream.
 
 Self-contained: bit-bangs the AD5664R DACs over the FT4232H (channels B/C)
-and reads Vout as a client of the scope broadcast server. No repo imports.
+and reads Vout as a client of the scope broadcast server. Fully self-contained.
 
 Vout path: the LNA output node is what the pixhawk scope streams as
 "<time>,<volts>" lines. Connect via ofxLPM/scope-pixhawk/tools/server.py
@@ -165,7 +165,7 @@ class ScopeClient:
                     return
             time.sleep(0.1)
         raise SystemExit(
-            f"no scope samples after 6 s (tried server {server[0]}:{server[1]} then {port}). "
+            f"scope samples empty after 6 s (tried server {server[0]}:{server[1]} then {port}). "
             "Start server.py or free the port.")
 
     def _run(self, server, port, baud):

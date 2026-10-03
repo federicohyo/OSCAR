@@ -58,8 +58,8 @@ def build_spec():
 def amplify(events, mult, dt=0.002):
     """Multiplicatively boost drive: replace each input event with `mult` tightly-spaced
     spikes (dt apart, in T-fraction units). Preserves relative event counts (feature
-    magnitude) and timing while raising the EPSP so weak features cross threshold without
-    re-tuning biases (the de-saturated neurons have headroom)."""
+    magnitude) and timing while raising the EPSP so weak features cross threshold while the
+    biases stay untouched (the de-saturated neurons have headroom)."""
     if mult <= 1:
         return list(events)
     out = []

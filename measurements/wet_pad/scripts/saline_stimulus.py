@@ -25,7 +25,7 @@ the make_fig10 recovery), and it is THAT signal that is played. The amplifier
 then re-applies one high-pass and the replayed output should reproduce the
 recorded event -- the self-check below simulates the replay and scores it.
 
-G = 268 is the gain measured at V_iref = 1.079 V, not the 1.157 V of the
+G = 268 is the gain measured at V_iref = 1.079 V rather than the 1.157 V of the
 recording (flagged in tio2_dilute3x_panel.py), so the absolute input-referred
 amplitude is provisional; the default --chip-vpp 1.50 mVpp replays the event at
 unity under that gain. At the high-gain setting the clean input ceiling is

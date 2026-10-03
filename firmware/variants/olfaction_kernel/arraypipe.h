@@ -80,7 +80,7 @@ static const int ap_projq8[AP_UNITS][AP_CHAN] = {
   {-218,54,-229,226,306,51,-97,37},
   {263,-503,-186,237,3,-230,0,-59},
 };
-/* NOT always_inline: inlining a 16-case switch of constant multiplies into a
+/* Kept out of always_inline: inlining a 16-case switch of constant multiplies into a
    doubly-nested loop blew the 1 KB dff stack and wedged the core (0xE8 returned
    zero bytes and stopped responding). noinline keeps the frame small. */
 __attribute__((noinline)) static int ap_proj_dot(const int *x, int u)

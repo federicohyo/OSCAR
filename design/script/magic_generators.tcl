@@ -21,7 +21,7 @@ proc generate_digital_rails {{width 1} {height 1}} {
 #
 # The optional second argument controls the width of the midrail
 #   default:   same as the total power rail width
-#   0:         no midrail is generated
+#   0:         midrail generation off
 #   otherwise: width specified by the argument
 #   
 proc generate_analog_rails {width {midrailwidth -1}} {

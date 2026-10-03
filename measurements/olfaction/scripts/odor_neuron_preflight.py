@@ -4,7 +4,7 @@ neuron channels are applied.
 
     ../.venv-meas/bin/python3 LNA/odor_neuron_preflight.py
 
-WRITES NO BIASES. That is deliberate: the array and the amplifier share one DAC
+LEAVES BIASES UNTOUCHED. That is deliberate: the array and the amplifier share one DAC
 bank, and the per-neuron bias files used by the general bring-up gate set
 `lna_iref`/`VB1`/`VB2`/`TUNEp`/`VREF` to values that switch the amplifier off.
 Whatever is loaded stays loaded; this only stimulates and listens.
@@ -16,8 +16,8 @@ Three checks, in order, each gating the next:
   1. UNMASKED 16-NEURON ADDRESSING SCAN. Stimulate neuron k, confirm the address
      that comes back is k. The AER encoder can latch so that every spike reads as
      one address, or so that every address comes back one low -- both survive
-     reset, reflash and rebiasing, and only a power cycle clears them. Without
-this makes a latched encoder visible: a per-neuron mask keyed to the intended address
+     reset, reflash and rebiasing, and only a power cycle clears them.
+An unmasked scan makes a latched encoder visible: a per-neuron mask keyed to the intended address
      turns a mislabelled array into an apparently dead one.
   2. NEURON 9 POSITIVE CONTROL. It must spike to a plain BURST before any loop is
      wired, otherwise a null result later is uninterpretable.

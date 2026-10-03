@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Measurement harness for the clean-setup LNA campaign (2026-08-26).
 
-Every point saves the RAW scope trace, not just the fit -- the previous campaign
+Every point saves the RAW scope trace as well as the fit -- the previous campaign
 saved fits only, and `README_MEASUREMENTS.md` lists that as an open item ("If a
 reviewer wants a waveform, it needs re-measuring").
 
-READ-ONLY on the chip: opens no FTDI and writes no DAC. The GUI and
+READ-ONLY on the chip: the FTDI stays closed and the DACs untouched. The GUI and
 neuron_bridge.py keep the device. Audio out + scope server in, nothing else.
 """
 import csv, json, math, os, sys, time

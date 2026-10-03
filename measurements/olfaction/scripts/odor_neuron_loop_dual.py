@@ -15,8 +15,8 @@ With ch2 the raster is confirmed against the scope rather than taken on faith fr
 membrane trace shows the integration and the reset next to the stimulus that
 caused it, on one time base.
 
-WHAT CLOSES THE LOOP is unchanged. There is no on-die path from the amplifier to
-the core, so the host does the detection: it reads ch1, and when the output rises
+WHAT CLOSES THE LOOP is unchanged. The amplifier reaches the core only through the
+host, so the host does the detection: it reads ch1, and when the output rises
 above a baseline-relative threshold it injects spikes into neuron 9. The decision
 between amplification and spiking is made off-die -- a host-in-the-loop
 demonstration, and it must be described as one.
@@ -30,7 +30,7 @@ membrane sawtooth aliases badly at the control rate. `raw` = (t_board, t_host,
 ch1, ch2); `trace`/`fires`/`counts` keep the same meaning as in the 1-channel
 script so the two runs stay comparable.
 
-MONITOR SELECT IS NOT PERSISTENT. The firmware selects neuron 14 at boot
+MONITOR SELECT RESETS. The firmware selects neuron 14 at boot
 (`select_monitor_neuron(14, ...)`), so ch2 watches a silent neuron until `M 9` is
 sent -- and it reverts on every CPU reset, i.e. after every reflash and after
 every DLL engage. Hence the gate below: ch2 must actually come alive when the
@@ -201,7 +201,7 @@ def main():
 
         # --- monitor path gate ------------------------------------------------
         # ch2 sees neuron 14 until `M 9` is sent (the firmware selects 14 at boot
-        # and reverts on every CPU reset). A flat ch2 does NOT prove the monitor
+        # and reverts on every CPU reset). A flat ch2 leaves the monitor's state open
         # is dead -- neuron 9 is quiescent at this operating point -- so the gate
         # kicks the neuron and requires the membrane to answer. The burst is fired
         # even under --dry: it tests the path and stays outside the experiment,
@@ -316,7 +316,7 @@ def main():
         print(f"excess at injection: {fr[:,1].min():.0f} .. {fr[:,1].max():.0f} mV")
         print(f"instantaneous rate : {fr[:,2].min():.0f} .. {fr[:,2].max():.0f} Hz")
         # NOTE ON THE EVENT WINDOW: odor_timing.json's event_on/event_off
-        # (0.330-0.565 s) describe the SPICE/reference stimulus, NOT the WAV that is
+        # (0.330-0.565 s) describe the SPICE/reference stimulus rather than the WAV that is
         # played. Measured on odor_stimulus.wav itself, the odor content of each
         # period runs 0.501-1.260 s and peaks at 1.047 s; the 137 Hz mark at
         # 0.124 s matches t_mark and is what any offline alignment should use

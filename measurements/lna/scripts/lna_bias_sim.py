@@ -10,7 +10,7 @@ Defaults come from an OP solve of the original current-source testbench:
   vb1 = 0.7927  vb2 = 0.6466  tunep = 0.7094  iref = 1.1051  vref = 0.8
 with vout DC = 0.80 (healthy). Points whose OP vout leaves
 [--op-margin .. VDD -- op-margin] are rejected before the AC run --
-out-of-headroom "gain" is not real on the chip.
+out-of-headroom "gain" exists in simulation rather than on the chip.
 
 Usage (from anywhere):
   ../.venv-meas/bin/python3 lna_bias_sim.py
@@ -142,14 +142,14 @@ def main():
     args = ap.parse_args()
 
     if not os.path.exists(PDK_LIB):
-        sys.exit(f"PDK lib not found: {PDK_LIB}")
+        sys.exit(f"PDK lib required: {PDK_LIB}")
 
     global SUBCKT
     with open(SUBCKT_FILE) as f:
         raw = f.read()
     m = re.search(r"(\.subckt low_noise_amp_fc_v3.*?\.ends[^\n]*)", raw, re.S)
     if not m:
-        sys.exit("could not extract low_noise_amp_fc_v3 subckt")
+        sys.exit("extraction of low_noise_amp_fc_v3 subckt returned nothing")
     SUBCKT = m.group(1)
 
     current = {name: cfg["design"] for name, cfg in BIASES.items()}
@@ -180,7 +180,7 @@ def main():
     print(f"start biases: { {k: round(v,3) for k,v in current.items()} }")
     vout, g = measure(dict(current))
     if g is None:
-        sys.exit(f"baseline failed (OP vout={vout}); template or PDK problem")
+        sys.exit(f"baseline OP unconverged (vout={vout}); template or PDK problem")
     best_db = g
     print(f"baseline: vout_op={vout:.3f} V, gain @ {args.fin/1e3:.0f} kHz = "
           f"{g:.2f} dB ({gain_lin(g):.0f} x)")

@@ -8,7 +8,7 @@ on the first EPSP. The Delta-t-graded EPSP summation crosses the 800 mV
 positive-feedback threshold only at the shortest interval; at 2--4 ms the
 second EPSP arrives after the first has partly leaked away and the membrane
 stays sub-threshold. The measured P(spike)-vs-Delta-t panel of the original
-figure is deliberately NOT included: this reference needs the membrane physics
+figure is deliberately left out: this reference needs the membrane physics
 only. Trace set, colours and threshold are imported from
 coincidence_frontier.py, which stays the single source of truth.
 

@@ -122,7 +122,7 @@ def check_bias_clock_pairing(pattern):
             f"CARAVAN_CLK_MHZ={clk} with the 10 MHz-tuned bias set\n  {pattern}\n"
             f"whose JInhWp[0:3] are at ~1.78 V (PMOS OFF -- inhibition off). "
             f"Synaptic efficacy is clock-dependent; this "
-            f"pairing is the documented failure mode rather than a valid operating point.\n"
+            f"pairing is the documented off-nominal mode rather than a valid operating point.\n"
             f"Use --bias-pattern '{BIAS_PATTERN_50MHZ}', or set CARAVAN_CLK_MHZ=10, "
             f"or RESERVOIR_ALLOW_BIAS_CLOCK=1 to override deliberately.")
 

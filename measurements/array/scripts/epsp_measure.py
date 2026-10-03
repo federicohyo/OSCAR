@@ -135,7 +135,7 @@ def main() -> int:
     ap.add_argument("--out-prefix", default="epsp_w", help="weight-sweep file prefix")
     ap.add_argument("--wmin", type=int, default=1)
     ap.add_argument("--wmax", type=int, default=15)
-    ap.add_argument("--no-scope", action="store_true", help="drive chip only (no capture)")
+    ap.add_argument("--no-scope", action="store_true", help="drive chip only (capture off)")
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args()
 

@@ -17,7 +17,7 @@ window is 1.25 MSa/s -- roughly 1700 samples per interspike interval.
 No pyvisa: the device is readable as /dev/usbtmc<N> by anyone in `plugdev`, and
 one open file plus SCPI strings is the whole driver.
 
-PROBE ATTENUATION IS THE INSTRUMENT'S BELIEF, NOT A MEASUREMENT. `:CHANn:PROB`
+PROBE ATTENUATION IS THE INSTRUMENT'S BELIEF RATHER THAN A MEASUREMENT. `:CHANn:PROB`
 was found at 10x on both channels; if the probe actually fitted is 1x, every
 volt reported here is ten times too large and nothing in the data will say so.
 Check it against a known level before trusting an absolute voltage.
@@ -90,7 +90,7 @@ class Agilent:
                 # Even a WRITE times out once the interface is wedged (seen right
                 # after a single-shot trigger). Clearing is the only way back.
                 self.clear()
-        raise TimeoutError(f"cannot send {cmd!r}")
+        raise TimeoutError(f"send timed out for {cmd!r}")
 
     def q(self, cmd, n=65536, tries=6, settle=0.15):
         """Write the query ONCE, then read until it answers.
@@ -98,8 +98,8 @@ class Agilent:
         Re-sending a query while its response is still pending is what puts
         "query unterminated" on the instrument's front panel and leaves it
         stopped -- the scope discards the first answer, and the two sides are
-        then permanently one response out of step. A read that times out has not
-        lost anything, so the fix for a slow answer is another read, never
+        then permanently one response out of step. A read that times out leaves the link
+        lost anything, so the fix for a slow answer is another read rather than
         another write. Only when the instrument has genuinely dropped the request
         (after a device clear) is re-issuing correct, and that is the last resort
         at the bottom.
@@ -114,7 +114,7 @@ class Agilent:
             if out:
                 return out.decode(errors="replace").strip()
             time.sleep(settle)
-        raise TimeoutError(f"no answer to {cmd!r}")
+        raise TimeoutError(f"timeout waiting for answer to {cmd!r}")
 
     def qf(self, cmd):
         return float(self.q(cmd))
@@ -129,7 +129,7 @@ class Agilent:
 
         span_s is the whole screen (10 divisions). delay_frac puts the trigger
         that far into the screen, so the burst that fires the trigger is captured
-        with some of the membrane before it, not only after.
+        with some of the membrane before it, as well as after.
         """
         self.w(":STOP")
         self.w(f":TIM:SCAL {span_s/10.0:.9f}")
@@ -165,7 +165,7 @@ class Agilent:
     def capture(self, chan=None, timeout_s=30.0):
         """Wait for the armed acquisition, then read it back as (t, volts)."""
         if not self.wait(timeout_s):
-            raise TimeoutError("scope did not trigger")
+            raise TimeoutError("scope trigger timed out")
         return self.read_waveform(chan if chan is not None else self.chan)
 
     def read_waveform(self, chan, _retry=True):
@@ -175,7 +175,7 @@ class Agilent:
         it answers about a NEW acquisition -- it overwrites the single shot you
         were trying to read, and the preamble still describes the old timebase,
         so the loss is silent. A device clear is safe (the acquisition survives
-        it); re-running is not.
+        it); re-running resets it.
         """
         try:
             return self._read_waveform(chan)

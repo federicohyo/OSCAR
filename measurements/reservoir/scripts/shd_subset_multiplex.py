@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DECIDER v2 for SHD-on-chip recurrence. Aggregating 700->16 (pool or random group) destroys
 the per-channel timing recurrence exploits. Hardware-faithful alternative: each pass routes 16
-INDIVIDUAL cochlea channels (a subset, NO summing) straight to the 16 chip inputs -- preserving
+INDIVIDUAL cochlea channels (a subset, summing off) straight to the 16 chip inputs -- preserving
 their exact spike timing -- and across M passes covers 16*M distinct channels. Concatenate the
 per-pass reservoir features into one linear readout. This should recover the full-700 recurrence
 gap far better than aggregation, at feasible M.

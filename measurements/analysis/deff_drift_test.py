@@ -2,7 +2,7 @@
 """Does hardware drift inflate D_eff? (F. Corradi's hypothesis, 2026-08-12)
 
 If the array's operating point shifts during an acquisition, that adds variance
-across beats which is not input-driven. The software model has no drift, so this
+across beats beyond input drive. The software model stays drift-free, so this
 would be a mechanism for the reference figure gap -- AND it would explain why D_eff rose
 14.1 -> 16.9 between a 36-minute recording and a 95-minute one at the same
 operating point. One hypothesis, both open questions.
@@ -55,7 +55,7 @@ def main():
     print(f"   -> time-span effect {span:+.2f} units, {100*span/(full-cont.mean()):.0f}% of the "
           f"60->160 rise, and INSIDE the +/-{rand.std():.2f} scatter of the draws")
     print(f"   -> beat-count effect {count:+.2f} units, {100*count/(full-cont.mean()):.0f}% "
-          f"-- estimator convergence, not the array")
+          f"-- estimator convergence rather than the array")
 
     a, _, _ = load(REF)
     ra, rb = rates(a), rates(sp)

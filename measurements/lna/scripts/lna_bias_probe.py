@@ -7,11 +7,11 @@ lna_iref sets the gate of the input-pair current mirror (PMOS: lower voltage =
 more current). More current raises the OTA's transconductance and therefore its
 open-loop gain, which pushes the closed-loop gain closer to the ideal C1/C2.
 
-This is a test of the explanation in the earlier analysis, not just a tuning knob:
+This is a test of the explanation in the earlier analysis, as well as a tuning knob:
 
   * if the gain climbs toward C1/C2 = 369x (51.4 dB), the measured shortfall was
     INSUFFICIENT LOOP GAIN and is recoverable by biasing -- the parasitic-C2
-    story in README_MEASUREMENTS.md would then be wrong and must be rewritten.
+    story in README_MEASUREMENTS.md would then be off and need rewriting.
   * if the gain saturates well below 369x however much current is supplied, the
     ratio itself is what limits, and the parasitic explanation stands.
 

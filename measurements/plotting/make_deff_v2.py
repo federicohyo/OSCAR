@@ -9,7 +9,7 @@ same lattice to a software neuron carries 2.4 of the 4.1 rate-matched D_eff unit
 the decomposition was trying to explain.
 
 The 2026-08-11 re-acquisition uses the fixed read-out (SRAM-resident drain, 21-bit
-on-chip Timer0 timestamps). reservoir_acq_compare.py confirms the lattice is absent
+on-chip Timer0 timestamps). reservoir_acq_compare.py confirms the lattice is gone
 from it: 0% of intervals fall on integer multiples (against 100%), per-trial phase
 concentration 0.265 (against 0.998), and the shortest ISI now varies 1.2-7.5 ms
 across neurons instead of sitting at a uniform 23.97 ms.

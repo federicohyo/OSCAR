@@ -6,13 +6,13 @@ residual: per-trial excitability jitter at 20% lands at D_eff 18.0 against
 silicon's 18.1. Taken alone that would read as "the residual is trial-to-trial
 excitability variation, mechanism found".
 
-It is not, and this script is the test that says so. A mechanism that genuinely
+The mechanism stays unidentified, and this script is the test that shows why. A mechanism that genuinely
 reproduces the array has to match the whole kernel sweep and the mean pairwise
-correlation, not one point of one curve. Three statistics, paired-bootstrapped
+correlation rather than one point of one curve. Three statistics, paired-bootstrapped
 over beats:
 
     D_eff at tau = 20 ms   the reference analysis's number, which jitter matches
-    D_eff at tau = 320 ms  the long-kernel tail, which it does not
+    D_eff at tau = 320 ms  the long-kernel tail, which it misses
     <|rho|>                mean pairwise neuron correlation
 
   PYTHONPATH=. ./.venv-meas/bin/python3 deff_identifiability.py

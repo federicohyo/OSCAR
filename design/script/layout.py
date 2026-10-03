@@ -70,7 +70,7 @@ def extract_components_from_file(file_path):
     with open(file_path, 'r') as file:
         text = file.read()
 
-    # Exclude lines after *expanding keyword           #PLEASE CHANGE THIS IF YOU WANT TO IMPORT MULTIPLE MODULES
+    # Skip lines after *expanding keyword           #PLEASE CHANGE THIS IF YOU WANT TO IMPORT MULTIPLE MODULES
     text = text.split('* expanding')[0]
 
     # Regex pattern to match the transistor, capacitor lines, and module lines
@@ -201,9 +201,9 @@ def generate_magic_script(transistors, capacitors, modules, script_file):
         y_offset = 0
         for nfet in nfets:
             if nfet.mult != 1:
-                input(f"The transitor {nfet.name} has a mult different to 1. This script does not yet support that. Press Enter to continue...")
+                input(f"The transitor {nfet.name} has a mult different to 1. This script currently requires mult=1. Press Enter to continue...")
             if nfet.nf != 1:
-                input(f"The transitor {nfet.name} has nf different to 1. This script does not yet support that. Press Enter to continue...")
+                input(f"The transitor {nfet.name} has nf different to 1. This script currently requires nf=1. Press Enter to continue...")
             # Calculate polyextend based on nfet.L
             if nfet.L < 0.33:
                 polyoverextend = (0.33 - nfet.L) / 2
@@ -299,9 +299,9 @@ def generate_magic_script(transistors, capacitors, modules, script_file):
         y_offset = 0
         for pfet in pfets:
             if pfet.mult != 1:
-                input(f"The transitor {pfet.name} has a mult different to 1. This script does not yet support that. Press Enter to continue...")
+                input(f"The transitor {pfet.name} has a mult different to 1. This script currently requires mult=1. Press Enter to continue...")
             if pfet.nf != 1:
-                input(f"The transitor {pfet.name} has nf different to 1. This script does not yet support that. Press Enter to continue...")
+                input(f"The transitor {pfet.name} has nf different to 1. This script currently requires nf=1. Press Enter to continue...")
             # Calculate polyextend based on pfet.L
             if pfet.L < 0.33:
                 polyoverextend = (0.33 - pfet.L) / 2

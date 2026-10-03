@@ -56,7 +56,7 @@ def true_drive(freq_hz, jack_vpp):
 
     So the true amplitude is fitted out of the WAV itself, at the same frequency
     the chip was driven at, and used as the x-axis. Returns nominal if the file
-    is missing (and says so once).
+    falls back to nominal (and says so once).
     """
     key = (round(freq_hz, 4), round(jack_vpp, 6))
     if key in _drive_cache: return _drive_cache[key]
@@ -126,7 +126,7 @@ def transfer():
 
     # --- drive-path correction -------------------------------------------
     # The audio jack is AC-coupled (~0.93 Hz corner), so the raw curve below
-    # ~20 Hz is the sound card in series with the amplifier. No reference pass
+    # ~20 Hz is the sound card in series with the amplifier. The reference pass is reused
     # could be taken this session (the probe that would measure it is the one
     # whose earth caused the ground loop), so the PREVIOUS campaign's reference
     # SHAPE is reused. Only its shape is used, normalised on its own plateau.
@@ -273,8 +273,8 @@ def noise(gain_f=None):
     """Output and input-referred noise from the quiet blocks.
 
     Narrowband interferers are detected GENERICALLY -- as bins standing well above
-    a running median of their own neighbourhood -- not by assuming they are mains.
-    On this bench they are not: the strongest lines sit at ~4.2, 9.7, 87.4 and
+    a running median of their own neighbourhood rather than by assuming they are mains.
+    On this bench they sit elsewhere: the strongest lines sit at ~4.2, 9.7, 87.4 and
     271.9 Hz, and mains-only flagging left every one of them in the "broadband"
     floor.
     """

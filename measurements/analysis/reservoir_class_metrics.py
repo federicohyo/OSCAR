@@ -74,7 +74,7 @@ def main():
     print(f"  {len(y)} beats, classes {dict(counts)}, kernel {args.shape} tau={args.tau}")
     print(f"  overall LORO accuracy      : {accuracy_score(y, pred):.3f}")
     print(f"  majority-class floor       : {majority:.3f}  "
-          f"(balanced by construction; per-record folds are not)")
+          f"(balanced by construction; per-record folds differ)")
     print(f"  per-record accuracy        : "
           f"{np.mean(list(per_record.values())):.3f} +/- {np.std(list(per_record.values())):.3f}")
     print("\n  class   support   sensitivity      PPV")

@@ -52,7 +52,7 @@ def series(block, words, sigma_floor=0.0):
     """Return (words, means, stds) for the words that produced an onset.
 
     The onset search is a bisection, so repeats on a stable chip can agree exactly and report
-    zero spread. That is a statement about repeatability, not about resolution: nothing finer
+    zero spread. That is a statement about repeatability rather than about resolution: nothing finer
     than the bisection tolerance was ever probed. `sigma_floor` (half the tolerance) keeps the
     error bars and the distinguishable-level count honest about that limit.
     """
@@ -186,7 +186,7 @@ def main():
 
         ORDER -- whether a larger word actually means a stronger synapse. Counting |differences|
         while walking w upward would credit non-monotonic scatter as resolution, which is
-        backwards: a code that jumps around is not usable at any resolution. So monotonicity
+        backwards: a code that jumps around defeats any resolution. So monotonicity
         is reported separately, and the effective bits below are only meaningful alongside it.
         """
         if not ms:

@@ -23,7 +23,7 @@ real result for level-crossing coding on this signal. (2) The projection bottlen
 the analog array cost about the same per chunk -- so the array's shortfall runs deeper than starvation from
 its input, it loses as much again on its own. But under voting the array's loss collapses
 to -0.034 while the projection's stays at -0.067: the array's contribution is largely
-NOISE, which averaging removes, and the projection's is lost INFORMATION, which averaging cannot restore.
+NOISE, which averaging removes, and the projection's is lost INFORMATION, which averaging leaves unrestored.
 So the ranked fix is more effective input dimensions (time-multiplex projections), then
 more votes.
 

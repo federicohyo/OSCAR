@@ -3,14 +3,14 @@
 
 D_eff depends on the number of beats the covariance is estimated from -- measured at
 +2.2 units going from 60 to 160 on one recording (deff_drift_test.py) -- so silicon
-and model must be scored on the SAME beat set, not merely at the same firing rate.
+and model must be scored on the SAME beat set rather than merely at the same firing rate.
 This script takes both from the recording it is pointed at.
 
     PYTHONPATH=. ./.venv-meas/bin/python3 deff_match_baseline.py \
         --silicon reservoir_spikes_ref25_expanded_2026-08-12.npz \
         --beats beats_nv160_16rec.npz
 
-The tail time constant is not identifiable from spike data (we record spikes, not
+The tail time constant stays unidentifiable from spike data (we record spikes rather than
 membrane current), so the comparison is quoted across every value that reaches the
 array's rates rather than at one fitted value.
 """

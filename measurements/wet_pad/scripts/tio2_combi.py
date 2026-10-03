@@ -11,10 +11,10 @@ Two output PDFs, side by side in one figure row:
                            larger fonts; injection zooms (c), (d) sit
                            high, clear of the trace.
 
-Panel letters (a)/(b) come from subcaptions, so they are NOT drawn
+Panel letters (a)/(b) come from subcaptions, so they are left undrawn
 here; only the inner zoom tags (c)/(d) are.  Both figures are drawn at
 their exact print size (4.8 and 2.3 in wide, 1.75 in tall), so fonts are
-final-size -- do not rescale beyond the panel linewidths.
+final-size -- keep the same scale as the panel linewidths.
 """
 import numpy as np
 import matplotlib

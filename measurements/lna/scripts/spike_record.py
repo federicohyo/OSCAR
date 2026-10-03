@@ -150,7 +150,7 @@ def main():
          "--repeats", str(a.repeats), "--stretch", str(a.stretch),
          "--ratio", f"{ratio:.6f}"], capture_output=True, text=True)
     if r.returncode:
-        sys.exit(f"ERROR: spike_stimulus.py did not finish:\n{r.stdout}{r.stderr}")
+        sys.exit(f"ERROR: spike_stimulus.py stopped early:\n{r.stdout}{r.stderr}")
     for line in r.stdout.strip().splitlines():
         print("      " + line)
     meta = json.load(open(os.path.join(HERE, "spike_stimulus.json")))
@@ -193,7 +193,7 @@ def main():
     t_seg = (np.arange(len(avg)) - pre) / FS
 
     # Amplitude by projecting the average onto the template rather than by its
-    # peak-to-peak. Anything left in the average that is NOT spike-shaped --
+    # peak-to-peak. Anything left in the average that is outside the spike shape --
     # residual hum above all -- lands in the residual instead of being read as
     # signal. Peak-to-peak conflates them, and on synthetic data with
     # mains coherent to the repetition rate it read the gain 54% high.
@@ -216,7 +216,7 @@ def main():
           f"{20*math.log10(gain):.2f} dB   (template projection)")
     print(f"      peak-to-peak of the average would say "
           f"{avg_pp/(a.uvpp*1e-6):.0f}x -- the gap is whatever survives the "
-          f"average without being spike-shaped")
+          f"average with a non-spike shape")
     print(f"      unmodelled residual in the average: {fit_resid*1e3:.3f} mV rms")
 
     np.savez(a.out, t_seg=t_seg, avg=avg, sweeps=seg, template_t=tt,

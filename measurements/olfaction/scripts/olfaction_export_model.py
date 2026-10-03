@@ -91,7 +91,7 @@ def main():
                 f" * {len(roots)} trees, {len(nodes)} nodes, {nv:.1f} node visits/decision.\n"
                 f" * Agrees with sklearn on {agree*100:.1f}% of chunks; voted accuracy "
                 f"{vote(kp):.3f} against sklearn's {vote(sk):.3f}.\n"
-                f" * Q8.8 is NOT sufficient: its resolution (3.9e-3) exceeds the smallest\n"
+                f" * Q8.8 falls short: its resolution (3.9e-3) exceeds the smallest\n"
                 f" * boosting leaf value (1.7e-3), so small corrections round to zero.\n */\n")
         h.write(f"#define N_TREES {len(roots)}\n#define N_NODES {len(nodes)}\n"
                 f"#define N_CLASS {NC}\n#define QSHIFT {Q}\n\n")

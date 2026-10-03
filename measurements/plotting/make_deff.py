@@ -5,7 +5,7 @@ Task 2 of the pre-release fix list. The reference figure decomposed the
 dimensionality expansion as shared-input -> per-neuron projection -> "mismatch",
 where the last step was the contrast between *simulated identical software LIF*
 and *silicon*. That contrast attributes to mismatch everything that differs
-between the two substrates, not just parameter spread.
+between the two substrates, beyond parameter spread.
 
 This version adds the tight control the claim needs: the same software LIF with
 HETEROGENEOUS parameters, run through the identical feature pipeline (same
@@ -23,7 +23,7 @@ rates). The 15% variants used elsewhere in the repo are also computed by
 constants-free re-run; see data/deff_tau_controls.json.
 
 Reuses corr_effdim/load from reservoir_demo_proj -- the SAME implementation the
-hardware row uses, not a reimplementation.
+hardware row uses rather than a reimplementation.
 
 Run from the repo root:  python3 measurements/plotting/make_deff.py
 """
@@ -56,7 +56,7 @@ TAUS = np.array([0.01, 0.02, 0.04, 0.08, 0.16, 0.32])
 TAU_TABLE = 0.02          # the tau the reference table tabulates
 
 CURVES = [
-    # recording DIM (../../../reservoir_datasets.py) -- NOT the accuracy recording
+    # recording DIM (../../../reservoir_datasets.py) -- rather than the accuracy recording
     ("Silicon array, + projection", "reservoir_spikes_nv_randproj.npz", "#c0392b", "o-", 1.9),
     ("SW LIF, heterogeneous $\\tau$+$V_{th}$+$w$, + projection",
      "sw_proj_allparam_mm0.65.npz", "#e8880c", "^-", 1.4),

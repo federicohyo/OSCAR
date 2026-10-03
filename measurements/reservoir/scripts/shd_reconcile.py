@@ -2,8 +2,8 @@
 """Reconcile the matched-ceiling result with SHD_reservoir_result.md Result 3.
 
 The doc found rate < rate+feedforward < rate+recurrent (+0.012/+0.018) with RANDOM 5-fold CV,
-N=300, FULL 700 channels. My matched run (speaker-independent, N<=16, 700->16 pooled) shows no
-recurrence gap. That changed THREE knobs at once. This isolates which knob drives the gap by
+N=300, FULL 700 channels. My matched run (speaker-independent, N<=16, 700->16 pooled) shows the recurrence benefit to be
+flat. That changed THREE knobs at once. This isolates which knob drives the gap by
 changing one at a time, always using the fair rate (+) reservoir readout (compression-controlled).
 
 Knobs: CV = {random 5-fold, speaker-independent} ; input = {full 700, pooled 16} ; N = {300, 16}.

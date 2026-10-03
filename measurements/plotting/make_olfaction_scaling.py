@@ -43,7 +43,7 @@ def mk(ax, x, y, shape, colour, measured, **kw):
     The marker EDGE carries the substrate (teal analog, purple digital) and the FILL
     carries the provenance: red means measured on silicon, unfilled means simulated or
     projected. Keeping them on different channels lets a reader answer "which substrate"
-    and "is this real" independently, which a single colour per point cannot do."""
+    and "is this real" independently, which a single colour per point leaves undone."""
     return ax.plot(x, y, shape, ms=kw.pop("ms", 5), color=colour,
                    mfc=(C_MEAS if measured else "none"), mec=colour, mew=1.3, **kw)
 
@@ -123,7 +123,7 @@ def main():
 def draw_panel_b(a2, tag="(b)", legend_ncol=1):
     """Panel (b) on any axes: energy vs accuracy per decision, measured points only.
     Also used standalone (--b-only) to render olfaction_scaling_b.pdf as the
-    single-panel variant, so it can never drift from the main figure."""
+    single-panel variant, so it stays consistent with the main figure."""
     # ---- (b) amortisation: energy vs accuracy, PER DECISION ----------------
     # per voted5 DECISION (5 chunks), so the energy axis and the accuracy axis describe
     # the same event. Quoting per-chunk energy against a voted-over-5 accuracy compares
