@@ -1,0 +1,8 @@
+** sch_path: /home/s151941/aVLSI-SkyWater130-2024/xschem/420x150_lvt_flat.sch
+.subckt 420x150_lvt_flat
+
+XM2 net1 net2 net3 net3 sky130_fd_pr__nfet_01v8_lvt L=0.15 W=0.42 nf=1 m=1
+XM1 net4 net5 net3 net3 sky130_fd_pr__nfet_01v8_lvt L=0.15 W=0.42 nf=1 m=1
+XM3 net6 net7 net3 net3 sky130_fd_pr__nfet_01v8_lvt L=0.15 W=0.42 nf=1 m=64
+.ends
+.end

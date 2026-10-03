@@ -1,0 +1,7 @@
+{
+  "cyc_per_step": {
+    "SRAM-resident (dff2)": 51.919208323753715,
+    "flash-resident (XIP)": 844.0769558854604
+  },
+  "analog_block_uJ": 104.17938000000001
+}

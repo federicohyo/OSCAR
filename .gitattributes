@@ -1,0 +1,25 @@
+# Normalize text files; do not attempt diff/merge on binary design assets.
+# NOTE: Git LFS is intentionally NOT configured (see docs/HARDWARE_TRAPS.md).
+* text=auto eol=lf
+
+# Binary / non-diffable assets
+*.gds binary
+*.oas binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.npz binary
+*.npy binary
+*.hex -text
+
+# Textual design sources (keep readable/diffable)
+*.mag text
+*.sch text
+*.sym text
+*.spice text
+*.v text
+*.c text
+*.h text
+*.py text
+*.md text

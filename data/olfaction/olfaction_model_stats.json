@@ -1,0 +1,9 @@
+{
+  "n_trees": 50,
+  "n_nodes": 746,
+  "n_classes": 5,
+  "visits_mean": 160.28666666666666,
+  "visits_sd": 21.243457554948275,
+  "distinct_features": 94,
+  "table_bytes": 8952
+}

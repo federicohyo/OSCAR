@@ -1,0 +1,15 @@
+{
+  "t_mark": 0.125,
+  "mark_hz": 137.0,
+  "mark_s": 0.05,
+  "t_odor": 0.5,
+  "wav_s": 19.489795918367346,
+  "period_s": 1.9489795918367347,
+  "repeats": 10,
+  "chip_vpp": 0.0011491750334394813,
+  "event_on": 0.85,
+  "event_off": 0.956,
+  "source_csv": "scope_20260829_103015.csv",
+  "source_event_s": 16.985,
+  "note": "replayed pad event; sign flipped so the inverting amp gives an upward excursion"
+}

@@ -1,0 +1,82 @@
+{
+  "window_s": 0.05,
+  "classes": [
+    "2H",
+    "Blank",
+    "EB",
+    "Eu",
+    "IA"
+  ],
+  "per_duration": {
+    "0.01s": {
+      "acc_per_chunk": 0.336734693877551,
+      "acc_per_trial_vote": 0.3333333333333333,
+      "mean_votes": 3.2666666666666666,
+      "n_trials": 30,
+      "n_chunks": 98,
+      "duration_s": 0.01,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 3.3293516e-05
+    },
+    "0.02s": {
+      "acc_per_chunk": 0.37373737373737376,
+      "acc_per_trial_vote": 0.4,
+      "mean_votes": 3.3,
+      "n_trials": 30,
+      "n_chunks": 99,
+      "duration_s": 0.02,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 3.3413858e-05
+    },
+    "0.05s": {
+      "acc_per_chunk": 0.7166666666666667,
+      "acc_per_trial_vote": 0.7333333333333333,
+      "mean_votes": 4.0,
+      "n_trials": 30,
+      "n_chunks": 120,
+      "duration_s": 0.05,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 3.594104e-05
+    },
+    "0.1s": {
+      "acc_per_chunk": 0.9133333333333333,
+      "acc_per_trial_vote": 1.0,
+      "mean_votes": 5.0,
+      "n_trials": 30,
+      "n_chunks": 150,
+      "duration_s": 0.1,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 6.10513e-05
+    },
+    "0.2s": {
+      "acc_per_chunk": 0.9523809523809523,
+      "acc_per_trial_vote": 1.0,
+      "mean_votes": 7.0,
+      "n_trials": 30,
+      "n_chunks": 210,
+      "duration_s": 0.2,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 0.00011127182
+    },
+    "0.5s": {
+      "acc_per_chunk": 0.9769820971867008,
+      "acc_per_trial_vote": 1.0,
+      "mean_votes": 13.033333333333333,
+      "n_trials": 30,
+      "n_chunks": 391,
+      "duration_s": 0.5,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 0.000262053722
+    },
+    "1.0s": {
+      "acc_per_chunk": 0.98503861003861,
+      "acc_per_trial_vote": 1.0,
+      "mean_votes": 23.022222222222222,
+      "n_trials": 90,
+      "n_chunks": 2072,
+      "duration_s": 1.0,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 0.000513116208
+    }
+  }
+}

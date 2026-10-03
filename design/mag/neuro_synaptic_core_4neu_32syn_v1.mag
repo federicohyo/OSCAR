@@ -1,0 +1,71 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1724964914
+<< locali >>
+rect 0 -11353 34 2459
+<< metal1 >>
+rect -38 1214 -14 1249
+rect -22 -751 2 -716
+rect -21 -6404 -2 -6367
+rect -22 -8368 -2 -8329
+<< via1 >>
+rect 125484 4030 125536 4083
+rect 125578 4032 125630 4085
+rect 125483 -3586 125535 -3533
+rect 125578 -3584 125630 -3531
+rect 125483 -11203 125535 -11150
+rect 125578 -11201 125630 -11148
+<< metal2 >>
+rect 125466 4085 125643 4108
+rect 125466 4083 125578 4085
+rect 125466 4030 125484 4083
+rect 125536 4032 125578 4083
+rect 125630 4032 125643 4085
+rect 125536 4030 125643 4032
+rect 125466 -3531 125643 4030
+rect 125466 -3533 125578 -3531
+rect 125466 -3586 125483 -3533
+rect 125535 -3584 125578 -3533
+rect 125630 -3584 125643 -3531
+rect 125535 -3586 125643 -3584
+rect 125466 -11148 125643 -3586
+rect 125466 -11150 125578 -11148
+rect 125466 -11203 125483 -11150
+rect 125535 -11201 125578 -11150
+rect 125630 -11201 125643 -11148
+rect 125535 -11203 125643 -11201
+rect 125466 -11229 125643 -11203
+rect 123919 -11668 123969 -11457
+use neuron_32syn_v1  neuron_32syn_v1_0
+timestamp 1724964146
+transform 1 0 288 0 1 96
+box -327 -96 125633 5014
+use neuron_32syn_v1_norail  neuron_32syn_v1_norail_0
+timestamp 1724964222
+transform 1 0 288 0 -1 402
+box -311 -96 125633 4474
+use neuron_32syn_v1_norail  neuron_32syn_v1_norail_1
+timestamp 1724964222
+transform 1 0 288 0 1 -7520
+box -311 -96 125633 4474
+use neuron_32syn_v1_norail  neuron_32syn_v1_norail_2
+timestamp 1724964222
+transform 1 0 288 0 -1 -7214
+box -311 -96 125633 4474
+<< labels >>
+flabel metal2 123936 -11625 123944 -11536 1 FreeSans 320 0 0 0 nRes
+port 1 n
+flabel metal1 -30 1222 -20 1233 1 FreeSans 320 0 0 0 neu_req[0]
+port 4 n
+flabel metal1 -17 -742 -14 -731 1 FreeSans 320 0 0 0 neu_req[1]
+port 5 n
+flabel metal1 -15 -6392 -13 -6385 1 FreeSans 320 0 0 0 neu_req[2]
+port 6 n
+flabel metal1 -17 -8363 -14 -8351 1 FreeSans 320 0 0 0 neu_req[3]
+port 7 n
+flabel locali 13 2404 22 2424 1 FreeSans 320 0 0 0 dVDD
+port 8 n
+flabel metal2 125562 -11209 125562 -11209 1 FreeSans 320 0 0 0 aVDD
+port 9 n
+<< end >>

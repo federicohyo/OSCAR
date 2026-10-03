@@ -1,0 +1,126 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1725023619
+<< nwell >>
+rect 4832 9204 5600 9527
+rect 4841 8683 5561 8684
+rect 2772 8519 2795 8581
+rect 4841 8117 6313 8683
+rect 4841 7274 6215 7595
+<< locali >>
+rect 6181 10218 6303 10257
+rect 6181 10123 6204 10218
+rect 6273 10123 6303 10218
+rect 6181 10031 6303 10123
+rect 2135 9471 7563 9505
+rect 2703 9309 2769 9375
+rect 4737 9139 4803 9205
+rect 5345 9145 5438 9210
+rect 4445 9074 4503 9132
+rect 5465 8961 5509 9110
+rect 2595 8927 4987 8961
+rect 5171 8927 6919 8961
+rect 4447 8756 4505 8814
+rect 4737 8683 4803 8749
+rect 5366 8679 5439 8731
+rect 5566 8679 5611 8799
+rect 6385 8729 6449 8733
+rect 6350 8686 6449 8729
+rect 6385 8679 6449 8686
+rect 5627 8598 5694 8622
+rect 2708 8515 2774 8581
+rect 5627 8550 5693 8598
+rect 5220 8500 5254 8534
+rect 2411 8383 7103 8417
+rect 2684 8197 2750 8263
+rect 4737 8051 4803 8117
+rect 4444 7984 4502 8042
+rect 2595 7839 6919 7873
+rect 4450 7669 4508 7727
+rect 4736 7595 4802 7661
+rect 2677 7423 2743 7489
+rect 2135 7295 7563 7329
+<< viali >>
+rect 6204 10123 6273 10218
+rect 6233 9160 6267 9194
+<< metal1 >>
+rect 6179 10218 6303 10254
+rect 6179 10123 6204 10218
+rect 6273 10123 6303 10218
+rect 6179 10090 6303 10123
+rect 6220 9216 6299 9218
+rect 6220 9208 6301 9216
+rect 6220 9140 6226 9208
+rect 6294 9140 6301 9208
+rect 6220 9129 6301 9140
+rect 5139 8352 5211 8448
+<< via1 >>
+rect 6204 10123 6273 10218
+rect 6226 9194 6294 9208
+rect 6226 9160 6233 9194
+rect 6233 9160 6267 9194
+rect 6267 9160 6294 9194
+rect 6226 9140 6294 9160
+<< metal2 >>
+rect 6178 10218 6302 10257
+rect 6178 10123 6204 10218
+rect 6273 10123 6302 10218
+rect 6178 10093 6302 10123
+rect 6219 9208 6300 10093
+rect 6219 9140 6226 9208
+rect 6294 9140 6300 9208
+rect 6219 9126 6300 9140
+use dpi_syn_inh_4bit_fc_v2  dpi_syn_inh_4bit_fc_v2_0
+timestamp 1724840577
+transform 1 0 -2251 0 1 7141
+box 5031 2299 8787 5032
+use sky130_fd_sc_hd__clkdlybuf4s50_1  sky130_fd_sc_hd__clkdlybuf4s50_1_0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1718225290
+transform -1 0 6367 0 -1 8944
+box -38 -48 774 592
+use sky130_fd_sc_hd__dfrbp_1  sky130_fd_sc_hd__dfrbp_1_0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1718225290
+transform -1 0 4803 0 1 8944
+box -38 -48 2154 592
+use sky130_fd_sc_hd__dfrbp_1  sky130_fd_sc_hd__dfrbp_1_1
+timestamp 1718225290
+transform -1 0 4803 0 -1 7856
+box -38 -48 2154 592
+use sky130_fd_sc_hd__dfrbp_1  sky130_fd_sc_hd__dfrbp_1_2
+timestamp 1718225290
+transform -1 0 4803 0 -1 8944
+box -38 -48 2154 592
+use sky130_fd_sc_hd__dfrbp_1  sky130_fd_sc_hd__dfrbp_1_3
+timestamp 1718225290
+transform -1 0 4803 0 1 7856
+box -38 -48 2154 592
+use sky130_fd_sc_hd__inv_1  sky130_fd_sc_hd__inv_1_5 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1718225290
+transform -1 0 5171 0 -1 7856
+box -38 -48 314 592
+use sky130_fd_sc_hd__nor2b_1  sky130_fd_sc_hd__nor2b_1_0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1718225290
+transform -1 0 5631 0 -1 8944
+box -38 -48 498 592
+use sky130_fd_sc_hd__tapvpwrvgnd_1  sky130_fd_sc_hd__tapvpwrvgnd_1_24 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1718225290
+transform 1 0 4803 0 -1 8944
+box -38 -48 130 592
+use sky130_fd_sc_hd__tapvpwrvgnd_1  sky130_fd_sc_hd__tapvpwrvgnd_1_26
+timestamp 1718225290
+transform 1 0 4803 0 1 8944
+box -38 -48 130 592
+use sky130_fd_sc_hd__tapvpwrvgnd_1  sky130_fd_sc_hd__tapvpwrvgnd_1_27
+timestamp 1718225290
+transform 1 0 4803 0 -1 7856
+box -38 -48 130 592
+use sky130_fd_sc_hd__tapvpwrvgnd_1  sky130_fd_sc_hd__tapvpwrvgnd_1_28
+timestamp 1718225290
+transform 1 0 4803 0 1 7856
+box -38 -48 130 592
+use spike_extender  spike_extender_0
+timestamp 1725021132
+transform 1 0 4895 0 1 8944
+box -38 -48 1510 592
+<< end >>

@@ -1,0 +1,13 @@
+{
+  "q": 16,
+  "agreement": 1.0,
+  "visits_mean": 160.43333333333334,
+  "n_trees": 50,
+  "n_nodes": 746,
+  "table_bytes": 11936,
+  "distinct_features": 94,
+  "sk_chunk": 0.9,
+  "k_chunk": 0.9,
+  "sk_vote": 1.0,
+  "k_vote": 1.0
+}

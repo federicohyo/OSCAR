@@ -1,0 +1,80 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1725021001
+<< locali >>
+rect -454 431 -418 442
+rect -479 385 -467 431
+rect -433 385 -418 431
+rect -454 370 -418 385
+rect -1133 263 -1103 304
+rect -10 254 42 289
+rect 144 258 312 300
+rect 1460 256 1494 290
+rect -402 205 -357 213
+<< viali >>
+rect -467 385 -433 431
+rect -1103 263 -1058 304
+rect -209 269 -175 303
+rect 42 254 77 289
+rect -402 213 -357 252
+rect 303 148 337 182
+<< metal1 >>
+rect -770 556 -720 628
+rect -458 437 -426 438
+rect -483 436 -426 437
+rect -484 431 -426 436
+rect -484 385 -467 431
+rect -433 385 -169 431
+rect -484 378 -426 385
+rect -1109 313 -1052 316
+rect -1109 304 -1049 313
+rect -1109 263 -1103 304
+rect -1058 263 -1049 304
+rect -215 303 -169 385
+rect -215 269 -209 303
+rect -175 269 -169 303
+rect -1109 247 -1049 263
+rect -1091 242 -1049 247
+rect -408 252 -351 264
+rect -215 257 -169 269
+rect 36 289 83 301
+rect -408 242 -402 252
+rect -1091 213 -402 242
+rect -357 213 -351 252
+rect 36 254 42 289
+rect 77 254 83 289
+rect 36 242 83 254
+rect -1091 200 -351 213
+rect -408 199 -351 200
+rect 42 182 77 242
+rect 291 182 349 188
+rect 42 148 303 182
+rect 337 148 349 182
+rect 42 147 349 148
+rect 291 142 349 147
+rect -770 14 -720 86
+use sky130_fd_sc_hd__clkdlybuf4s50_1  sky130_fd_sc_hd__clkdlybuf4s50_1_0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1718225290
+transform 1 0 -1158 0 1 48
+box -38 -48 774 592
+use sky130_fd_sc_hd__nor2b_1  sky130_fd_sc_hd__nor2b_1_0 $PDKPATH/libs.ref/sky130_fd_sc_hd/mag
+timestamp 1718225290
+transform 1 0 -422 0 1 48
+box -38 -48 498 592
+use spike_extender  spike_extender_0
+timestamp 1725020967
+transform 1 0 38 0 1 48
+box -38 -48 1510 592
+<< labels >>
+flabel locali 218 278 218 278 1 FreeSans 320 0 0 0 vpulseextp
+port 2 n
+flabel locali 1478 278 1478 278 1 FreeSans 320 0 0 0 spkext
+port 3 n
+flabel metal1 -752 50 -752 52 1 FreeSans 320 0 0 0 GND
+port 4 n
+flabel metal1 -750 590 -750 592 1 FreeSans 320 0 0 0 VDD
+port 5 n
+flabel locali -1112 280 -1112 280 1 FreeSans 320 0 0 0 vspk
+port 6 n
+<< end >>

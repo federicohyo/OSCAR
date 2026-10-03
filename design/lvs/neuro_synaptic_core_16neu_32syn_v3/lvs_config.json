@@ -1,0 +1,30 @@
+{
+	"STD_CELL_LIBRARY": "sky130_fd_sc_hd",
+	"INCLUDE_CONFIGS": [
+		"$LVS_ROOT/tech/$PDK/lvs_config.base.json"
+	],
+	"TOP_SOURCE": "neuro_synaptic_core_16neu_32syn_v3",
+	"TOP_LAYOUT": "$TOP_SOURCE",
+	"EXTRACT_FLATGLOB": [
+		""
+	],
+	"EXTRACT_ABSTRACT": [
+		""
+	],
+	"LVS_FLATTEN": [
+		""
+	],
+	"LVS_NOFLATTEN": [
+		""
+	],
+	"LVS_IGNORE": [
+		""
+	],
+	"LVS_SPICE_FILES": [
+		"$UPRJ_ROOT/netlists/neuro_synaptic_core_16neu_32syn_v3.spice"
+	],
+	"LVS_VERILOG_FILES": [
+		""
+	],
+	"LAYOUT_FILE": "$UPRJ_ROOT/gds/neuro_synaptic_core_16neu_32syn_v3.gds"
+}

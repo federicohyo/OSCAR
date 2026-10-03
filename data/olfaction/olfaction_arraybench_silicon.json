@@ -1,0 +1,16 @@
+{
+  "raw": "ARRAYBENCH ci=00004e20 tc=02fbe77e tp=054c8fcc te=00432d84 tk=1014032c tl=00cbc329 nev=000000d1",
+  "cyc_per_tick": 0.0023969687932640384,
+  "stages_cyc": {
+    "projection": 213099.221923955,
+    "encode": 10552.808518347698,
+    "kernel_feats": 646575.112312969,
+    "classifier": 32008.567565456724
+  },
+  "drain_cyc": 106665.0,
+  "events": 222.0,
+  "array_digital_total_cyc": 1008900.7103207285,
+  "op3_cyc": 85215,
+  "ratio": 11.839473218573355,
+  "clock_mhz": 25
+}

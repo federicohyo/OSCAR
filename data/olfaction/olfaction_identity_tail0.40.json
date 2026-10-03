@@ -1,0 +1,82 @@
+{
+  "window_s": 0.05,
+  "classes": [
+    "2H",
+    "Blank",
+    "EB",
+    "Eu",
+    "IA"
+  ],
+  "per_duration": {
+    "0.01s": {
+      "acc_per_chunk": 0.3348623853211009,
+      "acc_per_trial_vote": 0.3333333333333333,
+      "mean_votes": 7.266666666666667,
+      "n_trials": 30,
+      "n_chunks": 218,
+      "duration_s": 0.01,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 4.7734556e-05
+    },
+    "0.02s": {
+      "acc_per_chunk": 0.365296803652968,
+      "acc_per_trial_vote": 0.36666666666666664,
+      "mean_votes": 7.3,
+      "n_trials": 30,
+      "n_chunks": 219,
+      "duration_s": 0.02,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 4.7854898e-05
+    },
+    "0.05s": {
+      "acc_per_chunk": 0.6625,
+      "acc_per_trial_vote": 0.6333333333333333,
+      "mean_votes": 8.0,
+      "n_trials": 30,
+      "n_chunks": 240,
+      "duration_s": 0.05,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 5.038208e-05
+    },
+    "0.1s": {
+      "acc_per_chunk": 0.8777777777777778,
+      "acc_per_trial_vote": 0.9666666666666667,
+      "mean_votes": 9.0,
+      "n_trials": 30,
+      "n_chunks": 270,
+      "duration_s": 0.1,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 7.549234e-05
+    },
+    "0.2s": {
+      "acc_per_chunk": 0.9696969696969697,
+      "acc_per_trial_vote": 1.0,
+      "mean_votes": 11.0,
+      "n_trials": 30,
+      "n_chunks": 330,
+      "duration_s": 0.2,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 0.00012571286
+    },
+    "0.5s": {
+      "acc_per_chunk": 0.9823874755381604,
+      "acc_per_trial_vote": 1.0,
+      "mean_votes": 17.033333333333335,
+      "n_trials": 30,
+      "n_chunks": 511,
+      "duration_s": 0.5,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 0.000276494762
+    },
+    "1.0s": {
+      "acc_per_chunk": 0.9872532894736842,
+      "acc_per_trial_vote": 1.0,
+      "mean_votes": 27.022222222222222,
+      "n_trials": 90,
+      "n_chunks": 2432,
+      "duration_s": 1.0,
+      "E_array_J": 2.511026e-05,
+      "E_array_J_total": 0.000527557248
+    }
+  }
+}

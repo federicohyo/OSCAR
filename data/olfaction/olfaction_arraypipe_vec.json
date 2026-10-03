@@ -1,0 +1,7 @@
+{
+  "n_features": 128,
+  "n_class": 5,
+  "ticks": 150,
+  "events_in_vector": 85,
+  "source": "results/olf_validate/centre_r0.npz"
+}

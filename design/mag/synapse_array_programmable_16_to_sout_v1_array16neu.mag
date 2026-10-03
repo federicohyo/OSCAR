@@ -1,0 +1,21 @@
+magic
+tech sky130A
+magscale 1 2
+timestamp 1722677635
+use synapse_array_programmable_16_to_sout_v1  synapse_array_programmable_16_to_sout_v1_0
+timestamp 1721905301
+transform 1 0 -354 0 1 -5257
+box 354 5257 60817 10258
+use synapse_array_programmable_16_to_sout_v1_norail  synapse_array_programmable_16_to_sout_v1_norail_0
+timestamp 1722677496
+transform 1 0 -354 0 -1 5537
+box 354 4800 60817 9302
+use synapse_array_programmable_16_to_sout_v1_norail  synapse_array_programmable_16_to_sout_v1_norail_1
+timestamp 1722677496
+transform 1 0 -354 0 1 -12873
+box 354 4800 60817 9302
+use synapse_array_programmable_16_to_sout_v1_norail  synapse_array_programmable_16_to_sout_v1_norail_2
+timestamp 1722677496
+transform 1 0 -354 0 -1 -2079
+box 354 4800 60817 9302
+<< end >>

@@ -1,0 +1,6 @@
+dVDD power 1.8
+dGND power 0
+nrst input min@0.0 max@1.8
+A input min@0.0 max@1.8
+B input min@0.0 max@1.8
+C expectMin@0.0 expectMax@1.8

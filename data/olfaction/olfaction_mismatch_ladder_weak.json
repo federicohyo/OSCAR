@@ -1,0 +1,146 @@
+{
+  "neurons": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7,
+    9,
+    11,
+    13,
+    14,
+    15
+  ],
+  "settings": [
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "reps": 4,
+  "switch": {
+    "C": {
+      "1": 1,
+      "2": 1,
+      "4": null,
+      "5": 11,
+      "6": 1,
+      "7": 1,
+      "9": 1,
+      "11": 1,
+      "13": 1,
+      "14": null,
+      "15": 1
+    },
+    "D": {
+      "1": 1,
+      "2": 8,
+      "4": null,
+      "5": null,
+      "6": 1,
+      "7": 1,
+      "9": 1,
+      "11": 1,
+      "13": 1,
+      "14": null,
+      "15": 1
+    },
+    "E": {
+      "1": 1,
+      "2": null,
+      "4": null,
+      "5": null,
+      "6": null,
+      "7": 1,
+      "9": 1,
+      "11": 1,
+      "13": 1,
+      "14": null,
+      "15": 1
+    },
+    "F": {
+      "1": 1,
+      "2": null,
+      "4": null,
+      "5": null,
+      "6": null,
+      "7": 1,
+      "9": 1,
+      "11": 1,
+      "13": 1,
+      "14": null,
+      "15": 1
+    }
+  },
+  "state": {
+    "C": {
+      "1": "ok",
+      "2": "ok",
+      "4": "silent",
+      "5": "ok",
+      "6": "ok",
+      "7": "ok",
+      "9": "ok",
+      "11": "ok",
+      "13": "ok",
+      "14": "silent",
+      "15": "ok"
+    },
+    "D": {
+      "1": "ok",
+      "2": "ok",
+      "4": "silent",
+      "5": "silent",
+      "6": "ok",
+      "7": "ok",
+      "9": "ok",
+      "11": "ok",
+      "13": "ok",
+      "14": "silent",
+      "15": "ok"
+    },
+    "E": {
+      "1": "ok",
+      "2": "silent",
+      "4": "silent",
+      "5": "silent",
+      "6": "free-runs",
+      "7": "ok",
+      "9": "ok",
+      "11": "ok",
+      "13": "ok",
+      "14": "silent",
+      "15": "ok"
+    },
+    "F": {
+      "1": "ok",
+      "2": "silent",
+      "4": "silent",
+      "5": "silent",
+      "6": "free-runs",
+      "7": "ok",
+      "9": "ok",
+      "11": "ok",
+      "13": "ok",
+      "14": "silent",
+      "15": "ok"
+    }
+  },
+  "combined_levels": [
+    1,
+    8,
+    11
+  ],
+  "prov_clk_mhz": "25",
+  "prov_unix_time": "1786995959.562802",
+  "prov_utc": "2026-08-17T19:45:59Z",
+  "prov_firmware_sha256": "12f78a81be808058",
+  "prov_git_head": "60c74718e9b073ad64db37b6aaebbcb353ec6dad",
+  "prov_git_dirty": "True",
+  "prov_git_dirty_files": "M ofxCaravanViewer/bin/comparator_n14_lvl1.biases\n M ofxCaravanViewer/bin/comparator_n14_lvl12.biases\n M ofxCaravanViewer/bin/comparator_n14_lvl16.biases\n M ofxCaravanViewer/bin/comparator_n14_lvl32.biases\n M ofxCaravanViewer/bin/comparator_n14_lvl6.biases\n M ofxCaravanViewer/bin/comparator_n14_lvl8.biases\n M ofxLPM/scope-pixhawk/bin/data/settings.json\n M ofxLPM/scope-pixhawk/bin/scope-pixhawk\n M ofxLPM/scope-pixhawk/src/ofApp.cpp\n M paper/micro/micpro.pdf\n M paper/micro/micpro.tex\n M results/olfaction_comparator_tune_n5.json\n M resume_claude.txt\n?? LPMReadme.md\n?? ofxCaravanViewer/bin/bias_ladder_25mhz_n0.biases\n?? ofxCaravanViewer/bin/comparator_multi_A.biases\n?? ofxCaravanViewer/bin/comparator_multi_B.biases\n?? ofxCaravanViewer/bin/comparator_multi_C.biases\n?? ofxCaravanViewer/bin/comparator_multi_D.biases\n?? ofxCaravanViewer/bin/comparator_multi_E.biases\n?? ofxCaravanViewer/bin/comparator_multi_F.biases\n?? ofxCaravanViewer/bin/comparator_n14_lvl2.biases\n?? ofxCaravanViewer/bin/comparator_n14_lvl3.biases\n?? ofxCaravanViewer/bin/comparator_n5_lvl12.biases\n?? ofxCaravanViewer/bin/comparator_n5_lvl16.biases\n?? ofxCaravanViewer/bin/comparator_n5_lvl24.biases\n?? ofxCaravanViewer/bin/comparator_n5_lvl32.biases\n?? ofxCaravanViewer/bin/comparator_n5_lvl4.biases\n?? ofxCaravanViewer/bin/data/audio.s16\n?? ofxCaravanViewer/bin/data/video.mp4\n?? ofxLPM/opencode.json\n?? ofxLPM/pixhawk-scope/tools/pixhawk_record.py\n?? ofxLPM/scope-pixhawk-client/bin/scope-pixhawk-client\n?? ofxLPM/scope-pixhawk/bin/data/scope_20260813_163231.csv\n?? ofxLPM/scope-pixhawk/bin/data/scope_20260816_150257.csv\n?? ofxLPM/scope-pixhawk/bin/scope-pixhawk_debug\n?? olfaction_array_screen.py\n?? olfaction_mismatch_ladder.py\n?? olfaction_multineuron_ladder.py\n?? olfaction_spikes_array.npz\n?? results/office_biases/\n?? results/olfaction_array_screen.json\n?? results/olfaction_array_screen_BUGGY.json\n?? results/olfaction_array_screen_files.json\n?? results/olfaction_array_screen_quiet.json\n?? results/olfaction_comparator_found.json\n?? results/olfaction_comparator_ladder.json\n?? results/olfaction_comparator_levels.json\n?? results/olfaction_comparator_tune_n14.json\n?? results/olfaction_comparator_tune_office.json\n?? results/olfaction_graded_hunt.json\n?? results/olfaction_hybrid_transfer_C_office.json\n?? results/olfaction_mismatch_ladder.json\n?? results/olfaction_mismatch_ladder_weak.json\n?? results/olfaction_multineuron_ladder.json\n?? results/olfaction_n14_extender.json\n?? results/olfaction_pulseext.json\n?? results/olfaction_vleak_to_threshold.json",
+  "prov_bias_files": "ofxCaravanViewer/bin/comparator_multi_C.biases;ofxCaravanViewer/bin/comparator_multi_D.biases;ofxCaravanViewer/bin/comparator_multi_E.biases;ofxCaravanViewer/bin/comparator_multi_F.biases",
+  "prov_bias_hashes": "8c33f510b4b2bd9e;dba554130bcc7ca6;d11c1d74bd5bfae4;92d3970a4ec32b12",
+  "prov_dac_log": "",
+  "prov_task": "mismatch_ladder"
+}

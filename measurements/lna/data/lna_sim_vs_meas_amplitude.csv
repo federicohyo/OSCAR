@@ -1,0 +1,3 @@
+case,vin_pp,sim_vout_pp,sim_gain,sim_gain_db,meas_gain,meas_gain_db,gap_db
+400uVpp,0.000400,0.127212,318.03,50.05,101.20,40.10,9.95
+7mVpp,0.007000,1.242857,177.55,44.99,108.90,40.74,4.25

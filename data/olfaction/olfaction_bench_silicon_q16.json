@@ -1,0 +1,13 @@
+{
+  "raw": "OLFBENCH ci=00004e20 tc=000f98b2 K=000000c8 ts=08a716da",
+  "cal_iters": 20000,
+  "ticks_cal": 1022130,
+  "K": 200,
+  "ticks_step": 145168090,
+  "cyc_per_tick": 0.11740189604062105,
+  "measured_cyc": 85215.0450529776,
+  "counted_cyc": 4126,
+  "ratio": 20.653185907168588,
+  "E_J": 3.1699996759707666e-05,
+  "clock_mhz": 25
+}

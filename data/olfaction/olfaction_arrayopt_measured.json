@@ -1,0 +1,12 @@
+{
+  "cpt": 0.11740086230933366,
+  "naive_cyc": {
+    "projection": 6388615.168778415,
+    "kernel feats": 4907006.42476219
+  },
+  "opt_cyc": {
+    "projection": 2284004.073809922,
+    "kernel feats": 77898.28976293831
+  },
+  "status": "single valid run; ARRAYOPT wedges intermittently"
+}

@@ -1,0 +1,29 @@
+vccd* power 1.8
+vdda* power 1.8
+vssa* power 0.0
+vssd* power 0.0
+io_analog[0] expectMin@0.0 expectMax@1.8
+io_analog[1] power 1.8
+io_analog[2] power 0.0
+io_analog[3] expectMin@0.0 expectMax@1.8
+io_analog[4] expectMin@0.0 expectMax@1.8
+io_analog[5] input min@0.0 max@1.8
+io_analog[6] input min@0.0 max@1.8
+io_analog[7] input min@0.0 max@1.8
+io_analog[8] expectMin@0.0 expectMax@1.8
+io_analog[9] input min@0.0 max@1.8
+io_analog[10] input min@0.0 max@1.8
+gpio_analog[*] input min@0.0 max@1.8
+wb_clk_i input min@0.0 max@1.8
+wb_rst_i input min@0.0 max@1.8
+wbs_stb_i input min@0.0 max@1.8
+wbs_cyc_i input min@0.0 max@1.8
+wbs_we_i input min@0.0 max@1.8
+wbs_sel_i[*] input min@0.0 max@1.8
+wbs_dat_i[*] input min@0.0 max@1.8
+wbs_adr_i[*] input min@0.0 max@1.8
+la_data_in[*] input min@0.0 max@1.8
+la_oenb[*] input min@0.0 max@1.8
+io_in[*] input min@0.0 max@1.8
+io_in_3v3[*] input min@0.0 max@3.3
+user_clock2 input min@0.0 max@1.8

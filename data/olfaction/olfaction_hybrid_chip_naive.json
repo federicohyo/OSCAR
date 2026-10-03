@@ -1,0 +1,50 @@
+{
+  "neuron": 14,
+  "model": "results/olfaction_hybrid_model.json",
+  "wait": 0.25,
+  "levels_used": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    16,
+    24,
+    32
+  ],
+  "aer_before": {
+    "misaddressed": [],
+    "silent": [
+      0,
+      3,
+      8,
+      10,
+      12
+    ]
+  },
+  "ladder_before": [
+    32
+  ],
+  "ladder_after": [
+    6,
+    16,
+    24
+  ],
+  "aer_after": {
+    "misaddressed": [
+      {
+        "stimulated": 0,
+        "reported": 14,
+        "count_at_k": 0
+      }
+    ],
+    "silent": [
+      3,
+      8,
+      10,
+      12
+    ]
+  }
+}

@@ -1,0 +1,111 @@
+OSCAR — Open-Silicon Chemosensing Analog RISC-V array
+Copyright 2026 the OSCAR authors and contributors (see CITATION.cff).
+
+This product includes software and hardware design material developed by
+third parties. First-party files in this repository are licensed under the
+Apache License, Version 2.0 (see LICENSE) unless stated otherwise below or in a
+file's own header. Where a file carries no header, the root LICENSE applies.
+
+--------------------------------------------------------------------------
+Efabless Caravel / Caravan and the caravel_user_project_analog template
+--------------------------------------------------------------------------
+design/Makefile and the surrounding flow derive from the Efabless Caravel
+analog user project template, which is licensed under the Apache License,
+Version 2.0. Copyright Efabless Corporation. See:
+  https://github.com/efabless/caravel_user_project_analog
+The Caravel harness itself is not vendored; the design Makefile fetches it at
+build time (`./caravel`, `./mgmt_core_wrapper`,
+`./dependencies/{pdks,openlane_src}`).
+
+--------------------------------------------------------------------------
+SkyWater 130 nm PDK / open_pdks
+--------------------------------------------------------------------------
+The design targets the open SkyWater `sky130A` process via open_pdks
+(Apache-2.0 family). The PDK is an external, pinned build dependency and is
+NOT redistributed here. See:
+  https://github.com/google/skywater-pdk
+  https://github.com/RTimothyEdwards/open_pdks
+
+--------------------------------------------------------------------------
+VexRiscv (MIT)
+--------------------------------------------------------------------------
+The management core is VexRiscv, distributed under the MIT License.
+Copyright 2016-2026 SpinalHDL / Charles Papon.
+See: https://github.com/SpinalHDL/VexRiscv
+
+The MIT License (MIT)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+--------------------------------------------------------------------------
+riscvprog.py
+--------------------------------------------------------------------------
+host/riscvprog.py (HKSPI / AD5664RBitBang / Config) derives from the
+Caravel/Efabless `riscvprog` / housekeeping-SPI tooling lineage. Its upstream
+license could not be pinned to a single file at release time; treat it as
+Apache-2.0 consistent with the rest of the Caravel tooling, and verify the
+upstream text before any redistribution that changes this notice.
+
+--------------------------------------------------------------------------
+RISC-V GCC toolchain (GPL)
+--------------------------------------------------------------------------
+The firmware is built with the external `riscv64-unknown-elf` GCC toolchain
+(GPL). It is a build dependency only and is NOT redistributed here.
+
+--------------------------------------------------------------------------
+Authors / institution
+--------------------------------------------------------------------------
+The chip was designed by the Neuromorphic Edge Computing Systems Lab,
+Eindhoven University of Technology (TU/e), by F. Corradi, S. Ye, M. Fattori
+and R. Jordans. Author copyright and attribution should be preserved.
+
+--------------------------------------------------------------------------
+Cited papers (NOT redistributed)
+--------------------------------------------------------------------------
+The following articles are cited references only. They are (c) IEEE and are
+NOT included in this repository — no manuscript PDF, LaTeX source, or figure
+beyond the small attributed image assets under docs/figures/ is shipped.
+
+  * F. Corradi, S. Ye, M. Fattori, R. Jordans, "An Open-Silicon Neuromorphic
+    Chemosensing Front-End with Electrode-Pad Wet Transduction," IEEE ISCAS 2026.
+  * F. Corradi, S. Ye, M. Fattori, R. Jordans, "A RISC-V-Managed Analog Spiking
+    Neural Network Array for On-Sensor Olfactory Processing," IEEE ISCAS 2027.
+  * The shared IEEE TBioCAS journal companion panels reuse the same data/scripts.
+
+The README hardware figure (docs/figures/fig_hardware_layout.{pdf,png}) is
+composed from image assets of the ISCAS 2026 paper and is reproduced here with
+attribution to the authors and (c) IEEE.
+
+--------------------------------------------------------------------------
+Metal-oxide odor dataset
+--------------------------------------------------------------------------
+The olfaction experiments use a third-party metal-oxide gas-sensor dataset.
+It is cited in the papers; raw third-party features are not redistributed
+beyond the derived, paper-facing result files under data/olfaction/.
+
+--------------------------------------------------------------------------
+Large design files available on request
+--------------------------------------------------------------------------
+To keep the repository under hosting limits, three oversized design files are
+intentionally omitted (see docs/HARDWARE_TRAPS.md — "Large files"):
+  design/gds/RF_block.gds                                   (~140 MB)
+  design/mag/RF_block.mag                                   (~137 MB)
+  design/mag/neuron_synapse_array_with_input_output_logic_v2_flat.mag (~104 MB)
+They are one-off test structures / flattened layout, not needed to open or
+understand the DUT wrapper. Request them from the authors.

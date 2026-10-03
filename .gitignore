@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv*/
+venv/
+
+# Build artifacts
+*.o
+*.elf
+*.lst
+*.vvp
+*.vcd
+firmware/**/*.hex
+!firmware/neuron_handshake/binaries/*.hex
+ofxCaravanViewer/obj/
+ofxCaravanViewer/bin/ofxCaravanViewer
+
+# LaTeX / manuscript -- NOT part of this repo (Revision 3 scope)
+*.tex
+*.bib
+*.cls
+*.sty
+*.bst
+*.aux
+*.log
+*.out
+*.blg
+*.bbl
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.spl
+texput.log
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+generated_constants.tex
+/paper/
+/*.pdf
+**/ISCAS2026*.pdf
+**/ISCAS2027*.pdf
+**/TBioCAS*.pdf
+**/micpro*.pdf
+!docs/figures/*.pdf
+
+# Design backups / derived
+*.mag_bck
+*.mag~
+*~
+precheck_results/
+lvs/*/lvs_results/
+netlists/.*
+*.raw
+*.ext
+*.nodes
+*.sim
+comp.out
+*.nfs00*
+
+# Scratch / large lab trees (anchored)
+*.swp
+*.wav
+/figures/
+/LNA/_wavs/
+/LNA/wavs*/
+recordings/
+newchipexploration/
+data_olfaction/
+results/scope_selfheal_aug24.csv
+
+# Editorial / working trees in-tree
+LNA/ISCAS27/edit_plans/
+LNA/ISCAS27/style_reviews/
+LNA/ISCAS27/reviews*.md
+**/_backup_*/
+
+# Secrets / machine-specific
+.env

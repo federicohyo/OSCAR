@@ -1,0 +1,39 @@
+{
+  "lif_step_cyc": 5089.579902710188,
+  "tree_q16_cyc": 85215.0450529776,
+  "proj_cyc": 7074902.199807267,
+  "enc_cyc": 2503.583186174038,
+  "kern_cyc": 5576408.517465893,
+  "clf_cyc": 494794.7971647581,
+  "drain_cyc": 106665,
+  "common_cyc": 13148609.097624091,
+  "lif_emul_cyc": 12214991.766504452,
+  "neuron_block_analog_uJ": 104.17938000000001,
+  "neuron_block_digital_uJ": 4543.976937139656,
+  "rows": [
+    {
+      "name": "analog array + digital read-out",
+      "uJ_per_voted5": 24977.309821580813,
+      "voted5": 0.7555555555555555,
+      "voted5_sd": 0.041573970964154945
+    },
+    {
+      "name": "digital, SAME pipeline emulated",
+      "uJ_per_voted5": 47176.29760727909,
+      "voted5": 0.8666666666666668,
+      "voted5_sd": 0.036514837167011066
+    },
+    {
+      "name": "digital tree Q8.8",
+      "uJ_per_voted5": 220.12913999999998,
+      "voted5": 0.9466666666666667,
+      "voted5_sd": 0.016329931618554516
+    },
+    {
+      "name": "digital tree Q16",
+      "uJ_per_voted5": 158.49998379853832,
+      "voted5": 0.9533333333333334,
+      "voted5_sd": 0.01632993161855452
+    }
+  ]
+}

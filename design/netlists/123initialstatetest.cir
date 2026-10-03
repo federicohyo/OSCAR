@@ -1,0 +1,12 @@
+************************************** 
+* SPICE STIMULI FILE 
+* generated from 
+************************************** 
+
+VW[2] W[2] 0 PWL 0n 0 
+VW[3] W[3] 0 PWL 0n 0 30n 0 31n 1.8 50n 1.8 51n 0 
+VsetW setW 0 PWL 0n 0 40n 0 41n 1.8 50n 1.8 51n 0 
+Vexc exc 0 PWL 0n 0 30n 0 31n 1.8 
+VW[0] W[0] 0 PWL 0n 0 
+VW[1] W[1] 0 PWL 0n 0 30n 0 31n 1.8 50n 1.8 51n 0 
+

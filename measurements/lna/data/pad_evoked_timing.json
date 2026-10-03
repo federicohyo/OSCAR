@@ -1,0 +1,14 @@
+{
+  "wav_s": 34.8,
+  "period_s": 2.9,
+  "repeats": 12,
+  "chip_vpp": 0.005,
+  "burst_hz": 137.0,
+  "t_mark": 1.2,
+  "mark_hz": 137.0,
+  "mark_s": 0.4,
+  "event_on": 1.0,
+  "event_off": 1.4,
+  "drive": "direct, no divider; jack level == chip level",
+  "note": "137 Hz tone bursts ARE the events: on this die the amp DC parks at the ground floor when driven; a continuous tone still reads out, a DC step does not (measured 2026-08-31)"
+}

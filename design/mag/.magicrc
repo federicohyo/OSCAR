@@ -1,0 +1,10 @@
+setlabel -default font FreeSans
+setlabel -default size 200nm
+grid 5nm 5nm
+snap user
+
+source ../script/magic_extract_helpers.tcl
+source ../script/magic_generators.tcl
+puts stdout "Loaded aVLSI local magic RC script"
+
+gds abstract allow

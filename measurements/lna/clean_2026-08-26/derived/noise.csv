@@ -1,0 +1,9 @@
+tag,block,utc,freq_hz,jack_vpp,divider,vin_pp,settle_s,window_s,vout_pp,gain,gain_db,dc_v,peak_v,trough_v,h2,h3,resid_rms_v,amp_se_v,drift_mv_s,n_samples,frac_at_rail,frac_at_zero,raw_npz,flag
+N00_quiet,noise,18:41:43,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30135,0.0,0.0,raw/noise/N00_quiet.npz,"no drive, card idle"
+N01_quiet,noise,18:42:14,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30135,0.0,0.0,raw/noise/N01_quiet.npz,"no drive, card idle"
+N02_quiet,noise,18:42:44,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30135,0.0,0.0,raw/noise/N02_quiet.npz,"no drive, card idle"
+N03_quiet,noise,18:43:15,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30135,0.0,0.0,raw/noise/N03_quiet.npz,"no drive, card idle"
+N04_quiet,noise,18:43:46,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30135,0.0,0.0,raw/noise/N04_quiet.npz,"no drive, card idle"
+N05_quiet,noise,18:44:16,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30134,0.0,0.0,raw/noise/N05_quiet.npz,"no drive, card idle"
+N06_quiet,noise,18:44:47,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30135,0.0,0.0,raw/noise/N06_quiet.npz,"no drive, card idle"
+N07_quiet,noise,18:45:17,0.0,nan,0.028,nan,0.0,30.0,,,,,,,,,,,,30135,0.0,0.0,raw/noise/N07_quiet.npz,"no drive, card idle"

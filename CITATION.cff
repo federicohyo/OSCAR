@@ -1,0 +1,75 @@
+cff-version: 1.2.0
+message: >-
+  If you use this chip design, firmware, data, or plotting code, please cite the
+  associated papers and the design deposit below. The papers themselves are not
+  distributed in this repository; they are cited only.
+title: "OSCAR: Open-Silicon Chemosensing Analog RISC-V array"
+abstract: >-
+  Design sources, RISC-V firmware, host bridge, archived datasets and plotting
+  scripts for a SkyWater 130-nm Caravel/Caravan neuromorphic chemosensing chip:
+  a TiO2-coated electrode pad and capacitively coupled LNA feeding sixteen analog
+  leaky-integrate-and-fire neurons with 512 4-bit DPI synapses, managed end to end
+  by a VexRiscv RV32I core over a four-phase address-event interface.
+authors:
+  - family-names: Corradi
+    given-names: Federico
+    affiliation: "Neuromorphic Edge Computing Systems Lab, Eindhoven University of Technology"
+  - family-names: Ye
+    given-names: Sheng
+    affiliation: "Neuromorphic Edge Computing Systems Lab, Eindhoven University of Technology"
+  - family-names: Fattori
+    given-names: Matteo
+    affiliation: "Neuromorphic Edge Computing Systems Lab, Eindhoven University of Technology"
+  - family-names: Jordans
+    given-names: Ruud
+    affiliation: "Eindhoven University of Technology"
+license: Apache-2.0
+repository-code: "https://github.com/federicohyo/OSCAR.git"
+keywords:
+  - neuromorphic
+  - open silicon
+  - SkyWater 130 nm
+  - Caravel
+  - RISC-V
+  - spiking neural network
+  - olfaction
+referenced-software:
+  - type: software
+    title: "aVLSI-SkyWater130-2024 chip design"
+    authors:
+      - family-names: Corradi
+        given-names: Federico
+    notes: "Chip design sources released together with this repository."
+references:
+  - type: conference-paper
+    title: >-
+      An Open-Silicon Neuromorphic Chemosensing Front-End with Electrode-Pad Wet
+      Transduction
+    authors:
+      - family-names: Corradi
+        given-names: Federico
+      - family-names: Ye
+        given-names: Sheng
+      - family-names: Fattori
+        given-names: Matteo
+      - family-names: Jordans
+        given-names: Ruud
+    conference:
+      name: "IEEE International Symposium on Circuits and Systems (ISCAS) 2026"
+    year: 2026
+  - type: conference-paper
+    title: >-
+      A RISC-V-Managed Analog Spiking Neural Network Array for On-Sensor
+      Olfactory Processing
+    authors:
+      - family-names: Corradi
+        given-names: Federico
+      - family-names: Ye
+        given-names: Sheng
+      - family-names: Fattori
+        given-names: Matteo
+      - family-names: Jordans
+        given-names: Ruud
+    conference:
+      name: "IEEE International Symposium on Circuits and Systems (ISCAS) 2027"
+    year: 2027

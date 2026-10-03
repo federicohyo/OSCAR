@@ -1,0 +1,18 @@
+************************************** 
+* SPICE STIMULI FILE 
+* generated from 
+************************************** 
+
+VW[2] W[2] 0 PWL 0n 0 
+VW[3] W[3] 0 PWL 0n 0 230n 0 231n 1.8 300n 1.8 301n 0 
+VnRes nRes 0 PWL 0n 1.8 30n 1.8 31n 0 230n 0 231n 1.8 
+Vsyn_addr[0] syn_addr[0] 0 PWL 0n 0 
+Vsyn_addr[1] syn_addr[1] 0 PWL 0n 0 
+Vsyn_addr[2] syn_addr[2] 0 PWL 0n 0 
+Vsyn_addr[3] syn_addr[3] 0 PWL 0n 0 
+VsetW setW 0 PWL 0n 0 280n 0 281n 1.8 300n 1.8 301n 0 
+Vexc exc 0 PWL 0n 0 230n 0 231n 1.8 
+VresetW resetW 0 PWL 0n 0 
+VW[0] W[0] 0 PWL 0n 0 
+VW[1] W[1] 0 PWL 0n 0 230n 0 231n 1.8 300n 1.8 301n 0 
+

@@ -1,0 +1,27 @@
+QUIET: DC 1.6216 V   hum 141.5 mV rms   ptp 600 mVpp   (this morning 22.6 mV; during the loose-cable runs 51-65 mV)
+       at-rail 12.8%   at-0V 0.0%
+
+LEVEL SWEEP (original divider, 2.8%)
+  vin 1.75 mVpp -> out   273.4 mVpp  gain  156.2x  DC 1.6176  h2 0.079  hum 95mV  rail 8.5%
+  vin 7.00 mVpp -> out  1053.4 mVpp  gain  150.5x  DC 1.3905  h2 0.194  hum 111mV  rail 31.2%
+  vin 1.75 mVpp -> out   385.5 mVpp  gain  220.3x  DC 1.2989  h2 0.011  hum 364mV  rail 15.9%
+  guard: 156.2x vs 220.3x  spread 34.0%
+
+STABILITY HOLD @ 7.00 mVpp -- 12 reads, no drive change (loose-cable test)
+  # 1  out   874.5 mVpp  gain 124.9x  DC 1.4314  h2 0.170  hum  197mV  rail 28.6%
+  # 2  out   885.1 mVpp  gain 126.4x  DC 1.4206  h2 0.167  hum  201mV  rail 26.9%
+  # 3  out   894.9 mVpp  gain 127.8x  DC 1.4136  h2 0.160  hum  212mV  rail 26.9%
+  # 4  out   896.4 mVpp  gain 128.1x  DC 1.4052  h2 0.148  hum  210mV  rail 26.1%
+  # 5  out   885.7 mVpp  gain 126.5x  DC 1.4087  h2 0.149  hum  202mV  rail 25.7%
+  # 6  out  1199.1 mVpp  gain 171.3x  DC 1.0586  h2 0.023  hum  340mV  rail 13.4%
+  # 7  out  1525.7 mVpp  gain 218.0x  DC 1.2324  h2 0.212  hum  110mV  rail 35.6%
+  # 8  out  1508.6 mVpp  gain 215.5x  DC 1.2428  h2 0.224  hum  101mV  rail 35.8%
+  # 9  out  1486.9 mVpp  gain 212.4x  DC 1.2553  h2 0.234  hum   88mV  rail 36.0%
+  #10  out  1488.3 mVpp  gain 212.6x  DC 1.2532  h2 0.234  hum   89mV  rail 35.8%
+  #11  out  1458.7 mVpp  gain 208.4x  DC 1.2675  h2 0.243  hum   95mV  rail 36.6%
+  #12  out  1463.2 mVpp  gain 209.0x  DC 1.2645  h2 0.240  hum  103mV  rail 36.6%
+
+  mean 1213.9 mVpp   sd 287.2 mVpp   spread 53.6%   -> gain 173.4x
+  a solid connection holds well under 2%; an intermittent one jumps or drifts.
+
+[exited with code 0]

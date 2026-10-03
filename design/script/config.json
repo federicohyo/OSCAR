@@ -1,0 +1,9 @@
+{
+    "magicpath": "../mag",
+    "xschempath": "../xschem",
+    "netlistpath": "../netlists",
+    "spicepath": "../mag/spicefiles",
+    "scriptpath": "../script",
+    "extpath": "../mag/extfiles",
+    "allowed_processes": ["lvs", "pex", "rcx"]
+  }

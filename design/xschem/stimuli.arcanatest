@@ -1,0 +1,49 @@
+unit n
+voltage 1.8
+slope 1
+format hspice
+
+beginfile arcanatest.cir
+set W[0] 0
+set W[1] 0
+set W[2] 0
+set W[3] 0
+set syn_addr[0] 0
+set syn_addr[1] 0
+set syn_addr[2] 0
+set syn_addr[3] 0
+set setW 0
+set exc 0
+set resetW 0
+set nRes 1
+s 30
+set nRes 0
+s 200
+set nRes 1
+set exc 1
+
+
+set W[0] 0
+set W[1] 1
+set W[2] 0
+set W[3] 1
+set syn_addr[0] 0
+set syn_addr[1] 0
+set syn_addr[2] 0
+set syn_addr[3] 0
+s 50
+set setW 1
+s 20
+set W[0] 0
+set W[1] 0
+set W[2] 0
+set W[3] 0
+set setW 0
+s 10
+set syn_addr[0] 0
+set syn_addr[1] 0
+set syn_addr[2] 0
+set syn_addr[3] 0
+s 50
+
+endfile

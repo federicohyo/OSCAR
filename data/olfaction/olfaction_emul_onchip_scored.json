@@ -1,0 +1,19 @@
+{
+  "per_chunk": [
+    0.6533333333333333,
+    0.72,
+    0.7
+  ],
+  "voted5": [
+    0.7666666666666667,
+    0.8666666666666667,
+    0.8333333333333334
+  ],
+  "per_chunk_mean": 0.6911111111111111,
+  "voted5_mean": 0.8222222222222223,
+  "sources": [
+    "results/olfaction_emul_onchip.json",
+    "results/olfaction_emul_onchip_seed8019.json",
+    "results/olfaction_emul_onchip_seed15938.json"
+  ]
+}

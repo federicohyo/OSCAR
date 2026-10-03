@@ -1,0 +1,885 @@
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/user_analog_project_wrapper.sch
+.subckt user_analog_project_wrapper vdda1 vdda2 vssa1 vssa2 vccd1 vccd2 vssd1 vssd2 wb_clk_i wb_rst_i wbs_stb_i wbs_cyc_i wbs_we_i
++ wbs_sel_i[3] wbs_sel_i[2] wbs_sel_i[1] wbs_sel_i[0] wbs_dat_i[31] wbs_dat_i[30] wbs_dat_i[29] wbs_dat_i[28] wbs_dat_i[27] wbs_dat_i[26]
++ wbs_dat_i[25] wbs_dat_i[24] wbs_dat_i[23] wbs_dat_i[22] wbs_dat_i[21] wbs_dat_i[20] wbs_dat_i[19] wbs_dat_i[18] wbs_dat_i[17] wbs_dat_i[16]
++ wbs_dat_i[15] wbs_dat_i[14] wbs_dat_i[13] wbs_dat_i[12] wbs_dat_i[11] wbs_dat_i[10] wbs_dat_i[9] wbs_dat_i[8] wbs_dat_i[7] wbs_dat_i[6]
++ wbs_dat_i[5] wbs_dat_i[4] wbs_dat_i[3] wbs_dat_i[2] wbs_dat_i[1] wbs_dat_i[0] wbs_adr_i[31] wbs_adr_i[30] wbs_adr_i[29] wbs_adr_i[28]
++ wbs_adr_i[27] wbs_adr_i[26] wbs_adr_i[25] wbs_adr_i[24] wbs_adr_i[23] wbs_adr_i[22] wbs_adr_i[21] wbs_adr_i[20] wbs_adr_i[19] wbs_adr_i[18]
++ wbs_adr_i[17] wbs_adr_i[16] wbs_adr_i[15] wbs_adr_i[14] wbs_adr_i[13] wbs_adr_i[12] wbs_adr_i[11] wbs_adr_i[10] wbs_adr_i[9] wbs_adr_i[8]
++ wbs_adr_i[7] wbs_adr_i[6] wbs_adr_i[5] wbs_adr_i[4] wbs_adr_i[3] wbs_adr_i[2] wbs_adr_i[1] wbs_adr_i[0] wbs_ack_o wbs_dat_o[31] wbs_dat_o[30]
++ wbs_dat_o[29] wbs_dat_o[28] wbs_dat_o[27] wbs_dat_o[26] wbs_dat_o[25] wbs_dat_o[24] wbs_dat_o[23] wbs_dat_o[22] wbs_dat_o[21] wbs_dat_o[20]
++ wbs_dat_o[19] wbs_dat_o[18] wbs_dat_o[17] wbs_dat_o[16] wbs_dat_o[15] wbs_dat_o[14] wbs_dat_o[13] wbs_dat_o[12] wbs_dat_o[11] wbs_dat_o[10]
++ wbs_dat_o[9] wbs_dat_o[8] wbs_dat_o[7] wbs_dat_o[6] wbs_dat_o[5] wbs_dat_o[4] wbs_dat_o[3] wbs_dat_o[2] wbs_dat_o[1] wbs_dat_o[0]
++ la_data_in[127] la_data_in[126] la_data_in[125] la_data_in[124] la_data_in[123] la_data_in[122] la_data_in[121] la_data_in[120] la_data_in[119]
++ la_data_in[118] la_data_in[117] la_data_in[116] la_data_in[115] la_data_in[114] la_data_in[113] la_data_in[112] la_data_in[111] la_data_in[110]
++ la_data_in[109] la_data_in[108] la_data_in[107] la_data_in[106] la_data_in[105] la_data_in[104] la_data_in[103] la_data_in[102] la_data_in[101]
++ la_data_in[100] la_data_in[99] la_data_in[98] la_data_in[97] la_data_in[96] la_data_in[95] la_data_in[94] la_data_in[93] la_data_in[92]
++ la_data_in[91] la_data_in[90] la_data_in[89] la_data_in[88] la_data_in[87] la_data_in[86] la_data_in[85] la_data_in[84] la_data_in[83]
++ la_data_in[82] la_data_in[81] la_data_in[80] la_data_in[79] la_data_in[78] la_data_in[77] la_data_in[76] la_data_in[75] la_data_in[74]
++ la_data_in[73] la_data_in[72] la_data_in[71] la_data_in[70] la_data_in[69] la_data_in[68] la_data_in[67] la_data_in[66] la_data_in[65]
++ la_data_in[64] la_data_in[63] la_data_in[62] la_data_in[61] la_data_in[60] la_data_in[59] la_data_in[58] la_data_in[57] la_data_in[56]
++ la_data_in[55] la_data_in[54] la_data_in[53] la_data_in[52] la_data_in[51] la_data_in[50] la_data_in[49] la_data_in[48] la_data_in[47]
++ la_data_in[46] la_data_in[45] la_data_in[44] la_data_in[43] la_data_in[42] la_data_in[41] la_data_in[40] la_data_in[39] la_data_in[38]
++ la_data_in[37] la_data_in[36] la_data_in[35] la_data_in[34] la_data_in[33] la_data_in[32] la_data_in[31] la_data_in[30] la_data_in[29]
++ la_data_in[28] la_data_in[27] la_data_in[26] la_data_in[25] la_data_in[24] la_data_in[23] la_data_in[22] la_data_in[21] la_data_in[20]
++ la_data_in[19] la_data_in[18] la_data_in[17] la_data_in[16] la_data_in[15] la_data_in[14] la_data_in[13] la_data_in[12] la_data_in[11]
++ la_data_in[10] la_data_in[9] la_data_in[8] la_data_in[7] la_data_in[6] la_data_in[5] la_data_in[4] la_data_in[3] la_data_in[2] la_data_in[1]
++ la_data_in[0] la_data_out[127] la_data_out[126] la_data_out[125] la_data_out[124] la_data_out[123] la_data_out[122] la_data_out[121]
++ la_data_out[120] la_data_out[119] la_data_out[118] la_data_out[117] la_data_out[116] la_data_out[115] la_data_out[114] la_data_out[113]
++ la_data_out[112] la_data_out[111] la_data_out[110] la_data_out[109] la_data_out[108] la_data_out[107] la_data_out[106] la_data_out[105]
++ la_data_out[104] la_data_out[103] la_data_out[102] la_data_out[101] la_data_out[100] la_data_out[99] la_data_out[98] la_data_out[97]
++ la_data_out[96] la_data_out[95] la_data_out[94] la_data_out[93] la_data_out[92] la_data_out[91] la_data_out[90] la_data_out[89] la_data_out[88]
++ la_data_out[87] la_data_out[86] la_data_out[85] la_data_out[84] la_data_out[83] la_data_out[82] la_data_out[81] la_data_out[80] la_data_out[79]
++ la_data_out[78] la_data_out[77] la_data_out[76] la_data_out[75] la_data_out[74] la_data_out[73] la_data_out[72] la_data_out[71] la_data_out[70]
++ la_data_out[69] la_data_out[68] la_data_out[67] la_data_out[66] la_data_out[65] la_data_out[64] la_data_out[63] la_data_out[62] la_data_out[61]
++ la_data_out[60] la_data_out[59] la_data_out[58] la_data_out[57] la_data_out[56] la_data_out[55] la_data_out[54] la_data_out[53] la_data_out[52]
++ la_data_out[51] la_data_out[50] la_data_out[49] la_data_out[48] la_data_out[47] la_data_out[46] la_data_out[45] la_data_out[44] la_data_out[43]
++ la_data_out[42] la_data_out[41] la_data_out[40] la_data_out[39] la_data_out[38] la_data_out[37] la_data_out[36] la_data_out[35] la_data_out[34]
++ la_data_out[33] la_data_out[32] la_data_out[31] la_data_out[30] la_data_out[29] la_data_out[28] la_data_out[27] la_data_out[26] la_data_out[25]
++ la_data_out[24] la_data_out[23] la_data_out[22] la_data_out[21] la_data_out[20] la_data_out[19] la_data_out[18] la_data_out[17] la_data_out[16]
++ la_data_out[15] la_data_out[14] la_data_out[13] la_data_out[12] la_data_out[11] la_data_out[10] la_data_out[9] la_data_out[8] la_data_out[7]
++ la_data_out[6] la_data_out[5] la_data_out[4] la_data_out[3] la_data_out[2] la_data_out[1] la_data_out[0] io_in[26] io_in[25] io_in[24] io_in[23]
++ io_in[22] io_in[21] io_in[20] io_in[19] io_in[18] io_in[17] io_in[16] io_in[15] io_in[14] io_in[13] io_in[12] io_in[11] io_in[10] io_in[9]
++ io_in[8] io_in[7] io_in[6] io_in[5] io_in[4] io_in[3] io_in[2] io_in[1] io_in[0] io_in_3v3[26] io_in_3v3[25] io_in_3v3[24] io_in_3v3[23]
++ io_in_3v3[22] io_in_3v3[21] io_in_3v3[20] io_in_3v3[19] io_in_3v3[18] io_in_3v3[17] io_in_3v3[16] io_in_3v3[15] io_in_3v3[14] io_in_3v3[13]
++ io_in_3v3[12] io_in_3v3[11] io_in_3v3[10] io_in_3v3[9] io_in_3v3[8] io_in_3v3[7] io_in_3v3[6] io_in_3v3[5] io_in_3v3[4] io_in_3v3[3]
++ io_in_3v3[2] io_in_3v3[1] io_in_3v3[0] user_clock2 io_out[26] io_out[25] io_out[24] io_out[23] io_out[22] io_out[21] io_out[20] io_out[19]
++ io_out[18] io_out[17] io_out[16] io_out[15] io_out[14] io_out[13] io_out[12] io_out[11] io_out[10] io_out[9] io_out[8] io_out[7] io_out[6]
++ io_out[5] io_out[4] io_out[3] io_out[2] io_out[1] io_out[0] io_oeb[26] io_oeb[25] io_oeb[24] io_oeb[23] io_oeb[22] io_oeb[21] io_oeb[20]
++ io_oeb[19] io_oeb[18] io_oeb[17] io_oeb[16] io_oeb[15] io_oeb[14] io_oeb[13] io_oeb[12] io_oeb[11] io_oeb[10] io_oeb[9] io_oeb[8] io_oeb[7]
++ io_oeb[6] io_oeb[5] io_oeb[4] io_oeb[3] io_oeb[2] io_oeb[1] io_oeb[0] gpio_analog[17] gpio_analog[16] gpio_analog[15] gpio_analog[14]
++ gpio_analog[13] gpio_analog[12] gpio_analog[11] gpio_analog[10] gpio_analog[9] gpio_analog[8] gpio_analog[7] gpio_analog[6] gpio_analog[5]
++ gpio_analog[4] gpio_analog[3] gpio_analog[2] gpio_analog[1] gpio_analog[0] gpio_noesd[17] gpio_noesd[16] gpio_noesd[15] gpio_noesd[14]
++ gpio_noesd[13] gpio_noesd[12] gpio_noesd[11] gpio_noesd[10] gpio_noesd[9] gpio_noesd[8] gpio_noesd[7] gpio_noesd[6] gpio_noesd[5] gpio_noesd[4]
++ gpio_noesd[3] gpio_noesd[2] gpio_noesd[1] gpio_noesd[0] io_analog[10] io_analog[9] io_analog[8] io_analog[7] io_analog[6] io_analog[5]
++ io_analog[4] io_analog[3] io_analog[2] io_analog[1] io_analog[0] io_clamp_high[2] io_clamp_high[1] io_clamp_high[0] io_clamp_low[2]
++ io_clamp_low[1] io_clamp_low[0] user_irq[2] user_irq[1] user_irq[0] la_oenb[127] la_oenb[126] la_oenb[125] la_oenb[124] la_oenb[123] la_oenb[122]
++ la_oenb[121] la_oenb[120] la_oenb[119] la_oenb[118] la_oenb[117] la_oenb[116] la_oenb[115] la_oenb[114] la_oenb[113] la_oenb[112] la_oenb[111]
++ la_oenb[110] la_oenb[109] la_oenb[108] la_oenb[107] la_oenb[106] la_oenb[105] la_oenb[104] la_oenb[103] la_oenb[102] la_oenb[101] la_oenb[100]
++ la_oenb[99] la_oenb[98] la_oenb[97] la_oenb[96] la_oenb[95] la_oenb[94] la_oenb[93] la_oenb[92] la_oenb[91] la_oenb[90] la_oenb[89]
++ la_oenb[88] la_oenb[87] la_oenb[86] la_oenb[85] la_oenb[84] la_oenb[83] la_oenb[82] la_oenb[81] la_oenb[80] la_oenb[79] la_oenb[78]
++ la_oenb[77] la_oenb[76] la_oenb[75] la_oenb[74] la_oenb[73] la_oenb[72] la_oenb[71] la_oenb[70] la_oenb[69] la_oenb[68] la_oenb[67]
++ la_oenb[66] la_oenb[65] la_oenb[64] la_oenb[63] la_oenb[62] la_oenb[61] la_oenb[60] la_oenb[59] la_oenb[58] la_oenb[57] la_oenb[56]
++ la_oenb[55] la_oenb[54] la_oenb[53] la_oenb[52] la_oenb[51] la_oenb[50] la_oenb[49] la_oenb[48] la_oenb[47] la_oenb[46] la_oenb[45]
++ la_oenb[44] la_oenb[43] la_oenb[42] la_oenb[41] la_oenb[40] la_oenb[39] la_oenb[38] la_oenb[37] la_oenb[36] la_oenb[35] la_oenb[34]
++ la_oenb[33] la_oenb[32] la_oenb[31] la_oenb[30] la_oenb[29] la_oenb[28] la_oenb[27] la_oenb[26] la_oenb[25] la_oenb[24] la_oenb[23]
++ la_oenb[22] la_oenb[21] la_oenb[20] la_oenb[19] la_oenb[18] la_oenb[17] la_oenb[16] la_oenb[15] la_oenb[14] la_oenb[13] la_oenb[12]
++ la_oenb[11] la_oenb[10] la_oenb[9] la_oenb[8] la_oenb[7] la_oenb[6] la_oenb[5] la_oenb[4] la_oenb[3] la_oenb[2] la_oenb[1] la_oenb[0]
+*.PININFO vdda1:B vdda2:B vssa1:B vssa2:B vccd1:B vccd2:B vssd1:B vssd2:B wb_clk_i:I wb_rst_i:I wbs_stb_i:I wbs_cyc_i:I wbs_we_i:I
+*+ wbs_sel_i[3:0]:I wbs_dat_i[31:0]:I wbs_adr_i[31:0]:I wbs_ack_o:O wbs_dat_o[31:0]:O la_data_in[127:0]:I la_data_out[127:0]:O io_in[26:0]:I
+*+ io_in_3v3[26:0]:I user_clock2:I io_out[26:0]:O io_oeb[26:0]:O gpio_analog[17:0]:B gpio_noesd[17:0]:B io_analog[10:0]:B io_clamp_high[2:0]:B
+*+ io_clamp_low[2:0]:B user_irq[2:0]:O la_oenb[127:0]:I
+x3 gpio_analog[14] gpio_analog[13] gpio_analog[12] gpio_analog[11] gpio_analog[0] la_data_in[11] la_data_in[12] la_data_in[13]
++ la_data_in[14] gpio_analog[7] gpio_analog[6] gpio_analog[5] gpio_analog[4] gpio_analog[3] la_data_in[7] la_data_in[8] la_data_in[9]
++ la_data_in[10] gpio_analog[10] gpio_analog[8] io_analog[3] gpio_analog[15] la_data_in[6] la_data_in[3] gpio_analog[9] gpio_analog[2]
++ la_data_in[5] gpio_analog[17] gpio_analog[1] la_data_in[4] gpio_analog[16] vssd2 vccd2 vccd1 vssd1 la_data_in[70] la_data_in[68]
++ la_data_out[69] neuron_32syn_v1
+x5 la_data_in[27] la_data_in[28] la_data_in[29] la_data_in[30] la_data_out[61] io_analog[0] la_data_in[68] la_data_out[65]
++ la_data_out[64] la_data_out[63] la_data_out[62] gpio_analog[0] la_data_in[22] la_data_in[60] gpio_analog[14] gpio_analog[13] gpio_analog[12]
++ gpio_analog[11] gpio_analog[3] gpio_analog[7] gpio_analog[6] gpio_analog[5] gpio_analog[4] gpio_analog[10] la_data_in[23] la_data_in[24]
++ la_data_in[25] la_data_in[26] gpio_analog[8] gpio_analog[15] la_data_in[67] la_data_in[21] la_data_in[66] gpio_analog[16] gpio_analog[2]
++ la_data_in[19] la_data_in[18] la_data_in[17] la_data_in[16] gpio_analog[1] la_data_in[15] gpio_analog[17] gpio_analog[9] la_data_in[20] vssd1
++ vssd2 vccd1 vccd2 neuron_synapse_array_with_input_output_logic_v1
+x4 io_analog[2] io_analog[7] io_analog[6] io_analog[8] io_analog[9] io_analog[1] io_analog[3] io_analog[10] io_analog[5]
++ low_noise_amp_fc_v3
+x6 io_analog[1] io_analog[7] io_analog[2] io_analog[5] io_analog[3] io_analog[6] io_analog[4] low_noise_amp_fc_v3_withpad
+R1 io_oeb[7] vccd1 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R2 io_oeb[8] vccd1 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R3 io_oeb[9] vccd1 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R4 io_oeb[10] vccd1 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R5 io_oeb[12] vccd1 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R6 io_oeb[13] vccd1 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R7 io_oeb[11] vccd1 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R8 io_oeb[14] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R9 io_oeb[15] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R10 io_oeb[16] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R11 io_oeb[17] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R12 io_oeb[18] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R13 io_oeb[19] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R14 io_oeb[20] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R15 io_oeb[21] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R16 io_oeb[22] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R17 io_oeb[23] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+R18 io_oeb[24] vccd2 sky130_fd_pr__res_generic_m3 W=0.56 L=0.56 m=1
+.ends
+
+* expanding   symbol:  neuron_32syn_v1.sym # of pins=26
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuron_32syn_v1.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuron_32syn_v1.sch
+.subckt neuron_32syn_v1 JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3]
++ buffermonp syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout vepulseextp resetW syn_req vtaun vrefn setW vtaup
++ vthrdp exc vthrdn dGND dVDD aVDD aGND ack_out nRes req
+*.PININFO ack_out:I dGND:B dVDD:B vepulseextp:I syn_addr[0:3]:I W[0:3]:I setW:I resetW:I syn_req:I exc:I vipulseextp:I req:O
+*+ vleakn:I ifdcp:I vrefn:I nRes:I aVDD:B buffermonp:I monout:B JExcWn[0:3]:I JInhWp[0:3]:I vtaun:I vthrdp:I vtaup:I vthrdn:I aGND:B
+x11 nRes req ack_out ack_cel1 dVDD dGND c_element_rj
+x4 setW exc dGND dGND dVDD dVDD setWe sky130_fd_sc_hd__and2_1
+x5 exc dGND dGND dVDD dVDD nExc sky130_fd_sc_hd__inv_1
+x6 setW nExc dGND dGND dVDD dVDD setWi sky130_fd_sc_hd__and2_1
+x7 resetW exc dGND dGND dVDD dVDD resetWe sky130_fd_sc_hd__and2_1
+x8 resetW nExc dGND dGND dVDD dVDD resetWi sky130_fd_sc_hd__and2_1
+x10 syn_req exc dGND dGND dVDD dVDD reqe sky130_fd_sc_hd__and2_1
+x12 syn_req nExc dGND dGND dVDD dVDD reqi sky130_fd_sc_hd__and2_1
+x14 ack_cel1 dGND dGND dVDD dVDD net2 sky130_fd_sc_hd__inv_1
+x1 W[0] W[1] W[2] W[3] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1 syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vepulseextp
++ resetWe reqe setWe vthrdn vtaup dGND dVDD aGND aVDD synapse_array_programmable_16_to_sout_v1
+x2 net1 W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vipulseextp
++ resetWi reqi vthrdp setWi vtaun dGND dVDD aVDD aGND synapse_array_programmable_inh_16_to_sout_v1
+x9 nreq_neu1 req dVDD dGND schmitt_trigger
+x3 aGND aVDD nreq_neu1 ifdcp net2 net1 vleakn vrefn neuron_analog_fc_v2_norail
+x13 buffermonp monout net1 aGND aVDD buffer_mon_p_norail
+.ends
+
+
+* expanding   symbol:  neuron_synapse_array_with_input_output_logic_v1.sym # of pins=30
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuron_synapse_array_with_input_output_logic_v1.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuron_synapse_array_with_input_output_logic_v1.sch
+.subckt neuron_synapse_array_with_input_output_logic_v1 W[0] W[1] W[2] W[3] req_o monout nRes aer_o[0] aer_o[1] aer_o[2] aer_o[3]
++ ifdcp resetW ack JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] bufmonp JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] vleakn syn_addr[0] syn_addr[1]
++ syn_addr[2] syn_addr[3] vipulseextp vepulseextp Da setW CLK vthrdn vrefn neu_addr[0] neu_addr[1] neu_addr[2] neu_addr[3] vthrdp req_inp vtaup
++ vtaun exc aGND dGND aVDD dVDD
+*.PININFO vleakn:I vrefn:I ifdcp:I bufmonp:I req_o:O aer_o[0:3]:O dGND:B dVDD:B nRes:I ack:I neu_addr[0:3]:I req_inp:I
+*+ syn_addr[0:3]:I exc:I aVDD:B monout:B W[0:3]:I resetW:I setW:I vepulseextp:I vipulseextp:I JExcWn[0:3]:I JInhWp[0:3]:I vthrdp:I vtaun:I vthrdn:I
+*+ vtaup:I Da:I CLK:I aGND:B
+x1 JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp ifdcp JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] W[0] W[1] W[2] W[3]
++ syn_addr_latched[0] syn_addr_latched[1] syn_addr_latched[2] syn_addr_latched[3] ack_neu[0] ack_neu[1] ack_neu[2] ack_neu[3] ack_neu[4] ack_neu[5]
++ ack_neu[6] ack_neu[7] ack_neu[8] ack_neu[9] ack_neu[10] ack_neu[11] ack_neu[12] ack_neu[13] ack_neu[14] ack_neu[15] vleakn vipulseextp
++ vepulseextp monout[0] monout[1] monout[2] monout[3] monout[4] monout[5] monout[6] monout[7] monout[8] monout[9] monout[10] monout[11]
++ monout[12] monout[13] monout[14] monout[15] resetW neu_req[0] neu_req[1] neu_req[2] neu_req[3] neu_req[4] neu_req[5] neu_req[6] neu_req[7]
++ neu_req[8] neu_req[9] neu_req[10] neu_req[11] neu_req[12] neu_req[13] neu_req[14] neu_req[15] vrefn req_o[0] req_o[1] req_o[2] req_o[3]
++ req_o[4] req_o[5] req_o[6] req_o[7] req_o[8] req_o[9] req_o[10] req_o[11] req_o[12] req_o[13] req_o[14] req_o[15] vthrdn vthrdp setW
++ exc_latched vtaup vtaun aGND dGND aVDD dVDD nRes neuro_synaptic_core_16neu_32syn_v1
+x5 req_o[0] req_o[1] req_o[2] req_o[3] req_o[4] req_o[5] req_o[6] req_o[7] req_o[8] req_o[9] req_o[10] req_o[11] req_o[12]
++ req_o[13] req_o[14] req_o[15] ack ack_neu[0] ack_neu[1] ack_neu[2] ack_neu[3] ack_neu[4] ack_neu[5] ack_neu[6] ack_neu[7] ack_neu[8]
++ ack_neu[9] ack_neu[10] ack_neu[11] ack_neu[12] ack_neu[13] ack_neu[14] ack_neu[15] req_o dVDD dGND arbiter_tree_sixteen_bits
+x6 aer_o[0] aer_o[1] aer_o[2] aer_o[3] ack_neu[0] ack_neu[1] ack_neu[2] ack_neu[3] ack_neu[4] ack_neu[5] ack_neu[6] ack_neu[7]
++ ack_neu[8] ack_neu[9] ack_neu[10] ack_neu[11] ack_neu[12] ack_neu[13] ack_neu[14] ack_neu[15] dVDD dGND encoder_16_to_4
+x3 req_inp syn_addr_latched[0] syn_addr_latched[1] syn_addr_latched[2] syn_addr_latched[3] syn_addr[0] syn_addr[1] syn_addr[2]
++ syn_addr[3] nRes neu_addr_latched[0] neu_addr_latched[1] neu_addr_latched[2] neu_addr_latched[3] neu_addr[0] neu_addr[1] neu_addr[2]
++ neu_addr[3] exc_latched exc req_inp_array dVDD dGND inputs_latch_16neu
+x8 dVDD Da CLK dGND nRes monout monout[0] monout[1] monout[2] monout[3] monout[4] monout[5] monout[6] monout[7] monout[8]
++ monout[9] monout[10] monout[11] monout[12] monout[13] monout[14] monout[15] monitor_select
+x7 neu_addr_latched[0] neu_addr_latched[1] neu_addr_latched[2] neu_addr_latched[3] neu_req[0] neu_req[1] neu_req[2] neu_req[3]
++ neu_req[4] neu_req[5] neu_req[6] neu_req[7] neu_req[8] neu_req[9] neu_req[10] neu_req[11] neu_req[12] neu_req[13] neu_req[14] neu_req[15]
++ dGND dVDD req_inp_array input_neuron_address_decoder_16_to_1
+.ends
+
+
+* expanding   symbol:  low_noise_amp_fc_v3.sym # of pins=10
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/low_noise_amp_fc_v3.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/low_noise_amp_fc_v3.sch
+.subckt low_noise_amp_fc_v3 vss vb1 vb2 vout input vdd iref vref tunep
+*.PININFO vdd:B vss:B vref:I iref:I input:I vout:O tunep:I vb1:I vb2:I
+XM1 vy vin vp vdd sky130_fd_pr__pfet_01v8 L=2.0 W=4.0 nf=1 m=300
+XM2 vx vref vp vdd sky130_fd_pr__pfet_01v8 L=2.0 W=4.0 nf=1 m=300
+XM5 vp iref vdd vdd sky130_fd_pr__pfet_01v8 L=0.3 W=3 nf=1 m=120
+XC6 vin vout sky130_fd_pr__cap_mim_m3_1 W=5 L=5 m=1
+XM6 vx net1 net2 vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XM9 vy net1 net3 vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XM10 net1 net4 vx vss sky130_fd_pr__nfet_01v8 L=1.0 W=10.0 nf=1 m=1
+XM12 vout net7 vy vss sky130_fd_pr__nfet_01v8 L=1.0 W=10.0 nf=1 m=1
+XM15 net4 vx vss vss sky130_fd_pr__nfet_01v8 L=2.0 W=15.0 nf=1 m=1
+XM16 net4 tunep vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM17 net1 vb2 net5 vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM24 vout vb2 net6 vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM25 net5 vb1 vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM26 net6 vb1 vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM7 net7 vy vss vss sky130_fd_pr__nfet_01v8 L=2.0 W=15.0 nf=1 m=1
+XM27 net7 tunep vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1.0
+XM36 vres vres vin vin sky130_fd_pr__pfet_01v8_hvt L=3.0 W=1.0 nf=1 m=1
+XM37 vres vres vout vout sky130_fd_pr__pfet_01v8_hvt L=3.0 W=1.0 nf=1 m=1
+XM3 net2 net1 vss vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XM4 net3 net1 vss vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XC1 vin input sky130_fd_pr__cap_mim_m3_1 W=132 L=70 m=1
+.ends
+
+
+* expanding   symbol:  low_noise_amp_fc_v3_withpad.sym # of pins=7
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/low_noise_amp_fc_v3_withpad.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/low_noise_amp_fc_v3_withpad.sch
+.subckt low_noise_amp_fc_v3_withpad vdd vb1 vss tunep iref vb2 vout
+*.PININFO vdd:B vss:B iref:I vout:O tunep:I vb1:I vb2:I
+XM1 vy vin vp vdd sky130_fd_pr__pfet_01v8 L=2.0 W=4.0 nf=1 m=300
+XM2 vx padref vp vdd sky130_fd_pr__pfet_01v8 L=2.0 W=4.0 nf=1 m=300
+XM5 vp iref vdd vdd sky130_fd_pr__pfet_01v8 L=0.3 W=3 nf=1 m=120
+XC6 vin vout sky130_fd_pr__cap_mim_m3_1 W=5 L=5 m=1
+XM6 vx net1 net2 vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XM9 vy net1 net3 vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XM10 net1 net4 vx vss sky130_fd_pr__nfet_01v8 L=1.0 W=10.0 nf=1 m=1
+XM12 vout net7 vy vss sky130_fd_pr__nfet_01v8 L=1.0 W=10.0 nf=1 m=1
+XM15 net4 vx vss vss sky130_fd_pr__nfet_01v8 L=2.0 W=15.0 nf=1 m=1
+XM16 net4 tunep vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM17 net1 vb2 net5 vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM24 vout vb2 net6 vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM25 net5 vb1 vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM26 net6 vb1 vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1
+XM7 net7 vy vss vss sky130_fd_pr__nfet_01v8 L=2.0 W=15.0 nf=1 m=1
+XM27 net7 tunep vdd vdd sky130_fd_pr__pfet_01v8 L=3.0 W=1.0 nf=1 m=1.0
+XM36 vres vres vin vin sky130_fd_pr__pfet_01v8_hvt L=3.0 W=1.0 nf=1 m=1
+XM37 vres vres vout vout sky130_fd_pr__pfet_01v8_hvt L=3.0 W=1.0 nf=1 m=1
+XM3 net2 net1 vss vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XM4 net3 net1 vss vss sky130_fd_pr__nfet_01v8 L=20.0 W=8.0 nf=1 m=1
+XC1 vin inputpad sky130_fd_pr__cap_mim_m3_1 W=132 L=70 m=1
+.ends
+
+
+* expanding   symbol:  c_element_rj.sym # of pins=6
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/c_element_rj.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/c_element_rj.sch
+.subckt c_element_rj nrst a b c dVDD dGND
+*.PININFO dGND:B dVDD:B c:O b:I a:I nrst:I
+XM14 c net6 dVDD dVDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM5 net6 nrst dVDD dVDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM6 net5 b dVDD dVDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM4 net4 a dVDD dVDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM7 net3 b net4 dVDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM8 net3 a net5 dVDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM10 net5 c net4 dVDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM12 c net6 dGND dGND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM1 net3 nrst net6 dGND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM2 net3 b net1 dGND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM3 net3 a net2 dGND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM9 net2 c net1 dGND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM11 net1 a dGND dGND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM13 net2 b dGND dGND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+.ends
+
+
+* expanding   symbol:  synapse_array_programmable_16_to_sout_v1.sym # of pins=14
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_array_programmable_16_to_sout_v1.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_array_programmable_16_to_sout_v1.sch
+.subckt synapse_array_programmable_16_to_sout_v1 W[0] W[1] W[2] W[3] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] sout syn_addr[0]
++ syn_addr[1] syn_addr[2] syn_addr[3] vpulseextp resetW req setW vthrdn vtaup GND VDD aGND aVDD
+*.PININFO GND:B VDD:B vpulseextp:I syn_addr[0:3]:I W[0:3]:I JExcWn[0:3]:I sout:B setW:I resetW:I req:I vthrdn:I vtaup:I aVDD:B
+*+ aGND:B
+x3 syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] D[0] D[1] D[2] D[3] D[4] D[5] D[6] D[7] D[8] D[9] D[10] D[11] D[12] D[13] D[14]
++ D[15] req req_syn VDD GND decoder_4_to_16
+x2[0] req_syn D[0] GND GND VDD VDD net1[15] sky130_fd_sc_hd__and2_1
+x2[1] req_syn D[1] GND GND VDD VDD net1[14] sky130_fd_sc_hd__and2_1
+x2[2] req_syn D[2] GND GND VDD VDD net1[13] sky130_fd_sc_hd__and2_1
+x2[3] req_syn D[3] GND GND VDD VDD net1[12] sky130_fd_sc_hd__and2_1
+x2[4] req_syn D[4] GND GND VDD VDD net1[11] sky130_fd_sc_hd__and2_1
+x2[5] req_syn D[5] GND GND VDD VDD net1[10] sky130_fd_sc_hd__and2_1
+x2[6] req_syn D[6] GND GND VDD VDD net1[9] sky130_fd_sc_hd__and2_1
+x2[7] req_syn D[7] GND GND VDD VDD net1[8] sky130_fd_sc_hd__and2_1
+x2[8] req_syn D[8] GND GND VDD VDD net1[7] sky130_fd_sc_hd__and2_1
+x2[9] req_syn D[9] GND GND VDD VDD net1[6] sky130_fd_sc_hd__and2_1
+x2[10] req_syn D[10] GND GND VDD VDD net1[5] sky130_fd_sc_hd__and2_1
+x2[11] req_syn D[11] GND GND VDD VDD net1[4] sky130_fd_sc_hd__and2_1
+x2[12] req_syn D[12] GND GND VDD VDD net1[3] sky130_fd_sc_hd__and2_1
+x2[13] req_syn D[13] GND GND VDD VDD net1[2] sky130_fd_sc_hd__and2_1
+x2[14] req_syn D[14] GND GND VDD VDD net1[1] sky130_fd_sc_hd__and2_1
+x2[15] req_syn D[15] GND GND VDD VDD net1[0] sky130_fd_sc_hd__and2_1
+x1[0] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[15] resetW vpulseextp net2[15] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[1] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[14] resetW vpulseextp net2[14] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[2] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[13] resetW vpulseextp net2[13] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[3] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[12] resetW vpulseextp net2[12] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[4] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[11] resetW vpulseextp net2[11] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[5] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[10] resetW vpulseextp net2[10] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[6] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[9] resetW vpulseextp net2[9] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND aVDD
++ aGND synapse_4bit_memory_v1_norail
+x1[7] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[8] resetW vpulseextp net2[8] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND aVDD
++ aGND synapse_4bit_memory_v1_norail
+x1[8] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[7] resetW vpulseextp net2[7] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND aVDD
++ aGND synapse_4bit_memory_v1_norail
+x1[9] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[6] resetW vpulseextp net2[6] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND aVDD
++ aGND synapse_4bit_memory_v1_norail
+x1[10] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[5] resetW vpulseextp net2[5] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[11] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[4] resetW vpulseextp net2[4] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[12] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[3] resetW vpulseextp net2[3] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[13] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[2] resetW vpulseextp net2[2] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[14] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[1] resetW vpulseextp net2[1] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x1[15] sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] net1[0] resetW vpulseextp net2[0] vthrdn W[0] W[1] W[2] W[3] vtaup VDD GND
++ aVDD aGND synapse_4bit_memory_v1_norail
+x3[0] D[0] setW GND GND VDD VDD net2[15] sky130_fd_sc_hd__and2_1
+x3[1] D[1] setW GND GND VDD VDD net2[14] sky130_fd_sc_hd__and2_1
+x3[2] D[2] setW GND GND VDD VDD net2[13] sky130_fd_sc_hd__and2_1
+x3[3] D[3] setW GND GND VDD VDD net2[12] sky130_fd_sc_hd__and2_1
+x3[4] D[4] setW GND GND VDD VDD net2[11] sky130_fd_sc_hd__and2_1
+x3[5] D[5] setW GND GND VDD VDD net2[10] sky130_fd_sc_hd__and2_1
+x3[6] D[6] setW GND GND VDD VDD net2[9] sky130_fd_sc_hd__and2_1
+x3[7] D[7] setW GND GND VDD VDD net2[8] sky130_fd_sc_hd__and2_1
+x3[8] D[8] setW GND GND VDD VDD net2[7] sky130_fd_sc_hd__and2_1
+x3[9] D[9] setW GND GND VDD VDD net2[6] sky130_fd_sc_hd__and2_1
+x3[10] D[10] setW GND GND VDD VDD net2[5] sky130_fd_sc_hd__and2_1
+x3[11] D[11] setW GND GND VDD VDD net2[4] sky130_fd_sc_hd__and2_1
+x3[12] D[12] setW GND GND VDD VDD net2[3] sky130_fd_sc_hd__and2_1
+x3[13] D[13] setW GND GND VDD VDD net2[2] sky130_fd_sc_hd__and2_1
+x3[14] D[14] setW GND GND VDD VDD net2[1] sky130_fd_sc_hd__and2_1
+x3[15] D[15] setW GND GND VDD VDD net2[0] sky130_fd_sc_hd__and2_1
+.ends
+
+
+* expanding   symbol:  synapse_array_programmable_inh_16_to_sout_v1.sym # of pins=14
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_array_programmable_inh_16_to_sout_v1.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_array_programmable_inh_16_to_sout_v1.sch
+.subckt synapse_array_programmable_inh_16_to_sout_v1 sout W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] syn_addr[0]
++ syn_addr[1] syn_addr[2] syn_addr[3] vpulseextp resetW req vthrdp setW vtaun GND VDD aVDD aGND
+*.PININFO vpulseextp:I syn_addr[0:3]:I W[0:3]:I JInhWp[0:3]:I sout:B setW:I resetW:I req:I vthrdp:I vtaun:I GND:B VDD:B aVDD:B
+*+ aGND:B
+x3 syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] D[0] D[1] D[2] D[3] D[4] D[5] D[6] D[7] D[8] D[9] D[10] D[11] D[12] D[13] D[14]
++ D[15] req req_syn VDD GND decoder_4_to_16
+x2[0] req_syn D[0] GND GND VDD VDD net1[15] sky130_fd_sc_hd__and2_1
+x2[1] req_syn D[1] GND GND VDD VDD net1[14] sky130_fd_sc_hd__and2_1
+x2[2] req_syn D[2] GND GND VDD VDD net1[13] sky130_fd_sc_hd__and2_1
+x2[3] req_syn D[3] GND GND VDD VDD net1[12] sky130_fd_sc_hd__and2_1
+x2[4] req_syn D[4] GND GND VDD VDD net1[11] sky130_fd_sc_hd__and2_1
+x2[5] req_syn D[5] GND GND VDD VDD net1[10] sky130_fd_sc_hd__and2_1
+x2[6] req_syn D[6] GND GND VDD VDD net1[9] sky130_fd_sc_hd__and2_1
+x2[7] req_syn D[7] GND GND VDD VDD net1[8] sky130_fd_sc_hd__and2_1
+x2[8] req_syn D[8] GND GND VDD VDD net1[7] sky130_fd_sc_hd__and2_1
+x2[9] req_syn D[9] GND GND VDD VDD net1[6] sky130_fd_sc_hd__and2_1
+x2[10] req_syn D[10] GND GND VDD VDD net1[5] sky130_fd_sc_hd__and2_1
+x2[11] req_syn D[11] GND GND VDD VDD net1[4] sky130_fd_sc_hd__and2_1
+x2[12] req_syn D[12] GND GND VDD VDD net1[3] sky130_fd_sc_hd__and2_1
+x2[13] req_syn D[13] GND GND VDD VDD net1[2] sky130_fd_sc_hd__and2_1
+x2[14] req_syn D[14] GND GND VDD VDD net1[1] sky130_fd_sc_hd__and2_1
+x2[15] req_syn D[15] GND GND VDD VDD net1[0] sky130_fd_sc_hd__and2_1
+x3[0] D[0] setW GND GND VDD VDD net2[15] sky130_fd_sc_hd__and2_1
+x3[1] D[1] setW GND GND VDD VDD net2[14] sky130_fd_sc_hd__and2_1
+x3[2] D[2] setW GND GND VDD VDD net2[13] sky130_fd_sc_hd__and2_1
+x3[3] D[3] setW GND GND VDD VDD net2[12] sky130_fd_sc_hd__and2_1
+x3[4] D[4] setW GND GND VDD VDD net2[11] sky130_fd_sc_hd__and2_1
+x3[5] D[5] setW GND GND VDD VDD net2[10] sky130_fd_sc_hd__and2_1
+x3[6] D[6] setW GND GND VDD VDD net2[9] sky130_fd_sc_hd__and2_1
+x3[7] D[7] setW GND GND VDD VDD net2[8] sky130_fd_sc_hd__and2_1
+x3[8] D[8] setW GND GND VDD VDD net2[7] sky130_fd_sc_hd__and2_1
+x3[9] D[9] setW GND GND VDD VDD net2[6] sky130_fd_sc_hd__and2_1
+x3[10] D[10] setW GND GND VDD VDD net2[5] sky130_fd_sc_hd__and2_1
+x3[11] D[11] setW GND GND VDD VDD net2[4] sky130_fd_sc_hd__and2_1
+x3[12] D[12] setW GND GND VDD VDD net2[3] sky130_fd_sc_hd__and2_1
+x3[13] D[13] setW GND GND VDD VDD net2[2] sky130_fd_sc_hd__and2_1
+x3[14] D[14] setW GND GND VDD VDD net2[1] sky130_fd_sc_hd__and2_1
+x3[15] D[15] setW GND GND VDD VDD net2[0] sky130_fd_sc_hd__and2_1
+x1[0] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[15] vpulseextp net2[15] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[1] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[14] vpulseextp net2[14] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[2] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[13] vpulseextp net2[13] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[3] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[12] vpulseextp net2[12] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[4] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[11] vpulseextp net2[11] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[5] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[10] vpulseextp net2[10] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[6] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[9] vpulseextp net2[9] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD aVDD
++ aGND synapse_4bit_memory_inh_v1_norail
+x1[7] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[8] vpulseextp net2[8] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD aVDD
++ aGND synapse_4bit_memory_inh_v1_norail
+x1[8] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[7] vpulseextp net2[7] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD aVDD
++ aGND synapse_4bit_memory_inh_v1_norail
+x1[9] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[6] vpulseextp net2[6] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD aVDD
++ aGND synapse_4bit_memory_inh_v1_norail
+x1[10] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[5] vpulseextp net2[5] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[11] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[4] vpulseextp net2[4] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[12] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[3] vpulseextp net2[3] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[13] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[2] vpulseextp net2[2] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[14] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[1] vpulseextp net2[1] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+x1[15] sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW net1[0] vpulseextp net2[0] vthrdp W[0] W[1] W[2] W[3] vtaun GND VDD
++ aVDD aGND synapse_4bit_memory_inh_v1_norail
+.ends
+
+
+* expanding   symbol:  schmitt_trigger.sym # of pins=4
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/schmitt_trigger.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/schmitt_trigger.sch
+.subckt schmitt_trigger A Y VDD GND
+*.PININFO A:I Y:O VDD:B GND:B
+XM3 net2 A GND GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM1 Y A net2 GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM7 VDD Y net2 GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.42 nf=1 m=1
+XM4 net1 A VDD VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM2 Y A net1 VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1 nf=1 m=1
+XM5 GND Y net1 VDD sky130_fd_pr__pfet_01v8 L=0.15 W=0.82 nf=1 m=1
+.ends
+
+
+* expanding   symbol:  neuron_analog_fc_v2_norail.sym # of pins=8
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuron_analog_fc_v2_norail.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuron_analog_fc_v2_norail.sch
+.subckt neuron_analog_fc_v2_norail GND VDD nreq ifdcp nack vmem vleakn vrefn
+*.PININFO vleakn:I GND:B VDD:B nreq:O vrefn:I nack:I ifdcp:I vmem:B
+XC1 GND vmem sky130_fd_pr__cap_mim_m3_1 W=5 L=5 m=1
+XM1 vmem ifdcp VDD VDD sky130_fd_pr__pfet_01v8 L=2.0 W=1.0 nf=1 m=1
+XM5 net2 nreq VDD VDD sky130_fd_pr__pfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM7 net3 nreq net4 GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.6 nf=1 m=1
+XM6 net5 nack VDD VDD sky130_fd_pr__pfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM9 nreq vmem net2 VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1.0 nf=1 m=1
+XM10 net3 nreq net5 VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1.0 nf=1 m=1
+XM4 vmem nreq VDD VDD sky130_fd_pr__pfet_01v8 L=1.0 W=1.0 nf=1 m=1
+XM2 nreq vmem net1 GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.6 nf=1 m=1
+XM3 net4 vrefn GND GND sky130_fd_pr__nfet_01v8 L=1.0 W=0.6 nf=1 m=1
+XM8 net1 net1 GND GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.6 nf=1 m=1
+XM11 vmem net3 GND GND sky130_fd_pr__nfet_01v8 L=0.2 W=1.0 nf=1 m=1
+XM12 vmem vleakn GND GND sky130_fd_pr__nfet_01v8 L=2.0 W=1.0 nf=1 m=1
+XM13 GND net3 GND GND sky130_fd_pr__nfet_01v8 L=2.0 W=1.0 nf=1 m=1
+.ends
+
+
+* expanding   symbol:  buffer_mon_p_norail.sym # of pins=5
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/buffer_mon_p_norail.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/buffer_mon_p_norail.sch
+.subckt buffer_mon_p_norail buf_p out mon GND AVDD
+*.PININFO GND:B AVDD:B buf_p:I mon:I out:O
+XM1 out out net2 AVDD sky130_fd_pr__pfet_01v8 L=0.5 W=1.0 nf=1 m=1
+XM5 net1 mon net2 AVDD sky130_fd_pr__pfet_01v8 L=0.5 W=1.0 nf=1 m=1
+XM2 net2 buf_p AVDD AVDD sky130_fd_pr__pfet_01v8 L=0.30 W=1.0 nf=1 m=1
+XM3 out net1 GND GND sky130_fd_pr__nfet_01v8 L=0.5 W=1.0 nf=1 m=1
+XM4 net1 net1 GND GND sky130_fd_pr__nfet_01v8 L=0.5 W=1.0 nf=1 m=1
+.ends
+
+
+* expanding   symbol:  neuro_synaptic_core_16neu_32syn_v1.sym # of pins=26
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuro_synaptic_core_16neu_32syn_v1.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/neuro_synaptic_core_16neu_32syn_v1.sch
+.subckt neuro_synaptic_core_16neu_32syn_v1 JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp ifdcp JExcWn[0] JExcWn[1] JExcWn[2]
++ JExcWn[3] W[0] W[1] W[2] W[3] syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] ack_neu[0] ack_neu[1] ack_neu[2] ack_neu[3] ack_neu[4]
++ ack_neu[5] ack_neu[6] ack_neu[7] ack_neu[8] ack_neu[9] ack_neu[10] ack_neu[11] ack_neu[12] ack_neu[13] ack_neu[14] ack_neu[15] vleakn
++ vipulseextp vepulseextp monout[0] monout[1] monout[2] monout[3] monout[4] monout[5] monout[6] monout[7] monout[8] monout[9] monout[10]
++ monout[11] monout[12] monout[13] monout[14] monout[15] resetW neu_req[0] neu_req[1] neu_req[2] neu_req[3] neu_req[4] neu_req[5] neu_req[6]
++ neu_req[7] neu_req[8] neu_req[9] neu_req[10] neu_req[11] neu_req[12] neu_req[13] neu_req[14] neu_req[15] vrefn req_neu_out[0] req_neu_out[1]
++ req_neu_out[2] req_neu_out[3] req_neu_out[4] req_neu_out[5] req_neu_out[6] req_neu_out[7] req_neu_out[8] req_neu_out[9] req_neu_out[10]
++ req_neu_out[11] req_neu_out[12] req_neu_out[13] req_neu_out[14] req_neu_out[15] vthrdn vthrdp setW exc vtaup vtaun aGND dGND aVDD dVDD nRes
+*.PININFO dGND:B dVDD:B syn_addr[0:3]:I W[0:3]:I setW:I resetW:I neu_req[0:15]:I exc:I vleakn:I ifdcp:I vrefn:I nRes:I aVDD:B
+*+ bufmonp:I monout[0:15]:B ack_neu[0:15]:I req_neu_out[0:15]:O vepulseextp:I vipulseextp:I JExcWn[0:3]:I JInhWp[0:3]:I vthrdp:I vtaun:I
+*+ vthrdn:I vtaup:I aGND:B
+x4[0] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[0] vepulseextp resetW neu_req[0] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[0] nRes req_neu_out[0] neuron_32syn_v1
+x4[1] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[1] vepulseextp resetW neu_req[1] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[1] nRes req_neu_out[1] neuron_32syn_v1
+x4[2] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[2] vepulseextp resetW neu_req[2] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[2] nRes req_neu_out[2] neuron_32syn_v1
+x4[3] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[3] vepulseextp resetW neu_req[3] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[3] nRes req_neu_out[3] neuron_32syn_v1
+x4[4] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[4] vepulseextp resetW neu_req[4] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[4] nRes req_neu_out[4] neuron_32syn_v1
+x4[5] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[5] vepulseextp resetW neu_req[5] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[5] nRes req_neu_out[5] neuron_32syn_v1
+x4[6] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[6] vepulseextp resetW neu_req[6] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[6] nRes req_neu_out[6] neuron_32syn_v1
+x4[7] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[7] vepulseextp resetW neu_req[7] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[7] nRes req_neu_out[7] neuron_32syn_v1
+x4[8] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[8] vepulseextp resetW neu_req[8] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[8] nRes req_neu_out[8] neuron_32syn_v1
+x4[9] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[9] vepulseextp resetW neu_req[9] vtaun vrefn setW vtaup vthrdp exc
++ vthrdn dGND dVDD aVDD aGND ack_neu[9] nRes req_neu_out[9] neuron_32syn_v1
+x4[10] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[10] vepulseextp resetW neu_req[10] vtaun vrefn setW vtaup vthrdp
++ exc vthrdn dGND dVDD aVDD aGND ack_neu[10] nRes req_neu_out[10] neuron_32syn_v1
+x4[11] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[11] vepulseextp resetW neu_req[11] vtaun vrefn setW vtaup vthrdp
++ exc vthrdn dGND dVDD aVDD aGND ack_neu[11] nRes req_neu_out[11] neuron_32syn_v1
+x4[12] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[12] vepulseextp resetW neu_req[12] vtaun vrefn setW vtaup vthrdp
++ exc vthrdn dGND dVDD aVDD aGND ack_neu[12] nRes req_neu_out[12] neuron_32syn_v1
+x4[13] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[13] vepulseextp resetW neu_req[13] vtaun vrefn setW vtaup vthrdp
++ exc vthrdn dGND dVDD aVDD aGND ack_neu[13] nRes req_neu_out[13] neuron_32syn_v1
+x4[14] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[14] vepulseextp resetW neu_req[14] vtaun vrefn setW vtaup vthrdp
++ exc vthrdn dGND dVDD aVDD aGND ack_neu[14] nRes req_neu_out[14] neuron_32syn_v1
+x4[15] JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] ifdcp W[0] W[1] W[2] W[3] JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] bufmonp
++ syn_addr[0] syn_addr[1] syn_addr[2] syn_addr[3] vleakn vipulseextp monout[15] vepulseextp resetW neu_req[15] vtaun vrefn setW vtaup vthrdp
++ exc vthrdn dGND dVDD aVDD aGND ack_neu[15] nRes req_neu_out[15] neuron_32syn_v1
+.ends
+
+
+* expanding   symbol:  arbiter_tree_sixteen_bits.sym # of pins=6
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/arbiter_tree_sixteen_bits.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/arbiter_tree_sixteen_bits.sch
+.subckt arbiter_tree_sixteen_bits req[0] req[1] req[2] req[3] req[4] req[5] req[6] req[7] req[8] req[9] req[10] req[11] req[12]
++ req[13] req[14] req[15] ack_cpu ack[0] ack[1] ack[2] ack[3] ack[4] ack[5] ack[6] ack[7] ack[8] ack[9] ack[10] ack[11] ack[12] ack[13]
++ ack[14] ack[15] req_cpu VDD GND
+*.PININFO req[0:15]:I ack[0:15]:O ack_cpu:I req_cpu:O VDD:B GND:B
+x3 net5[1] net5[0] ack_cpu net6[1] net6[0] req_cpu VDD GND arbiter_two_bits
+x1[0] net4[3] net4[2] net6[1] net3[3] net3[2] net5[1] VDD GND arbiter_two_bits
+x1[1] net4[1] net4[0] net6[0] net3[1] net3[0] net5[0] VDD GND arbiter_two_bits
+x2[0] net1[7] net1[6] net3[3] net2[7] net2[6] net4[3] VDD GND arbiter_two_bits
+x2[1] net1[5] net1[4] net3[2] net2[5] net2[4] net4[2] VDD GND arbiter_two_bits
+x2[2] net1[3] net1[2] net3[1] net2[3] net2[2] net4[1] VDD GND arbiter_two_bits
+x2[3] net1[1] net1[0] net3[0] net2[1] net2[0] net4[0] VDD GND arbiter_two_bits
+x3[0] req[0] req[1] net2[7] ack[0] ack[1] net1[7] VDD GND arbiter_two_bits
+x3[1] req[2] req[3] net2[6] ack[2] ack[3] net1[6] VDD GND arbiter_two_bits
+x3[2] req[4] req[5] net2[5] ack[4] ack[5] net1[5] VDD GND arbiter_two_bits
+x3[3] req[6] req[7] net2[4] ack[6] ack[7] net1[4] VDD GND arbiter_two_bits
+x3[4] req[8] req[9] net2[3] ack[8] ack[9] net1[3] VDD GND arbiter_two_bits
+x3[5] req[10] req[11] net2[2] ack[10] ack[11] net1[2] VDD GND arbiter_two_bits
+x3[6] req[12] req[13] net2[1] ack[12] ack[13] net1[1] VDD GND arbiter_two_bits
+x3[7] req[14] req[15] net2[0] ack[14] ack[15] net1[0] VDD GND arbiter_two_bits
+.ends
+
+
+* expanding   symbol:  encoder_16_to_4.sym # of pins=4
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/encoder_16_to_4.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/encoder_16_to_4.sch
+.subckt encoder_16_to_4 neu_addr[0] neu_addr[1] neu_addr[2] neu_addr[3] ack_neu[0] ack_neu[1] ack_neu[2] ack_neu[3] ack_neu[4]
++ ack_neu[5] ack_neu[6] ack_neu[7] ack_neu[8] ack_neu[9] ack_neu[10] ack_neu[11] ack_neu[12] ack_neu[13] ack_neu[14] ack_neu[15] VDD GND
+*.PININFO neu_addr[0:3]:O ack_neu[0:15]:I VDD:B GND:B
+x1 ack_neu[8] ack_neu[9] ack_neu[10] ack_neu[11] neu_addr[3] ack_neu[12] ack_neu[13] ack_neu[14] ack_neu[15] VDD GND or8
+x2 ack_neu[4] ack_neu[5] ack_neu[6] ack_neu[7] neu_addr[2] ack_neu[12] ack_neu[13] ack_neu[14] ack_neu[15] VDD GND or8
+x3 ack_neu[2] ack_neu[3] ack_neu[6] ack_neu[7] neu_addr[1] ack_neu[10] ack_neu[11] ack_neu[14] ack_neu[15] VDD GND or8
+x4 ack_neu[1] ack_neu[3] ack_neu[5] ack_neu[7] neu_addr[0] ack_neu[9] ack_neu[11] ack_neu[13] ack_neu[15] VDD GND or8
+.ends
+
+
+* expanding   symbol:  inputs_latch_16neu.sym # of pins=11
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/inputs_latch_16neu.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/inputs_latch_16neu.sch
+.subckt inputs_latch_16neu req_inp syn_addr_latched[0] syn_addr_latched[1] syn_addr_latched[2] syn_addr_latched[3] syn_addr_in[0]
++ syn_addr_in[1] syn_addr_in[2] syn_addr_in[3] nRes neu_addr_latched[0] neu_addr_latched[1] neu_addr_latched[2] neu_addr_latched[3] neu_addr_in[0]
++ neu_addr_in[1] neu_addr_in[2] neu_addr_in[3] exc_latched exc_in req_in_array VDD GND
+*.PININFO neu_addr_in[0:3]:I req_inp:I syn_addr_in[0:3]:I exc_in:I nRes:I syn_addr_latched[0:3]:O neu_addr_latched[0:3]:O
+*+ exc_latched:O req_in_array:O VDD:B GND:B
+x2[0] req_inp syn_addr_in[0] nRes GND GND VDD VDD syn_addr_latched[0] sky130_fd_sc_hd__dfrtp_1
+x2[1] req_inp syn_addr_in[1] nRes GND GND VDD VDD syn_addr_latched[1] sky130_fd_sc_hd__dfrtp_1
+x2[2] req_inp syn_addr_in[2] nRes GND GND VDD VDD syn_addr_latched[2] sky130_fd_sc_hd__dfrtp_1
+x2[3] req_inp syn_addr_in[3] nRes GND GND VDD VDD syn_addr_latched[3] sky130_fd_sc_hd__dfrtp_1
+x1[0] req_inp neu_addr_in[0] nRes GND GND VDD VDD neu_addr_latched[0] sky130_fd_sc_hd__dfrtp_1
+x1[1] req_inp neu_addr_in[1] nRes GND GND VDD VDD neu_addr_latched[1] sky130_fd_sc_hd__dfrtp_1
+x1[2] req_inp neu_addr_in[2] nRes GND GND VDD VDD neu_addr_latched[2] sky130_fd_sc_hd__dfrtp_1
+x1[3] req_inp neu_addr_in[3] nRes GND GND VDD VDD neu_addr_latched[3] sky130_fd_sc_hd__dfrtp_1
+x3 req_inp exc_in nRes GND GND VDD VDD exc_latched sky130_fd_sc_hd__dfrtp_1
+x7 req_inp GND GND VDD VDD net1 sky130_fd_sc_hd__inv_1
+x1 net1 GND GND VDD VDD net2 sky130_fd_sc_hd__inv_1
+x2 net2 GND GND VDD VDD net3 sky130_fd_sc_hd__inv_1
+x4 net3 GND GND VDD VDD req_in_array sky130_fd_sc_hd__inv_1
+.ends
+
+
+* expanding   symbol:  monitor_select.sym # of pins=7
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/monitor_select.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/monitor_select.sch
+.subckt monitor_select dVDD Da CLK dGND nRes monOUT inputAnalog[0] inputAnalog[1] inputAnalog[2] inputAnalog[3] inputAnalog[4]
++ inputAnalog[5] inputAnalog[6] inputAnalog[7] inputAnalog[8] inputAnalog[9] inputAnalog[10] inputAnalog[11] inputAnalog[12] inputAnalog[13]
++ inputAnalog[14] inputAnalog[15]
+*.PININFO Da:I CLK:I nRes:I dGND:B monOUT:B inputAnalog[0:15]:B dVDD:B
+x1 net1[3] net1[2] net1[1] net1[0] net2[15] net2[14] net2[13] net2[12] net2[11] net2[10] net2[9] net2[8] net2[7] net2[6] net2[5]
++ net2[4] net2[3] net2[2] net2[1] net2[0] dGND net3 dVDD dGND decoder_4_to_16
+x2 dVDD inputAnalog[0] inputAnalog[1] inputAnalog[2] inputAnalog[3] inputAnalog[4] inputAnalog[5] inputAnalog[6] inputAnalog[7]
++ inputAnalog[8] inputAnalog[9] inputAnalog[10] inputAnalog[11] inputAnalog[12] inputAnalog[13] inputAnalog[14] inputAnalog[15] dGND monOUT
++ net2[15] net2[14] net2[13] net2[12] net2[11] net2[10] net2[9] net2[8] net2[7] net2[6] net2[5] net2[4] net2[3] net2[2] net2[1] net2[0]
++ 16-to-1_analog_mux
+x3 net1[3] net1[2] net1[1] net1[0] Da CLK nRes dVDD dGND dflip_flop_chain_4_fc_nolatch
+.ends
+
+
+* expanding   symbol:  input_neuron_address_decoder_16_to_1.sym # of pins=5
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/input_neuron_address_decoder_16_to_1.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/input_neuron_address_decoder_16_to_1.sch
+.subckt input_neuron_address_decoder_16_to_1 neu_addr[0] neu_addr[1] neu_addr[2] neu_addr[3] req_neu[0] req_neu[1] req_neu[2]
++ req_neu[3] req_neu[4] req_neu[5] req_neu[6] req_neu[7] req_neu[8] req_neu[9] req_neu[10] req_neu[11] req_neu[12] req_neu[13] req_neu[14]
++ req_neu[15] dGND dVDD req_inp
+*.PININFO neu_addr[0:3]:I req_inp:I dGND:B dVDD:B req_neu[0:15]:O
+x2 neu_addr[0] neu_addr[1] neu_addr[2] neu_addr[3] net2[15] net2[14] net2[13] net2[12] net2[11] net2[10] net2[9] net2[8] net2[7]
++ net2[6] net2[5] net2[4] net2[3] net2[2] net2[1] net2[0] req_inp net1 dVDD dGND decoder_4_to_16
+x4 net2[15] net2[14] net2[13] net2[12] net2[11] net2[10] net2[9] net2[8] net2[7] net2[6] net2[5] net2[4] net2[3] net2[2] net2[1]
++ net2[0] req_neu[0] req_neu[1] req_neu[2] req_neu[3] req_neu[4] req_neu[5] req_neu[6] req_neu[7] req_neu[8] req_neu[9] req_neu[10]
++ req_neu[11] req_neu[12] req_neu[13] req_neu[14] req_neu[15] net1 dVDD dGND request_logic_delay
+.ends
+
+
+* expanding   symbol:  decoder_4_to_16.sym # of pins=6
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/decoder_4_to_16.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/decoder_4_to_16.sch
+.subckt decoder_4_to_16 A[0] A[1] A[2] A[3] D[0] D[1] D[2] D[3] D[4] D[5] D[6] D[7] D[8] D[9] D[10] D[11] D[12] D[13] D[14] D[15]
++ req req_syn dVDD dGND
+*.PININFO A[0:3]:I req:I D[0:15]:O req_syn:O dVDD:B dGND:B
+x21 req dGND dGND dVDD dVDD net5 sky130_fd_sc_hd__inv_1
+x22 net5 dGND dGND dVDD dVDD net6 sky130_fd_sc_hd__inv_1
+x23 net6 dGND dGND dVDD dVDD net7 sky130_fd_sc_hd__inv_1
+x24 net7 dGND dGND dVDD dVDD req_syn sky130_fd_sc_hd__inv_1
+x20 A[3] A[2] A[1] A[0] dGND dGND dVDD dVDD D[15] sky130_fd_sc_hd__and4_1
+x19 A[3] A[2] A[1] net4 dGND dGND dVDD dVDD D[14] sky130_fd_sc_hd__and4_1
+x18 A[3] A[2] net3 A[0] dGND dGND dVDD dVDD D[13] sky130_fd_sc_hd__and4_1
+x17 A[3] A[2] net3 net4 dGND dGND dVDD dVDD D[12] sky130_fd_sc_hd__and4_1
+x16 A[3] net2 A[1] A[0] dGND dGND dVDD dVDD D[11] sky130_fd_sc_hd__and4_1
+x15 A[3] net2 A[1] net4 dGND dGND dVDD dVDD D[10] sky130_fd_sc_hd__and4_1
+x13 A[3] net2 net3 A[0] dGND dGND dVDD dVDD D[9] sky130_fd_sc_hd__and4_1
+x4 A[3] net2 net3 net4 dGND dGND dVDD dVDD D[8] sky130_fd_sc_hd__and4_1
+x5 net1 A[2] A[1] A[0] dGND dGND dVDD dVDD D[7] sky130_fd_sc_hd__and4_1
+x6 net1 A[2] A[1] net4 dGND dGND dVDD dVDD D[6] sky130_fd_sc_hd__and4_1
+x8 net1 A[2] net3 net4 dGND dGND dVDD dVDD D[4] sky130_fd_sc_hd__and4_1
+x9 net1 net2 A[1] net4 dGND dGND dVDD dVDD D[2] sky130_fd_sc_hd__and4_1
+x10 net1 net2 net3 net4 dGND dGND dVDD dVDD D[0] sky130_fd_sc_hd__and4_1
+x11 net1 net2 net3 A[0] dGND dGND dVDD dVDD D[1] sky130_fd_sc_hd__and4_1
+x12 net1 net2 A[1] A[0] dGND dGND dVDD dVDD D[3] sky130_fd_sc_hd__and4_1
+x14 net1 A[2] net3 A[0] dGND dGND dVDD dVDD D[5] sky130_fd_sc_hd__and4_1
+x1 A[3] dGND dGND dVDD dVDD net1 sky130_fd_sc_hd__inv_4
+x2 A[2] dGND dGND dVDD dVDD net2 sky130_fd_sc_hd__inv_4
+x3 A[1] dGND dGND dVDD dVDD net3 sky130_fd_sc_hd__inv_4
+x7 A[0] dGND dGND dVDD dVDD net4 sky130_fd_sc_hd__inv_4
+.ends
+
+
+* expanding   symbol:  synapse_4bit_memory_v1_norail.sym # of pins=13
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_4bit_memory_v1_norail.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_4bit_memory_v1_norail.sch
+.subckt synapse_4bit_memory_v1_norail sout JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] spk resetW vpulseextp setW vthrdn W[0] W[1]
++ W[2] W[3] vtaup VDD GND aVDD aGND
+*.PININFO GND:B VDD:B vpulseextp:I spk:I setW:I resetW:I sout:B vthrdn:I vtaup:I aVDD:B JExcWn[0:3]:I W[0:3]:I aGND:B
+x2[0] setW W[0] net1 GND GND VDD VDD net2[3] sky130_fd_sc_hd__dfrtp_1
+x2[1] setW W[1] net1 GND GND VDD VDD net2[2] sky130_fd_sc_hd__dfrtp_1
+x2[2] setW W[2] net1 GND GND VDD VDD net2[1] sky130_fd_sc_hd__dfrtp_1
+x2[3] setW W[3] net1 GND GND VDD VDD net2[0] sky130_fd_sc_hd__dfrtp_1
+x4 resetW GND GND VDD VDD net1 sky130_fd_sc_hd__inv_1
+x2 vtaup sout vthrdn spke JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] aGND aVDD net2[3] net2[2] net2[1] net2[0] dpi_syn_exc_4bit_fc_v2
+x6 vpulseextp spk GND spke VDD spike_extender_with_trimming
+x1 GND GND VDD VDD sky130_fd_sc_hd__decap_4
+x3 GND GND VDD VDD sky130_fd_sc_hd__decap_3
+x5 GND GND VDD VDD sky130_fd_sc_hd__decap_3
+x7 GND GND VDD VDD sky130_fd_sc_hd__decap_6
+x8 GND GND VDD VDD sky130_fd_sc_hd__decap_3
+x9 GND GND VDD VDD sky130_fd_sc_hd__decap_3
+.ends
+
+
+* expanding   symbol:  synapse_4bit_memory_inh_v1_norail.sym # of pins=13
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_4bit_memory_inh_v1_norail.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/synapse_4bit_memory_inh_v1_norail.sch
+.subckt synapse_4bit_memory_inh_v1_norail sout JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] resetW spk vpulseextp setW vthrdp W[0] W[1]
++ W[2] W[3] vtaun GND VDD aVDD aGND
+*.PININFO vpulseextp:I spk:I JInhWp[0:3]:I W[0:3]:I setW:I resetW:I sout:B vthrdp:I vtaun:I GND:B VDD:B aVDD:B aGND:B
+x11 resetW GND GND VDD VDD net1 sky130_fd_sc_hd__inv_1
+x2 JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] net2[3] net2[2] net2[1] net2[0] spke sout vthrdp vtaun aGND aVDD dpi_syn_inh_4bit_fc_v2
+x2[0] setW W[0] net1 GND GND VDD VDD net3[3] net2[3] sky130_fd_sc_hd__dfrbp_1
+x2[1] setW W[1] net1 GND GND VDD VDD net3[2] net2[2] sky130_fd_sc_hd__dfrbp_1
+x2[2] setW W[2] net1 GND GND VDD VDD net3[1] net2[1] sky130_fd_sc_hd__dfrbp_1
+x2[3] setW W[3] net1 GND GND VDD VDD net3[0] net2[0] sky130_fd_sc_hd__dfrbp_1
+x4 vpulseextp spk GND spke VDD spike_extender_with_trimming
+x1 GND GND VDD VDD sky130_fd_sc_hd__decap_4
+.ends
+
+
+* expanding   symbol:  arbiter_two_bits.sym # of pins=6
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/arbiter_two_bits.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/arbiter_two_bits.sch
+.subckt arbiter_two_bits req[0] req[1] ack_cpu ack[0] ack[1] req_cpu VDD GND
+*.PININFO req[0:1]:I ack[0:1]:O ack_cpu:I req_cpu:O VDD:B GND:B
+x1 ack[1] ack[0] ack_cpu req_cpu req[0] req[1] VDD GND arbiter_cell_two_bits_fc
+.ends
+
+
+* expanding   symbol:  or8.sym # of pins=11
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/or8.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/or8.sch
+.subckt or8 h g f e out d c b a VDD GND
+*.PININFO a:I b:I c:I d:I e:I f:I g:I h:I out:O VDD:B GND:B
+x1 h g f e GND GND VDD VDD net1 sky130_fd_sc_hd__or4_1
+x2 d c b a GND GND VDD VDD net2 sky130_fd_sc_hd__or4_1
+x3 net1 net2 GND GND VDD VDD out sky130_fd_sc_hd__or2_1
+.ends
+
+
+* expanding   symbol:  16-to-1_analog_mux.sym # of pins=5
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/16-to-1_analog_mux.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/16-to-1_analog_mux.sch
+.subckt 16-to-1_analog_mux VDD inputAnalog[0] inputAnalog[1] inputAnalog[2] inputAnalog[3] inputAnalog[4] inputAnalog[5]
++ inputAnalog[6] inputAnalog[7] inputAnalog[8] inputAnalog[9] inputAnalog[10] inputAnalog[11] inputAnalog[12] inputAnalog[13] inputAnalog[14]
++ inputAnalog[15] GND OUT inputAddress[0] inputAddress[1] inputAddress[2] inputAddress[3] inputAddress[4] inputAddress[5] inputAddress[6]
++ inputAddress[7] inputAddress[8] inputAddress[9] inputAddress[10] inputAddress[11] inputAddress[12] inputAddress[13] inputAddress[14]
++ inputAddress[15]
+*.PININFO VDD:B inputAddress[0:15]:I GND:B OUT:B inputAnalog[0:15]:B
+x1[0] net1[15] OUT inputAnalog[0] inputAddress[0] GND VDD tg
+x1[1] net1[14] OUT inputAnalog[1] inputAddress[1] GND VDD tg
+x1[2] net1[13] OUT inputAnalog[2] inputAddress[2] GND VDD tg
+x1[3] net1[12] OUT inputAnalog[3] inputAddress[3] GND VDD tg
+x1[4] net1[11] OUT inputAnalog[4] inputAddress[4] GND VDD tg
+x1[5] net1[10] OUT inputAnalog[5] inputAddress[5] GND VDD tg
+x1[6] net1[9] OUT inputAnalog[6] inputAddress[6] GND VDD tg
+x1[7] net1[8] OUT inputAnalog[7] inputAddress[7] GND VDD tg
+x1[8] net1[7] OUT inputAnalog[8] inputAddress[8] GND VDD tg
+x1[9] net1[6] OUT inputAnalog[9] inputAddress[9] GND VDD tg
+x1[10] net1[5] OUT inputAnalog[10] inputAddress[10] GND VDD tg
+x1[11] net1[4] OUT inputAnalog[11] inputAddress[11] GND VDD tg
+x1[12] net1[3] OUT inputAnalog[12] inputAddress[12] GND VDD tg
+x1[13] net1[2] OUT inputAnalog[13] inputAddress[13] GND VDD tg
+x1[14] net1[1] OUT inputAnalog[14] inputAddress[14] GND VDD tg
+x1[15] net1[0] OUT inputAnalog[15] inputAddress[15] GND VDD tg
+x16[0] inputAddress[0] GND GND VDD VDD net1[15] sky130_fd_sc_hd__inv_1
+x16[1] inputAddress[1] GND GND VDD VDD net1[14] sky130_fd_sc_hd__inv_1
+x16[2] inputAddress[2] GND GND VDD VDD net1[13] sky130_fd_sc_hd__inv_1
+x16[3] inputAddress[3] GND GND VDD VDD net1[12] sky130_fd_sc_hd__inv_1
+x16[4] inputAddress[4] GND GND VDD VDD net1[11] sky130_fd_sc_hd__inv_1
+x16[5] inputAddress[5] GND GND VDD VDD net1[10] sky130_fd_sc_hd__inv_1
+x16[6] inputAddress[6] GND GND VDD VDD net1[9] sky130_fd_sc_hd__inv_1
+x16[7] inputAddress[7] GND GND VDD VDD net1[8] sky130_fd_sc_hd__inv_1
+x16[8] inputAddress[8] GND GND VDD VDD net1[7] sky130_fd_sc_hd__inv_1
+x16[9] inputAddress[9] GND GND VDD VDD net1[6] sky130_fd_sc_hd__inv_1
+x16[10] inputAddress[10] GND GND VDD VDD net1[5] sky130_fd_sc_hd__inv_1
+x16[11] inputAddress[11] GND GND VDD VDD net1[4] sky130_fd_sc_hd__inv_1
+x16[12] inputAddress[12] GND GND VDD VDD net1[3] sky130_fd_sc_hd__inv_1
+x16[13] inputAddress[13] GND GND VDD VDD net1[2] sky130_fd_sc_hd__inv_1
+x16[14] inputAddress[14] GND GND VDD VDD net1[1] sky130_fd_sc_hd__inv_1
+x16[15] inputAddress[15] GND GND VDD VDD net1[0] sky130_fd_sc_hd__inv_1
+.ends
+
+
+* expanding   symbol:  dflip_flop_chain_4_fc_nolatch.sym # of pins=6
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/dflip_flop_chain_4_fc_nolatch.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/dflip_flop_chain_4_fc_nolatch.sch
+.subckt dflip_flop_chain_4_fc_nolatch D[0] D[1] D[2] D[3] Da CLK nRes VDD GND
+*.PININFO Da:I D[0:3]:O CLK:I nRes:I VDD:B GND:B
+x1[0] CLK Da nRes GND GND VDD VDD D[0] sky130_fd_sc_hd__dfrtp_1
+x1[1] CLK D[0] nRes GND GND VDD VDD D[1] sky130_fd_sc_hd__dfrtp_1
+x1[2] CLK D[1] nRes GND GND VDD VDD D[2] sky130_fd_sc_hd__dfrtp_1
+x1[3] CLK D[2] nRes GND GND VDD VDD D[3] sky130_fd_sc_hd__dfrtp_1
+.ends
+
+
+* expanding   symbol:  request_logic_delay.sym # of pins=5
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/request_logic_delay.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/request_logic_delay.sch
+.subckt request_logic_delay A[0] A[1] A[2] A[3] A[4] A[5] A[6] A[7] A[8] A[9] A[10] A[11] A[12] A[13] A[14] A[15] O[0] O[1] O[2]
++ O[3] O[4] O[5] O[6] O[7] O[8] O[9] O[10] O[11] O[12] O[13] O[14] O[15] req dVDD dGND
+*.PININFO A[0:15]:I req:I O[0:15]:O dVDD:B dGND:B
+x1[0] A[0] req dGND dGND dVDD dVDD O[0] sky130_fd_sc_hd__and2_1
+x1[1] A[1] req dGND dGND dVDD dVDD O[1] sky130_fd_sc_hd__and2_1
+x1[2] A[2] req dGND dGND dVDD dVDD O[2] sky130_fd_sc_hd__and2_1
+x1[3] A[3] req dGND dGND dVDD dVDD O[3] sky130_fd_sc_hd__and2_1
+x1[4] A[4] req dGND dGND dVDD dVDD O[4] sky130_fd_sc_hd__and2_1
+x1[5] A[5] req dGND dGND dVDD dVDD O[5] sky130_fd_sc_hd__and2_1
+x1[6] A[6] req dGND dGND dVDD dVDD O[6] sky130_fd_sc_hd__and2_1
+x1[7] A[7] req dGND dGND dVDD dVDD O[7] sky130_fd_sc_hd__and2_1
+x1[8] A[8] req dGND dGND dVDD dVDD O[8] sky130_fd_sc_hd__and2_1
+x1[9] A[9] req dGND dGND dVDD dVDD O[9] sky130_fd_sc_hd__and2_1
+x1[10] A[10] req dGND dGND dVDD dVDD O[10] sky130_fd_sc_hd__and2_1
+x1[11] A[11] req dGND dGND dVDD dVDD O[11] sky130_fd_sc_hd__and2_1
+x1[12] A[12] req dGND dGND dVDD dVDD O[12] sky130_fd_sc_hd__and2_1
+x1[13] A[13] req dGND dGND dVDD dVDD O[13] sky130_fd_sc_hd__and2_1
+x1[14] A[14] req dGND dGND dVDD dVDD O[14] sky130_fd_sc_hd__and2_1
+x1[15] A[15] req dGND dGND dVDD dVDD O[15] sky130_fd_sc_hd__and2_1
+.ends
+
+
+* expanding   symbol:  dpi_syn_exc_4bit_fc_v2.sym # of pins=8
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/dpi_syn_exc_4bit_fc_v2.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/dpi_syn_exc_4bit_fc_v2.sch
+.subckt dpi_syn_exc_4bit_fc_v2 vtaup sout vthn spk JExcWn[0] JExcWn[1] JExcWn[2] JExcWn[3] GND aVDD weight[0] weight[1] weight[2]
++ weight[3]
+*.PININFO GND:B aVDD:B vtaup:B spk:I sout:O vthn:B weight[0:3]:I JExcWn[0:3]:B
+XM2 net3 spk net1 GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XC1 vsin aVDD sky130_fd_pr__cap_mim_m3_1 W=5 L=5 m=1
+XM5 vsin vtaup aVDD aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM6 sout vsin aVDD aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM1 net1 JExcWn[0] net2 GND sky130_fd_pr__nfet_01v8 L=1.0 W=1.0 nf=1 m=1
+XM4 vsin vsin net3 GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM3 aVDD vthn net3 GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM7 net1 JExcWn[1] net4 GND sky130_fd_pr__nfet_01v8 L=2.0 W=1.0 nf=1 m=1
+XM8 net1 JExcWn[2] net5 GND sky130_fd_pr__nfet_01v8 L=4.0 W=1.0 nf=1 m=1
+XM9 net1 JExcWn[3] net6 GND sky130_fd_pr__nfet_01v8 L=8.0 W=1.0 nf=1 m=1
+XM10 net2 weight[0] GND GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM11 net4 weight[1] GND GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM12 net5 weight[2] GND GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM13 net6 weight[3] GND GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+.ends
+
+
+* expanding   symbol:  spike_extender_with_trimming.sym # of pins=5
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/spike_extender_with_trimming.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/spike_extender_with_trimming.sch
+.subckt spike_extender_with_trimming vpulseextp vspk GND spkext VDD
+*.PININFO GND:B VDD:B vspk:I spkext:O vpulseextp:I
+x1 vpulseextp vpulseshort GND spkext VDD spike_extender
+x3 vspk GND GND VDD VDD net1 sky130_fd_sc_hd__clkdlybuf4s50_1
+x2 net1 vspk GND GND VDD VDD vpulseshort sky130_fd_sc_hd__nor2b_1
+.ends
+
+
+* expanding   symbol:  dpi_syn_inh_4bit_fc_v2.sym # of pins=8
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/dpi_syn_inh_4bit_fc_v2.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/dpi_syn_inh_4bit_fc_v2.sch
+.subckt dpi_syn_inh_4bit_fc_v2 JInhWp[0] JInhWp[1] JInhWp[2] JInhWp[3] weight_b[0] weight_b[1] weight_b[2] weight_b[3] spk sout
++ vthrdp vtaun GND aVDD
+*.PININFO spk:I vthrdp:B vtaun:B sout:B GND:B aVDD:B weight_b[0:3]:I JInhWp[0:3]:B
+XM5 net2 net3 net1 aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM2 GND vthrdp net2 aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM3 vsin vsin net2 aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM4 vsin vtaun GND GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM6 sout vsin GND GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM7 net3 spk GND GND sky130_fd_pr__nfet_01v8 L=0.25 W=1.0 nf=1 m=1
+XM8 net3 spk aVDD aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XC1 vsin GND sky130_fd_pr__cap_mim_m3_1 W=5 L=5 m=1
+XM9 net4 JInhWp[0] aVDD aVDD sky130_fd_pr__pfet_01v8 L=1.2 W=1.2 nf=1 m=1
+XM10 net1 weight_b[0] net4 aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM11 net1 weight_b[1] net5 aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM1 net5 JInhWp[1] aVDD aVDD sky130_fd_pr__pfet_01v8 L=2.0 W=1.2 nf=1 m=1
+XM12 net6 JInhWp[2] aVDD aVDD sky130_fd_pr__pfet_01v8 L=4.0 W=1.2 nf=1 m=1
+XM13 net7 JInhWp[3] aVDD aVDD sky130_fd_pr__pfet_01v8 L=8.0 W=1.2 nf=1 m=1
+XM14 net1 weight_b[2] net6 aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+XM15 net1 weight_b[3] net7 aVDD sky130_fd_pr__pfet_01v8 L=0.2 W=1.2 nf=1 m=1
+.ends
+
+
+* expanding   symbol:  arbiter_cell_two_bits_fc.sym # of pins=8
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/arbiter_cell_two_bits_fc.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/arbiter_cell_two_bits_fc.sch
+.subckt arbiter_cell_two_bits_fc g1 g0 gc rc r0 r1 VDD GND
+*.PININFO r1:I r0:I g0:O g1:O rc:O gc:I GND:B VDD:B
+x1 net6 net5 GND GND VDD VDD net7 sky130_fd_sc_hd__nand2_1
+x2 r0 gc GND GND VDD VDD net4 sky130_fd_sc_hd__or2_1
+x3 net3 net1 GND GND VDD VDD g0 sky130_fd_sc_hd__nor2_1
+x4 net6 net6 net6 net6 GND GND VDD VDD net3 sky130_fd_sc_hd__or4_1
+x5 gc GND GND VDD VDD net1 sky130_fd_sc_hd__inv_1
+x6 gc r1 GND GND VDD VDD net5 sky130_fd_sc_hd__or2_1
+x7 net4 net7 GND GND VDD VDD net6 sky130_fd_sc_hd__nand2_1
+x8 net7 net7 net7 net7 GND GND VDD VDD net2 sky130_fd_sc_hd__or4_1
+x9 net1 net2 GND GND VDD VDD g1 sky130_fd_sc_hd__nor2_1
+x10 net2 r0 GND GND VDD VDD net8 sky130_fd_sc_hd__nand2_1
+x11 net3 r1 GND GND VDD VDD net9 sky130_fd_sc_hd__nand2_1
+x12 net8 net9 GND GND VDD VDD rc sky130_fd_sc_hd__nand2_1
+.ends
+
+
+* expanding   symbol:  tg.sym # of pins=6
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/tg.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/tg.sch
+.subckt tg nEn OUT IN EN GND VDD
+*.PININFO GND:B VDD:B IN:B OUT:B EN:I nEn:I
+XM14 OUT EN IN GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM13 IN nEn OUT VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1.0 nf=1 m=1
+.ends
+
+
+* expanding   symbol:  spike_extender.sym # of pins=5
+** sym_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/spike_extender.sym
+** sch_path: /home/federico/tue/projects/aVLSI-SkyWater130-2024/xschem/spike_extender.sch
+.subckt spike_extender vpulseextp spk GND spkext VDD
+*.PININFO GND:B VDD:B spk:I spkext:O vpulseextp:I
+XM1 net1 spk GND GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM6 net1 vpulseextp VDD VDD sky130_fd_pr__pfet_01v8 L=2 W=1 nf=1 m=1
+XM5 net3 net2 GND GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM8 spkext net3 GND GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM4 net3 net2 VDD VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1.0 nf=1 m=1
+XM7 spkext net3 VDD VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1.0 nf=1 m=1
+XM2 net2 net1 GND GND sky130_fd_pr__nfet_01v8 L=0.15 W=0.65 nf=1 m=1
+XM3 net2 net1 VDD VDD sky130_fd_pr__pfet_01v8 L=0.15 W=1.0 nf=1 m=1
+XM9 GND net1 GND GND sky130_fd_pr__nfet_01v8 L=1 W=0.65 nf=1 m=1
+.ends
+
+.end

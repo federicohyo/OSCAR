@@ -1,0 +1,61 @@
+{
+  "window_s": 0.05,
+  "classes": [
+    "2H",
+    "Blank",
+    "EB",
+    "Eu",
+    "IA"
+  ],
+  "per_duration": {
+    "0.01s": {
+      "acc": 0.3333333333333333,
+      "n_trials": 30,
+      "n_chunks": 30,
+      "duration_s": 0.01,
+      "E_array_J": 2.511026e-05
+    },
+    "0.02s": {
+      "acc": 0.3333333333333333,
+      "n_trials": 30,
+      "n_chunks": 30,
+      "duration_s": 0.02,
+      "E_array_J": 2.511026e-05
+    },
+    "0.05s": {
+      "acc": 0.5777777777777777,
+      "n_trials": 30,
+      "n_chunks": 90,
+      "duration_s": 0.05,
+      "E_array_J": 2.511026e-05
+    },
+    "0.1s": {
+      "acc": 0.7466666666666667,
+      "n_trials": 30,
+      "n_chunks": 150,
+      "duration_s": 0.1,
+      "E_array_J": 2.511026e-05
+    },
+    "0.2s": {
+      "acc": 0.8629629629629629,
+      "n_trials": 30,
+      "n_chunks": 270,
+      "duration_s": 0.2,
+      "E_array_J": 2.511026e-05
+    },
+    "0.5s": {
+      "acc": 0.946031746031746,
+      "n_trials": 30,
+      "n_chunks": 630,
+      "duration_s": 0.5,
+      "E_array_J": 2.511026e-05
+    },
+    "1.0s": {
+      "acc": 0.9775067750677506,
+      "n_trials": 90,
+      "n_chunks": 3690,
+      "duration_s": 1.0,
+      "E_array_J": 2.511026e-05
+    }
+  }
+}
