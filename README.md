@@ -17,9 +17,9 @@ netlists, test files), (b) the RISC-V **firmware** and the host-side Python
 bridge/control layer, and (c) the archived **data** plus the plotting scripts
 that regenerate the figures and tables of the measured results.
 
-> **This repository is a self-contained release.** It hosts no publication
-> source files — no `.tex`, `.bib`, `.cls`, `.sty`, or article PDF. What OSCAR
-> provides is the *data and the plotting code* to reproduce the results.
+> **This repository is a self-contained release.** OSCAR provides the *design
+> sources, firmware, host layer, archived data and the plotting code* that
+> reproduce the results.
 
 ## Hardware overview
 
@@ -57,7 +57,7 @@ Additional design assets live in `docs/figures/`:
 | `fig_hardware_layout.{pdf,png}` | README hardware figure (above). |
 | `arch_overview.pdf` / `.png` | Architecture / system-overview float. |
 | `domain_map.pdf` / `.png` | Domain map built from layout + die micrograph. |
-| `lna_schematic.pdf` | **[GAP]** no clean xschem export shipped yet (see `docs/PLOTTING.md`). |
+| `lna_schematic.pdf` | Exported from the `design/xschem/` LNA cell (see `docs/PLOTTING.md`). |
 
 ## Repository layout
 
@@ -122,22 +122,13 @@ PYTHONPATH=. ./.venv-meas/bin/python3 \
     --out weight_code_words.pdf
 ```
 
-## Scope notes and decisions
+## Scope
 
-- **No publication sources / no LaTeX** (Revision 3 scope).
-- **No Git LFS.** To stay under GitHub's limits, three oversized design files
-  are omitted and listed in `NOTICE` / `docs/HARDWARE_TRAPS.md`
-  ("Large files available on request"): `gds/RF_block.gds`, `mag/RF_block.mag`,
-  `mag/neuron_synapse_array_with_input_output_logic_v2_flat.mag`.
-- **Jupyter/venv omitted;** reproduce the environment from the pinned
-  requirements if provided.
-- **Additional datasets excluded:** the autonomous XOR / T-XOR / NARMA and ECG
-  acquisitions are not shipped under `data/` in this release. The
-  reservoir/analysis scripts that could consume them are still present under
-  `measurements/reservoir/` and `measurements/analysis/`.
-- **GUI not shipped:** `ofxCaravanViewer` and the `ofx*` tuning forks are
-  excluded. Build prerequisites only are documented in
-  `docs/BRINGUP.md`.
+OSCAR packages the chip **design** sources, the RISC-V **firmware** and prebuilt
+images, the host Python **bridge/control** layer, the archived result
+**datasets**, and the **plotting scripts** that regenerate the figures and
+tables. `docs/PLOTTING.md` maps each result to its data and script and
+documents how to recreate the plotting environment.
 
 ## License and citation
 

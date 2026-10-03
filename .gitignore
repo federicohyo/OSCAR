@@ -15,7 +15,7 @@ firmware/**/*.hex
 ofxCaravanViewer/obj/
 ofxCaravanViewer/bin/ofxCaravanViewer
 
-# LaTeX sources -- NOT part of this repo (Revision 3 scope)
+# LaTeX sources and build outputs
 *.tex
 *.bib
 *.cls

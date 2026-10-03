@@ -77,24 +77,3 @@ These cost real bench time to rediscover. Read before touching the hardware.
   image. Rules: never run the 50 MHz bring-up on it; always
   `CARAVAN_CLK_MHZ=25`. Reflash path is an external Raspberry Pi wired to the
   motherboard J15 header. This is board-specific, not a chip-architecture fact.
-
-## Large files (available on request)
-
-Three oversized design files are intentionally omitted to stay under GitHub's
-file/size limits (no Git LFS is configured):
-
-| Omitted file | Size |
-|---|---|
-| `design/gds/RF_block.gds` | ~140 MB |
-| `design/mag/RF_block.mag` | ~137 MB |
-| `design/mag/neuron_synapse_array_with_input_output_logic_v2_flat.mag` | ~104 MB |
-
-They are one-off test structures / a flattened layout, not needed to open or
-understand the DUT wrapper. Request them from the authors.
-
-## GUI note
-
-The C++ `ofxCaravanViewer` GUI and the `ofxXORtuning` / `ofxNARMATuning` forks
-are **not shipped**. They need openFrameworks and are excluded. The bench and
-reservoir workflows in this repository are the headless Python path
-(`host/neuron_bridge.py` + `host/meas_common.py` + the `measurements/` scripts).

@@ -27,8 +27,7 @@ import json
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-# OSCAR: no LaTeX is shipped. This module emits a CSV table instead of
-# generated_constants.tex (see docs/PLOTTING.md).
+# OSCAR: this module emits a CSV table (see docs/PLOTTING.md).
 CSV_OUT = os.path.join(HERE, "energy_table.csv")
 
 # OSCAR reorg: results/ -> data/, and the olfaction result JSONs live under

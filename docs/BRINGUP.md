@@ -84,11 +84,3 @@ QUIT
 
 Before and after every long acquisition, run the unmasked 16-neuron addressing
 scan (see `docs/HARDWARE_TRAPS.md`) and confirm `drops == stalls == 0`.
-
-## GUI (not shipped)
-
-The C++ `ofxCaravanViewer` GUI is excluded from this repository. If you want to
-run it, it needs **openFrameworks 0.12.x** plus the `ofxGui` / serial addons, and
-a `../../host/neuron_bridge.py` child process. Build prerequisites only:
-`openFrameworks`, a C++ toolchain, `libusb`/FTDI support. The headless Python
-path above needs no GUI.

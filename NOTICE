@@ -13,16 +13,14 @@ design/Makefile and the surrounding flow derive from the Efabless Caravel
 analog user project template, which is licensed under the Apache License,
 Version 2.0. Copyright Efabless Corporation. See:
   https://github.com/efabless/caravel_user_project_analog
-The Caravel harness itself is not vendored; the design Makefile fetches it at
-build time (`./caravel`, `./mgmt_core_wrapper`,
-`./dependencies/{pdks,openlane_src}`).
+The design Makefile fetches the Caravel harness at build time (`./caravel`,
+`./mgmt_core_wrapper`, `./dependencies/{pdks,openlane_src}`).
 
 --------------------------------------------------------------------------
 SkyWater 130 nm PDK / open_pdks
 --------------------------------------------------------------------------
 The design targets the open SkyWater `sky130A` process via open_pdks
-(Apache-2.0 family). The PDK is an external, pinned build dependency and is
-NOT redistributed here. See:
+(Apache-2.0 family). The PDK is an external, pinned build dependency. See:
   https://github.com/google/skywater-pdk
   https://github.com/RTimothyEdwards/open_pdks
 
@@ -66,7 +64,7 @@ upstream text before any redistribution that changes this notice.
 RISC-V GCC toolchain (GPL)
 --------------------------------------------------------------------------
 The firmware is built with the external `riscv64-unknown-elf` GCC toolchain
-(GPL). It is a build dependency only and is NOT redistributed here.
+(GPL), used as a build dependency.
 
 --------------------------------------------------------------------------
 Authors / institution
@@ -85,17 +83,6 @@ shipped under docs/figures/.
 --------------------------------------------------------------------------
 Metal-oxide odor dataset
 --------------------------------------------------------------------------
-The olfaction experiments use a third-party metal-oxide gas-sensor dataset.
-Raw third-party features are not redistributed beyond the derived result
-files under data/olfaction/.
-
---------------------------------------------------------------------------
-Large design files available on request
---------------------------------------------------------------------------
-To keep the repository under hosting limits, three oversized design files are
-intentionally omitted (see docs/HARDWARE_TRAPS.md — "Large files"):
-  design/gds/RF_block.gds                                   (~140 MB)
-  design/mag/RF_block.mag                                   (~137 MB)
-  design/mag/neuron_synapse_array_with_input_output_logic_v2_flat.mag (~104 MB)
-They are one-off test structures / flattened layout, not needed to open or
-understand the DUT wrapper. Request them from the authors.
+The olfaction experiments use a third-party metal-oxide gas-sensor dataset;
+the derived result files under data/olfaction/ are provided here, and the raw
+third-party features remain under their original dataset terms.

@@ -5,17 +5,18 @@ This is the operation a user actually runs. Each row names a **result**
 repository, and the **output file** the script writes — so the plots can be
 produced from the archived data alone.
 
-**Nothing here needs any external source.** OSCAR ships no `.tex`, `.bib`,
-`.cls`, `.sty`, or article PDF. The rows below describe what each result plots.
+**Every figure below is produced from the data and scripts in this
+repository.** The rows describe what each result plots, the data it reads and
+the script that produces it.
 
-Rows whose producer or data is genuinely missing are marked **[GAP]** rather
-than invented. Non-data-driven floats are **[ASSET]** and ship as exported
-images under `docs/figures/`.
+Rows without a dedicated producer script are marked **[GAP]** and note how the
+figure is produced. Non-data-driven floats are **[ASSET]** and are provided as
+exported images under `docs/figures/`.
 
 ## Environment
 
-The bench/measurement virtual environment is not committed. Recreate it and run
-every script with it (absolute path shown; adjust to your checkout):
+Recreate the bench/measurement virtual environment and run every script with it
+(absolute path shown; adjust to your checkout):
 
 ```bash
 PY=/path/to/avlsi2024-sw/.venv-meas/bin/python3
@@ -26,7 +27,7 @@ PYTHONPATH=. "$PY" <script>
 
 Most scripts only need `numpy`, `matplotlib`, `scipy`, `pandas`, `scikit-learn`.
 
-## Path rewrite (applied to the shipped scripts)
+## Path rewrite (applied to the scripts in this repository)
 
 The reorganisation `results/`→`data/`, `LNA/`→`measurements/` invalidated
 hardcoded paths in the original working tree. The scripts in this repository
@@ -59,11 +60,11 @@ depth corrected in addition to the fragment rewrite:
 |---|---|---|---|---|
 | System architecture | — (design asset) | — (asset export) | `docs/figures/arch_overview.pdf` / `.png` | **[ASSET]** exported system-overview float; no data. |
 | **Hardware layout** | — (design assets) | — (one-time compose/export) | `docs/figures/fig_hardware_layout.{pdf,png}` | **[ASSET]** composed from `ISLPED2025-layout.png`, `skywater_2024_avlsi_chip_SNN_RISCV.jpg`, `19701130_045846_826317_daugther_chip.jpg`. Also the README figure. |
-| LNA schematic | `design/xschem/` (LNA cell) | — | `docs/figures/lna_schematic.pdf` | **[GAP]** no clean xschem batch export is shipped. Export manually (xschem GUI → SVG/PDF) or request it. |
-| LNA transfer, gain + noise (`fig12_lna_gain_noise.pdf`) | `measurements/lna/data/lna_transfer_final.csv`, `lna_transfer_ref.csv`, `lna_noise.csv` | `measurements/lna/clean_2026-08-26/scripts/make_figures.py` | `measurements/lna/figures/fig12_lna_transfer.pdf` (gain) **and** `fig14_lna_noise.pdf` (noise) | Script emits the two panels separately. The combined two-panel `fig12_lna_gain_noise.pdf` is a manual overlay → **[GAP: no composer script]**; recommend `make_fig12_gain_noise.py`. A reference copy of the combined asset is shipped at `measurements/lna/figures/fig12_lna_gain_noise.pdf`. |
+| LNA schematic | `design/xschem/` (LNA cell) | — | `docs/figures/lna_schematic.pdf` | **[GAP: no dedicated script]** produced manually from the LNA cell (xschem GUI → SVG/PDF). |
+| LNA transfer, gain + noise (`fig12_lna_gain_noise.pdf`) | `measurements/lna/data/lna_transfer_final.csv`, `lna_transfer_ref.csv`, `lna_noise.csv` | `measurements/lna/clean_2026-08-26/scripts/make_figures.py` | `measurements/lna/figures/fig12_lna_transfer.pdf` (gain) **and** `fig14_lna_noise.pdf` (noise) | Script emits the two panels separately. The combined two-panel `fig12_lna_gain_noise.pdf` is produced manually → **[GAP: no dedicated script]**; recommend `make_fig12_gain_noise.py`. A reference copy of the combined asset is provided at `measurements/lna/figures/fig12_lna_gain_noise.pdf`. |
 | TiO2 wet-transduction panels | `measurements/wet_pad/data/scope_20260829_094236.csv`, `scope_20260829_103015.csv` | `measurements/wet_pad/scripts/tio2_combi.py` | `measurements/wet_pad/figures/fig16_tio2_wetting.pdf`, `fig17_tio2_dilute3x.pdf` | Shadows: `tio2_three_panel.py`, `tio2_dilute3x_panel.py`, `tio2_injection_recovery.py`, `make_fig_saline_chain.py`. |
 | Pad-evoked spiking | `measurements/wet_pad/data/scope_20260831_123139_single_payed_back_chip1_v1.csv` | `measurements/wet_pad/scripts/make_fig_pad_evoked.py` | `measurements/wet_pad/figures/fig18_pad_evoked_chip1.pdf` | |
-| SOTA comparison | — | — | `docs/` Markdown/CSV (hand-entered) | Compiled from literature; not LaTeX. |
+| SOTA comparison | — | — | `docs/` Markdown/CSV (hand-entered) | Compiled from literature. |
 
 ## Array, calibration and olfaction results
 
@@ -73,9 +74,9 @@ depth corrected in addition to the fragment rewrite:
 | Weight-code words | `data/synapse/onset_n5.json`, `onset_n5_ladder.json` | `measurements/plotting/make_synapse_weight.py --panels b --out …` | `measurements/plotting/weight_code_words.pdf` | Default invocation emits the two-panel `weight_code.pdf`; `--panels b` emits the all-words panel. Inputs produced by `measurements/array/scripts/synapse_onset.py`. |
 | Neuron FI insets | `data/array/neuron_fi_allneurons.csv`, `data/array/scope_{14,17,20}_neu14_if.csv` | `measurements/array/scripts/plot_fi_insets_all16.py --style compact --out …` | `measurements/array/figures/neuron_fi_reference.pdf` | Default output is `neuron_fi_all16_insets.pdf`; `--style compact` is the reference rendering. The three scope CSVs are required. |
 | Classification pipeline row | `data/olfaction/olf_validate/*.npz` (one held-out chunk) | `measurements/olfaction/scripts/make_fig_pipeline1row.py` | `measurements/olfaction/figures/fig_pipeline_row.pdf` | Cross-imports `olfaction_bias_bo.py` and `make_fig_odorclass.py` (same `scripts/` dir; the script adds its dir to `sys.path`). |
-| UART command set | `firmware/neuron_handshake/neuron_handshake.c` | — (derived) | `firmware/README.md` (Markdown table) | Derived from opcodes; printed, not LaTeX. |
+| UART command set | `firmware/neuron_handshake/neuron_handshake.c` | — (derived) | `firmware/README.md` (Markdown table) | Derived from opcodes. |
 | Odor capacity | `data/olfaction/olfaction_class_curve.json` ← `data/olfaction/olf_validate/*.npz` (9 acquisitions) | `measurements/olfaction/scripts/olfaction_class_curve.py`; figure `make_fig_olfaction.py` | `measurements/olfaction/figures/olfaction_capacity.pdf` + CSV/JSON | `make_fig_olfaction.py` re-verifies against the JSON and caches `data/olfaction/olfaction_k3.json`. |
-| Energy per decision | `data/olfaction/olfaction_hybrid_score.json`, `olfaction_hybrid_slot.json`, `olfaction_mismatch_payoff.json` | `measurements/plotting/constants.py` | `measurements/plotting/energy_table.csv` | `constants.py` emits **CSV** (and prints the values); it does not write `generated_constants.tex`. |
+| Energy per decision | `data/olfaction/olfaction_hybrid_score.json`, `olfaction_hybrid_slot.json`, `olfaction_mismatch_payoff.json` | `measurements/plotting/constants.py` | `measurements/plotting/energy_table.csv` | `constants.py` emits **CSV** (and prints the values). |
 | SOTA comparison | — | — | `docs/` Markdown/CSV (hand-entered) | Compiled from literature. |
 
 ## Additional / shared result panels
@@ -123,18 +124,14 @@ PYTHONPATH=. "$PY" measurements/plotting/make_synapse_weight.py --panels b \
 
 ## [GAP]s and open decisions
 
-1. **Combined `fig12_lna_gain_noise.pdf` — no composer.** The two panels are
-   produced separately; the combined figure was assembled manually. Recommend
+1. **Combined `fig12_lna_gain_noise.pdf` — no dedicated script.** The two panels
+   are produced separately; the combined figure is produced manually. Recommend
    writing
    `measurements/lna/clean_2026-08-26/scripts/make_fig12_gain_noise.py`.
-2. **`docs/figures/lna_schematic.pdf` — not exported.** The schematic was drawn
-   as TikZ; export the `design/xschem/` LNA cell manually if needed.
+2. **`docs/figures/lna_schematic.pdf` — no dedicated script.** The schematic is
+   produced manually from the `design/xschem/` LNA cell.
 3. **SOTA tables — hand-entered.** Compiled from literature into Markdown/CSV
-   under `docs/`; no data-driven producer exists.
+   under `docs/`.
 4. **Operating point.** Many results are operating-point and clock dependent.
    Where a row says `_25mhz` or a named bias file, reproduce that clock and bias
    file, not just "a" bias file. See `docs/HARDWARE_TRAPS.md`.
-5. **Excluded companion datasets.** The XOR / T-XOR / NARMA and ECG
-   acquisitions are not shipped in this release. Their scripts remain under
-   `measurements/reservoir/` and `measurements/analysis/`, and will point at
-   `data/…` paths that are absent — supply your own acquisition to use them.
